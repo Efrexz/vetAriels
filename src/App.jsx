@@ -1,14 +1,15 @@
-import {NavBar} from './components/NavBar.jsx'
-import {HeroSection} from './components/HeroSection.jsx'
-import {Footer} from './components/Footer.jsx'
+import { HeroSection } from './components/HeroSection.jsx'
+import { Footer } from './components/Footer.jsx'
+import { Layout } from './components/Layout.jsx'
 
 function App() {
 
   return (
     <>
-      <NavBar />
-      <HeroSection />
-      <Footer />
+      <Layout>
+        <HeroSection />
+        <Footer />
+      </Layout>
     </>
   )
 }
