@@ -182,7 +182,7 @@ function SideBarMenu() {
             {categories.map((category, index) => (
                 !category.subCategories ? (
                     <li key={index}>
-                        <a href={category.path} className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                        <a href={category.path} className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-md font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
                             <category.icon className="w-5 h-5" />
                             {category.name}
                         </a>

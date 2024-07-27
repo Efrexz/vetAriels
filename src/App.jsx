@@ -1,4 +1,4 @@
-import { HeroSection } from './components/HeroSection.jsx'
+import { DashBoard } from './Pages/DashBoard.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
 
@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <Layout>
-        <HeroSection />
+        <DashBoard />
         <Footer />
       </Layout>
     </>
