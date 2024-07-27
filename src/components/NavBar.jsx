@@ -27,7 +27,7 @@ function NavBar() {
                 <span className='font-bold mx-3'>|</span>
                 <li className='flex items-center gap-2'>
                     <a href="">Efrexz</a>
-                    <UserIcon className='w-5 h-5' />
+                    <UserIcon className='w-5 h-5 hover:text-[#206D5A]' />
                 </li>
             </ul>
         </nav>

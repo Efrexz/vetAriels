@@ -8,6 +8,17 @@ import PetIcon from '../assets/petIcon.svg?react';
 import BoxesIcon from '../assets/boxesIcon.svg?react';
 import PillsIcon from '../assets/pillsIcon.svg?react';
 import ConfigurationIcon from '../assets/configurationIcon.svg?react';
+import ShoppingCartPlusIcon from '../assets/shoppingCartPlus.svg?react';
+import BagShoppingIcon from '../assets/bagShopping.svg?react';
+import FileInvoiceIcon from '../assets/file-invoice.svg?react';
+import MoneyTransferIcon from '../assets/moneyTransferIcon.svg?react';
+import MoneyIcon from '../assets/moneyIcon.svg?react';
+import DocumentIcon from '../assets/documentIcon.svg?react';
+import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
+import DocumentJoinIcon from '../assets/DocumentJoinIcon.svg?react';
+import BuildingShieldIcon from '../assets/buildingShield.svg?react';
+import RoleUserIcon from '../assets/roleUserIcon.svg?react';
+import FileContractIcon from '../assets/fileContract.svg?react';
 
 function SideBarMenu() {
 
@@ -23,27 +34,27 @@ function SideBarMenu() {
             subCategories: [
                 {
                     name: "Ventas",
-                    icon: ShoppingCart,
+                    icon: ShoppingCartPlusIcon,
                     path: "/sales"
                 },
                 {
                     name: "Cuentas Activas",
-                    icon: ShoppingCart,
+                    icon: BagShoppingIcon,
                     path: "/active-orders"
                 },
                 {
                     name: "Comprobantes",
-                    icon: ShoppingCart,
+                    icon: FileInvoiceIcon,
                     path: "/invoices"
                 },
                 {
                     name: "Entradas / Salidas",
-                    icon: ShoppingCart,
+                    icon: MoneyTransferIcon,
                     path: "/ventas"
                 },
                 {
                     name: "Cuadrar caja",
-                    icon: ShoppingCart,
+                    icon: MoneyIcon,
                     path: "/cash-review"
                 },
             ],
@@ -63,95 +74,31 @@ function SideBarMenu() {
             icon: BathIcon,
             subCategories: [
                 {
-                    name: "Ventas",
-                    icon: ShoppingCart,
-                    path: "/sales"
+                    name: "Turnos de hoy",
+                    path: "/grooming"
                 },
                 {
-                    name: "Cuentas Activas",
-                    icon: ShoppingCart,
-                    path: "/active-orders"
+                    name: "Terminados de hoy",
+                    path: "/grooming/finished-today"
                 },
                 {
                     name: "Comprobantes",
-                    icon: ShoppingCart,
                     path: "/invoices"
                 },
                 {
-                    name: "Entradas / Salidas",
-                    icon: ShoppingCart,
-                    path: "/ventas"
-                },
-                {
-                    name: "Cuadrar caja",
-                    icon: ShoppingCart,
-                    path: "/cash-review"
+                    name: "Historial",
+                    path: "/grooming/history"
                 },
             ],
-            path: "/peluqueria"
         },
         {
             name: "Clientes",
             icon: UserGroupIcon,
-            subCategories: [
-                {
-                    name: "Ventas",
-                    icon: ShoppingCart,
-                    path: "/sales"
-                },
-                {
-                    name: "Cuentas Activas",
-                    icon: ShoppingCart,
-                    path: "/active-orders"
-                },
-                {
-                    name: "Comprobantes",
-                    icon: ShoppingCart,
-                    path: "/invoices"
-                },
-                {
-                    name: "Entradas / Salidas",
-                    icon: ShoppingCart,
-                    path: "/ventas"
-                },
-                {
-                    name: "Cuadrar caja",
-                    icon: ShoppingCart,
-                    path: "/cash-review"
-                },
-            ],
             path: "/clientes"
         },
         {
             name: "Mascotas",
             icon: PetIcon,
-            subCategories: [
-                {
-                    name: "Ventas",
-                    icon: ShoppingCart,
-                    path: "/sales"
-                },
-                {
-                    name: "Cuentas Activas",
-                    icon: ShoppingCart,
-                    path: "/active-orders"
-                },
-                {
-                    name: "Comprobantes",
-                    icon: ShoppingCart,
-                    path: "/invoices"
-                },
-                {
-                    name: "Entradas / Salidas",
-                    icon: ShoppingCart,
-                    path: "/ventas"
-                },
-                {
-                    name: "Cuadrar caja",
-                    icon: ShoppingCart,
-                    path: "/cash-review"
-                },
-            ],
             path: "/mascotas"
         },
         {
@@ -159,32 +106,26 @@ function SideBarMenu() {
             icon: BoxesIcon,
             subCategories: [
                 {
-                    name: "Ventas",
-                    icon: ShoppingCart,
-                    path: "/sales"
+                    name: "Catalogo",
+                    icon: DocumentIcon,
+                    path: "/products"
                 },
                 {
-                    name: "Cuentas Activas",
-                    icon: ShoppingCart,
-                    path: "/active-orders"
+                    name: "Descargar stock",
+                    icon: DocumentOutIcon,
+                    path: "/discharges"
                 },
                 {
-                    name: "Comprobantes",
-                    icon: ShoppingCart,
-                    path: "/invoices"
+                    name: "Cargar stock",
+                    icon: DocumentJoinIcon,
+                    path: "/charges"
                 },
                 {
-                    name: "Entradas / Salidas",
-                    icon: ShoppingCart,
-                    path: "/ventas"
-                },
-                {
-                    name: "Cuadrar caja",
-                    icon: ShoppingCart,
-                    path: "/cash-review"
+                    name: "Stock por almacén",
+                    icon: BoxesIcon,
+                    path: "/depot-stocks"
                 },
             ],
-            path: "/productos"
         },
         {
             name: "Servicios",
@@ -196,29 +137,39 @@ function SideBarMenu() {
             icon: ConfigurationIcon,
             subCategories: [
                 {
-                    name: "Ventas",
-                    icon: ShoppingCart,
-                    path: "/sales"
+                    name: "General",
+                    icon: HospitalIcon,
+                    path: "/config/clinics"
                 },
                 {
-                    name: "Cuentas Activas",
-                    icon: ShoppingCart,
-                    path: "/active-orders"
+                    name: "Datos fiscales",
+                    icon: BuildingShieldIcon,
+                    path: "/config/companies"
                 },
                 {
                     name: "Comprobantes",
-                    icon: ShoppingCart,
-                    path: "/invoices"
+                    icon: FileInvoiceIcon,
+                    path: "/config/invoice-types"
                 },
                 {
-                    name: "Entradas / Salidas",
-                    icon: ShoppingCart,
-                    path: "/ventas"
+                    name: "Metodos de pago",
+                    icon: MoneyIcon,
+                    path: "/config/payment-methods"
                 },
                 {
-                    name: "Cuadrar caja",
-                    icon: ShoppingCart,
-                    path: "/cash-review"
+                    name: "Usuarios",
+                    icon: UserGroupIcon,
+                    path: "/config/user-subsidiaries"
+                },
+                {
+                    name: "Roles",
+                    icon: RoleUserIcon,
+                    path: "/config/roles"
+                },
+                {
+                    name: "Cuenta",
+                    icon: FileContractIcon,
+                    path: "/config/subscriptions"
                 },
             ],
             path: "/configuracion"
@@ -231,15 +182,19 @@ function SideBarMenu() {
             {categories.map((category, index) => (
                 !category.subCategories ? (
                     <li key={index}>
-                        <a href={category.path} className="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                        <a href={category.path} className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                            <category.icon className="w-5 h-5" />
                             {category.name}
                         </a>
                     </li>
                 ) : (
                     <li key={index}>
                         <details className="group [&_summary::-webkit-details-marker]:hidden">
-                            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#47C5A6]">
-                                <span className="text-sm font-medium">{category.name}</span>
+                            <summary className="flex cursor-pointer items-center rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#47C5A6]">
+                                <span className="flex gap-2 items-center text-sm font-medium">
+                                    <category.icon className="w-5 h-5" />
+                                    {category.name}
+                                </span>
                                 <span className="shrink-0 transition duration-300 group-open:-rotate-180">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -250,7 +205,8 @@ function SideBarMenu() {
                             <ul className="mt-2 space-y-1 px-4">
                                 {category.subCategories?.map((subCategory, index) => (
                                     <li key={index}>
-                                        <a href={subCategory.path} className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-[#47C5A6]">
+                                        <a href={subCategory.path} className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                                            {subCategory.icon ? <subCategory.icon className="w-4 h-4" /> : null}
                                             {subCategory.name}
                                         </a>
                                     </li>
@@ -266,15 +222,3 @@ function SideBarMenu() {
 }
 
 export { SideBarMenu }
-
-// <section className="flex flex-col w-fullh-full">
-//             <ul className="flex flex-col gap-4">
-//                 {categories.map((category, index) => (
-//                     <li key={index}>
-//                         <a to={category.path} className="text-gray-700 font-semibold cursor-pointer hover:text-[#47C5A6] ">
-//                             {category.name}
-//                         </a>
-//                     </li>
-//                 ))}
-//             </ul>
-//         </section>

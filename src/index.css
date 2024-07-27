@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estilo del scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Ancho del scrollbar */
+}
+
+/* Estilo del thumb del scrollbar */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); /* Color del thumb */
+  border-radius: 10px; /* Radio del borde del thumb */
+}
+
+/* Estilo del track del scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1); /* Color del track */
+  border-radius: 10px; /* Radio del borde del track */
+}
