@@ -41,7 +41,7 @@ function SideBarMenu() {
                 {
                     name: "Cuentas Activas",
                     icon: BagShoppingIcon,
-                    path: "/active-orders"
+                    path: "/sales/active-orders"
                 },
                 {
                     name: "Comprobantes",

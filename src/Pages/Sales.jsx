@@ -2,6 +2,7 @@ import ShoppingCartPlusIcon from '../assets/shoppingCartPlus.svg?react';
 import NewUserIcon from '../assets/newUserIcon.svg?react';
 import UserPenIcon from '../assets/userPenIcon.svg?react';
 
+
 const Sales = () => {
 
     const tableCategories = [
@@ -26,7 +27,7 @@ const Sales = () => {
     ];
 
     return (
-        <div className="container mx-auto p-6">
+        <section className="container mx-auto p-6">
             <h1 className="text-3xl font-bold text-[#4CAF50] flex items-center mb-4">
                 <ShoppingCartPlusIcon className="h-8 w-8 mr-2" />
                 Ventas
@@ -95,8 +96,8 @@ const Sales = () => {
                     Ir a caja y generar comprobante
                 </button>
             </div>
-        </div>
+        </section>
     )
 }
 
-export default Sales;
+export { Sales };
