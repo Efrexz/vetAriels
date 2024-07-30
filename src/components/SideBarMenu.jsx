@@ -46,7 +46,7 @@ function SideBarMenu() {
                 {
                     name: "Comprobantes",
                     icon: FileInvoiceIcon,
-                    path: "/invoices"
+                    path: "/sales/invoices"
                 },
                 {
                     name: "Entradas / Salidas",
