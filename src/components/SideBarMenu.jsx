@@ -51,7 +51,7 @@ function SideBarMenu() {
                 {
                     name: "Entradas / Salidas",
                     icon: MoneyTransferIcon,
-                    path: "/ventas"
+                    path: "/sales/payments"
                 },
                 {
                     name: "Cuadrar caja",
