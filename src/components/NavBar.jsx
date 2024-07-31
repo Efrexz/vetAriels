@@ -6,9 +6,9 @@ import NewUserIcon from '../assets/newUserIcon.svg?react';
 
 function NavBar() {
     const pageSections = [
-        { icon: NewUserIcon, tooltip: 'Crear nuevo Propietario', path: '/crear-nuevo-propietario' },
-        { icon: Stethoscope, tooltip: 'Sala de espera', path: '/sala-de-espera' },
-        { icon: BathIcon, tooltip: 'Peluqueria', path: '/peluqueria' },
+        { icon: NewUserIcon, tooltip: 'Crear nuevo Propietario', path: '/crear-nuevo-propietario', count: false },
+        { icon: Stethoscope, tooltip: 'Sala de espera', path: '/sala-de-espera', count: true },
+        { icon: BathIcon, tooltip: 'Peluqueria', path: '/peluqueria', count: true },
     ];
 
     return (
@@ -18,9 +18,14 @@ function NavBar() {
                 <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" />
                 <ul className="flex gap-5 items-center">
                     {pageSections.map((section, index) => (
-                        <li key={index} className='cursor-pointer relative group '>
+                        <li key={index} className='cursor-pointer relative group'>
                             <section.icon className="w-5 h-5 hover:text-[#206D5A]" />
-                            <div className="absolute bottom-[-100%] left-[-150%] transform translate-y-full opacity-0 group-hover:opacity-100  transition-opacity duration-300 bg-gray-800 text-white text-sm rounded py-1 px-2 whitespace-nowrap">
+                            {section.count && (
+                                <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs transform translate-x-1/2 -translate-y-1/2">
+                                    0
+                                </span>
+                            )}
+                            <div className="absolute bottom-[-100%] left-[-150%] transform translate-y-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-sm rounded py-1 px-2 whitespace-nowrap z-10">
                                 {section.tooltip}
                             </div>
                         </li>
@@ -36,4 +41,4 @@ function NavBar() {
     );
 }
 
-export { NavBar }
+export { NavBar };
