@@ -4,6 +4,7 @@ import { Sales } from './Pages/Sales.jsx'
 import { ActiveOrders } from './Pages/ActiveOrders.jsx'
 import { Invoices } from './Pages/Invoices.jsx'
 import { Payments } from './Pages/Payments.jsx'
+import { ClinicQueue } from './Pages/ClinicQueue.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
 
@@ -18,7 +19,7 @@ function App() {
           <Route path="/sales/active-orders" element={<ActiveOrders />} />
           <Route path="/sales/invoices" element={<Invoices />} />
           <Route path="/sales/payments" element={<Payments />} />
-
+          <Route path="/clinic-queue" element={<ClinicQueue />} />
           <Route path="*" element={<h1>404 Page Not Found</h1>} />
         </Routes>
         <Footer />

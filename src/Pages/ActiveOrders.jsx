@@ -4,6 +4,7 @@ import SearchIcon from '../assets/searchIcon.svg?react';
 import PDFIcon from '../assets/pdfIcon.svg?react';
 import PaperPlaneIcon from '../assets/paperPlaneIcon.svg?react';
 import WhatsAppIcon from '../assets/whatsAppIcon.svg?react';
+import ShoppingCart from '../assets/shoppingCart.svg?react';
 
 
 const activeAccounts = [
@@ -24,7 +25,10 @@ const tableHeaders = [
 function ActiveOrders() {
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-orange-500 mb-4 pb-4 border-b-2 border-gray-100">Cuentas activas</h1>
+            <h1 className="text-3xl font-medium text-orange-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <ShoppingCart className="w-9 h-9  mr-2" />
+                Cuentas activas
+            </h1>
             <div className="bg-white rounded-lg shadow p-4 mb-6 border border-gray-300">
                 <div className="flex items-center space-x-4 mb-4">
                     <button className="bg-blue-500 text-white py-2 px-4 rounded">Por cliente</button>

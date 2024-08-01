@@ -61,9 +61,9 @@ function SideBarMenu() {
             ],
         },
         {
-            name: "Sala de estar",
+            name: "Sala de espera",
             icon: BookIcon,
-            path: "/sala-de-estar"
+            path: "/clinic-queue"
         },
         {
             name: "Internamientos",

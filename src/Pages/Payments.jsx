@@ -3,6 +3,8 @@ import SearchIcon from '../assets/searchIcon.svg?react';
 import EraserIcon from '../assets/eraserIcon.svg?react';
 import RefreshIcon from '../assets/refreshIcon.svg?react';
 import PDFIcon from '../assets/pdfIcon.svg?react';
+import FileInvoiceIcon from '../assets/file-invoice.svg?react';
+import ExcelIcon from '../assets/fileExcelIcon.svg?react';
 
 
 const paymentsData = [
@@ -12,17 +14,16 @@ const paymentsData = [
     // Agrega más datos según sea necesario
 ];
 
-const headlinesOptions = [
-    { type: 'Método de Pago', options: [{ value: 'EFECTIVO', label: 'Efectivo' }, { value: 'VISA', label: 'Visa' }] },
-    { type: 'Tipo de Mov.', options: [{ value: 'DIRECTO', label: 'Directo' }, { value: 'VENTA', label: 'Venta' }] },
-];
 
 const tableHeaders = ["Fecha", "ID", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Tipo de Mov.", "Opciones"];
 
 function Payments() {
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100">Entradas / Salidas de Caja</h1>
+            <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <FileInvoiceIcon className="w-9 h-9 mr-2" />
+                Entradas / Salidas de Caja
+            </h1>
             <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <div className="p-4 rounded-lg mb-2">
                     <div className="flex items-center space-x-2 mb-4">
@@ -52,7 +53,7 @@ function Payments() {
                             <PDFIcon className="w-5 h-5" />
                         </button>
                         <button className="bg-transparent border border-gray-300 text-green-600 py-2 px-4 rounded hover:bg-gray-200">
-                            i
+                            <ExcelIcon className="w-5 h-5" />
                         </button>
                     </div>
                     <div className="flex items-center space-x-4 mb-4">
