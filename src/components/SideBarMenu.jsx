@@ -68,7 +68,7 @@ function SideBarMenu() {
         {
             name: "Internamientos",
             icon: HospitalIcon,
-            path: "/internamientos"
+            path: "/internments"
         },
         {
             name: "Peluqueria",

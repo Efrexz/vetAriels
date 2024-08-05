@@ -11,7 +11,6 @@ const paymentsData = [
     { id: '300EBFEA', date: '31-07-2024 07:43 AM', description: 'APERTURA ANGELLY', paymentMethod: 'EFECTIVO', income: '2,084.00', expense: null, docRef: '', movementType: 'DIRECTO' },
     { id: 'FD12A67B', date: '30-07-2024 10:05 PM', description: '', paymentMethod: 'VISA', income: '150.00', expense: null, docRef: 'BV01-0003572', movementType: 'VENTA' },
     { id: 'AB4801FD', date: '30-07-2024 10:00 PM', description: '', paymentMethod: 'VISA', income: '475.00', expense: null, docRef: 'BV01-0003571', movementType: 'VENTA' },
-    // Agrega más datos según sea necesario
 ];
 
 

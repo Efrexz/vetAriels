@@ -74,7 +74,7 @@ function ClinicQueue() {
                         <button className="bg-transparent border border-gray-300 text-green-600 py-2 px-4 rounded hover:bg-gray-200">
                             <ExcelIcon className="w-5 h-5" />
                         </button>
-                        <button className="bg-transparent border border-gray-300 text-white bg-green-600 py-2 px-4 rounded hover:bg-green-700 flex items-center gap-2">
+                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
                             <PlusIcon className="w-5 h-5" />
                             AGREGAR PACIENTE
                         </button>
