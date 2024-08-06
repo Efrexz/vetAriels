@@ -7,6 +7,8 @@ import { Payments } from './Pages/Payments.jsx'
 import { ClinicQueue } from './Pages/ClinicQueue.jsx'
 import { Internments } from './Pages/Internments.jsx'
 import { ActiveOrdersGrooming } from './Pages/ActiveOrdersGrooming.jsx'
+import { GroomingHistory } from './Pages/GroomingHistory.jsx'
+import { Clients } from './Pages/Clients.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
 
@@ -24,6 +26,8 @@ function App() {
           <Route path="/clinic-queue" element={<ClinicQueue />} />
           <Route path="/internments" element={<Internments />} />
           <Route path="/grooming" element={<ActiveOrdersGrooming />} />
+          <Route path="/grooming/history" element={<GroomingHistory />} />
+          <Route path="/clients" element={<Clients />} />
           <Route path="*" element={<h1>404 Page Not Found</h1>} />
         </Routes>
         <Footer />

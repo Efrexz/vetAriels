@@ -79,14 +79,6 @@ function SideBarMenu() {
                     path: "/grooming"
                 },
                 {
-                    name: "Terminados de hoy",
-                    path: "/grooming/finished-today"
-                },
-                {
-                    name: "Comprobantes",
-                    path: "/invoices"
-                },
-                {
                     name: "Historial",
                     path: "/grooming/history"
                 },

@@ -62,18 +62,20 @@ function ClinicQueue() {
                                 className="w-[350px] py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
                             />
                         </div>
-                        <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                            <EraserIcon className="w-5 h-5" />
-                        </button>
-                        <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                            <RefreshIcon className="w-5 h-5" />
-                        </button>
-                        <button className="bg-transparent border border-gray-300 text-orange-500 py-2 px-4 rounded hover:bg-gray-200">
-                            <PDFIcon className="w-5 h-5" />
-                        </button>
-                        <button className="bg-transparent border border-gray-300 text-green-600 py-2 px-4 rounded hover:bg-gray-200">
-                            <ExcelIcon className="w-5 h-5" />
-                        </button>
+                        <div>
+                            <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
+                                <EraserIcon className="w-5 h-5" />
+                            </button>
+                            <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
+                                <RefreshIcon className="w-5 h-5" />
+                            </button>
+                            <button className="bg-transparent border border-gray-300 text-orange-500 py-2 px-4 rounded hover:bg-gray-200">
+                                <PDFIcon className="w-5 h-5" />
+                            </button>
+                            <button className="bg-transparent border border-gray-300 text-green-600 py-2 px-4 rounded hover:bg-gray-200">
+                                <ExcelIcon className="w-5 h-5" />
+                            </button>
+                        </div>
                         <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
                             <PlusIcon className="w-5 h-5" />
                             AGREGAR PACIENTE
