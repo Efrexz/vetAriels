@@ -4,6 +4,9 @@ import SearchIcon from '../assets/searchIcon.svg?react';
 import BathIcon from '../assets/bathIcon.svg?react';
 import Stethoscope from '../assets/stethoscope.svg?react';
 import NewUserIcon from '../assets/newUserIcon.svg?react';
+import RoleUserIcon from '../assets/roleUserIcon.svg?react';
+import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
+import StoreIcon from '../assets/storeIcon.svg?react';
 import { Link } from 'react-router-dom';
 
 function NavBar() {
@@ -12,6 +15,15 @@ function NavBar() {
     const [showBathList, setShowBathList] = useState(false);
 
     const [activeIcon, setActiveIcon] = useState(null); // Verificar cual icono está activo
+
+    const [showSearchInput, setShowSearchInput] = useState(false);
+
+    const [showUserOptions, setShowUserOptions] = useState(false);
+
+
+    const toggleSearchInput = () => {
+        setShowSearchInput(!showSearchInput);
+    };
 
     const pageSections = [
         { icon: NewUserIcon, tooltip: 'Crear nuevo Propietario', path: '/clients/create', count: false },
@@ -22,13 +34,22 @@ function NavBar() {
     const togglePatientList = () => {
         setShowPatientList(!showPatientList);
         setShowBathList(false);
+        setShowUserOptions(false);
         setActiveIcon(showPatientList ? null : 'patients');
     };
 
     const toggleBathList = () => {
         setShowBathList(!showBathList);
         setShowPatientList(false);
+        setShowUserOptions(false);
         setActiveIcon(showBathList ? null : 'baths');
+    };
+
+    const toggleUserOptions = () => {
+        setShowUserOptions(!showUserOptions);
+        setShowBathList(false);
+        setShowPatientList(false);
+        setActiveIcon(showUserOptions ? null : 'user');
     };
 
     return (
@@ -37,7 +58,14 @@ function NavBar() {
                 <h1 className="text-2xl font-medium cursor-pointer">VETERINARIA ARIEL´S EIRL</h1>
             </Link>
             <div className="flex items-center gap-5">
-                <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" />
+                <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" onClick={toggleSearchInput} />
+                {showSearchInput && (
+                    <input
+                        type="text"
+                        placeholder="Buscar mascota"
+                        className="w-auto pl-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                )}
                 <ul className="flex gap-5 items-center">
                     {pageSections.map((section, index) => (
                         <li key={index} className="cursor-pointer relative group">
@@ -69,9 +97,9 @@ function NavBar() {
                         </li>
                     ))}
                     <span className="font-bold mx-3">|</span>
-                    <li className="flex items-center gap-2">
-                        <a href="">Efrexz</a>
-                        <UserIcon className="w-6 h-6 hover:text-[#206D5A] cursor-pointer" />
+                    <li className="flex items-center gap-2 cursor-pointer hover:text-[#206D5A]" onClick={toggleUserOptions}>
+                        <span>Efrexz</span>
+                        <UserIcon className="w-6 h-6" />
                     </li>
                 </ul>
             </div>
@@ -132,6 +160,45 @@ function NavBar() {
                             </div>
                         </li>
                         <li className="p-3 text-blue-500 cursor-pointer hover:underline">Ir a la sala de espera</li>
+                    </ul>
+                </div>
+            )}
+
+            {/*  el menú desplegable de opciones de usuario */}
+            {showUserOptions && (
+                <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg w-80 z-20">
+                    <ul>
+                        <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">
+                            <div className='flex items-center gap-2'>
+                                <RoleUserIcon className="w-5 h-5 text-gray-600" />
+                                <span className="ml-2 text-gray-600">Administracion</span>
+                            </div>
+                            <span className="block text-gray-500 text-xs pl-9">administracionAriels@gmail.com</span>
+                        </li>
+                        <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">
+                            <div className='flex items-center gap-2'>
+                                <DocumentOutIcon className="w-5 h-5 text-gray-600" />
+                                <span className="ml-2 text-gray-600 text-sm ">Cerrar Sesión en este dispositivo</span>
+                            </div>
+                        </li>
+                        <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">
+                            <div className='flex items-center gap-2'>
+                                <DocumentOutIcon className="w-5 h-5 text-gray-600" />
+                                <span className="ml-2 text-gray-600 text-sm">Cerrar Sesión en todos los dispositivos</span>
+                            </div>
+                        </li>
+                        <li className="p-3 border-b flex flex-col hover:bg-gray-100">
+                            <div className='flex items-center gap-2'>
+                                <StoreIcon className="w-5 h-5 text-gray-600" />
+                                <span className="ml-2 text-gray-600 text-sm">Cambiar de Sede:</span>
+                            </div>
+                        </li>
+                        <li className="p-3 border-b  hover:bg-gray-100 cursor-pointer">
+                            <span className="ml-2 text-gray-600 text-sm">[1570] OLGA BUSTINZA</span>
+                        </li>
+                        <li className="p-3 border-b  hover:bg-gray-100 cursor-pointer">
+                            <span className="ml-2 text-gray-600 text-sm">[1571] VETERINARIA ARIEL´S EIRL</span>
+                        </li>
                     </ul>
                 </div>
             )}
