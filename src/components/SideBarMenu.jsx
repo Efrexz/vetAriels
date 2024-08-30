@@ -123,7 +123,7 @@ function SideBarMenu() {
         {
             name: "Servicios",
             icon: PillsIcon,
-            path: "/servicios"
+            path: "/services"
         },
         {
             name: "Configuración",

@@ -6,13 +6,15 @@ import ExcelIcon from '../assets/fileExcelIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 import TrashIcon from '../assets/trashIcon.svg?react';
 import SearchIcon from '../assets/searchIcon.svg?react';
+import PenIcon from '../assets/penIcon.svg?react';
 import EyeIcon from '../assets/eyeIcon.svg?react';
 import EyeSlashIcon from '../assets/eyeSlash.svg?react';
+import KitMedical from '../assets/kitMedical.svg?react';
 
 const productsData = [
-    { id: 1, systemCode: 1520, name: 'NANORMEN PLUS - GATOS', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 10.00, stock: 15, availableStock: 15, status: true },
-    { id: 2, systemCode: 1519, name: 'URANOTEST-PANLEUCOPENIA FELINA', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'LABORATORIO', salePrice: 110.00, stock: 5, availableStock: 5, status: true },
-    { id: 3, systemCode: 1520, name: 'ROTOR 16 PARAMETROS + HEMOGRAMA', brand: 'Imagen Total SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 150.00, stock: 0, availableStock: 0, status: true },
+    { id: 1, systemCode: 1520, date: '2022-01-01', name: 'URANOTEST-PANLEUCOPENIA FELINA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
+    { id: 2, systemCode: 1519, date: '2022-01-01', name: 'URANOTEST-PANLEUCOPENIA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
+    { id: 3, systemCode: 1518, date: '2022-01-01', name: 'URANOTEST-PANLEUCOPENIA ', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
 ];
 
 const IconsOptions = [
@@ -26,13 +28,6 @@ const IconsOptions = [
 ];
 
 const filterOptions = [
-    {
-        type: "Proveedor",
-        options: [
-            { value: "durand", label: "REPRESENTACIONES DURAND SAC" },
-            { value: "imagen-total", label: "Imagen Total SAC" },
-        ]
-    },
     {
         type: "Línea...",
         options: [
@@ -51,24 +46,18 @@ const filterOptions = [
             { value: "categoria2", label: "Categoría 2" },
         ]
     },
-    {
-        type: "Stock...",
-        options: [
-            { value: "stock-agotado", label: "Stock Agotado" },
-            { value: "stock-bajo", label: "Stock Bajo" },
-        ]
-    },
 ];
 
-const tableHeaders = ["Cod. de sistema", "Producto", "Marca", "Proveedor", "Línea", "Precio de venta", "Stock Contable", "Stock Disponible", "Estado", "Opciones"];
+const tableHeaders = ["Cod. de sistema", "Fecha de Registro", "Nombre", "Línea", "Categoría", "Precio de venta", "Estado", "Opciones"];
 
-function Products() {
+function Services() {
     const [products, setProducts] = useState(productsData);
 
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                Productos
+                <KitMedical className="w-9 h-9 text-blue-500 mr-2" />
+                Servicios
             </h1>
             <div className="bg-white rounded-lg shadow p-3 mb-6">
                 <div className="p-4 rounded-lg mb-2">
@@ -128,28 +117,18 @@ function Products() {
                             {products.map((product, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">{product.systemCode}</td>
+                                    <td className="py-2 px-4 text-center border">{product.date}</td>
                                     <td className="py-2 px-4 text-center border">{product.name}</td>
-                                    <td className="py-2 px-4 text-center border">{product.brand}</td>
-                                    <td className="py-2 px-4 text-center border">{product.provider}</td>
                                     <td className="py-2 px-4 text-center border">{product.line}</td>
+                                    <td className="py-2 px-4 text-center border">{product.category}</td>
                                     <td className="py-2 px-4 text-center border">{product.salePrice}</td>
-                                    <td className="py-2 px-4 text-center border">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
-                                            {product.stock}
-                                        </span>
-                                    </td>
-                                    <td className="py-2 px-4 text-center border">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
-                                            {product.availableStock}
-                                        </span>
-                                    </td>
                                     <td className="py-2 px-4 text-center border ">
                                         <span
                                             className={`inline-block cursor-pointer w-4 h-4 rounded-full ${product.status ? "bg-green-500" : "bg-red-500"}`}
                                         />
                                     </td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
-                                        <SearchIcon className="w-4 h-4 text-blue-500 cursor-pointer" />
+                                        <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
                                         <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>
                                 </tr>
@@ -172,4 +151,4 @@ function Products() {
     );
 }
 
-export { Products };
+export { Services };
