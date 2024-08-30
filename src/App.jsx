@@ -15,31 +15,35 @@ import { Products } from './Pages/Products.jsx'
 import { Services } from './Pages/Services.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
+import { ClientsProvider } from './context/ClientsContext'
 
 function App() {
 
   return (
     <>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<DashBoard />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/sales/active-orders" element={<ActiveOrders />} />
-          <Route path="/sales/invoices" element={<Invoices />} />
-          <Route path="/sales/payments" element={<Payments />} />
-          <Route path="/clinic-queue" element={<ClinicQueue />} />
-          <Route path="/internments" element={<Internments />} />
-          <Route path="/grooming" element={<ActiveOrdersGrooming />} />
-          <Route path="/grooming/history" element={<GroomingHistory />} />
-          <Route path="/clients" element={<Clients />} />
-          <Route path="/clients/create" element={<CreateClientForm />} />
-          <Route path="/pets" element={<PetsData />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="*" element={<h1>404 Page Not Found</h1>} />
-        </Routes>
-        <Footer />
-      </Layout>
+      <ClientsProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<DashBoard />} />
+            <Route path="/sales" element={<Sales />} />
+            <Route path="/sales/active-orders" element={<ActiveOrders />} />
+            <Route path="/sales/invoices" element={<Invoices />} />
+            <Route path="/sales/payments" element={<Payments />} />
+            <Route path="/clinic-queue" element={<ClinicQueue />} />
+            <Route path="/internments" element={<Internments />} />
+            <Route path="/grooming" element={<ActiveOrdersGrooming />} />
+            <Route path="/grooming/history" element={<GroomingHistory />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/clients/create" element={<CreateClientForm />} />
+            <Route path="/pets" element={<PetsData />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="*" element={<h1>404 Page Not Found</h1>} />
+          </Routes>
+          <Footer />
+        </Layout>
+      </ClientsProvider>
+
     </>
   )
 }

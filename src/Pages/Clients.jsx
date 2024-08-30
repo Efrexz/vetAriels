@@ -1,4 +1,5 @@
-
+import { useContext } from 'react';
+import { ClientsContext } from '../context/ClientsContext';
 import EraserIcon from '../assets/eraserIcon.svg?react';
 import RefreshIcon from '../assets/refreshIcon.svg?react';
 import PDFIcon from '../assets/pdfIcon.svg?react';
@@ -21,6 +22,9 @@ const clientsData = [
 const tableHeaders = ["Fecha de registro", "Nombres y Apellidos", "Teléfono", "Email", "Direccion", "Opciones"];
 
 function Clients() {
+
+    const { clients } = useContext(ClientsContext);
+
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -84,7 +88,7 @@ function Clients() {
                             </tr>
                         </thead>
                         <tbody>
-                            {clientsData.map((userData, index) => (
+                            {clients.map((userData, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">
                                         <input type="checkbox" className="form-checkbox" />
@@ -93,8 +97,8 @@ function Clients() {
                                         <div>{userData.date}</div>
                                         <div>{userData.hour}</div>
                                     </td>
-                                    <td className="py-2 px-4 text-center border">{userData.name}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.phone}</td>
+                                    <td className="py-2 px-4 text-center border">{userData.firstName + ", " + userData.lastName}</td>
+                                    <td className="py-2 px-4 text-center border">{userData.phone1}</td>
                                     <td className="py-2 px-4 text-center border">{userData.email}</td>
                                     <td className="py-2 px-4 text-center border">{userData.address}</td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
