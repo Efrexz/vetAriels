@@ -112,7 +112,7 @@ function Clients() {
                     </table>
                 </div>
                 <div className="flex justify-between items-center mt-4">
-                    <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
+                    <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total {clients.length}</p>
                     <div className="flex space-x-2">
                         <button className="py-2 px-4 border rounded">Primera</button>
                         <button className="py-2 px-4 border rounded">Anterior</button>

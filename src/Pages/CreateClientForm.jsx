@@ -1,3 +1,5 @@
+import { useContext, useState } from 'react';
+import { ClientsContext } from '../context/ClientsContext';
 import UserGroupIcon from '../assets/userGroupIcon.svg?react';
 import RoleUserIcon from '../assets/roleUserIcon.svg?react';
 import DocumentIcon from '../assets/documentIcon.svg?react';
@@ -7,8 +9,59 @@ import LocationIcon from '../assets/locationIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 import { useNavigate } from "react-router-dom";
 
+
 function CreateClientForm() {
+    const { addClient } = useContext(ClientsContext);
     const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        nombre: '',
+        apellido: '',
+        documento: '',
+        email: '',
+        telefono_movil: '',
+        telefono_trabajo: '',
+        distrito: 'LIMA',
+        direccion: '',
+        referencia: '',
+        observaciones: ''
+    });
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [id]: value
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const now = new Date();
+        const currentDate = now.toLocaleDateString(); // ejemplo: "22/05/2023"
+        const currentTime = now.toLocaleTimeString(); // ejemplo: "07:43 PM"
+
+        const newClient = {
+            id: Date.now(), // Generar un ID único basado en el timestamp
+            firstName: formData.nombre,
+            lastName: formData.apellido,
+            email: formData.email,
+            dni: formData.documento,
+            date: currentDate,
+            hour: currentTime,
+            phone1: formData.telefono_movil,
+            phone2: formData.telefono_trabajo,
+            address: formData.direccion,
+            distrit: formData.distrito,
+            reference: formData.referencia,
+            observations: formData.observaciones,
+            pets: [] // Puedes añadir un campo para agregar mascotas más adelante
+        };
+
+        addClient(newClient);  // Añadir el nuevo cliente al contexto
+        navigate("/clients");  // Regresar a la página anterior después de agregar el cliente
+    };
 
     const formFields = [
         {
@@ -60,7 +113,7 @@ function CreateClientForm() {
         },
         {
             label: 'Dirección *',
-            id: 'provincia',
+            id: 'direccion',
             type: 'text'
         },
         {
@@ -96,7 +149,10 @@ function CreateClientForm() {
                                 }
 
                                 {field.type === 'select' ? (
-                                    <select id={field.id} className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0">
+                                    <select
+                                        id={field.id}
+                                        className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0"
+                                    >
                                         {field.options.map((option, i) => (
                                             <option key={i} value={option}>
                                                 {option}
@@ -107,6 +163,8 @@ function CreateClientForm() {
                                     <input
                                         type={field.type}
                                         id={field.id}
+                                        value={formData[field.id]}
+                                        onChange={handleChange}
                                         className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                                     />
                                 )}
@@ -126,7 +184,7 @@ function CreateClientForm() {
                     <PlusIcon className="w-5 h-5 text-gray-700" />
                     CANCELAR
                 </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
+                <button onClick={handleSubmit} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
                     <PlusIcon className="w-5 h-5 text-white" />
                     CREAR NUEVO CLIENTE
                 </button>
