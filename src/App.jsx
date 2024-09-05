@@ -14,6 +14,8 @@ import { CreateClientForm } from './Pages/CreateClientForm.jsx'
 import { UserProfile } from './Pages/UserProfile.jsx'
 import { PetsData } from './Pages/PetsData.jsx'
 import { Products } from './Pages/Products.jsx'
+import { Discharges } from './Pages/Discharges.jsx'
+import { Charges } from './Pages/Charges.jsx'
 import { Services } from './Pages/Services.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
@@ -39,6 +41,8 @@ function App() {
             <Route path="/clients/client/:id" element={<UserProfile />} />
             <Route path="/pets" element={<PetsData />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/discharges" element={<Discharges />} />
+            <Route path="/charges" element={<Charges />} />
             <Route path="/services" element={<Services />} />
             <Route path="*" element={<h1>404 Page Not Found</h1>} />
           </Routes>
