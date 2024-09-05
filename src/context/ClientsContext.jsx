@@ -118,12 +118,17 @@ function ClientsProvider({ children }) {
         setClients([...clients, newClient]);
     };
 
+    const updateClientData = (id, newData) => {
+        setClients(clients.map(client => client.id === id ? { ...client, ...newData } : client));
+        console.log(clients);
+    };
+
     const removeClient = (id) => {
         setClients(clients.filter(client => client.id !== id));
     };
 
     return (
-        <ClientsContext.Provider value={{ clients, addClient, removeClient }}>
+        <ClientsContext.Provider value={{ clients, addClient, removeClient, updateClientData }}>
             {children}
         </ClientsContext.Provider>
     );

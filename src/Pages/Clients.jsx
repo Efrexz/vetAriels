@@ -12,12 +12,6 @@ import SearchIcon from '../assets/searchIcon.svg?react';
 import PawIcon from '../assets/pawIcon.svg?react';
 
 
-const clientsData = [
-    { id: '20497', date: '31-07-2024', hour: '07:43PM', name: 'Efrain Andrade', phone: '917104426', address: 'Av. Proceres 115', email: "efrain@gmail.com" },
-    { id: '20498', date: '30-07-2024', hour: '07:43PM', name: 'Efrain Andrade', phone: '917104426', address: 'Av. Proceres 115', email: "efrain@gmail.com" },
-    { id: '20499', date: '30-07-2024', hour: '07:43PM', name: 'Efrain Andrade', phone: '917104426', address: 'CALLE LOS ROSALES 230 SAN MIGUEL', email: "efrain@gmail.com" },
-];
-
 
 const tableHeaders = ["Fecha de registro", "Nombres y Apellidos", "Teléfono", "Email", "Direccion", "Opciones"];
 

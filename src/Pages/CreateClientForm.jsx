@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { ClientsContext } from '../context/ClientsContext';
 import UserGroupIcon from '../assets/userGroupIcon.svg?react';
 import RoleUserIcon from '../assets/roleUserIcon.svg?react';
@@ -7,7 +8,6 @@ import EmailIcon from '../assets/emailIcon.svg?react';
 import PhoneIcon from '../assets/phoneIcon.svg?react';
 import LocationIcon from '../assets/locationIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
-import { useNavigate } from "react-router-dom";
 
 
 function CreateClientForm() {
@@ -39,11 +39,11 @@ function CreateClientForm() {
         e.preventDefault();
 
         const now = new Date();
-        const currentDate = now.toLocaleDateString(); // ejemplo: "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); // ejemplo: "07:43 PM"
+        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
+        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newClient = {
-            id: Date.now(), // Generar un ID único basado en el timestamp
+            id: Date.now(),
             firstName: formData.nombre,
             lastName: formData.apellido,
             email: formData.email,
@@ -56,11 +56,11 @@ function CreateClientForm() {
             distrit: formData.distrito,
             reference: formData.referencia,
             observations: formData.observaciones,
-            pets: [] // Puedes añadir un campo para agregar mascotas más adelante
+            pets: []
         };
 
-        addClient(newClient);  // Añadir el nuevo cliente al contexto
-        navigate("/clients");  // Regresar a la página anterior después de agregar el cliente
+        addClient(newClient);
+        navigate(`/clients/client/${newClient.id}`);
     };
 
     const formFields = [

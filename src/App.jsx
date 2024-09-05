@@ -1,3 +1,4 @@
+import { ClientsProvider } from './context/ClientsContext'
 import { Routes, Route } from 'react-router-dom'
 import { DashBoard } from './Pages/DashBoard.jsx'
 import { Sales } from './Pages/Sales.jsx'
@@ -10,12 +11,12 @@ import { ActiveOrdersGrooming } from './Pages/ActiveOrdersGrooming.jsx'
 import { GroomingHistory } from './Pages/GroomingHistory.jsx'
 import { Clients } from './Pages/Clients.jsx'
 import { CreateClientForm } from './Pages/CreateClientForm.jsx'
+import { UserProfile } from './Pages/UserProfile.jsx'
 import { PetsData } from './Pages/PetsData.jsx'
 import { Products } from './Pages/Products.jsx'
 import { Services } from './Pages/Services.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
-import { ClientsProvider } from './context/ClientsContext'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/grooming/history" element={<GroomingHistory />} />
             <Route path="/clients" element={<Clients />} />
             <Route path="/clients/create" element={<CreateClientForm />} />
+            <Route path="/clients/client/:id" element={<UserProfile />} />
             <Route path="/pets" element={<PetsData />} />
             <Route path="/products" element={<Products />} />
             <Route path="/services" element={<Services />} />
