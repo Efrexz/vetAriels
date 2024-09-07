@@ -75,12 +75,12 @@ function Config() {
     ];
 
     const themeColorList = [
-        'blue',
-        'red',
-        'green',
-        'yellow',
-        'purple',
-        "gray",
+        { color: 'blue', bgClass: 'bg-blue-400', hoverClass: 'hover:bg-blue-500' },
+        { color: 'red', bgClass: 'bg-red-400', hoverClass: 'hover:bg-red-500' },
+        { color: 'green', bgClass: 'bg-green-400', hoverClass: 'hover:bg-green-500' },
+        { color: 'yellow', bgClass: 'bg-yellow-400', hoverClass: 'hover:bg-yellow-500' },
+        { color: 'purple', bgClass: 'bg-purple-400', hoverClass: 'hover:bg-purple-500' },
+        { color: 'gray', bgClass: 'bg-gray-400', hoverClass: 'hover:bg-gray-500' },
     ];
 
     return (
@@ -135,13 +135,13 @@ function Config() {
                     <div className="items-center mt-6 w-[70%]">
                         <h2>Temas</h2>
                         <div className='gap-4 mt-4 flex flex-wrap'>
-                            {themeColorList.map((color, index) => (
+                            {themeColorList.map((theme, index) => (
                                 <button
                                     key={index}
-                                    className={`bg-${color}-400 text-white py-3 px-5 w-28 rounded hover:bg-${color}-500`}
-                                    onClick={() => setThemeColor(color)}
+                                    className={`${theme.bgClass} text-white py-3 px-5 w-28 rounded ${theme.hoverClass}`}
+                                    onClick={() => setThemeColor(theme.color)}
                                 >
-                                    {color}
+                                    {theme.color}
                                 </button>
                             ))}
                         </div>
