@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ClientsContext } from '../context/ClientsContext';
 import EraserIcon from '../assets/eraserIcon.svg?react';
 import RefreshIcon from '../assets/refreshIcon.svg?react';
@@ -18,6 +19,7 @@ const tableHeaders = ["Fecha de registro", "Nombres y Apellidos", "Teléfono", "
 function Clients() {
 
     const { clients } = useContext(ClientsContext);
+    const navigate = useNavigate();
 
     return (
         <section className="container mx-auto p-6">
@@ -96,7 +98,7 @@ function Clients() {
                                     <td className="py-2 px-4 text-center border">{userData.email}</td>
                                     <td className="py-2 px-4 text-center border">{userData.address}</td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
-                                        <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
+                                        <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" onClick={() => navigate(`/clients/client/${userData.id}/update`)} />
                                         <PawIcon className="w-4 h-4 text-[#7266BA] cursor-pointer" />
                                         <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>

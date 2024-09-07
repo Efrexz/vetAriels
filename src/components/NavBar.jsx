@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { GlobalContext } from '../context/GlobalContext';
 import UserIcon from '../assets/userIcon.svg?react';
 import SearchIcon from '../assets/searchIcon.svg?react';
 import BathIcon from '../assets/bathIcon.svg?react';
@@ -7,7 +9,6 @@ import NewUserIcon from '../assets/newUserIcon.svg?react';
 import RoleUserIcon from '../assets/roleUserIcon.svg?react';
 import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
 import StoreIcon from '../assets/storeIcon.svg?react';
-import { Link } from 'react-router-dom';
 
 function NavBar() {
     const [showPatientList, setShowPatientList] = useState(false);
@@ -52,8 +53,10 @@ function NavBar() {
         setActiveIcon(showUserOptions ? null : 'user');
     };
 
+    const { themeColor } = useContext(GlobalContext);
+
     return (
-        <nav className="flex justify-between items-center py-4 px-6 w-full bg-[#47C5A6] text-white">
+        <nav className={`flex justify-between items-center py-4 px-6 w-full bg-${themeColor}-400 text-white`}>
             <Link to="/">
                 <h1 className="text-2xl font-medium cursor-pointer">VETERINARIA ARIEL´S EIRL</h1>
             </Link>

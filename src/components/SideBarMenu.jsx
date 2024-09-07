@@ -132,7 +132,7 @@ function SideBarMenu() {
                 {
                     name: "General",
                     icon: HospitalIcon,
-                    path: "/config/clinics"
+                    path: "/config/subsidiary"
                 },
                 {
                     name: "Datos fiscales",

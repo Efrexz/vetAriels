@@ -60,7 +60,7 @@ function CreateClientForm() {
         };
 
         addClient(newClient);
-        navigate(`/clients/client/${newClient.id}`);
+        navigate(`/clients/client/${newClient.id}/update`);
     };
 
     const formFields = [
