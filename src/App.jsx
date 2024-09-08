@@ -12,7 +12,8 @@ import { ActiveOrdersGrooming } from './Pages/ActiveOrdersGrooming.jsx'
 import { GroomingHistory } from './Pages/GroomingHistory.jsx'
 import { Clients } from './Pages/Clients.jsx'
 import { CreateClientForm } from './Pages/CreateClientForm.jsx'
-import { UserProfile } from './Pages/UserProfile.jsx'
+import { ClientProfile } from './Pages/ClientProfile.jsx'
+import { ClientPets } from './Pages/ClientPets.jsx'
 import { PetsData } from './Pages/PetsData.jsx'
 import { Products } from './Pages/Products.jsx'
 import { Discharges } from './Pages/Discharges.jsx'
@@ -41,7 +42,8 @@ function App() {
               <Route path="/grooming/history" element={<GroomingHistory />} />
               <Route path="/clients" element={<Clients />} />
               <Route path="/clients/create" element={<CreateClientForm />} />
-              <Route path="/clients/client/:id/update" element={<UserProfile />} />
+              <Route path="/clients/client/:id/update" element={<ClientProfile />} />
+              <Route path="/clients/client/:id/pets" element={<ClientPets />} />
               <Route path="/pets" element={<PetsData />} />
               <Route path="/products" element={<Products />} />
               <Route path="/discharges" element={<Discharges />} />

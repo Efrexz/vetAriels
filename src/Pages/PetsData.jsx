@@ -5,7 +5,6 @@ import PDFIcon from '../assets/pdfIcon.svg?react';
 import ExcelIcon from '../assets/fileExcelIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 import Stethoscope from '../assets/stethoscope.svg?react';
-import PenIcon from '../assets/penIcon.svg?react';
 import TrashIcon from '../assets/trashIcon.svg?react';
 import PawIcon from '../assets/pawIcon.svg?react';
 import SearchIcon from '../assets/searchIcon.svg?react';

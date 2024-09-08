@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { ClientsContext } from '../context/ClientsContext';
 
 function HorizontalMenu() {
 
@@ -9,25 +11,28 @@ function HorizontalMenu() {
     };
 
     const tabs = [
-        { name: 'Editar' },
-        { name: 'Mascotas' },
-        { name: 'Historial de compras' },
-        { name: 'Galería' },
+        { name: 'Editar', url: "update" },
+        { name: 'Mascotas', url: "pets" },
+        { name: 'Historial de compras', url: "purchases" },
+        { name: 'Galería', url: "gallery" },
     ];
+
+    const { clients } = useContext(ClientsContext);
+    const { id } = useParams();
 
     return (
         <div>
             <nav className="flex gap-5" aria-label="Tabs">
                 {tabs.map((tab, index) => (
-                    <a
+                    <Link
                         key={index}
-                        href="#"
+                        to={`/clients/client/${id}/${tab.url}`}
                         className={`shrink-0 rounded-lg p-2 text-sm font-bold
                         ${selectedTab === tab.name ? 'bg-sky-400 text-white ' : 'text-sky-500 hover:text-sky-600 hover:bg-gray-50'}`}
                         onClick={() => handleTabClick(tab.name)}
                     >
                         {tab.name}
-                    </a>
+                    </Link>
                 ))}
             </nav>
         </div>
