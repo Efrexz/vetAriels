@@ -1,7 +1,7 @@
-import SearchIcon from '../assets/searchIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import RefreshIcon from '../assets/refreshIcon.svg?react';
 import { useNavigate } from 'react-router-dom';
+import SearchIcon from '../../assets/searchIcon.svg?react';
+import PlusIcon from '../../assets/plusIcon.svg?react';
+import RefreshIcon from '../../assets/refreshIcon.svg?react';
 
 function ClientPets() {
 

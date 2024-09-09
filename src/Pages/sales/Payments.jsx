@@ -1,10 +1,10 @@
 
-import SearchIcon from '../assets/searchIcon.svg?react';
-import EraserIcon from '../assets/eraserIcon.svg?react';
-import RefreshIcon from '../assets/refreshIcon.svg?react';
-import PDFIcon from '../assets/pdfIcon.svg?react';
-import FileInvoiceIcon from '../assets/file-invoice.svg?react';
-import ExcelIcon from '../assets/fileExcelIcon.svg?react';
+import SearchIcon from '../../assets/searchIcon.svg?react';
+import EraserIcon from '../../assets/eraserIcon.svg?react';
+import RefreshIcon from '../../assets/refreshIcon.svg?react';
+import PDFIcon from '../../assets/pdfIcon.svg?react';
+import FileInvoiceIcon from '../../assets/file-invoice.svg?react';
+import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
 
 
 const paymentsData = [

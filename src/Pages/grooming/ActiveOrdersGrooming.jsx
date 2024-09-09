@@ -1,18 +1,18 @@
-import BathIcon from '../assets/bathIcon.svg?react';
-import EraserIcon from '../assets/eraserIcon.svg?react';
-import RefreshIcon from '../assets/refreshIcon.svg?react';
-import PDFIcon from '../assets/pdfIcon.svg?react';
-import ExcelIcon from '../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import PenIcon from '../assets/penIcon.svg?react';
-import CheckIcon from '../assets/checkIcon.svg?react';
-import SearchIcon from '../assets/searchIcon.svg?react';
-import BanIcon from '../assets/banIcon.svg?react';
+import BathIcon from '../../assets/bathIcon.svg?react';
+import EraserIcon from '../../assets/eraserIcon.svg?react';
+import RefreshIcon from '../../assets/refreshIcon.svg?react';
+import PDFIcon from '../../assets/pdfIcon.svg?react';
+import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
+import PlusIcon from '../../assets/plusIcon.svg?react';
+import PenIcon from '../../assets/penIcon.svg?react';
+import CheckIcon from '../../assets/checkIcon.svg?react';
+import SearchIcon from '../../assets/searchIcon.svg?react';
+import BanIcon from '../../assets/banIcon.svg?react';
 
 
 const groomingOrderData = [
     {
-        code: "245",
+        turn: '1',
         date: '31-07-2024',
         entryTime: '10:00 PM',
         exitTime: '11:05 PM',
@@ -23,7 +23,7 @@ const groomingOrderData = [
         state: "Pendiente"
     },
     {
-        code: "246",
+        turn: '1',
         date: '31-07-2024',
         entryTime: '10:00 PM',
         exitTime: '11:05 PM',
@@ -34,7 +34,7 @@ const groomingOrderData = [
         state: "Pendiente"
     },
     {
-        code: "247",
+        turn: '1',
         date: '31-07-2024',
         entryTime: '10:00 PM',
         exitTime: '11:05 PM',
@@ -47,14 +47,14 @@ const groomingOrderData = [
 ];
 
 
-const tableHeaders = ["Cod. de Sistema", "Fecha", "Entreda", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
+const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
 
-function GroomingHistory() {
+function ActiveOrdersGrooming() {
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <BathIcon className="w-9 h-9 text-blue-400 mr-2" />
-                Peluquería: historial
+                Peluquería: <span className="text-green-600 font-light pl-1"> Turnos de hoy</span>
             </h1>
             <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <div className="p-4 rounded-lg mb-2">
@@ -88,11 +88,7 @@ function GroomingHistory() {
                             CREAR ORDEN DE SERVICIO
                         </button>
                     </div>
-                    <div className='flex gap-3'>
-                        <input
-                            type="date"
-                            className="w-[30%] py-2 px-4 border-gray-200 border rounded-lg focus:outline-none focus:border-blue-300"
-                        />
+                    <div>
                         <select
                             name="status"
                             className="w-[30%] rounded-lg border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300  focus:border-blue-300"
@@ -109,6 +105,9 @@ function GroomingHistory() {
                     <table className="min-w-full bg-white border rounded-lg">
                         <thead className="bg-gray-100">
                             <tr>
+                                <th className="py-2 px-4 text-left border">
+                                    <input type="checkbox" className="form-checkbox" />
+                                </th>
                                 {tableHeaders.map((header) => (
                                     <th key={header} className={`py-2 px-4 ${header === "Mascota" ? "text-left" : "text-center"} border font-medium text-gray-700`}>
                                         {header}
@@ -119,7 +118,10 @@ function GroomingHistory() {
                         <tbody>
                             {groomingOrderData.map((groomingData, index) => (
                                 <tr key={index} className="hover:bg-gray-100 border-b">
-                                    <td className="py-2 px-4 text-center border align-top pt-4">{groomingData.code}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">
+                                        <input type="checkbox" className="form-checkbox" />
+                                    </td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.turn}</td>
                                     <td className="py-2 px-4 text-center border align-top pt-4">{groomingData.date}</td>
                                     <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.entryTime}</td>
                                     <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.exitTime}</td>
@@ -169,4 +171,4 @@ function GroomingHistory() {
     );
 }
 
-export { GroomingHistory };
+export { ActiveOrdersGrooming };

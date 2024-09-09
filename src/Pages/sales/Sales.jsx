@@ -1,6 +1,6 @@
-import ShoppingCartPlusIcon from '../assets/shoppingCartPlus.svg?react';
-import NewUserIcon from '../assets/newUserIcon.svg?react';
-import UserPenIcon from '../assets/userPenIcon.svg?react';
+import ShoppingCartPlusIcon from '../../assets/shoppingCartPlus.svg?react';
+import NewUserIcon from '../../assets/newUserIcon.svg?react';
+import UserPenIcon from '../../assets/userPenIcon.svg?react';
 
 
 const Sales = () => {

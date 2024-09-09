@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import EraserIcon from '../assets/eraserIcon.svg?react';
-import RefreshIcon from '../assets/refreshIcon.svg?react';
-import PDFIcon from '../assets/pdfIcon.svg?react';
-import ExcelIcon from '../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import TrashIcon from '../assets/trashIcon.svg?react';
-import SearchIcon from '../assets/searchIcon.svg?react';
-import EyeIcon from '../assets/eyeIcon.svg?react';
-import EyeSlashIcon from '../assets/eyeSlash.svg?react';
+import EraserIcon from '../../assets/eraserIcon.svg?react';
+import RefreshIcon from '../../assets/refreshIcon.svg?react';
+import PDFIcon from '../../assets/pdfIcon.svg?react';
+import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
+import PlusIcon from '../../assets/plusIcon.svg?react';
+import TrashIcon from '../../assets/trashIcon.svg?react';
+import SearchIcon from '../../assets/searchIcon.svg?react';
+import EyeIcon from '../../assets/eyeIcon.svg?react';
+import EyeSlashIcon from '../../assets/eyeSlash.svg?react';
 
 const productsData = [
     { id: 1, systemCode: 1520, name: 'NANORMEN PLUS - GATOS', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 10.00, stock: 15, availableStock: 15, status: true },
