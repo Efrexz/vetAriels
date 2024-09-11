@@ -1,4 +1,4 @@
-
+import { useNavigate } from 'react-router-dom';
 import EraserIcon from '../assets/eraserIcon.svg?react';
 import RefreshIcon from '../assets/refreshIcon.svg?react';
 import PDFIcon from '../assets/pdfIcon.svg?react';
@@ -92,6 +92,8 @@ const headlinesOptions = [
 const tableHeaders = ["Fecha de Registro", "#H.C", "Nombre", "Especie", "Raza", "Genero", "Fecha de Nacimiento", "Cliente", "Estado", "Opciones"];
 
 function PetsData() {
+
+    const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -125,7 +127,10 @@ function PetsData() {
                                 <TrashIcon className="w-5 h-5" />
                             </button>
                         </div>
-                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
+                        <button
+                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            onClick={() => navigate("/pets/create/no_client")}
+                        >
                             <PlusIcon className="w-5 h-5" />
                             CREAR NUEVA MASCOTA
                         </button>

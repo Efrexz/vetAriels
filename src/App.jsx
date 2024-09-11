@@ -14,6 +14,7 @@ import { Clients } from './Pages/Clients.jsx'
 import { CreateClientForm } from './Pages/CreateClientForm.jsx'
 import { ClientInfo } from './Pages/clientData.jsx/ClientInfo.jsx'
 import { PetsData } from './Pages/PetsData.jsx'
+import { CreatePetForm } from './Pages/CreatePetForm.jsx'
 import { Products } from './Pages/products/Products.jsx'
 import { Discharges } from './Pages/products/Discharges.jsx'
 import { Charges } from './Pages/products/Charges.jsx'
@@ -43,6 +44,7 @@ function App() {
               <Route path="/clients/create" element={<CreateClientForm />} />
               <Route path="/clients/client/:id/:section" element={<ClientInfo />} />
               <Route path="/pets" element={<PetsData />} />
+              <Route path="/pets/create/:id" element={<CreatePetForm />} />
               <Route path="/products" element={<Products />} />
               <Route path="/discharges" element={<Discharges />} />
               <Route path="/charges" element={<Charges />} />

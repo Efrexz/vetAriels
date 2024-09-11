@@ -13,7 +13,7 @@ function HorizontalMenu() {
     const tabs = [
         { name: 'Editar', url: "update" },
         { name: 'Mascotas', url: "pets" },
-        { name: 'Historial de compras', url: "purchases" },
+        { name: 'Historial de compras', url: "purchase-history" },
         { name: 'Galería', url: "gallery" },
     ];
 

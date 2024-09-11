@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SearchIcon from '../../assets/searchIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
@@ -30,6 +30,8 @@ function ClientPets() {
         },
     ];
 
+    const { id } = useParams();
+
     return (
         <div className="container mx-auto p-6">
             <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-t-lg overflow-hidden px-10 py-4">
@@ -37,7 +39,7 @@ function ClientPets() {
                     <div className="flex items-center space-x-4 mb-4">
                         <button
                             className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                            onClick={() => navigate("/clients/create")}
+                            onClick={() => navigate(`/pets/create/${id}`)}
                         >
                             <PlusIcon className="w-5 h-5 text-white" />
                             CREAR NUEVA MASCOTA

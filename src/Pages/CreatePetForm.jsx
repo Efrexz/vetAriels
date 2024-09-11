@@ -1,31 +1,34 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ClientsContext } from '../context/ClientsContext';
-import UserGroupIcon from '../assets/userGroupIcon.svg?react';
+import PawIcon from '../assets/pawIcon.svg?react';
 import RoleUserIcon from '../assets/roleUserIcon.svg?react';
-import DocumentIcon from '../assets/documentIcon.svg?react';
-import EmailIcon from '../assets/emailIcon.svg?react';
-import PhoneIcon from '../assets/phoneIcon.svg?react';
-import LocationIcon from '../assets/locationIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 import ReturnIcon from '../assets/returnIcon.svg?react';
+import CakeIcon from '../assets/cakeIcon.svg?react';
+import BookIcon from '../assets/bookIcon.svg?react';
+import MicrochipIcon from '../assets/microChip.svg?react';
 
 
-function CreateClientForm() {
-    const { addClient } = useContext(ClientsContext);
+function CreatePetForm() {
+    // const { addClient } = useContext(ClientsContext);
     const navigate = useNavigate();
+    const { clients } = useContext(ClientsContext);
+    const { id } = useParams();
+
+    const individualClientData = clients.find(client => client.id == id);
+
+
 
     const [formData, setFormData] = useState({
-        nombre: '',
-        apellido: '',
-        documento: '',
-        email: '',
-        telefono_movil: '',
-        telefono_trabajo: '',
-        distrito: 'LIMA',
-        direccion: '',
-        referencia: '',
-        observaciones: ''
+        owner: id !== "no_client" ? individualClientData?.firstName + " " + individualClientData?.lastName : "", //si nuestra url dice que no es un cliente, entonces no se debe mostrar por defecto el propietario
+        petName: '',
+        birthDate: '',
+        hc: "", //TODO - Generar por los momentos un hc segun el largo de la lista de mascotas
+        microchip: '',
+        species: '',
+        breed: '',
+        sex: '',
     });
 
     const handleChange = (e) => {
@@ -36,106 +39,102 @@ function CreateClientForm() {
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
 
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
+    //     const now = new Date();
+    //     const currentDate = now.toLocaleDateString(); //  "22/05/2023"
+    //     const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
-        const newClient = {
-            id: Date.now(),
-            firstName: formData.nombre,
-            lastName: formData.apellido,
-            email: formData.email,
-            dni: formData.documento,
-            date: currentDate,
-            hour: currentTime,
-            phone1: formData.telefono_movil,
-            phone2: formData.telefono_trabajo,
-            address: formData.direccion,
-            distrit: formData.distrito,
-            reference: formData.referencia,
-            observations: formData.observaciones,
-            pets: []
-        };
+    //     const newPet = {
+    //         owner: formData.owner,
+    //         date: currentDate,
+    //         time: currentTime,
+    //         petName: formData.petName,
+    //         birthDate: formData.birthDate,
+    //         hc: formData.hc,
+    //         microchip: formData.microchip,
+    //         species: formData.species,
+    //         breed: formData.breed,
+    //         sex: formData.sex,
+    //         pets: []
+    //     };
 
-        addClient(newClient);
-        navigate(`/clients/client/${newClient.id}/update`);
-    };
+    //     addClient(newPet);
+    //     navigate(`/clients/client/${newClient.id}/update`);
+    // };
+
 
     const formFields = [
         {
-            label: 'Nombre *',
-            id: 'nombre',
+            label: 'Propietario *',
+            id: 'owner',
             type: 'text',
             icon: RoleUserIcon,
-            required: true
+            required: true,
+            disabled: id !== "no_client" ? true : false
         },
         {
-            label: 'Apellido *',
-            id: 'apellido',
+            label: 'Nombre de la mascota *',
+            id: 'petName',
             type: 'text',
-            icon: RoleUserIcon,
-            required: true
+            icon: PawIcon,
+            required: true,
+            disabled: false,
         },
         {
-            label: 'Número de documento de identidad',
-            id: 'documento',
-            icon: DocumentIcon,
-            type: 'text'
-        },
-        {
-            label: 'Correo electrónico',
-            id: 'email',
-            icon: EmailIcon,
-            type: 'email',
-            helperText: 'Para enviar notificaciones o correos masivos, el cliente debe confirmar su correo electrónico'
-        },
-        {
-            label: 'Teléfono móvil *',
-            id: 'telefono_movil',
-            icon: PhoneIcon,
+            label: 'Fecha de nacimiento',
+            id: 'birthDate',
+            icon: CakeIcon,
             type: 'text',
-            helperText: 'Para utilizar WhatsApp, registrar el código de país delante del teléfono móvil. Ej. +51',
-            required: true
+            disabled: false,
         },
         {
-            label: 'Teléfono de trabajo',
-            id: 'telefono_trabajo',
-            icon: PhoneIcon,
-            type: 'text'
+            label: 'N° de historia',
+            id: 'hc',
+            icon: BookIcon,
+            type: 'text',
+            disabled: id !== "no_client" ? true : false
         },
         {
-            label: 'Distrito',
-            id: 'departamento',
+            label: 'Número de microchip',
+            id: 'microchip',
+            icon: MicrochipIcon,
+            type: 'text',
+            disabled: false
+        },
+        {
+            label: 'Especie',
+            id: 'species',
             type: 'select',
-            options: ['LIMA']
+            options: ['CANINO', 'FELINO', 'CONEJO', 'HAMSTER', 'ERIZO', 'EXOTICO']
         },
         {
-            label: 'Dirección *',
-            id: 'direccion',
-            type: 'text'
+            label: 'Raza',
+            id: 'breed',
+            type: 'select',
+            options: ['CRUCE', 'BULLDOG INGLES', 'CHIHUAHUA', 'COCKER SPANIEL', 'COLLIE', 'BOXER']
         },
         {
-            label: 'Referencias de la dirección',
-            id: 'referencia',
-            icon: LocationIcon,
-            type: 'text'
+            label: 'Sexo',
+            id: 'sex',
+            type: 'select',
+            options: ['MACHO', 'HEMBRA']
         },
         {
-            label: 'Observaciones del cliente',
-            id: 'observaciones',
-            icon: LocationIcon,
-            type: 'text'
+            label: '¿Ha sido esterilizado?',
+            id: 'esterilized',
+            type: 'select',
+            options: ['SI', 'NO']
         },
+
     ];
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <UserGroupIcon className="w-9 h-9  mr-2" />
-                Clientes
+            <h1 className="text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <PawIcon className="w-9 h-9  mr-2" />
+                Mascotas
             </h1>
             <div className="bg-white p-4 pb-10 rounded-t-lg shadow-lg">
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -166,6 +165,7 @@ function CreateClientForm() {
                                         id={field.id}
                                         value={formData[field.id]}
                                         onChange={handleChange}
+                                        disabled={field.disabled}
                                         className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                                     />
                                 )}
@@ -185,13 +185,13 @@ function CreateClientForm() {
                     <ReturnIcon className="w-5 h-5 text-gray-700" />
                     CANCELAR
                 </button>
-                <button onClick={handleSubmit} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
+                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
                     <PlusIcon className="w-5 h-5 text-white" />
-                    CREAR NUEVO CLIENTE
+                    CREAR NUEVA MASCOTA
                 </button>
             </div>
         </section>
     )
 }
 
-export { CreateClientForm }
+export { CreatePetForm }

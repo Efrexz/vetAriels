@@ -63,7 +63,10 @@ function Clients() {
                                 <TrashIcon className="w-5 h-5" />
                             </button>
                         </div>
-                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
+                        <button
+                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            onClick={() => navigate("/clients/create")}
+                        >
                             <PlusIcon className="w-5 h-5" />
                             CREAR NUEVO CLIENTE
                         </button>
