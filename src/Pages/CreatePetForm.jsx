@@ -13,10 +13,10 @@ import MicrochipIcon from '../assets/microChip.svg?react';
 function CreatePetForm() {
     // const { addClient } = useContext(ClientsContext);
     const navigate = useNavigate();
-    const { clients } = useContext(ClientsContext);
+    const { clients, addPet, historyCounter } = useContext(ClientsContext);
     const { id } = useParams();
 
-    const individualClientData = clients.find(client => client.id == id);
+    const individualClientData = clients.find(client => client.id === Number(id));
 
 
 
@@ -24,7 +24,7 @@ function CreatePetForm() {
         owner: id !== "no_client" ? individualClientData?.firstName + " " + individualClientData?.lastName : "", //si nuestra url dice que no es un cliente, entonces no se debe mostrar por defecto el propietario
         petName: '',
         birthDate: '',
-        hc: "", //TODO - Generar por los momentos un hc segun el largo de la lista de mascotas
+        hc: historyCounter, //TODO - Generar por los momentos un hc segun el largo de la lista de mascotas
         microchip: '',
         species: '',
         breed: '',
@@ -39,30 +39,30 @@ function CreatePetForm() {
         }));
     };
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    //     const now = new Date();
-    //     const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-    //     const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
+        const now = new Date();
+        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
+        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
-    //     const newPet = {
-    //         owner: formData.owner,
-    //         date: currentDate,
-    //         time: currentTime,
-    //         petName: formData.petName,
-    //         birthDate: formData.birthDate,
-    //         hc: formData.hc,
-    //         microchip: formData.microchip,
-    //         species: formData.species,
-    //         breed: formData.breed,
-    //         sex: formData.sex,
-    //         pets: []
-    //     };
+        const newPet = {
+            owner: formData.owner,
+            registrationDate: currentDate,
+            registrationTime: currentTime,
+            petName: formData.petName,
+            birthDate: formData.birthDate,
+            hc: formData.hc,
+            microchip: formData.microchip,
+            species: formData.species || "CANINO",
+            breed: formData.breed || "CRUCE",
+            sex: formData.sex || "MACHO",
+            active: true,
+        };
 
-    //     addClient(newPet);
-    //     navigate(`/clients/client/${newClient.id}/update`);
-    // };
+        addPet(newPet, Number(id), formData.owner);
+        navigate(`/pets`);
+    };
 
 
     const formFields = [
@@ -151,6 +151,7 @@ function CreatePetForm() {
                                 {field.type === 'select' ? (
                                     <select
                                         id={field.id}
+                                        onChange={handleChange}
                                         className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0"
                                     >
                                         {field.options.map((option, i) => (
@@ -185,7 +186,9 @@ function CreatePetForm() {
                     <ReturnIcon className="w-5 h-5 text-gray-700" />
                     CANCELAR
                 </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
+                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
+                    onClick={handleSubmit}
+                >
                     <PlusIcon className="w-5 h-5 text-white" />
                     CREAR NUEVA MASCOTA
                 </button>

@@ -4,6 +4,7 @@ const ClientsContext = createContext();
 
 function ClientsProvider({ children }) {
 
+    //clients Data
     const [clients, setClients] = useState([
         {
             id: 1,
@@ -19,46 +20,6 @@ function ClientsProvider({ children }) {
             distrit: 'San miguel',
             city: 'Lima',
             reference: 'es una veterinaria',
-            pets: [
-                {
-                    id: 1,
-                    name: 'Pedro',
-                    age: 1,
-                    sex: 'M',
-                    color: 'rojo',
-                    breed: 'corgi',
-                    img: 'https://i.imgur.com/v8y0k4B.jpg',
-                },
-                {
-                    id: 2,
-                    name: 'Macarena',
-                    age: 10,
-                    sex: 'F',
-                    color: 'rojo',
-                    breed: 'chihuahua',
-                    img: 'https://i.imgur.com/v8y0k4B.jpg',
-                },
-                {
-                    id: 3,
-                    name: 'Frack',
-                    age: 2,
-                    sex: 'M',
-                    color: 'rojo',
-                    breed: 'bulldog',
-                    img: 'https://i.imgur.com/v8y0k4B.jpg',
-                },
-                {
-                    id: 4,
-                    name: 'Miguelito',
-                    age: 2,
-                    sex: 'M',
-                    weight: 10,
-                    height: 10,
-                    color: 'rojo',
-                    breed: 'corgi',
-                    img: 'https://i.imgur.com/v8y0k4B.jpg',
-                },
-            ]
         },
         {
             id: 2,
@@ -74,17 +35,6 @@ function ClientsProvider({ children }) {
             distrit: 'San miguel',
             city: 'Lima',
             reference: 'es una veterinaria',
-            pets: [
-                {
-                    id: 1,
-                    name: 'Cataleya',
-                    age: 4,
-                    sex: 'F',
-                    color: 'rojo',
-                    breed: 'Bulldog frances',
-                    img: 'https://i.imgur.com/v8y0k4B.jpg',
-                },
-            ]
         },
         {
             id: 3,
@@ -100,17 +50,6 @@ function ClientsProvider({ children }) {
             distrit: 'San miguel',
             city: 'Lima',
             reference: 'es una veterinaria',
-            pets: [
-                {
-                    id: 1,
-                    name: 'Cataleya',
-                    age: 4,
-                    sex: 'F',
-                    color: 'rojo',
-                    breed: 'Bulldog frances',
-                    img: 'https://i.imgur.com/v8y0k4B.jpg',
-                },
-            ]
         },
     ]);
 
@@ -120,15 +59,81 @@ function ClientsProvider({ children }) {
 
     const updateClientData = (id, newData) => {
         setClients(clients.map(client => client.id === id ? { ...client, ...newData } : client));
-        console.log(clients);
     };
 
     const removeClient = (id) => {
         setClients(clients.filter(client => client.id !== id));
     };
 
+    //Pets Data
+    const [petsData, setPetsData] = useState([
+        {
+            id: 1,
+            ownerId: 3,
+            registrationDate: '31-07-2024',
+            registrationTime: '07:43 PM',
+            petName: 'FRAC',
+            birthDate: '31-07-2024',
+            hc: '123456',
+            microchip: '123456',
+            species: 'Canino',
+            breed: 'Mestizo',
+            sex: 'MACHO',
+            active: true,
+            img: 'https://i.imgur.com/v8y0k4B.jpg',
+        },
+        {
+            id: 2,
+            ownerId: 3,
+            registrationDate: '31-07-2024',
+            registrationTime: '07:43 PM',
+            petName: 'FRAC',
+            birthDate: '31-07-2024',
+            hc: '123456',
+            microchip: '123456',
+            species: 'Canino',
+            breed: 'Mestizo',
+            sex: 'MACHO',
+            active: true,
+            img: 'https://i.imgur.com/v8y0k4B.jpg',
+        },
+        {
+            id: 3,
+            ownerId: 3,
+            registrationDate: '31-07-2024',
+            registrationTime: '07:43 PM',
+            petName: 'Macarena',
+            birthDate: '31-07-2024',
+            hc: '123456',
+            microchip: '123456',
+            species: 'Canino',
+            breed: 'Mestizo',
+            sex: 'HEMBRA',
+            active: true,
+            img: 'https://i.imgur.com/v8y0k4B.jpg',
+        },
+    ]);
+
+    let historyCounter = 100;
+
+    const addPet = (newPet, ownerId, ownerName) => {
+        const petWithOwner = { ...newPet, ownerId, ownerName, hc: historyCounter };
+        setPetsData([...petsData, petWithOwner]);
+        historyCounter++;
+        console.log(petsData);
+    };
+
+    const updatePetData = (id, newData) => {
+        setPetsData(petsData.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+        console.log(petsData);
+    };
+
+    const removePet = (id) => {
+        setPetsData(petsData.filter(pet => pet.id !== id));
+    };
+
     return (
-        <ClientsContext.Provider value={{ clients, addClient, removeClient, updateClientData }}>
+        <ClientsContext.Provider value={{ clients, addClient, removeClient, updateClientData, petsData, addPet, updatePetData, removePet, historyCounter }}>
             {children}
         </ClientsContext.Provider>
     );

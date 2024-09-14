@@ -1,4 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { ClientsContext } from '../../context/ClientsContext';
+import { useContext } from 'react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
@@ -6,6 +8,9 @@ import RefreshIcon from '../../assets/refreshIcon.svg?react';
 function ClientPets() {
 
     const navigate = useNavigate();
+    const { petsData } = useContext(ClientsContext);
+    const { id } = useParams();
+    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
 
     const tableHeaders = [
         "Fecha de Registro",
@@ -16,21 +21,6 @@ function ClientPets() {
         "Fecha de Nacimiento",
         "Opciones",
     ];
-
-    const petsInfo = [
-        {
-            registrationDate: '29-07-2024',
-            registrationTime: '11:00 AM',
-            hc: '123456',
-            name: 'Canela',
-            species: "Canino",
-            breed: "Mestizo",
-            sex: "MACHO",
-            birthDate: '29-07-2024',
-        },
-    ];
-
-    const { id } = useParams();
 
     return (
         <div className="container mx-auto p-6">
@@ -63,18 +53,21 @@ function ClientPets() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {petsInfo.map((petData, index) => (
+                                {petsByOwner.map((petData, index) => (
                                     <tr key={index} className="hover:bg-gray-100">
                                         <td className="py-2 px-4 text-center border">
                                             <input type="checkbox" className="form-checkbox" />
                                         </td>
-                                        <td className="py-2 px-4 border-b text-center border whitespace-nowrap ">{petData.registrationDate}-{petData.registrationTime}</td>
+                                        <td className="py-2 px-4 border-b text-center border ">
+                                            <span className='block'>{petData.registrationDate}</span>
+                                            <span className='block'>{petData.registrationTime}</span>
+                                        </td>
                                         <td className="py-2 px-4 border-b text-center border ">{petData.hc}</td>
-                                        <td className="py-2 px-4 border-b text-center border ">{petData.name}</td>
-                                        <td className="py-2 px-4 border-b text-center border ">{petData.species}-{petData.breed}</td>
+                                        <td className="py-2 px-4 border-b text-center border ">{petData.petName}</td>
+                                        <td className="py-2 px-4 border-b text-center border whitespace-nowrap">{petData.species}-{petData.breed}</td>
                                         <td className="py-2 px-4 border-b text-center border ">{petData.sex}</td>
                                         <td className="py-2 px-4 border-b text-center border whitespace-nowrap ">{petData.birthDate}</td>
-                                        <td className="py-3 px-4 text-center border flex justify-center">
+                                        <td className="py-6 px-4 text-center border flex justify-center">
                                             <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
                                         </td>
                                     </tr>

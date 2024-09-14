@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { ClientsContext } from '../context/ClientsContext';
+import { useContext } from 'react';
 import EraserIcon from '../assets/eraserIcon.svg?react';
 import RefreshIcon from '../assets/refreshIcon.svg?react';
 import PDFIcon from '../assets/pdfIcon.svg?react';
@@ -8,13 +10,6 @@ import Stethoscope from '../assets/stethoscope.svg?react';
 import TrashIcon from '../assets/trashIcon.svg?react';
 import PawIcon from '../assets/pawIcon.svg?react';
 import SearchIcon from '../assets/searchIcon.svg?react';
-
-
-const petsData = [
-    { hc: '20497', birthdate: '31-07-2024', petName: 'FRAC', owner: 'DONNA GRACIELA ZELADA BURGOS', registrationDate: '25-02-2024', registrationTime: '11:00 AM', breed: "CRUCE CANINO GRANDE PELO LARGO (MESTIZO)", sex: "MACHO", active: true, species: "Canino" },
-    { hc: '20497', birthdate: '31-07-2024', petName: 'FRAC', owner: 'Juan Carlos', registrationDate: '25-02-2024', registrationTime: '11:00 AM', breed: "Chihuahua", sex: "MACHO", active: true, species: "Canino" },
-    { hc: '20497', birthdate: '31-07-2024', petName: 'FRAC', owner: 'Juan Carlos', registrationDate: '25-02-2024', registrationTime: '11:00 AM', breed: "Chihuahua", sex: "MACHO", active: true, species: "Canino" },
-];
 
 
 const headlinesOptions = [
@@ -93,6 +88,8 @@ const tableHeaders = ["Fecha de Registro", "#H.C", "Nombre", "Especie", "Raza", 
 
 function PetsData() {
 
+    const { petsData } = useContext(ClientsContext);
+
     const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6">
@@ -168,25 +165,25 @@ function PetsData() {
                             </tr>
                         </thead>
                         <tbody>
-                            {petsData.map((userData, index) => (
+                            {petsData.map((petData, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
                                     <td className="py-2 px-4 text-center border">
-                                        <div>{userData.registrationDate}</div>
-                                        <div>{userData.registrationTime}</div>
+                                        <div>{petData.registrationDate}</div>
+                                        <div>{petData.registrationTime}</div>
                                     </td>
-                                    <td className="py-2 px-4 text-center border">{userData.hc}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.petName}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.species}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.breed}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.sex}</td>
-                                    <td className="py-2 px-4 text-center border whitespace-nowrap">{userData.birthdate}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.owner}</td>
+                                    <td className="py-2 px-4 text-center border">{petData.hc}</td>
+                                    <td className="py-2 px-4 text-center border">{petData.petName}</td>
+                                    <td className="py-2 px-4 text-center border">{petData.species}</td>
+                                    <td className="py-2 px-4 text-center border">{petData.breed}</td>
+                                    <td className="py-2 px-4 text-center border">{petData.sex}</td>
+                                    <td className="py-2 px-4 text-center border whitespace-nowrap">{petData.birthDate}</td>
+                                    <td className="py-2 px-4 text-center border">{petData.ownerName}</td>
                                     <td className="py-2 px-4 text-center border ">
                                         <span
-                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${userData.active ? "bg-green-500" : "bg-red-500"}`}
+                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${petData.active ? "bg-green-500" : "bg-red-500"}`}
                                         />
                                     </td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
