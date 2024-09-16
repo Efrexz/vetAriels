@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ClientsContext } from '../context/ClientsContext';
 import { useContext } from 'react';
 import EraserIcon from '../assets/eraserIcon.svg?react';
@@ -187,7 +187,9 @@ function PetsData() {
                                         />
                                     </td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
-                                        <SearchIcon className="w-4 h-4 text-green-500 cursor-pointer" />
+                                        <Link to={`/pets/pet/${petData.id}/update`}>
+                                            <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
+                                        </Link>
                                         <Stethoscope className="w-4 h-4 text-blue-500 cursor-pointer" />
                                         <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>

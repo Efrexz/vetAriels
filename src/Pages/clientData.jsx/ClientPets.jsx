@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '../../context/ClientsContext';
 import { useContext } from 'react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
@@ -68,7 +68,9 @@ function ClientPets() {
                                         <td className="py-2 px-4 border-b text-center border ">{petData.sex}</td>
                                         <td className="py-2 px-4 border-b text-center border whitespace-nowrap ">{petData.birthDate}</td>
                                         <td className="py-6 px-4 text-center border flex justify-center">
-                                            <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
+                                            <Link to={`/pets/pet/${petData.id}/update`}>
+                                                <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
+                                            </Link>
                                         </td>
                                     </tr>
                                 ))}

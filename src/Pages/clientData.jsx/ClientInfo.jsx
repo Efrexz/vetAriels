@@ -18,7 +18,7 @@ function ClientInfo() {
         <div className="container mx-auto p-6">
             <div className="flex justify-between items-center mb-6 border-b-2 border-gray-100 pb-5">
                 <h1 className="text-2xl font-semibold text-gray-800">Informacion del Cliente</h1>
-                <HorizontalMenu />
+                <HorizontalMenu mode="clients" />
             </div>
 
             <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-t-lg overflow-hidden">

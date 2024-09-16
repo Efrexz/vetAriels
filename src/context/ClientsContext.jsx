@@ -70,11 +70,12 @@ function ClientsProvider({ children }) {
         {
             id: 1,
             ownerId: 3,
+            ownerName: "Efrain Andrade",
             registrationDate: '31-07-2024',
             registrationTime: '07:43 PM',
             petName: 'FRAC',
-            birthDate: '31-07-2024',
-            hc: '123456',
+            birthDate: '01/01/2023',
+            hc: '1',
             microchip: '123456',
             species: 'Canino',
             breed: 'Mestizo',
@@ -85,11 +86,12 @@ function ClientsProvider({ children }) {
         {
             id: 2,
             ownerId: 3,
+            ownerName: "Efrain Andrade",
             registrationDate: '31-07-2024',
             registrationTime: '07:43 PM',
             petName: 'FRAC',
-            birthDate: '31-07-2024',
-            hc: '123456',
+            birthDate: '01/01/2023',
+            hc: '2',
             microchip: '123456',
             species: 'Canino',
             breed: 'Mestizo',
@@ -100,11 +102,12 @@ function ClientsProvider({ children }) {
         {
             id: 3,
             ownerId: 3,
+            ownerName: "Efrain Andrade",
             registrationDate: '31-07-2024',
             registrationTime: '07:43 PM',
             petName: 'Macarena',
-            birthDate: '31-07-2024',
-            hc: '123456',
+            birthDate: '01/01/2023',
+            hc: '3',
             microchip: '123456',
             species: 'Canino',
             breed: 'Mestizo',
@@ -114,18 +117,17 @@ function ClientsProvider({ children }) {
         },
     ]);
 
-    let historyCounter = 100;
+    let historyCounter = localStorage.getItem('historyCounter') || 100;
 
     const addPet = (newPet, ownerId, ownerName) => {
-        const petWithOwner = { ...newPet, ownerId, ownerName, hc: historyCounter };
+        const petWithOwner = { ...newPet, ownerId, ownerName, hc: historyCounter, id: historyCounter };
         setPetsData([...petsData, petWithOwner]);
         historyCounter++;
-        console.log(petsData);
+        localStorage.setItem('historyCounter', historyCounter);
     };
 
     const updatePetData = (id, newData) => {
         setPetsData(petsData.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
-        console.log(petsData);
     };
 
     const removePet = (id) => {
