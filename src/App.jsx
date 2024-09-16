@@ -20,7 +20,10 @@ import { Products } from './Pages/products/Products.jsx'
 import { Discharges } from './Pages/products/Discharges.jsx'
 import { Charges } from './Pages/products/Charges.jsx'
 import { Services } from './Pages/Services.jsx'
-import { Config } from './Pages/Config.jsx'
+import { Config } from './Pages/configurationSection/Config.jsx'
+import { Roles } from './Pages/configurationSection/Roles.jsx'
+import { Users } from './Pages/configurationSection/Users.jsx'
+import { NotFound } from './Pages/NotFound.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
 
@@ -52,7 +55,9 @@ function App() {
               <Route path="/charges" element={<Charges />} />
               <Route path="/services" element={<Services />} />
               <Route path="/config/subsidiary" element={<Config />} />
-              <Route path="*" element={<h1>404 Page Not Found</h1>} />
+              <Route path="/config/roles" element={<Roles />} />
+              <Route path="/config/user-subsidiaries" element={<Users />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
           </Layout>

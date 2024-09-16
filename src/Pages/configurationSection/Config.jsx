@@ -1,14 +1,14 @@
 
 import { useContext } from 'react';
-import { GlobalContext } from '../context/GlobalContext';
-import { HorizontalMenu } from '../components/HorizontalMenu';
-import RoleUserIcon from '../assets/roleUserIcon.svg?react';
-import EmailIcon from '../assets/emailIcon.svg?react';
-import PhoneIcon from '../assets/phoneIcon.svg?react';
-import HospitalIcon from '../assets/hospitalIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import LocationIcon from '../assets/locationIcon.svg?react';
-import FacebookIcon from '../assets/facebook.svg?react';
+import { GlobalContext } from '../../context/GlobalContext';
+import { HorizontalMenu } from '../../components/HorizontalMenu';
+import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
+import EmailIcon from '../../assets/emailIcon.svg?react';
+import PhoneIcon from '../../assets/phoneIcon.svg?react';
+import HospitalIcon from '../../assets/hospitalIcon.svg?react';
+import PlusIcon from '../../assets/plusIcon.svg?react';
+import LocationIcon from '../../assets/locationIcon.svg?react';
+import FacebookIcon from '../../assets/facebook.svg?react';
 
 function Config() {
 
