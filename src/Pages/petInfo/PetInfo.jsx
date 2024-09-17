@@ -4,6 +4,7 @@ import { ClientsContext } from '../../context/ClientsContext';
 import { HorizontalMenu } from '../../components/HorizontalMenu';
 import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
 import { PetProfile } from './PetProfile';
+import { ClinicalRecords } from './ClinicalRecords';
 
 function PetInfo() {
 
@@ -71,6 +72,7 @@ function PetInfo() {
                     </div>
                 </div>
                 {section === 'update' && <PetProfile petData={individualPetData} />}
+                {section === 'clinical-records' && <ClinicalRecords />}
             </div>
 
         </div>
