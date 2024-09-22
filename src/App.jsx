@@ -36,7 +36,8 @@ function App() {
           <Layout>
             <Routes>
               <Route path="/" element={<DashBoard />} />
-              <Route path="/sales" element={<Sales />} />
+              {/* <Route path="/sales" element={<Sales />} /> */}
+              <Route path="/sales/client/:id" element={<Sales />} />
               <Route path="/sales/active-orders" element={<ActiveOrders />} />
               <Route path="/sales/invoices" element={<Invoices />} />
               <Route path="/sales/payments" element={<Payments />} />

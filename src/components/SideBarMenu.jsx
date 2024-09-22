@@ -36,7 +36,7 @@ function SideBarMenu() {
                 {
                     name: "Ventas",
                     icon: ShoppingCartPlusIcon,
-                    path: "/sales"
+                    path: "/sales/client/no_client"
                 },
                 {
                     name: "Cuentas Activas",

@@ -24,7 +24,7 @@ function ClientsProvider({ children }) {
         {
             id: 2,
             firstName: 'Isabel',
-            lastName: 'Quintero',
+            lastName: 'Bustinza',
             email: 'isaquintisa@gmail.com',
             dni: '003028128',
             date: '31-07-2024',
@@ -70,7 +70,7 @@ function ClientsProvider({ children }) {
         {
             id: 1,
             ownerId: 3,
-            ownerName: "Efrain Andrade",
+            ownerName: "Olga Bustinza",
             registrationDate: '31-07-2024',
             registrationTime: '07:43 PM',
             petName: 'FRAC',
@@ -85,8 +85,8 @@ function ClientsProvider({ children }) {
         },
         {
             id: 2,
-            ownerId: 3,
-            ownerName: "Efrain Andrade",
+            ownerId: 2,
+            ownerName: "Isabel Bustinza",
             registrationDate: '31-07-2024',
             registrationTime: '07:43 PM',
             petName: 'FRAC',
@@ -102,7 +102,7 @@ function ClientsProvider({ children }) {
         {
             id: 3,
             ownerId: 3,
-            ownerName: "Efrain Andrade",
+            ownerName: "Olga Bustinza",
             registrationDate: '31-07-2024',
             registrationTime: '07:43 PM',
             petName: 'Macarena',
@@ -128,6 +128,7 @@ function ClientsProvider({ children }) {
 
     const updatePetData = (id, newData) => {
         setPetsData(petsData.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+
     };
 
     const removePet = (id) => {
