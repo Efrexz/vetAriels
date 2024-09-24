@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
+import { ClientsContext } from '../context/ClientsContext';
 import UserIcon from '../assets/userIcon.svg?react';
 import SearchIcon from '../assets/searchIcon.svg?react';
 import BathIcon from '../assets/bathIcon.svg?react';
@@ -11,6 +12,8 @@ import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
 import StoreIcon from '../assets/storeIcon.svg?react';
 
 function NavBar() {
+    const { petsInQueueMedical } = useContext(ClientsContext);
+
     const [showPatientList, setShowPatientList] = useState(false);
 
     const [showBathList, setShowBathList] = useState(false);
@@ -28,8 +31,8 @@ function NavBar() {
 
     const pageSections = [
         { icon: NewUserIcon, tooltip: 'Crear nuevo Propietario', path: '/clients/create', count: false },
-        { icon: Stethoscope, tooltip: 'Sala de espera', path: '/sala-de-espera', count: true },
-        { icon: BathIcon, tooltip: 'Peluquería', path: '/peluqueria', count: true },
+        { icon: Stethoscope, tooltip: 'Sala de espera', path: '/sala-de-espera', count: true, countData: petsInQueueMedical.length },
+        { icon: BathIcon, tooltip: 'Peluquería', path: '/peluqueria', count: true, countData: 4 },
     ];
 
     const togglePatientList = () => {
@@ -54,6 +57,8 @@ function NavBar() {
     };
 
     const { themeColor } = useContext(GlobalContext);
+
+
 
     return (
         <nav className={`flex justify-between items-center py-4 px-6 w-full bg-${themeColor}-400 text-white`}>
@@ -91,7 +96,7 @@ function NavBar() {
 
                             {section.count && (
                                 <span className="absolute top-0 right-0 bg-red-500 text-white  rounded-full py-0.2 px-1 text-xs transform translate-x-1/2 -translate-y-1/2">
-                                    0
+                                    {section.countData}
                                 </span>
                             )}
                             <div className="absolute bottom-[-100%] left-[-150%] transform translate-y-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-sm rounded py-1 px-2 whitespace-nowrap z-10">
@@ -137,31 +142,19 @@ function NavBar() {
                 </div>
             )}
 
-            {/*  el menú desplegable de baños */}
+            {/*  el menú desplegable de pacientes en cola medica */}
             {showPatientList && (
                 <div className="absolute top-16 right-24 bg-white shadow-lg rounded-lg w-64 z-20">
                     <ul>
-                        <li className="p-3 border-b flex items-center">
-                            <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
-                            <div className='ml-2 gap-2'>
-                                <span className=" text-blue-500 cursor-pointer hover:underline">ROCKO</span>
-                                <span className="block text-gray-500 text-xs">12:59 PM</span>
-                            </div>
-                        </li>
-                        <li className="p-3 border-b flex items-center">
-                            <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
-                            <div className='ml-2 gap-2'>
-                                <span className=" text-blue-500 cursor-pointer hover:underline">ROCKO</span>
-                                <span className="block text-gray-500 text-xs">12:59 PM</span>
-                            </div>
-                        </li>
-                        <li className="p-3 border-b flex items-center">
-                            <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
-                            <div className='ml-2 gap-2'>
-                                <span className=" text-blue-500 cursor-pointer hover:underline">ROCKO</span>
-                                <span className="block text-gray-500 text-xs">12:59 PM</span>
-                            </div>
-                        </li>
+                        {petsInQueueMedical.map((pet, index) => (
+                            <li key={index} className="p-3 border-b flex items-center hover:bg-gray-50">
+                                <img src={pet.img || "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg"} alt="PetImage" className="w-10 h-10 rounded-lg" />
+                                <div className='ml-3 gap-2'>
+                                    <span className=" text-blue-500 cursor-pointer hover:underline">{pet.petData.petName}</span>
+                                    <span className="block text-gray-500 text-xs">{pet.time}</span>
+                                </div>
+                            </li>
+                        ))}
                         <li className="p-3 text-blue-500 cursor-pointer hover:underline">Ir a la sala de espera</li>
                     </ul>
                 </div>

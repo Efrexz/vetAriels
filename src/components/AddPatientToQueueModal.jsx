@@ -1,9 +1,50 @@
 import PropTypes from 'prop-types';
+import { useContext, useState } from 'react';
+import { ClientsContext } from '../context/ClientsContext';
 import PlusIcon from '../assets/plusIcon.svg?react';
 import ClockIcon from '../assets/clockIcon.svg?react';
 import RoleUserIcon from '../assets/roleUserIcon.svg?react';
 
 function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
+
+    console.log(petsByOwner);
+
+
+    // Estado del formulario
+    const [selectedDoctor, setSelectedDoctor] = useState("Medico 1");
+    const [selectedPet, setSelectedPet] = useState(petsByOwner[0].petName);
+    const [notes, setNotes] = useState('');
+
+    //obtenemos la fecha y la hora actuales a la cual se esta enviando a cola al paciente
+    const now = new Date();
+    const currentDate = now.toLocaleDateString(); //  "22/05/2023"
+    const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
+
+    const { addPetToQueueMedical } = useContext(ClientsContext);
+
+    // Manejo del envío del formulario
+    const sendPatientToQueue = () => {
+        const petSelected = petsByOwner.find(pet => pet.petName === selectedPet);
+
+        const dataToSend = {
+            doctor: selectedDoctor,
+            petData: petSelected,
+            notes,
+            time: currentTime,
+        };
+
+        // agregamos el paciente a la cola médica
+        addPetToQueueMedical(dataToSend);
+
+        // cerramos el modal después de enviar los datos
+        onClose();
+        console.log({
+            doctor: selectedDoctor,
+            petData: petSelected,
+            notes,
+        });
+
+    };
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
@@ -11,7 +52,6 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                 <h2 className="text-lg font-semibold mb-4">Generar Consulta</h2>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                    {/* Fecha de atención */}
                     <div className="flex flex-col">
                         <label htmlFor="date" className="text-md font-semibold mb-1">
                             Fecha de atención
@@ -21,16 +61,12 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                                 type="text"
                                 id="date"
                                 className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300"
-                                placeholder="Selecciona la fecha"
-                                defaultValue="21-09-2024 07:34 PM"
+                                value={`${currentDate} ${currentTime}`}
+                                disabled
                             />
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
-                                <i className="fas fa-calendar-alt"></i>
-                            </span>
                         </div>
                     </div>
 
-                    {/* Médico asignado */}
                     <div className="flex flex-col">
                         <label htmlFor="doctor" className="text-md font-semibold mb-1">
                             Médico asignado
@@ -38,14 +74,13 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         <select
                             id="doctor"
                             className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300"
+                            onChange={(e) => setSelectedDoctor(e.target.value)}
                         >
-                            <option>Selecciona un médico</option>
                             <option>Médico 1</option>
                             <option>Médico 2</option>
                         </select>
                     </div>
 
-                    {/* Propietario */}
                     <div className="flex flex-col">
                         <label htmlFor="owner" className="text-md font-semibold mb-1">
                             Propietario
@@ -56,7 +91,6 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         </div>
                     </div>
 
-                    {/* Mascota */}
                     <div className="flex flex-col">
                         <label htmlFor="pet" className="text-md font-semibold mb-1">
                             Mascota:
@@ -64,8 +98,8 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         <select
                             id="pet"
                             className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300"
+                            onChange={(e) => setSelectedPet(e.target.value)}
                         >
-                            <option>Selecciona una mascota</option>
                             {
                                 petsByOwner.map((pet, index) => (
                                     <option key={index}>{pet.petName}</option>
@@ -75,7 +109,6 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </div>
                 </div>
 
-                {/* Opción de emergencia */}
                 <div className="flex items-center mb-4">
                     <input
                         type="checkbox"
@@ -87,7 +120,6 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </label>
                 </div>
 
-                {/* Notas */}
                 <div className="flex flex-col mb-6">
                     <label htmlFor="notes" className="text-sm font-semibold mb-1">
                         Notas
@@ -97,6 +129,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300  "
                         rows="4"
                         placeholder="Escribe las notas aquí..."
+                        onChange={(e) => setNotes(e.target.value)}
                     ></textarea>
                 </div>
 
@@ -108,7 +141,10 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         <ClockIcon className="w-5 h-5 mr-2 text-gray-500" />
                         Cancelar
                     </button>
-                    <button className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md text-md font-semibold hover:bg-green-600">
+                    <button
+                        className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md text-md font-semibold hover:bg-green-600"
+                        onClick={sendPatientToQueue}
+                    >
                         <PlusIcon className="w-5 h-5 mr-2" />
                         Generar
                     </button>
