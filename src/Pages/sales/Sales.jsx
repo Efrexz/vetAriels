@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '../../context/ClientsContext';
 import { AddPatientToQueueModal } from '../../components/AddPatientToQueueModal';
+import { ClientSearchInput } from '../../components/ClientSearchInput';
 import ShoppingCartPlusIcon from '../../assets/shoppingCartPlus.svg?react';
 import NewUserIcon from '../../assets/newUserIcon.svg?react';
 import UserPenIcon from '../../assets/userPenIcon.svg?react';
@@ -42,16 +43,16 @@ function Sales() {
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
 
-    //si existe un cliente seleccionado, mostramos su nombre en el buscador y asi evitamos el error que al cambiar de pagina y volver el input esta vacio
-    const [searchTerm, setSearchTerm] = useState(isClientSelected ? `${isClientSelected.firstName} ${isClientSelected.lastName}` : '');
+    // //si existe un cliente seleccionado, mostramos su nombre en el buscador y asi evitamos el error que al cambiar de pagina y volver el input esta vacio
+    // const [searchTerm, setSearchTerm] = useState(isClientSelected ? `${isClientSelected.firstName} ${isClientSelected.lastName}` : '');
 
-    //estado para saber cuando el input tiene el foco para mostrar la lista de clientes que coinciden con el buscador
-    const [isFilteredListVisible, setIsFilteredListVisible] = useState(false);
+    // //estado para saber cuando el input tiene el foco para mostrar la lista de clientes que coinciden con el buscador
+    // const [isFilteredListVisible, setIsFilteredListVisible] = useState(false);
 
-    //filtramos los clientes que coinciden con el buscador
-    const filteredClients = clients.filter(client =>
-        `${client.firstName} ${client.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // //filtramos los clientes que coinciden con el buscador
+    // const filteredClients = clients.filter(client =>
+    //     `${client.firstName} ${client.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
 
 
 
@@ -99,19 +100,7 @@ function Sales() {
                     Buscar y seleccionar cliente:
                 </label>
                 <div className="flex gap-4">
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="clientSearch"
-                        type="text"
-                        placeholder="Buscar cliente..."
-                        value={searchTerm}
-                        onChange={(e) => {
-                            setSearchTerm(e.target.value);
-                            setIsFilteredListVisible(true); // Mostrar el dropdown cuando escribes
-                        }}
-                        onFocus={() => setIsFilteredListVisible(true)} // Mostrar cuando el input tiene el foco
-                        onBlur={() => setTimeout(() => setIsFilteredListVisible(false), 150)} // Ocultamos al perder foco con un poco de delay xD
-                    />
+                    <ClientSearchInput />
                     <button
                         className={`ml-2 ${isClientSelected ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"} text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline px-24`}
                         type="button"
@@ -128,7 +117,7 @@ function Sales() {
                     </button>
                 </div>
 
-                {/*Filtrado de busqueda de clientes */}
+                {/* Filtrado de busqueda de clientes
                 {(searchTerm.length >= 3 && isFilteredListVisible) && (
                     <ul className="bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
                         {filteredClients.map((client, index) => {
@@ -157,7 +146,7 @@ function Sales() {
                             <li className="p-2 text-gray-500">No se encontraron coincidencias</li>
                         )}
                     </ul>
-                )}
+                )} */}
 
                 {/* Mascotas del cliente seleccionado */}
                 {

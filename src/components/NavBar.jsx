@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
 import { ClientsContext } from '../context/ClientsContext';
+import { ClientSearchInput } from './ClientSearchInput';
 import UserIcon from '../assets/userIcon.svg?react';
 import SearchIcon from '../assets/searchIcon.svg?react';
 import BathIcon from '../assets/bathIcon.svg?react';
@@ -58,21 +59,18 @@ function NavBar() {
 
     const { themeColor } = useContext(GlobalContext);
 
-
-
     return (
         <nav className={`flex justify-between items-center py-4 px-6 w-full bg-${themeColor}-400 text-white`}>
-            <Link to="/">
+            <Link
+                to="/"
+                className='w-[50%] items-center cursor-pointer'
+            >
                 <h1 className="text-2xl font-medium cursor-pointer">VETERINARIA ARIEL´S EIRL</h1>
             </Link>
-            <div className="flex items-center gap-5">
+            <div className="flex justify-end items-center gap-5 w-full">
                 <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" onClick={toggleSearchInput} />
                 {showSearchInput && (
-                    <input
-                        type="text"
-                        placeholder="Buscar mascota"
-                        className="w-auto pl-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
+                    <ClientSearchInput />
                 )}
                 <ul className="flex gap-5 items-center">
                     {pageSections.map((section, index) => (
@@ -151,11 +149,21 @@ function NavBar() {
                                 <img src={pet.img || "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg"} alt="PetImage" className="w-10 h-10 rounded-lg" />
                                 <div className='ml-3 gap-2'>
                                     <span className=" text-blue-500 cursor-pointer hover:underline">{pet.petData.petName}</span>
-                                    <span className="block text-gray-500 text-xs">{pet.time}</span>
+                                    <span className="block text-gray-500 text-xs">{pet.timeOfAttention}</span>
                                 </div>
                             </li>
                         ))}
-                        <li className="p-3 text-blue-500 cursor-pointer hover:underline">Ir a la sala de espera</li>
+                        <li className='p-3 hover:bg-gray-50'>
+                            <Link
+                                className="text-blue-500 cursor-pointer hover:underline"
+                                onClick={() => {
+                                    setShowPatientList(false);
+                                    setActiveIcon(null);// Cerramos el menu y desactivamos el icono
+                                }}
+                                to="/clinic-queue">
+                                Ir a la sala de espera
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             )}

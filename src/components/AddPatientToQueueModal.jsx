@@ -27,10 +27,12 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
         const petSelected = petsByOwner.find(pet => pet.petName === selectedPet);
 
         const dataToSend = {
-            doctor: selectedDoctor,
+            assignedDoctor: selectedDoctor,
             petData: petSelected,
             notes,
-            time: currentTime,
+            dateOfAttention: currentDate,
+            timeOfAttention: currentTime,
+            state: "En espera",
         };
 
         // agregamos el paciente a la cola médica
@@ -38,12 +40,6 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
 
         // cerramos el modal después de enviar los datos
         onClose();
-        console.log({
-            doctor: selectedDoctor,
-            petData: petSelected,
-            notes,
-        });
-
     };
 
     return (

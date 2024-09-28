@@ -1,4 +1,5 @@
-
+import { ClientsContext } from '../context/ClientsContext';
+import { useContext } from 'react';
 import EraserIcon from '../assets/eraserIcon.svg?react';
 import RefreshIcon from '../assets/refreshIcon.svg?react';
 import PDFIcon from '../assets/pdfIcon.svg?react';
@@ -9,6 +10,7 @@ import Stethoscope from '../assets/stethoscope.svg?react';
 import PenIcon from '../assets/penIcon.svg?react';
 import TrashIcon from '../assets/trashIcon.svg?react';
 import EjectIcon from '../assets/ejectIcon.svg?react';
+import { Link } from 'react-router-dom';
 
 
 const clinicQueueData = [
@@ -42,6 +44,10 @@ const headlinesOptions = [
 const tableHeaders = ["N°", "Fecha de Atención", "Mascota", "Propietario", "Médico Asignado", "Estado", "Alerta", "Opciones"];
 
 function ClinicQueue() {
+
+    const { petsInQueueMedical } = useContext(ClientsContext);
+    console.log(petsInQueueMedical);
+
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -114,23 +120,34 @@ function ClinicQueue() {
                             </tr>
                         </thead>
                         <tbody>
-                            {clinicQueueData.map((userData, index) => (
+                            {petsInQueueMedical.map((petInQueue, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
-                                    <td className="py-2 px-4 text-center border">{userData.id}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.date}</td>
-                                    <td className="py-2 px-4 border">
-                                        <div>{userData.petName}</div>
-                                        <div className="text-gray-500 text-sm">{userData.owner}</div>
-                                        <div className="text-gray-500 text-sm italic">Notas: revision de baño 25.6kg</div>
-                                    </td>
-                                    <td className="py-2 px-4 text-center border text-blue-500">{userData.owner}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.assignedDoctor}</td>
+                                    <td className="py-2 px-4 text-center border">{index + 1}</td>
                                     <td className="py-2 px-4 text-center border">
-                                        <span className="inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white bg-green-500 rounded-full">
-                                            {userData.state}
+                                        <span className="block">{petInQueue?.dateOfAttention}</span>
+                                        <span className="block text-gray-500 text-sm">{petInQueue?.timeOfAttention}</span>
+                                    </td>
+                                    <td className="py-2 px-4 border">
+                                        <Link to={`/pets/pet/${petInQueue?.petData.id}/update`}>
+                                            <div>{petInQueue.petData.petName}</div>
+                                            <div className="text-gray-500 text-sm">
+                                                {petInQueue?.petData.breed}-{petInQueue?.petData.species}-{petInQueue?.petData.sex}
+                                            </div>
+                                            <div className="text-gray-500 text-sm italic">Notas: {petInQueue?.notes}</div>
+                                        </Link>
+                                    </td>
+                                    <td className="py-2 px-4 text-center border ">
+                                        <Link className='text-blue-500 cursor-pointer hover:underline' to={`/clients/client/${petInQueue?.petData.ownerId}/update`}>
+                                            {petInQueue?.petData.ownerName}
+                                        </Link>
+                                    </td>
+                                    <td className="py-2 px-4 text-center border">{petInQueue?.assignedDoctor}</td>
+                                    <td className="py-2 px-4 text-center border">
+                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${petInQueue?.state === "En espera" ? "bg-red-500" : "bg-green-500"} rounded-full`}>
+                                            {petInQueue?.state}
                                         </span>
                                     </td>
                                     <td className="px-8 text-center border justify-center">
