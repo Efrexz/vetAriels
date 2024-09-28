@@ -19,6 +19,7 @@ import { PetInfo } from './Pages/petInfo/PetInfo.jsx'
 import { Products } from './Pages/products/Products.jsx'
 import { Discharges } from './Pages/products/Discharges.jsx'
 import { Charges } from './Pages/products/Charges.jsx'
+import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStock.jsx'
 import { Services } from './Pages/Services.jsx'
 import { Config } from './Pages/configurationSection/Config.jsx'
 import { Roles } from './Pages/configurationSection/Roles.jsx'
@@ -54,6 +55,8 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/discharges" element={<Discharges />} />
               <Route path="/charges" element={<Charges />} />
+              <Route path="/charges/create" element={<DischargeAndChargeStock typeOfOperation="charge" />} />
+              <Route path="/discharges/create" element={<DischargeAndChargeStock typeOfOperation="discharge" />} />
               <Route path="/services" element={<Services />} />
               <Route path="/config/subsidiary" element={<Config />} />
               <Route path="/config/roles" element={<Roles />} />

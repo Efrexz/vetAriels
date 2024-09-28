@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import DocumentOutIcon from '../../assets/documentOutIcon.svg?react';
+import { useNavigate } from 'react-router-dom';
+import DocumentJoinIcon from '../../assets/DocumentJoinIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import PDFIcon from '../../assets/pdfIcon.svg?react';
@@ -26,10 +27,12 @@ const tableHeaders = ["N°", "Fecha de creación", "Razon", "Responsable", "Regi
 function Charges() {
     const [discharges, setDischarges] = useState(initialDischargesData);
 
+    const navigate = useNavigate();
+
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-green-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <DocumentOutIcon className="w-9 h-9 mr-2" />
+            <h1 className="text-2xl items-center font-medium text-green-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <DocumentJoinIcon className="w-9 h-9 mr-2" />
                 Cargas de stock
             </h1>
 
@@ -65,7 +68,10 @@ function Charges() {
                                 </button>
                             ))}
                         </div>
-                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
+                        <button
+                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            onClick={() => navigate('/charges/create')}
+                        >
                             <PlusIcon className="w-5 h-5" />
                             CARGAR STOCK
                         </button>
