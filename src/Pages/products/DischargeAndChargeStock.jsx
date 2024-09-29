@@ -187,8 +187,6 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                 </div>
             </div>
 
-
-            {/* Información Adicional */}
             <div className="mt-6 p-4 bg-blue-100 text-blue-700 rounded-lg">
                 <p>
                     Puedes usar esta herramienta para descargar el stock de productos directamente.

@@ -43,19 +43,6 @@ function Sales() {
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
 
-    // //si existe un cliente seleccionado, mostramos su nombre en el buscador y asi evitamos el error que al cambiar de pagina y volver el input esta vacio
-    // const [searchTerm, setSearchTerm] = useState(isClientSelected ? `${isClientSelected.firstName} ${isClientSelected.lastName}` : '');
-
-    // //estado para saber cuando el input tiene el foco para mostrar la lista de clientes que coinciden con el buscador
-    // const [isFilteredListVisible, setIsFilteredListVisible] = useState(false);
-
-    // //filtramos los clientes que coinciden con el buscador
-    // const filteredClients = clients.filter(client =>
-    //     `${client.firstName} ${client.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
-
-
-
     //obtenemos las mascotas que pertenecen al cliente seleccionado
     const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
 
@@ -117,37 +104,6 @@ function Sales() {
                     </button>
                 </div>
 
-                {/* Filtrado de busqueda de clientes
-                {(searchTerm.length >= 3 && isFilteredListVisible) && (
-                    <ul className="bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                        {filteredClients.map((client, index) => {
-                            // Filtramos las mascotitass que pertenecen a este cliente
-                            const clientPets = petsData.filter(pet => pet.ownerId === client.id);
-                            const clientPetNames = clientPets.map(pet => pet.petName);
-                            return (
-                                <li
-                                    key={index}
-                                    className="p-2 cursor-pointer hover:bg-blue-100"
-                                    onClick={() => {
-                                        setSearchTerm(`${client.firstName} ${client.lastName}`);
-                                        setIsFilteredListVisible(false); // Ocultar dropdown al seleccionar
-                                        navigate(`/sales/client/${client.id}`);
-                                    }}
-                                >
-                                    <div className="font-bold">{`${client.firstName} ${client.lastName}`}</div>
-                                    <div className="text-sm text-gray-500">{`${client.phone1} ${client.phone2}`}</div>
-                                    <div className="text-sm text-gray-500">
-                                        Mascotas: {clientPetNames.join(', ')}
-                                    </div>
-                                </li>
-                            );
-                        })}
-                        {filteredClients.length === 0 && (
-                            <li className="p-2 text-gray-500">No se encontraron coincidencias</li>
-                        )}
-                    </ul>
-                )} */}
-
                 {/* Mascotas del cliente seleccionado */}
                 {
                     isClientSelected &&
@@ -185,7 +141,7 @@ function Sales() {
                                             </div>
                                         )}
 
-                                        {/* Cuadro de información al hacer hover */}
+                                        {/* información al hacer hover */}
                                         {
                                             hoveredPetId === pet.id && (
                                                 <div className="absolute left-0 bottom-full w-52 bg-black text-white p-4 rounded shadow-lg">
@@ -224,7 +180,9 @@ function Sales() {
                 </button>
                 <button
                     className={`${isClientSelected ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
-                    disabled={!isClientSelected} >
+                    disabled={!isClientSelected}
+                    onClick={() => navigate(`/grooming/order-creation/${isClientSelected.id}`)}
+                >
                     Enviar a cola de grooming
                 </button>
             </div>
