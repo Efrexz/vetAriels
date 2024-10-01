@@ -11,7 +11,6 @@ import MicrochipIcon from '../assets/microChip.svg?react';
 
 
 function CreatePetForm() {
-    // const { addClient } = useContext(ClientsContext);
     const navigate = useNavigate();
     const { clients, addPet, historyCounter } = useContext(ClientsContext);
     const { id } = useParams();
@@ -33,10 +32,10 @@ function CreatePetForm() {
 
     const handleChange = (e) => {
         const { id, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
+        setFormData({
+            ...formData,
             [id]: value
-        }));
+        });
     };
 
     const createNewPet = () => {

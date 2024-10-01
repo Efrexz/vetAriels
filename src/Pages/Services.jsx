@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { ProductsAndServicesContext } from '../context/ProductsAndServicesContext.jsx';
+import { AddNewServiceAndProductModal } from '../components/AddNewServiceAndProductModal.jsx';
 import EraserIcon from '../assets/eraserIcon.svg?react';
 import RefreshIcon from '../assets/refreshIcon.svg?react';
 import PDFIcon from '../assets/pdfIcon.svg?react';
@@ -12,10 +14,11 @@ import EyeSlashIcon from '../assets/eyeSlash.svg?react';
 import KitMedical from '../assets/kitMedical.svg?react';
 
 const productsData = [
-    { id: 1, systemCode: 1520, date: '2022-01-01', name: 'URANOTEST-PANLEUCOPENIA FELINA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
-    { id: 2, systemCode: 1519, date: '2022-01-01', name: 'URANOTEST-PANLEUCOPENIA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
-    { id: 3, systemCode: 1518, date: '2022-01-01', name: 'URANOTEST-PANLEUCOPENIA ', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
+    { id: 1, systemCode: 1520, date: '2022-01-01', time: "20:56 PM", name: 'URANOTEST-PANLEUCOPENIA FELINA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
+    { id: 2, systemCode: 1519, date: '2022-01-01', time: "20:56 PM", name: 'URANOTEST-PANLEUCOPENIA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
+    { id: 3, systemCode: 1518, date: '2022-01-01', time: "20:56 PM", name: 'URANOTEST-PANLEUCOPENIA ', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
 ];
+
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },
@@ -51,7 +54,8 @@ const filterOptions = [
 const tableHeaders = ["Cod. de sistema", "Fecha de Registro", "Nombre", "Línea", "Categoría", "Precio de venta", "Estado", "Opciones"];
 
 function Services() {
-    const [products, setProducts] = useState(productsData);
+    const { servicesData } = useContext(ProductsAndServicesContext);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
         <section className="container mx-auto p-6">
@@ -79,11 +83,22 @@ function Services() {
                                 </button>
                             ))}
                         </div>
-                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
+                        <button
+                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            onClick={() => setIsModalOpen(true)}
+                        >
                             <PlusIcon className="w-5 h-5" />
                             CREAR NUEVO PRODUCTO
                         </button>
                     </div>
+
+                    {
+                        isModalOpen && (
+                            <AddNewServiceAndProductModal
+                                onClose={() => setIsModalOpen(false)}
+                            />
+                        )
+                    }
                     <div className="flex items-center space-x-4 mb-1">
                         {
                             filterOptions.map((option, index) => (
@@ -107,27 +122,30 @@ function Services() {
                         <thead className="bg-gray-100">
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 text-center border font-medium text-gray-700">
+                                    <th key={header} className="py-2 px-4 text-center border-2 font-medium text-gray-700">
                                         {header}
                                     </th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product, index) => (
+                            {servicesData.map((service, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 text-center border">{product.systemCode}</td>
-                                    <td className="py-2 px-4 text-center border">{product.date}</td>
-                                    <td className="py-2 px-4 text-center border">{product.name}</td>
-                                    <td className="py-2 px-4 text-center border">{product.line}</td>
-                                    <td className="py-2 px-4 text-center border">{product.category}</td>
-                                    <td className="py-2 px-4 text-center border">{product.salePrice}</td>
-                                    <td className="py-2 px-4 text-center border ">
+                                    <td className="py-2 px-4 text-center border-2">{service?.id}</td>
+                                    <td className="py-2 px-4 text-center border-2">
+                                        <span className="block">{service?.registrationDate}</span>
+                                        <span className="block text-sm text-gray-600">{service?.registrationTime}</span>
+                                    </td>
+                                    <td className="py-2 px-4 text-center border-2">{service?.serviceName}</td>
+                                    <td className="py-2 px-4 text-center border-2">{service?.line}</td>
+                                    <td className="py-2 px-4 text-center border-2">{service?.category}</td>
+                                    <td className="py-2 px-4 text-center border-2">{service?.price}</td>
+                                    <td className="py-2 px-4 text-center border-2 ">
                                         <span
-                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${product.status ? "bg-green-500" : "bg-red-500"}`}
+                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${service?.status ? "bg-green-500" : "bg-red-500"}`}
                                         />
                                     </td>
-                                    <td className="py-10 px-4 text-center border flex justify-center space-x-2">
+                                    <td className="py-6 px-4 text-center border-t-2 border-l-2 border-r-2 flex justify-center gap-2">
                                         <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
                                         <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>

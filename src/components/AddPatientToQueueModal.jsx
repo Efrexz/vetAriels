@@ -6,10 +6,6 @@ import ClockIcon from '../assets/clockIcon.svg?react';
 import RoleUserIcon from '../assets/roleUserIcon.svg?react';
 
 function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
-
-    console.log(petsByOwner);
-
-
     // Estado del formulario
     const [selectedDoctor, setSelectedDoctor] = useState("Medico 1");
     const [selectedPet, setSelectedPet] = useState(petsByOwner[0].petName);
