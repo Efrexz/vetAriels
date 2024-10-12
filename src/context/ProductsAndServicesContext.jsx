@@ -4,7 +4,7 @@ const ProductsAndServicesContext = createContext();
 
 function ProductsAndServicesProvider({ children }) {
 
-    const [ProductData, setProductData] = useState([
+    const [productsData, setProductsData] = useState([
         {
             id: 1,
             name: 'Vacuna de rabia',
@@ -40,14 +40,28 @@ function ProductsAndServicesProvider({ children }) {
             category: 'Vacunas',
             quantity: 10,
         },
+        {
+            id: 8,
+            name: 'Vacuna de sextuple',
+            price: 65,
+            category: 'Vacunas',
+            quantity: 10,
+        },
+        {
+            id: 9,
+            name: 'Vacuna de sextuple',
+            price: 65,
+            category: 'Vacunas',
+            quantity: 10,
+        },
     ]);
 
     function addProduct(product) {
-        setProductData([...ProductData, product]);
+        setProductsData([...productsData, product]);
     }
 
     function removeProduct(id) {
-        setProductData(ProductData.filter((product) => product.id !== id));
+        setProductsData(productsData.filter((product) => product.id !== id));
     }
 
     const [servicesData, setServicesData] = useState([
@@ -100,7 +114,7 @@ function ProductsAndServicesProvider({ children }) {
     }
 
     return (
-        <ProductsAndServicesContext.Provider value={{ ProductData, addProduct, removeProduct, servicesData, addNewService, removeService }}>
+        <ProductsAndServicesContext.Provider value={{ productsData, addProduct, removeProduct, servicesData, addNewService, removeService }}>
             {children}
         </ProductsAndServicesContext.Provider>
     );

@@ -1,32 +1,69 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '../../context/ClientsContext';
+import { ProductSearchInput } from '../../components/ProductSearchInput';
+import { QuantityCounter } from '../../components/QuantityCounter';
+import { PriceModificationModal } from '../../components/PriceModificationModal';
+import { QuantityModificationModal } from '../../components/QuantityModificationModal';
 import BathIcon from '../../assets/bathIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
 import ReturnIcon from '../../assets/returnIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
+import TrashIcon from '../../assets/trashIcon.svg?react';
+import TagIcon from '../../assets/tagIcon.svg?react';
 
 
 function GroomingOrderCreation() {
 
     const { clients, petsData } = useContext(ClientsContext);
 
+    const [petSelected, setPetSelected] = useState(petsData[0].petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
+
+    //estado de productos seleccionados al escribir en nuestro input de busqueda
+    const [selectedProducts, setSelectedProducts] = useState([]);
+
+    //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
+    const [productToEdit, setProductToEdit] = useState(null);
+
+    // funcion para modificar el precio de un item por el modal de editar el precio
+    function handleUpdateProductPrice(updatedProduct) {
+        const updatedProducts = selectedProducts.map(product =>
+            product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product
+        );
+        setSelectedProducts(updatedProducts);
+    }
+
+    //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
+    const addProductToTable = (product) => {
+        const provisionalId = Date.now();
+        const newProduct = {
+            ...product,
+            petSelected: petSelected,
+            provisionalId: provisionalId,
+        };
+        setSelectedProducts([...selectedProducts, newProduct]);
+    };
+
+    const totalPrice = selectedProducts.reduce((acc, curr) => acc + curr.price, 0);
+
     const taxesData = [
-        { label: 'Valor de venta bruto (sin descuentos)', value: '0.00' },
+        { label: 'Valor de venta bruto (sin descuentos)', value: totalPrice },
         { label: 'Total descuentos', value: '- 0.00' },
         { label: 'Valor de venta incluyendo descuentos', value: '0.00' },
         { label: 'Impuestos', value: '0.00' },
-        { label: 'TOTAL', value: '0.00', bold: true },
+        { label: 'TOTAL', value: totalPrice, bold: true },
     ];
 
     const navigate = useNavigate();
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
 
+    //obtenemos las mascotas del propietario para poder mostrarlos en la lista del select
     const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
 
-    console.log(isClientSelected);
 
+    //Modales
+    const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
+    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 
     return (
         <section className="bg-white p-6">
@@ -34,7 +71,6 @@ function GroomingOrderCreation() {
                 <BathIcon className="w-7 h-7 text-blue-400 mr-2" />
                 Peluquería
             </h1>
-            {/* Sección de Propietario, Dirección, etc. */}
             <div className="bg-gray-100 p-4 rounded mb-4">
 
                 <div className="grid grid-cols-4 gap-4">
@@ -48,10 +84,13 @@ function GroomingOrderCreation() {
                     </div>
                     <div className="col-span-2">
                         <label className="block text-gray-700">Mascota</label>
-                        <select className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300">
+                        <select
+                            className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300"
+                            onChange={(e) => setPetSelected(e.target.value)}
+                        >
                             {
                                 petsByOwner.map((pet, index) => (
-                                    <option key={index} value={pet.id}>{pet.petName}</option>
+                                    <option key={index} value={pet.petName}>{pet.petName}</option>
                                 ))
                             }
                         </select>
@@ -75,22 +114,6 @@ function GroomingOrderCreation() {
                         />
                     </div>
 
-                    <div className='col-start-1 '>
-                        <label className="block text-gray-700">Fecha</label>
-                        <input
-                            type="text"
-                            className="mt-2 w-full border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300"
-                            value="2023-07-01 - 20:53 PM"
-                        />
-                    </div>
-
-                    <div className='col-start-4'>
-                        <label className="block text-gray-700">Fuente de Atención</label>
-                        <select className="w-full mt-2 border border-gray-300 rounded p-2 bg-white hover:border-blue-300 focus-within:border-blue-300">
-                            <option>Grooming</option>
-                        </select>
-                    </div>
-
                     <div className='col-span-2'>
                         <label className="block text-gray-700">Empresa</label>
                         <select className="w-full mt-2 border border-gray-300 rounded p-2 bg-white hover:border-blue-300 focus-within:border-blue-300">
@@ -103,27 +126,17 @@ function GroomingOrderCreation() {
                 </div>
             </div>
 
-            {/* Sección de Almacén y Tabla */}
             <div className="bg-gray-100 p-4 rounded shadow">
                 <div className="grid grid-cols-4 gap-4 mb-4">
                     <div className='col-span-1'>
-                        <label className="block text-gray-700">Almacén de origen</label>
-                        <select className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300" >
+                        <label className="block text-gray-700 mb-2">Almacén de origen</label>
+                        <select className="w-full  border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300" >
                             <option>ALMACEN PRODUCTOS P/VENTAS</option>
                         </select>
                     </div>
                     <div className='col-span-3'>
-                        <label className="block text-gray-700">Buscar y agregar productos y/o servicios:</label>
-                        <div className="flex w-full border-gray-200 mt-2 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
-                            <div className="flex items-center justify-center bg-gray-100 px-3">
-                                <SearchIcon className="w-5 h-5 text-gray-600" />
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="Buscar..."
-                                className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
-                            />
-                        </div>
+                        <label className="block text-gray-700 mb-2">Buscar y agregar productos y/o servicios:</label>
+                        <ProductSearchInput addProductToTable={addProductToTable} />
                     </div>
                 </div>
 
@@ -142,19 +155,64 @@ function GroomingOrderCreation() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className='py-2 px-4 border border-gray-300 text-center'>Producto 1</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'>Descripción detallada</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'>$10.00</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'>2</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'>$20.00</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'>$2.00</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'>$22.00</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'>Frac</td>
-                            <td className='py-2 px-4  border border-gray-300 text-center'><button>x</button></td>
-                        </tr>
+                        {selectedProducts.map((product, index) => (
+                            <tr key={index}>
+                                <td className='py-2 px-4 border border-gray-300 text-center'>{product.name || product.serviceName}</td>
+                                <td className='py-2 px-4  border border-gray-300 text-center'>Descripción detallada</td>
+                                <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    <span
+                                        className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
+                                        onClick={() => {
+                                            setProductToEdit(product)
+                                            setIsPriceModalOpen(true)
+                                            setIsQuantityModalOpen(false)
+                                        }}
+                                    >
+                                        {product.price}
+                                    </span>
+                                </td>
+                                <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    <QuantityCounter openQuantityModal={() => {
+                                        setIsQuantityModalOpen(true)
+                                        setIsPriceModalOpen(false)
+                                    }} />
+                                </td>
+                                <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    {product.price}
+                                </td>
+                                <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
+                                        0.00
+                                    </span>
+                                </td>
+                                <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    {product.price}
+                                </td>
+                                <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
+                                <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
+                                    <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
+                                    <TrashIcon className='w-5 h-5 text-red-500 cursor-pointer' />
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
+
+                {
+                    isPriceModalOpen && (
+                        <PriceModificationModal
+                            onClose={() => setIsPriceModalOpen(false)}
+                            productToEdit={productToEdit}
+                            updateProductPrice={handleUpdateProductPrice}
+                        />
+                    )}
+                {
+                    isQuantityModalOpen && (
+                        <QuantityModificationModal
+                            onClose={() => setIsQuantityModalOpen(false)}
+                        />
+                    )
+                }
 
                 <div className="bg-gray-100 pt-6 pb-6">
                     <div className="w-full lg:w-1/2 ml-auto">
