@@ -2,16 +2,15 @@ import { useState } from 'react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 
 
-const QuantityCounter = ({ openQuantityModal }) => {
-    const [quantity, setQuantity] = useState(1);
+const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity }) => {
 
     const increaseQuantity = () => {
-        setQuantity(quantity + 1);
+        changeQuantity(itemCount + 1);
     };
 
     const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity(quantity - 1);
+        if (itemCount > 1) {
+            changeQuantity(itemCount - 1);
         }
     };
 
@@ -28,7 +27,7 @@ const QuantityCounter = ({ openQuantityModal }) => {
                 className="border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer"
                 onClick={() => openQuantityModal()}
             >
-                {quantity}
+                {itemCount}
             </div>
 
             <button

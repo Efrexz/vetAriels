@@ -37,13 +37,29 @@ function GroomingOrderCreation() {
         const provisionalId = Date.now();
         const newProduct = {
             ...product,
-            petSelected: petSelected,
-            provisionalId: provisionalId,
+            petSelected,
+            provisionalId,
+            quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
         };
         setSelectedProducts([...selectedProducts, newProduct]);
     };
 
-    const totalPrice = selectedProducts.reduce((acc, curr) => acc + curr.price, 0);
+    //funcion para actualizar cantidad de productos en la lista de forma individual
+    const updateProductQuantity = (id, newQuantity) => {
+        const updatedProducts = selectedProducts.map((product) =>
+            product.provisionalId === id
+                ? { ...product, quantity: newQuantity }
+                : product
+        );
+        setSelectedProducts(updatedProducts);
+    };
+
+    const totalPrice = selectedProducts.reduce(
+        (acc, product) => acc + product.price * product.quantity,
+        0
+    );
+
+    // const totalPrice = selectedProducts.reduce((acc, curr) => acc + curr.price, 0);
 
     const taxesData = [
         { label: 'Valor de venta bruto (sin descuentos)', value: totalPrice },
@@ -155,8 +171,8 @@ function GroomingOrderCreation() {
                         </tr>
                     </thead>
                     <tbody>
-                        {selectedProducts.map((product, index) => (
-                            <tr key={index}>
+                        {selectedProducts.map((product) => (
+                            <tr key={product.provisionalId}>
                                 <td className='py-2 px-4 border border-gray-300 text-center'>{product.name || product.serviceName}</td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>Descripción detallada</td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>
@@ -172,10 +188,15 @@ function GroomingOrderCreation() {
                                     </span>
                                 </td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    <QuantityCounter openQuantityModal={() => {
-                                        setIsQuantityModalOpen(true)
-                                        setIsPriceModalOpen(false)
-                                    }} />
+                                    <QuantityCounter
+                                        itemCount={product.quantity}
+                                        changeQuantity={(newQuantity) => {
+                                            updateProductQuantity(product.provisionalId, newQuantity)
+                                        }}
+                                        openQuantityModal={() => {
+                                            setIsQuantityModalOpen(true)
+                                            setIsPriceModalOpen(false)
+                                        }} />
                                 </td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>
                                     {product.price}
@@ -186,7 +207,7 @@ function GroomingOrderCreation() {
                                     </span>
                                 </td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    {product.price}
+                                    {product.price * product.quantity}
                                 </td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
                                 <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
