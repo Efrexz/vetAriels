@@ -14,7 +14,7 @@ import TagIcon from '../../assets/tagIcon.svg?react';
 
 function GroomingOrderCreation() {
 
-    const { clients, petsData } = useContext(ClientsContext);
+    const { clients, petsData, addPetToQueueGrooming } = useContext(ClientsContext);
 
     const [petSelected, setPetSelected] = useState(petsData[0].petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
 
@@ -23,6 +23,7 @@ function GroomingOrderCreation() {
 
     //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
     const [productToEdit, setProductToEdit] = useState(null);
+
 
     // funcion para modificar el precio de un item por el modal de editar el precio
     function handleUpdateProductPrice(updatedProduct) {
@@ -33,7 +34,7 @@ function GroomingOrderCreation() {
     }
 
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
-    const addProductToTable = (product) => {
+    function addProductToTable(product) {
         const provisionalId = Date.now();
         const newProduct = {
             ...product,
@@ -42,17 +43,22 @@ function GroomingOrderCreation() {
             quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
         };
         setSelectedProducts([...selectedProducts, newProduct]);
-    };
+    }
+
+    function removeProduct(id) {
+        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== id);
+        setSelectedProducts(updatedProducts);
+    }
 
     //funcion para actualizar cantidad de productos en la lista de forma individual
-    const updateProductQuantity = (id, newQuantity) => {
+    function updateProductQuantity(id, newQuantity) {
         const updatedProducts = selectedProducts.map((product) =>
             product.provisionalId === id
                 ? { ...product, quantity: newQuantity }
                 : product
         );
         setSelectedProducts(updatedProducts);
-    };
+    }
 
     const totalPrice = selectedProducts.reduce(
         (acc, product) => acc + product.price * product.quantity,
@@ -76,13 +82,38 @@ function GroomingOrderCreation() {
     //obtenemos las mascotas del propietario para poder mostrarlos en la lista del select
     const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
 
+    //estado de las observaciones del baño de la mascota
+    const [notes, setNotes] = useState('');
+
+    function handleChange(e) {
+        const { value } = e.target;
+        setNotes(value);
+    }
 
     //Modales
     const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 
+    function sendInfoToQueueGrooming() {
+        //depende la mascota seleccionada en el input de select, obtenemos toda la data de la mascota para enviarla a cola
+        const petSelectedData = petsData.find(pet => pet.petName === petSelected);
+        const now = new Date();
+        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
+        const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
+
+        const dataToSend = {
+            petData: petSelectedData,
+            notes,
+            dateOfAttention: currentDate,
+            timeOfAttention: currentTime,
+            state: "En espera",
+        };
+        addPetToQueueGrooming(dataToSend);
+        navigate("/grooming");
+    }
+
     return (
-        <section className="bg-white p-6">
+        <section className="bg-white p-6 overflow-auto">
             <h1 className="text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <BathIcon className="w-7 h-7 text-blue-400 mr-2" />
                 Peluquería
@@ -196,10 +227,11 @@ function GroomingOrderCreation() {
                                         openQuantityModal={() => {
                                             setIsQuantityModalOpen(true)
                                             setIsPriceModalOpen(false)
+                                            setProductToEdit(product)
                                         }} />
                                 </td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    {product.price}
+                                    {product.price * product.quantity}
                                 </td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>
                                     <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
@@ -212,7 +244,9 @@ function GroomingOrderCreation() {
                                 <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
                                 <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
                                     <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
-                                    <TrashIcon className='w-5 h-5 text-red-500 cursor-pointer' />
+                                    <TrashIcon
+                                        onClick={() => removeProduct(product.provisionalId)}
+                                        className='w-5 h-5 text-red-500 cursor-pointer' />
                                 </td>
                             </tr>
                         ))}
@@ -226,10 +260,15 @@ function GroomingOrderCreation() {
                             productToEdit={productToEdit}
                             updateProductPrice={handleUpdateProductPrice}
                         />
-                    )}
+                    )
+                }
                 {
                     isQuantityModalOpen && (
                         <QuantityModificationModal
+                            quantity={productToEdit?.quantity}
+                            changeQuantity={(newQuantity) => {
+                                updateProductQuantity(productToEdit.provisionalId, newQuantity)
+                            }}
                             onClose={() => setIsQuantityModalOpen(false)}
                         />
                     )
@@ -258,6 +297,8 @@ function GroomingOrderCreation() {
                     className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-20 hover:border-blue-300 focus-within:border-blue-300"
                     rows="3"
                     placeholder="Añadir observaciones..."
+                    value={notes}
+                    onChange={handleChange}
                 ></textarea>
             </div>
 
@@ -301,7 +342,10 @@ function GroomingOrderCreation() {
                     <ReturnIcon className="w-5 h-5 text-gray-700" />
                     CANCELAR
                 </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
+                <button
+                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
+                    onClick={() => sendInfoToQueueGrooming()}
+                >
                     <PlusIcon className="w-5 h-5 text-white" />
                     CREAR ORDEN DE SERVICIO
                 </button>

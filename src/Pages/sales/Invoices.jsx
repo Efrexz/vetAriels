@@ -89,7 +89,7 @@ const headlinesOptions = [
 
 function Invoices() {
     return (
-        <section className="container mx-auto p-6">
+        <section className="container mx-auto p-6 overflow-auto">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <FileInvoiceIcon className="w-9 h-9 mr-2" />
                 Comprobantes

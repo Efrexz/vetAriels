@@ -9,7 +9,7 @@ function Layout({ children }) {
                 <section className="bg-gray-100 pl-6 w-[16%] h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
                     <SideBarMenu />
                 </section>
-                <section className="bg-white mx-2 w-full h-auto flex flex-col overflow-auto custom-scrollbar ">
+                <section className="bg-white mx-2 w-full h-auto flex flex-col overflow-auto ">
                     {children}
                 </section>
             </main>

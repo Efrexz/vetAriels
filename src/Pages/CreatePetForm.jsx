@@ -30,13 +30,13 @@ function CreatePetForm() {
         sex: '',
     });
 
-    const handleChange = (e) => {
+    function handleChange(e) {
         const { id, value } = e.target;
         setFormData({
             ...formData,
             [id]: value
         });
-    };
+    }
 
     const createNewPet = () => {
         const now = new Date();

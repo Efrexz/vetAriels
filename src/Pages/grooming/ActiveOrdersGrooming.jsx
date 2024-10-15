@@ -8,6 +8,7 @@ import PenIcon from '../../assets/penIcon.svg?react';
 import CheckIcon from '../../assets/checkIcon.svg?react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
 import BanIcon from '../../assets/banIcon.svg?react';
+import { useEffect } from 'react';
 
 
 const groomingOrderData = [
@@ -50,8 +51,9 @@ const groomingOrderData = [
 const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
 
 function ActiveOrdersGrooming() {
+
     return (
-        <section className="container mx-auto p-6">
+        <section className="container mx-auto p-6 overflow-auto">
             <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <BathIcon className="w-9 h-9 text-blue-400 mr-2" />
                 Peluquería: <span className="text-green-600 font-light pl-1"> Turnos de hoy</span>

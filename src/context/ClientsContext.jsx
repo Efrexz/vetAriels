@@ -146,6 +146,16 @@ function ClientsProvider({ children }) {
         setPetsInQueueMedical(petsInQueueMedical.filter(pet => pet.id !== id));
     };
 
+    //Mascotas en cola grooming
+    const [petsInQueueGrooming, setPetsInQueueGrooming] = useState([]);
+    const addPetToQueueGrooming = (newPet) => {
+        setPetsInQueueGrooming([...petsInQueueGrooming, newPet]);
+    };
+
+    const removePetFromQueueGrooming = (id) => {
+        setPetsInQueueGrooming(petsInQueueGrooming.filter(pet => pet.id !== id));
+    };
+
     return (
         <ClientsContext.Provider value={{
             clients,
@@ -159,7 +169,10 @@ function ClientsProvider({ children }) {
             historyCounter,
             petsInQueueMedical,
             addPetToQueueMedical,
-            removePetFromQueueMedical
+            removePetFromQueueMedical,
+            petsInQueueGrooming,
+            addPetToQueueGrooming,
+            removePetFromQueueGrooming,
         }}>
             {children}
         </ClientsContext.Provider>

@@ -51,7 +51,7 @@ const tableHeaders = ["Cod. de Sistema", "Fecha", "Entreda", "Salida", "Cliente"
 
 function GroomingHistory() {
     return (
-        <section className="container mx-auto p-6">
+        <section className="container mx-auto p-6 overflow-auto">
             <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <BathIcon className="w-9 h-9 text-blue-400 mr-2" />
                 Peluquería: historial

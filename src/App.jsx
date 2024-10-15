@@ -29,6 +29,7 @@ import { Users } from './Pages/configurationSection/Users.jsx'
 import { NotFound } from './Pages/NotFound.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
         <ClientsProvider>
           <ProductsAndServicesProvider>
             <Layout>
+              <ScrollToTop />
               <Routes>
                 <Route path="/" element={<DashBoard />} />
                 {/* <Route path="/sales" element={<Sales />} /> */}

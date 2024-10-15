@@ -76,7 +76,7 @@ function Sales() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <section className="container mx-auto p-6">
+        <section className="container mx-auto p-6 overflow-auto">
             <h1 className="text-3xl font-bold text-[#4CAF50] flex items-center mb-4 border-b-2 border-gray-100 pb-5">
                 <ShoppingCartPlusIcon className="h-8 w-8 mr-2" />
                 Ventas

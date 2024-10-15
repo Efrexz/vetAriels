@@ -13,16 +13,13 @@ import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
 import StoreIcon from '../assets/storeIcon.svg?react';
 
 function NavBar() {
-    const { petsInQueueMedical } = useContext(ClientsContext);
+    const { petsInQueueMedical, petsInQueueGrooming } = useContext(ClientsContext);
+    console.log(petsInQueueGrooming);
 
     const [showPatientList, setShowPatientList] = useState(false);
-
     const [showBathList, setShowBathList] = useState(false);
-
     const [activeIcon, setActiveIcon] = useState(null); // Verificar cual icono está activo
-
     const [showSearchInput, setShowSearchInput] = useState(false);
-
     const [showUserOptions, setShowUserOptions] = useState(false);
 
 
@@ -33,7 +30,7 @@ function NavBar() {
     const pageSections = [
         { icon: NewUserIcon, tooltip: 'Crear nuevo Propietario', path: '/clients/create', count: false },
         { icon: Stethoscope, tooltip: 'Sala de espera', path: '/sala-de-espera', count: true, countData: petsInQueueMedical.length },
-        { icon: BathIcon, tooltip: 'Peluquería', path: '/peluqueria', count: true, countData: 4 },
+        { icon: BathIcon, tooltip: 'Peluquería', path: '/peluqueria', count: true, countData: petsInQueueGrooming.length },
     ];
 
     const togglePatientList = () => {
@@ -103,7 +100,7 @@ function NavBar() {
                         </li>
                     ))}
                     <span className="font-bold mx-3">|</span>
-                    <li className="flex items-center gap-2 cursor-pointer hover:text-[#206D5A]" onClick={toggleUserOptions}>
+                    <li className={`flex items-center gap-2 cursor-pointer hover:text-[#206D5A] ${activeIcon === "user" ? "text-[#206D5A]" : ""}`} onClick={toggleUserOptions}>
                         <span>Efrexz</span>
                         <UserIcon className="w-6 h-6" />
                     </li>
@@ -112,30 +109,30 @@ function NavBar() {
 
             {/*  el menú desplegable de pacientes */}
             {showBathList && (
-                <div className="absolute top-16 right-20 bg-white shadow-lg rounded-lg w-64 z-20">
+                <div className="absolute top-16 right-20 bg-white shadow-lg rounded-lg w-64 z-20 max-h-80 overflow-y-auto custom-scrollbar">
                     <ul>
-                        <li className="p-3 border-b flex items-center">
-                            <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
-                            <div className='ml-2 gap-2'>
-                                <span className=" text-blue-500 cursor-pointer hover:underline">ROCKO</span>
-                                <span className="block text-gray-500 text-xs">12:59 PM</span>
-                            </div>
+                        {
+                            petsInQueueGrooming.map((pet, index) => (
+                                <li className="p-3 border-b flex items-center" key={index}>
+                                    <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
+                                    <div className='ml-2 gap-2'>
+                                        <span className=" text-blue-500 cursor-pointer hover:underline">{pet.petData.petName}</span>
+                                        <span className="block text-gray-500 text-xs">{pet.timeOfAttention}</span>
+                                    </div>
+                                </li>
+                            ))
+                        }
+                        <li className='p-3 hover:bg-gray-50'>
+                            <Link
+                                className="text-blue-500 cursor-pointer hover:underline"
+                                onClick={() => {
+                                    setShowPatientList(false);
+                                    setActiveIcon(null);// Cerramos el menu y desactivamos el icono
+                                }}
+                                to="/clinic-queue">
+                                Ir a la Peluquería
+                            </Link>
                         </li>
-                        <li className="p-3 border-b flex items-center">
-                            <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
-                            <div className='ml-2 gap-2'>
-                                <span className=" text-blue-500 cursor-pointer hover:underline">ROCKO</span>
-                                <span className="block text-gray-500 text-xs">12:59 PM</span>
-                            </div>
-                        </li>
-                        <li className="p-3 border-b flex items-center">
-                            <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
-                            <div className='ml-2 gap-2'>
-                                <span className=" text-blue-500 cursor-pointer hover:underline">ROCKO</span>
-                                <span className="block text-gray-500 text-xs">12:59 PM</span>
-                            </div>
-                        </li>
-                        <li className="p-3 text-blue-500 cursor-pointer hover:underline">Ir a Peluquería</li>
                     </ul>
                 </div>
             )}

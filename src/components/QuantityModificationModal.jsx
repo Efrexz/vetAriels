@@ -1,49 +1,20 @@
-import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '../context/ProductsAndServicesContext';
+import { useState } from 'react';
 import ReturnIcon from '../assets/returnIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 
 
 
-function QuantityModificationModal({ onClose }) {
-    const navigate = useNavigate();
+function QuantityModificationModal({ onClose, quantity, changeQuantity }) {
 
-    const { addNewService } = useContext(ProductsAndServicesContext);
-    const [formData, setFormData] = useState({
-        serviceName: '',
-        line: '',
-        category: '',
-        cost: 0,
-        price: 0,
-    });
+    const [itemQuantity, setItemQuantity] = useState(quantity);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+    function handleChange(e) {
+        setItemQuantity(e.target.value);
+    }
 
-    function createService() {
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
-
-        const newService = {
-            serviceName: formData.serviceName,
-            line: formData.line,
-            category: formData.category,
-            cost: formData.cost,
-            price: formData.price,
-            registrationDate: currentDate,
-            registrationTime: currentTime,
-            status: true,
-        };
-        addNewService(newService);
+    function editQuantity() {
+        changeQuantity(parseInt(itemQuantity));//nos aseguramos de que el valor sea un numero para evitar el error que ocurre al enviarlo y lo toma como un string. Luego al modificar la cantidad con los botones genera el bug que lo suma como string
         onClose();
-        navigate(`/services`);
     }
 
     return (
@@ -56,9 +27,8 @@ function QuantityModificationModal({ onClose }) {
                         <input
                             name="quantity"
                             type="number"
-                            placeholder="Cantidad"
-                            value={1}
-                            // onChange={handleQuantityChange}
+                            value={itemQuantity}
+                            onChange={handleChange}
                             className="border border-gray-300 rounded-lg py-2 px-4 w-full hover:border-blue-300 focus-within:border-blue-300 text-center"
                         />
                     </div>
@@ -74,7 +44,7 @@ function QuantityModificationModal({ onClose }) {
                     </button>
                     <button
                         className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    // onClick={() => confirmQuantity()}
+                        onClick={() => editQuantity()}
                     >
                         <PlusIcon className="w-5 h-5 text-white" />
                         CONFIRMAR
