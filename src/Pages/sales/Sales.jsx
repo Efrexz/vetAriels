@@ -76,7 +76,7 @@ function Sales() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <section className="container mx-auto p-6 overflow-auto">
+        <section className="container mx-auto p-6 overflow-auto custom-scrollbar ">
             <h1 className="text-3xl font-bold text-[#4CAF50] flex items-center mb-4 border-b-2 border-gray-100 pb-5">
                 <ShoppingCartPlusIcon className="h-8 w-8 mr-2" />
                 Ventas
@@ -87,7 +87,7 @@ function Sales() {
                     Buscar y seleccionar cliente:
                 </label>
                 <div className="flex gap-4">
-                    <ClientSearchInput />
+                    <ClientSearchInput mode={"sales"} />
                     <button
                         className={`ml-2 ${isClientSelected ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"} text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline px-24`}
                         type="button"

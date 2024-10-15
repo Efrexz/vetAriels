@@ -66,7 +66,7 @@ function Products() {
     const [products, setProducts] = useState(productsData);
 
     return (
-        <section className="container mx-auto p-6">
+        <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 Productos
             </h1>

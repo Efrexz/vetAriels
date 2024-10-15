@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ClientsContext } from '../../context/ClientsContext';
 import BathIcon from '../../assets/bathIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
@@ -8,52 +11,18 @@ import PenIcon from '../../assets/penIcon.svg?react';
 import CheckIcon from '../../assets/checkIcon.svg?react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
 import BanIcon from '../../assets/banIcon.svg?react';
-import { useEffect } from 'react';
-
-
-const groomingOrderData = [
-    {
-        turn: '1',
-        date: '31-07-2024',
-        entryTime: '10:00 PM',
-        exitTime: '11:05 PM',
-        petName: 'FRAC',
-        owner: 'LEONARDO PAUL, ROJAS HERNANDEZ',
-        breed: "CRUCE CANINO CHICO PELO CORTO (MESTIZO) ",
-        services: ["Baño Tradicional", "Rebaje 1 cm", "Desparasitacion 0 A 10 kg", "Movilidad", "Limpieza"],
-        state: "Pendiente"
-    },
-    {
-        turn: '1',
-        date: '31-07-2024',
-        entryTime: '10:00 PM',
-        exitTime: '11:05 PM',
-        petName: 'Layla',
-        owner: 'RICARDO, RIOS',
-        breed: "CRUCE CANINO CHICO PELO CORTO (MESTIZO) ",
-        services: ["Baño Tradicional", "Rebaje 1 cm", "Desparasitacion 0 A 10 kg", "Movilidad", "Limpieza"],
-        state: "Pendiente"
-    },
-    {
-        turn: '1',
-        date: '31-07-2024',
-        entryTime: '10:00 PM',
-        exitTime: '11:05 PM',
-        petName: 'FRAC',
-        owner: 'LEONARDO PAUL, ROJAS HERNANDEZ',
-        breed: "CRUCE CANINO CHICO PELO CORTO (MESTIZO) ",
-        services: ["Baño Tradicional", "Rebaje 1 cm", "Desparasitacion 0 A 10 kg", "Movilidad", "Limpieza"],
-        state: "Pendiente"
-    },
-];
 
 
 const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
 
 function ActiveOrdersGrooming() {
 
+    const { petsInQueueGrooming } = useContext(ClientsContext);
+    const navigate = useNavigate();
+
+
     return (
-        <section className="container mx-auto p-6 overflow-auto">
+        <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
             <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <BathIcon className="w-9 h-9 text-blue-400 mr-2" />
                 Peluquería: <span className="text-green-600 font-light pl-1"> Turnos de hoy</span>
@@ -85,7 +54,10 @@ function ActiveOrdersGrooming() {
                                 <ExcelIcon className="w-5 h-5" />
                             </button>
                         </div>
-                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
+                        <button
+                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            onClick={() => navigate("/grooming/order-creation/no_client")}
+                        >
                             <PlusIcon className="w-5 h-5" />
                             CREAR ORDEN DE SERVICIO
                         </button>
@@ -118,27 +90,27 @@ function ActiveOrdersGrooming() {
                             </tr>
                         </thead>
                         <tbody>
-                            {groomingOrderData.map((groomingData, index) => (
+                            {petsInQueueGrooming.map((groomingData, index) => (
                                 <tr key={index} className="hover:bg-gray-100 border-b">
                                     <td className="py-2 px-4 text-center border-2 align-top pt-4">
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.turn}</td>
-                                    <td className="py-2 px-4 text-center border align-top pt-4">{groomingData.date}</td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.entryTime}</td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.exitTime}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.turn}</td>
+                                    <td className="py-2 px-4 text-center border align-top pt-4">{groomingData?.dateOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.timeOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.timeOfAttention}</td>
                                     <td className="py-2 px-4 border-b text-center border align-top pt-4">
-                                        <span className="text-md  cursor-pointer text-blue-500 hover:underline ">{groomingData.owner}</span>
+                                        <span className="text-md  cursor-pointer text-blue-500 hover:underline ">{groomingData?.ownerName}</span>
                                     </td>
                                     <td className="py-2 px-4 border-b text-center border-2 align-top pt-4">
-                                        <span className="text-md cursor-pointer text-blue-500 hover:underline">{groomingData.petName}</span>
+                                        <span className="text-md cursor-pointer text-blue-500 hover:underline">{groomingData?.petData?.petName}</span>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.breed}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.petData?.breed}</td>
                                     <td className="py-2 px-4 border-2 align-top pt-3">
                                         <ul className='list-disc pl-4'>
-                                            {groomingData.services.map((service) => (
-                                                <li key={service} >
-                                                    {service}
+                                            {groomingData?.productsAndServices?.map((service) => (
+                                                <li key={service?.provisionalId} >
+                                                    {service?.name || service?.serviceName}
                                                 </li>
                                             ))}
                                         </ul>

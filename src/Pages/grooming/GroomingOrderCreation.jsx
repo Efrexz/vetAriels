@@ -5,6 +5,7 @@ import { ProductSearchInput } from '../../components/ProductSearchInput';
 import { QuantityCounter } from '../../components/QuantityCounter';
 import { PriceModificationModal } from '../../components/PriceModificationModal';
 import { QuantityModificationModal } from '../../components/QuantityModificationModal';
+import { ClientSearchInput } from '../../components/ClientSearchInput';
 import BathIcon from '../../assets/bathIcon.svg?react';
 import ReturnIcon from '../../assets/returnIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
@@ -14,7 +15,7 @@ import TagIcon from '../../assets/tagIcon.svg?react';
 
 function GroomingOrderCreation() {
 
-    const { clients, petsData, addPetToQueueGrooming } = useContext(ClientsContext);
+    const { clients, petsData, addPetToQueueGrooming, petsInQueueGrooming } = useContext(ClientsContext);
 
     const [petSelected, setPetSelected] = useState(petsData[0].petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
 
@@ -78,6 +79,8 @@ function GroomingOrderCreation() {
     const navigate = useNavigate();
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
+    console.log(isClientSelected);
+
 
     //obtenemos las mascotas del propietario para poder mostrarlos en la lista del select
     const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
@@ -103,17 +106,21 @@ function GroomingOrderCreation() {
 
         const dataToSend = {
             petData: petSelectedData,
+            turn: petsInQueueGrooming.length + 1,
+            systemCode: petSelectedData.hc,
+            ownerName: `${isClientSelected.firstName} ${isClientSelected.lastName}`,
             notes,
             dateOfAttention: currentDate,
             timeOfAttention: currentTime,
             state: "En espera",
+            productsAndServices: selectedProducts,
         };
         addPetToQueueGrooming(dataToSend);
         navigate("/grooming");
     }
 
     return (
-        <section className="bg-white p-6 overflow-auto">
+        <section className="bg-white p-6 overflow-auto custom-scrollbar">
             <h1 className="text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <BathIcon className="w-7 h-7 text-blue-400 mr-2" />
                 Peluquería
@@ -122,25 +129,37 @@ function GroomingOrderCreation() {
 
                 <div className="grid grid-cols-4 gap-4">
                     <div className="col-span-2">
-                        <label className="block text-gray-700">Propietario</label>
-                        <input
+                        <label className="block text-gray-700 mb-2">Propietario</label>
+                        <ClientSearchInput mode={"grooming"} />
+                        {/* <input
                             className="w-full mt-2 bg-gray-200 py-2 px-4 rounded"
                             value={isClientSelected ? `${isClientSelected.firstName} ${isClientSelected.lastName}` : ''}
                             disabled
-                        />
+                        /> */}
                     </div>
                     <div className="col-span-2">
                         <label className="block text-gray-700">Mascota</label>
-                        <select
-                            className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300"
-                            onChange={(e) => setPetSelected(e.target.value)}
-                        >
-                            {
-                                petsByOwner.map((pet, index) => (
-                                    <option key={index} value={pet.petName}>{pet.petName}</option>
-                                ))
-                            }
-                        </select>
+                        {
+                            isClientSelected ? (
+                                <select
+                                    className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300"
+                                    onChange={(e) => setPetSelected(e.target.value)}
+                                >
+                                    {
+                                        petsByOwner.map((pet, index) => (
+                                            <option key={index} value={pet.petName}>{pet.petName}</option>
+                                        ))
+                                    }
+                                </select>
+                            ) :
+                                (
+                                    <input
+                                        className="w-full mt-2 border-gray-300 rounded py-2 px-4 bg-gray-200"
+                                        value=""
+                                        disabled
+                                    />
+                                )
+                        }
                     </div>
 
                     <div className="col-span-2">
@@ -177,13 +196,35 @@ function GroomingOrderCreation() {
                 <div className="grid grid-cols-4 gap-4 mb-4">
                     <div className='col-span-1'>
                         <label className="block text-gray-700 mb-2">Almacén de origen</label>
-                        <select className="w-full  border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300" >
-                            <option>ALMACEN PRODUCTOS P/VENTAS</option>
-                        </select>
+                        {
+                            isClientSelected ? (
+                                <select className="w-full  border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300" >
+                                    <option>ALMACEN PRODUCTOS P/VENTAS</option>
+                                </select>
+                            ) :
+                                (
+                                    <input
+                                        className="w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
+                                        value="ALMACEN PRODUCTOS P/VENTAS"
+                                        disabled
+                                    />
+                                )
+                        }
                     </div>
                     <div className='col-span-3'>
                         <label className="block text-gray-700 mb-2">Buscar y agregar productos y/o servicios:</label>
-                        <ProductSearchInput addProductToTable={addProductToTable} />
+                        {
+                            isClientSelected ? (
+                                <ProductSearchInput addProductToTable={addProductToTable} />
+                            ) :
+                                (
+                                    <input
+                                        className="w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
+                                        value=""
+                                        disabled
+                                    />
+                                )
+                        }
                     </div>
                 </div>
 

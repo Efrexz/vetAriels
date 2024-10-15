@@ -67,7 +67,7 @@ function NavBar() {
             <div className="flex justify-end items-center gap-5 w-full">
                 <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" onClick={toggleSearchInput} />
                 {showSearchInput && (
-                    <ClientSearchInput />
+                    <ClientSearchInput mode={"sales"} />
                 )}
                 <ul className="flex gap-5 items-center">
                     {pageSections.map((section, index) => (
@@ -129,7 +129,7 @@ function NavBar() {
                                     setShowPatientList(false);
                                     setActiveIcon(null);// Cerramos el menu y desactivamos el icono
                                 }}
-                                to="/clinic-queue">
+                                to="/grooming">
                                 Ir a la Peluquería
                             </Link>
                         </li>
