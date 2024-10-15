@@ -14,7 +14,6 @@ import StoreIcon from '../assets/storeIcon.svg?react';
 
 function NavBar() {
     const { petsInQueueMedical, petsInQueueGrooming } = useContext(ClientsContext);
-    console.log(petsInQueueGrooming);
 
     const [showPatientList, setShowPatientList] = useState(false);
     const [showBathList, setShowBathList] = useState(false);

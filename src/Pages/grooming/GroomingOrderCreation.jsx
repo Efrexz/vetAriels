@@ -17,10 +17,10 @@ function GroomingOrderCreation() {
 
     const { clients, petsData, addPetToQueueGrooming, petsInQueueGrooming } = useContext(ClientsContext);
 
-    const [petSelected, setPetSelected] = useState(petsData[0].petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
-
     //estado de productos seleccionados al escribir en nuestro input de busqueda
     const [selectedProducts, setSelectedProducts] = useState([]);
+    console.log(selectedProducts);
+
 
     //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
     const [productToEdit, setProductToEdit] = useState(null);
@@ -79,11 +79,12 @@ function GroomingOrderCreation() {
     const navigate = useNavigate();
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
-    console.log(isClientSelected);
-
 
     //obtenemos las mascotas del propietario para poder mostrarlos en la lista del select
     const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
+
+    const [petSelected, setPetSelected] = useState(petsByOwner[0]?.petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
+
 
     //estado de las observaciones del baño de la mascota
     const [notes, setNotes] = useState('');

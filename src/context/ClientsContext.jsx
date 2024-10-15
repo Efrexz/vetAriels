@@ -1,57 +1,50 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 const ClientsContext = createContext();
 
 function ClientsProvider({ children }) {
 
     //clients Data
-    const [clients, setClients] = useState([
-        {
-            id: 1,
-            firstName: 'Efrain',
-            lastName: 'Andrade',
-            email: 'zyzz_448@gmail.com',
-            dni: '002959161',
-            date: '31-07-2024',
-            hour: '07:43PM',
-            phone1: '+55 (11) 9988-7766',
-            phone2: '+55 (11) 9988-7766',
-            address: 'av. proceres 115',
-            distrit: 'San miguel',
-            city: 'Lima',
-            reference: 'es una veterinaria',
-        },
-        {
-            id: 2,
-            firstName: 'Isabel',
-            lastName: 'Bustinza',
-            email: 'isaquintisa@gmail.com',
-            dni: '003028128',
-            date: '31-07-2024',
-            hour: '07:43PM',
-            phone1: '+55 (11) 9988-7766',
-            phone2: '+55 (11) 9988-7766',
-            address: 'av. proceres 115',
-            distrit: 'San miguel',
-            city: 'Lima',
-            reference: 'es una veterinaria',
-        },
-        {
-            id: 3,
-            firstName: 'Olga',
-            lastName: 'Bustinza',
-            email: 'olgabustin@gmail.com',
-            dni: '123456789',
-            date: '31-07-2024',
-            hour: '07:43PM',
-            phone1: '+55 (11) 9988-7766',
-            phone2: '+55 (11) 9988-7766',
-            address: 'CALLE LOS ROSALES 230 SAN MIGUEL',
-            distrit: 'San miguel',
-            city: 'Lima',
-            reference: 'es una veterinaria',
-        },
-    ]);
+    const [clients, setClients] = useState(
+        localStorage.getItem('clients') ? JSON.parse(localStorage.getItem('clients')) : [
+        ]);
+    console.log(clients);
+
+
+    //Pets Data
+    const [petsData, setPetsData] = useState(
+        localStorage.getItem('petsData') ? JSON.parse(localStorage.getItem('petsData')) : [
+        ]
+    );
+    console.log(petsData);
+
+    //Mascotas en cola de espera
+    const [petsInQueueMedical, setPetsInQueueMedical] = useState(
+        localStorage.getItem('petsInQueueMedical') ? JSON.parse(localStorage.getItem('petsInQueueMedical')) : []
+    );
+
+    //Mascotas en cola grooming
+    const [petsInQueueGrooming, setPetsInQueueGrooming] = useState(
+        localStorage.getItem('petsInQueueGrooming') ? JSON.parse(localStorage.getItem('petsInQueueGrooming')) : []
+    );
+
+
+    // Guardar en localStorage cada vez que cambien los estados
+    useEffect(() => {
+        localStorage.setItem('clients', JSON.stringify(clients));
+    }, [clients]);
+
+    useEffect(() => {
+        localStorage.setItem('petsData', JSON.stringify(petsData));
+    }, [petsData]);
+
+    useEffect(() => {
+        localStorage.setItem('petsInQueueGrooming', JSON.stringify(petsInQueueGrooming));
+    }, [petsInQueueGrooming]);
+
+    useEffect(() => {
+        localStorage.setItem('petsInQueueMedical', JSON.stringify(petsInQueueMedical));
+    }, [petsInQueueMedical]);
 
     const addClient = (newClient) => {
         setClients([...clients, newClient]);
@@ -65,57 +58,9 @@ function ClientsProvider({ children }) {
         setClients(clients.filter(client => client.id !== id));
     };
 
-    //Pets Data
-    const [petsData, setPetsData] = useState([
-        {
-            id: 1,
-            ownerId: 3,
-            ownerName: "Olga Bustinza",
-            registrationDate: '31-07-2024',
-            registrationTime: '07:43 PM',
-            petName: 'FRAC',
-            birthDate: '01/01/2023',
-            hc: '1',
-            microchip: '123456',
-            species: 'Canino',
-            breed: 'Mestizo',
-            sex: 'MACHO',
-            active: true,
-            img: 'https://i.imgur.com/v8y0k4B.jpg',
-        },
-        {
-            id: 2,
-            ownerId: 2,
-            ownerName: "Isabel Bustinza",
-            registrationDate: '31-07-2024',
-            registrationTime: '07:43 PM',
-            petName: 'FRAC',
-            birthDate: '01/01/2023',
-            hc: '2',
-            microchip: '123456',
-            species: 'Canino',
-            breed: 'Mestizo',
-            sex: 'MACHO',
-            active: true,
-            img: 'https://i.imgur.com/v8y0k4B.jpg',
-        },
-        {
-            id: 3,
-            ownerId: 3,
-            ownerName: "Olga Bustinza",
-            registrationDate: '31-07-2024',
-            registrationTime: '07:43 PM',
-            petName: 'Macarena',
-            birthDate: '01/01/2023',
-            hc: '3',
-            microchip: '123456',
-            species: 'Canino',
-            breed: 'Mestizo',
-            sex: 'HEMBRA',
-            active: true,
-            img: 'https://i.imgur.com/v8y0k4B.jpg',
-        },
-    ]);
+
+
+    //pets data
 
     let historyCounter = localStorage.getItem('historyCounter') || 100;
 
@@ -136,7 +81,6 @@ function ClientsProvider({ children }) {
     };
 
     //Mascotas en cola de espera
-    const [petsInQueueMedical, setPetsInQueueMedical] = useState([]);
 
     const addPetToQueueMedical = (newPet) => {
         setPetsInQueueMedical([...petsInQueueMedical, newPet]);
@@ -147,7 +91,6 @@ function ClientsProvider({ children }) {
     };
 
     //Mascotas en cola grooming
-    const [petsInQueueGrooming, setPetsInQueueGrooming] = useState([]);
     const addPetToQueueGrooming = (newPet) => {
         setPetsInQueueGrooming([...petsInQueueGrooming, newPet]);
     };

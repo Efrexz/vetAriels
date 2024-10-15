@@ -40,7 +40,6 @@ function ClientSearchInput({ mode }) {
                 id="clientSearch"
                 type="text"
                 placeholder="Buscar cliente..."
-                defaultValue={`${isClientSelected?.firstName} ${isClientSelected?.lastName}`}
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
