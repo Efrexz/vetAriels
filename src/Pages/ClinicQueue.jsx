@@ -13,13 +13,6 @@ import EjectIcon from '../assets/ejectIcon.svg?react';
 import { Link } from 'react-router-dom';
 
 
-const clinicQueueData = [
-    { id: '20497', date: '31-07-2024 07:43 AM', petName: 'FRAC', owner: 'Juan Carlos', assignedDoctor: 'Olga Bustinza', state: "atendido" },
-    { id: '20498', date: '30-07-2024 10:05 PM', petName: 'FRAC', owner: 'Juan Carlos', assignedDoctor: 'Olga Bustinza', state: "atendido" },
-    { id: '20499', date: '30-07-2024 10:00 PM', petName: 'FRAC', owner: 'Juan Carlos', assignedDoctor: 'Olga Bustinza', state: "atendido" },
-];
-
-
 const headlinesOptions = [
     {
         type: "Cualquier-Usuario",

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ClientsContext } from '../../context/ClientsContext';
 import BathIcon from '../../assets/bathIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
@@ -18,6 +18,8 @@ const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota
 function ActiveOrdersGrooming() {
 
     const { petsInQueueGrooming } = useContext(ClientsContext);
+    console.log(petsInQueueGrooming);
+
     const navigate = useNavigate();
 
 
@@ -100,13 +102,21 @@ function ActiveOrdersGrooming() {
                                     <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.timeOfAttention}</td>
                                     <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.timeOfAttention}</td>
                                     <td className="py-2 px-4 border-b text-center border align-top pt-4">
-                                        <span className="text-md  cursor-pointer text-blue-500 hover:underline ">{groomingData?.ownerName}</span>
+                                        <Link
+                                            className="text-md  cursor-pointer text-blue-500 hover:underline"
+                                            to={`/clients/client/${groomingData?.petData?.ownerId}/update`}>
+                                            {groomingData?.ownerName}
+                                        </Link>
                                     </td>
                                     <td className="py-2 px-4 border-b text-center border-2 align-top pt-4">
-                                        <span className="text-md cursor-pointer text-blue-500 hover:underline">{groomingData?.petData?.petName}</span>
+                                        <Link
+                                            className="text-md  cursor-pointer text-blue-500 hover:underline"
+                                            to={`/pets/pet/${groomingData?.petData.id}/update`}>
+                                            {groomingData?.petData?.petName}
+                                        </Link>
                                     </td>
                                     <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.petData?.breed}</td>
-                                    <td className="py-2 px-4 border-2 align-top pt-3">
+                                    <td className="py-2 pr-3 pl-2 border-2 align-top pt-3 text-sm">
                                         <ul className='list-disc pl-4'>
                                             {groomingData?.productsAndServices?.map((service) => (
                                                 <li key={service?.provisionalId} >
@@ -116,7 +126,7 @@ function ActiveOrdersGrooming() {
                                         </ul>
                                     </td>
                                     <td className="py-2 px-4 border-2 align-top pt-5">
-                                        <span className="inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white bg-orange-500 rounded-full">
+                                        <span className="inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white bg-orange-500 rounded-full whitespace-nowrap">
                                             {groomingData.state}
                                         </span>
                                     </td>

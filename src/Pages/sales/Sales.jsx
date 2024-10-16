@@ -3,16 +3,22 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '../../context/ClientsContext';
 import { AddPatientToQueueModal } from '../../components/AddPatientToQueueModal';
 import { ClientSearchInput } from '../../components/ClientSearchInput';
+import { ProductSearchInput } from '../../components/ProductSearchInput';
+import { QuantityCounter } from '../../components/QuantityCounter';
+import { PriceModificationModal } from '../../components/PriceModificationModal';
+import { QuantityModificationModal } from '../../components/QuantityModificationModal';
 import ShoppingCartPlusIcon from '../../assets/shoppingCartPlus.svg?react';
 import NewUserIcon from '../../assets/newUserIcon.svg?react';
 import UserPenIcon from '../../assets/userPenIcon.svg?react';
 import AngleDown from '../../assets/angleDown.svg?react';
 import PetIcon from '../../assets/petIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
 import Stethoscope from '../../assets/stethoscope.svg?react';
 import PenIcon from '../../assets/penIcon.svg?react';
 import ClockIcon from '../../assets/clockIcon.svg?react';
+import TrashIcon from '../../assets/trashIcon.svg?react';
+import TagIcon from '../../assets/tagIcon.svg?react';
+import GiftIcon from '../../assets/giftIcon.svg?react';
 
 
 function Sales() {
@@ -20,7 +26,6 @@ function Sales() {
     const { clients, petsData } = useContext(ClientsContext);
 
     const tableCategories = [
-        "Select",
         "Concepto",
         "Valor Unitario",
         "Cantidad",
@@ -31,14 +36,6 @@ function Sales() {
         "Opciones"
     ];
 
-    const tableData = [
-        { label: 'Valor de venta bruto (sin descuentos)', value: '0.00' },
-        { label: 'Total descuentos', value: '- 0.00' },
-        { label: 'Valor de venta incluyendo descuentos', value: '0.00' },
-        { label: 'Impuestos', value: '0.00' },
-        { label: 'ICBPER', value: '0.00' },
-        { label: 'TOTAL', value: '0.00', bold: true },
-    ];
     const navigate = useNavigate();
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
@@ -74,6 +71,67 @@ function Sales() {
     ];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    //estado de productos seleccionados al escribir en nuestro input de busqueda
+    const [selectedProducts, setSelectedProducts] = useState([]);
+
+    //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
+    function addProductToTable(product) {
+        const provisionalId = Date.now();
+        const newProduct = {
+            ...product,
+            provisionalId,
+            quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
+        };
+        setSelectedProducts([...selectedProducts, newProduct]);
+    }
+
+    //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
+    const [productToEdit, setProductToEdit] = useState(null);
+
+
+    // funcion para modificar el precio de un item por el modal de editar el precio
+    function handleUpdateProductPrice(updatedProduct) {
+        const updatedProducts = selectedProducts.map(product =>
+            product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product
+        );
+        setSelectedProducts(updatedProducts);
+    }
+
+    function removeProduct(id) {
+        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== id);
+        setSelectedProducts(updatedProducts);
+    }
+
+    //funcion para actualizar cantidad de productos en la lista de forma individual
+    function updateProductQuantity(id, newQuantity) {
+        const updatedProducts = selectedProducts.map((product) =>
+            product.provisionalId === id
+                ? { ...product, quantity: newQuantity }
+                : product
+        );
+        setSelectedProducts(updatedProducts);
+    }
+
+    const totalPrice = selectedProducts.reduce(
+        (acc, product) => acc + product.price * product.quantity,
+        0
+    );
+
+    const taxesData = [
+        { label: 'Valor de venta bruto (sin descuentos)', value: totalPrice },
+        { label: 'Total descuentos', value: '- 0.00' },
+        { label: 'Valor de venta incluyendo descuentos', value: '0.00' },
+        { label: 'Impuestos', value: '0.00' },
+        { label: 'TOTAL', value: totalPrice, bold: true },
+    ];
+    // const [petSelected, setPetSelected] = useState(petsByOwner[0]?.petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
+
+
+    //Modales
+    const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
+    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar ">
@@ -197,7 +255,6 @@ function Sales() {
             }
 
             <div className="bg-white shadow-md rounded-lg p-6">
-
                 {
                     isClientSelected && (
                         <div className='flex gap-4 mb-6 items-center'>
@@ -206,7 +263,7 @@ function Sales() {
                                 <select
                                     id='store'
                                     name="store"
-                                    className="w-full rounded-lg border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300  focus:border-blue-300"
+                                    className="w-full rounded border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300  focus:border-blue-300"
                                 >
                                     <option value="">VET ARIEL</option>
                                 </select>
@@ -218,17 +275,7 @@ function Sales() {
                                     className="block text-gray-700 mb-2 pl-2">
                                     Buscar y agregar productos y servicios a la cuenta del cliente:
                                 </label>
-                                <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
-                                    <div className="flex items-center justify-center bg-gray-100 px-3">
-                                        <SearchIcon className="w-5 h-5 text-gray-600" />
-                                    </div>
-                                    <input
-                                        id='search'
-                                        type="text"
-                                        placeholder="Buscar producto..."
-                                        className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
-                                    />
-                                </div>
+                                <ProductSearchInput addProductToTable={addProductToTable} />
                             </div>
                         </div>
                     )
@@ -237,25 +284,126 @@ function Sales() {
                     <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
                         <thead>
                             <tr>
-                                {
-                                    tableCategories.map((category, index) => (
-                                        <th className="py-2 px-4 bg-gray-100 text-gray-600 font-bold uppercase text-sm border-gray-300 border-2" key={index}>{category}</th>
-                                    ))
-                                }
+                                <th className="py-2 px-4 text-center bg-gray-100 border-gray-300 border-2">
+                                    <input type="checkbox" className="form-checkbox" />
+                                </th>
+                                {tableCategories.map((category, index) => (
+                                    <th
+                                        key={index}
+                                        className="py-2 px-4 bg-gray-100 text-gray-600 font-bold uppercase text-sm border-gray-300 border-2"
+                                    >
+                                        {category}
+                                    </th>
+                                ))}
                             </tr>
                         </thead>
                         <tbody>
-
+                            {selectedProducts.map((product) => (
+                                <tr key={product.provisionalId} className="border-b">
+                                    <td className="py-2 px-4 text-center border-gray-300 border-2">
+                                        <input type="checkbox" className="form-checkbox" />
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        {product.name || product.serviceName}
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        <span
+                                            className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
+                                            onClick={() => {
+                                                setProductToEdit(product)
+                                                setIsPriceModalOpen(true)
+                                                setIsQuantityModalOpen(false)
+                                            }}
+                                        >
+                                            {product.price}
+                                        </span>
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        <QuantityCounter
+                                            itemCount={product.quantity}
+                                            changeQuantity={(newQuantity) => {
+                                                updateProductQuantity(product.provisionalId, newQuantity)
+                                            }}
+                                            openQuantityModal={() => {
+                                                setIsQuantityModalOpen(true)
+                                                setIsPriceModalOpen(false)
+                                                setProductToEdit(product)
+                                            }} />
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        {product.price * product.quantity}
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
+                                            0.00
+                                        </span>
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        {product.price * product.quantity}
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        <select className="border rounded p-1">
+                                            {
+                                                petsByOwner.map((pet, index) => (
+                                                    <option key={index} value={pet.petName}>{pet.petName}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </td>
+                                    <td className="py-5 px-4  flex space-x-2 justify-center align-center border-gray-300 border-b-2 border-r-2" >
+                                        <button className="text-blue-500 hover:text-blue-700">
+                                            <ClockIcon className="w-4 h-4" />
+                                        </button>
+                                        <button className="text-green-500 hover:text-blue-700">
+                                            <NewUserIcon className="w-4 h-4" />
+                                        </button>
+                                        <button className="text-orange-400 hover:text-blue-700">
+                                            <TagIcon className='w-4 h-4  cursor-pointer' />
+                                        </button>
+                                        <button className="text-orange-500 hover:text-blue-700">
+                                            <GiftIcon className='w-4 h-4 cursor-pointer' />
+                                        </button>
+                                        <button
+                                            className="text-red-500 hover:text-red-700"
+                                            onClick={() => removeProduct(product.provisionalId)}
+                                        >
+                                            <TrashIcon className="w-4 h-4" />
+                                        </button>
+                                        {/* Agrega más botones según tus opciones */}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
 
-                <div className="bg-white p-6 mb-6">
+                {
+                    isPriceModalOpen && (
+                        <PriceModificationModal
+                            onClose={() => setIsPriceModalOpen(false)}
+                            productToEdit={productToEdit}
+                            updateProductPrice={handleUpdateProductPrice}
+                        />
+                    )
+                }
+                {
+                    isQuantityModalOpen && (
+                        <QuantityModificationModal
+                            quantity={productToEdit?.quantity}
+                            changeQuantity={(newQuantity) => {
+                                updateProductQuantity(productToEdit.provisionalId, newQuantity)
+                            }}
+                            onClose={() => setIsQuantityModalOpen(false)}
+                        />
+                    )
+                }
+
+                <div className=" p-6">
                     <div className="w-full lg:w-1/2 ml-auto">
-                        <table className="min-w-full bg-white">
+                        <table className="min-w-full ">
                             <tbody>
-                                {tableData.map((row, index) => (
-                                    <tr key={index} className={`border-t border-gray-200 ${row.bold ? 'font-bold' : ''}`}>
+                                {taxesData.map((row, index) => (
+                                    <tr key={index} className={`border-t border-gray-300 ${row.bold ? 'font-bold' : ''}`}>
                                         <td className="py-2 text-gray-600">{row.label}</td>
                                         <td className="py-2 text-right text-gray-600">{row.value}</td>
                                     </tr>

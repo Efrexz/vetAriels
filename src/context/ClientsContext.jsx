@@ -8,7 +8,6 @@ function ClientsProvider({ children }) {
     const [clients, setClients] = useState(
         localStorage.getItem('clients') ? JSON.parse(localStorage.getItem('clients')) : [
         ]);
-    console.log(clients);
 
 
     //Pets Data
@@ -16,7 +15,6 @@ function ClientsProvider({ children }) {
         localStorage.getItem('petsData') ? JSON.parse(localStorage.getItem('petsData')) : [
         ]
     );
-    console.log(petsData);
 
     //Mascotas en cola de espera
     const [petsInQueueMedical, setPetsInQueueMedical] = useState(

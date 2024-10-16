@@ -101,8 +101,12 @@ function Clients() {
                                     <td className="py-2 px-4 text-center border">{userData.email}</td>
                                     <td className="py-2 px-4 text-center border">{userData.address}</td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
-                                        <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" onClick={() => navigate(`/clients/client/${userData.id}/update`)} />
-                                        <PawIcon className="w-4 h-4 text-[#7266BA] cursor-pointer" />
+                                        <PenIcon
+                                            className="w-4 h-4 text-green-500 cursor-pointer"
+                                            onClick={() => navigate(`/clients/client/${userData.id}/update`)} />
+                                        <PawIcon
+                                            className="w-4 h-4 text-[#7266BA] cursor-pointer"
+                                            onClick={() => navigate(`/clients/client/${userData.id}/pets`)} />
                                         <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>
                                 </tr>

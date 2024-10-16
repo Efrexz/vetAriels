@@ -19,8 +19,6 @@ function GroomingOrderCreation() {
 
     //estado de productos seleccionados al escribir en nuestro input de busqueda
     const [selectedProducts, setSelectedProducts] = useState([]);
-    console.log(selectedProducts);
-
 
     //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
     const [productToEdit, setProductToEdit] = useState(null);
@@ -233,7 +231,6 @@ function GroomingOrderCreation() {
                     <thead>
                         <tr>
                             <th className="py-2 px-4 border border-gray-300 text-center">Concepto</th>
-                            <th className="py-2 px-4 border  border-gray-300  text-center">Especificaciones</th>
                             <th className="py-2 px-4 border  border-gray-300 text-center">Valor Unitario</th>
                             <th className="py-2 px-4 border  border-gray-300 text-center">Cantidad</th>
                             <th className="py-2 px-4 border  border-gray-300 text-center">Sub Total</th>
@@ -247,7 +244,6 @@ function GroomingOrderCreation() {
                         {selectedProducts.map((product) => (
                             <tr key={product.provisionalId}>
                                 <td className='py-2 px-4 border border-gray-300 text-center'>{product.name || product.serviceName}</td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>Descripción detallada</td>
                                 <td className='py-2 px-4  border border-gray-300 text-center'>
                                     <span
                                         className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
