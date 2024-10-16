@@ -1,23 +1,18 @@
 import { useContext, useState } from 'react';
-import { ProductsAndServicesContext } from '../context/ProductsAndServicesContext.jsx';
-import { AddNewServiceAndProductModal } from '../components/AddNewServiceAndProductModal.jsx';
-import EraserIcon from '../assets/eraserIcon.svg?react';
-import RefreshIcon from '../assets/refreshIcon.svg?react';
-import PDFIcon from '../assets/pdfIcon.svg?react';
-import ExcelIcon from '../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import TrashIcon from '../assets/trashIcon.svg?react';
-import SearchIcon from '../assets/searchIcon.svg?react';
-import PenIcon from '../assets/penIcon.svg?react';
-import EyeIcon from '../assets/eyeIcon.svg?react';
-import EyeSlashIcon from '../assets/eyeSlash.svg?react';
-import KitMedical from '../assets/kitMedical.svg?react';
-
-const productsData = [
-    { id: 1, systemCode: 1520, date: '2022-01-01', time: "20:56 PM", name: 'URANOTEST-PANLEUCOPENIA FELINA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
-    { id: 2, systemCode: 1519, date: '2022-01-01', time: "20:56 PM", name: 'URANOTEST-PANLEUCOPENIA', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
-    { id: 3, systemCode: 1518, date: '2022-01-01', time: "20:56 PM", name: 'URANOTEST-PANLEUCOPENIA ', line: 'LABORATORIO', category: "CATEGORY1", salePrice: 110.00, status: true },
-];
+import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext.jsx';
+import { AddNewServiceAndProductModal } from '../../components/AddNewServiceAndProductModal.jsx';
+import EraserIcon from '../../assets/eraserIcon.svg?react';
+import RefreshIcon from '../../assets/refreshIcon.svg?react';
+import PDFIcon from '../../assets/pdfIcon.svg?react';
+import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
+import PlusIcon from '../../assets/plusIcon.svg?react';
+import TrashIcon from '../../assets/trashIcon.svg?react';
+import SearchIcon from '../../assets/searchIcon.svg?react';
+import PenIcon from '../../assets/penIcon.svg?react';
+import EyeIcon from '../../assets/eyeIcon.svg?react';
+import EyeSlashIcon from '../../assets/eyeSlash.svg?react';
+import KitMedical from '../../assets/kitMedical.svg?react';
+import { useNavigate } from 'react-router-dom';
 
 
 const IconsOptions = [
@@ -51,12 +46,15 @@ const filterOptions = [
     },
 ];
 
+
+
 const tableHeaders = ["Cod. de sistema", "Fecha de Registro", "Nombre", "Línea", "Categoría", "Precio de venta", "Estado", "Opciones"];
 
 function Services() {
     const { servicesData } = useContext(ProductsAndServicesContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -146,7 +144,10 @@ function Services() {
                                         />
                                     </td>
                                     <td className="py-6 px-4 text-center border-t-2 border-l-2 border-r-2 flex justify-center gap-2">
-                                        <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
+                                        <PenIcon
+                                            className="w-4 h-4 text-green-500 cursor-pointer"
+                                            onClick={() => navigate("/service/update/")}
+                                        />
                                         <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>
                                 </tr>
