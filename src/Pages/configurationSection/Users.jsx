@@ -1,26 +1,23 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { GlobalContext } from '../../context/GlobalContext';
 import TrashIcon from '../../assets/trashIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import UserGroupIcon from '../../assets/userGroupIcon.svg?react';
-
-
-const usersData = [
-    { id: 1, name: 'Juan Perez', email: 'juanperez@gmail.com', role: 'Administrador', status: true, dateRegistered: '2022-05-01', timeRegistered: '20:00' },
-    { id: 2, name: 'Maria Perez', email: 'mariaperez@gmail.com', role: 'Administrador', status: true, dateRegistered: '2022-05-01', timeRegistered: '20:00' },
-    { id: 3, name: 'Carlos Perez', email: 'carlosperez@gmail.com', role: 'Administrador', status: false, dateRegistered: '2022-05-01', timeRegistered: '20:00' },
-];
+import KeyIcon from '../../assets/keyIcon.svg?react';
 
 
 const tableHeaders = ["Fecha de creación", "Nombre y Apellidos", "Correo", "Rol", "Estado", "Opciones"];
 
 function Users() {
-    const [users, setUsers] = useState(usersData);
+    const navigate = useNavigate();
+    const { users, removeUser } = useContext(GlobalContext);
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <UserGroupIcon className="w-9 h-9 mr-2" />
+            <h1 className="text-2xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
+                <UserGroupIcon className="w-6 h-6 mr-2" />
                 Usuarios
             </h1>
             <div className="bg-white rounded-lg shadow p-3 mb-6">
@@ -28,11 +25,15 @@ function Users() {
                     <div className='flex gap-2'>
                         <button
                             className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 mb-4"
+                            onClick={() => navigate("/config/user-subsidiaries/create")}
                         >
                             <PlusIcon className="w-5 h-5" />
                             AGREGAR USUARIO
                         </button>
-                        <button className="bg-transparent border border-gray-300 px-4 py-2 text-gray-700 rounded hover:bg-gray-200">
+                        <button
+                            className="bg-transparent border border-gray-300 px-4 py-2 text-gray-700 rounded hover:bg-gray-200"
+                            onClick={() => window.location.reload()}
+                        >
                             <RefreshIcon className="w-5 h-5" />
                         </button>
                     </div>
@@ -49,19 +50,30 @@ function Users() {
                         <tbody>
                             {users.map((user, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 text-center border">{user.dateRegistered}</td>
-                                    <td className="py-2 px-4 text-center border">{user.name}</td>
-                                    <td className="py-2 px-4 text-center border">{user.email}</td>
-                                    <td className="py-2 px-4 text-center border">{user.role}</td>
+                                    <td className="py-2 px-4 text-center border">
+                                        {user?.registrationDate} {user?.registrationTime}
+                                    </td>
+                                    <td className="py-2 px-4 text-center border">
+                                        {user?.name} {user?.lastName}
+                                    </td>
+                                    <td className="py-2 px-4 text-center border">{user?.email}</td>
+                                    <td className="py-2 px-4 text-center border">{user?.rol}</td>
                                     <td className="py-2 px-4 text-center border ">
                                         <span
-                                            className={`inline-block cursor-pointer py-0.5 px-4 text-white rounded-full ${user.status ? "bg-green-500" : "bg-red-500"}`}
+                                            className={`inline-block cursor-pointer py-0.5 px-4 text-white rounded-full ${user?.status === "ACTIVO" ? "bg-green-500" : "bg-red-500"}`}
                                         >
-                                            {user.status ? "Activo" : "Inactivo"}
+                                            {user?.status === "ACTIVO" ? "Activo" : "Inactivo"}
                                         </span>
                                     </td>
-                                    <td className="py-3 px-4 text-center border flex justify-center">
-                                        <TrashIcon className="w-5 h-5 text-red-500 cursor-pointer" />
+                                    <td className="py-3 px-4 text-center border flex justify-center gap-2">
+                                        <KeyIcon
+                                            className="w-5 h-5 text-yellow-500 cursor-pointer"
+                                            onClick={() => navigate(`/config/user-subsidiaries/edit/${user.id}`)}
+                                        />
+                                        <TrashIcon
+                                            className="w-5 h-5 text-red-500 cursor-pointer"
+                                            onClick={() => removeUser(user.id)}
+                                        />
                                     </td>
                                 </tr>
                             ))}
@@ -79,7 +91,7 @@ function Users() {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     );
 }
 

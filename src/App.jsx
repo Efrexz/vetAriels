@@ -26,7 +26,11 @@ import { Services } from './Pages/servicesSection/Services.jsx'
 import { ServiceInfo } from './Pages/servicesSection/ServiceInfo.jsx'
 import { Config } from './Pages/configurationSection/Config.jsx'
 import { Roles } from './Pages/configurationSection/Roles.jsx'
+import { CreateRol } from './Pages/configurationSection/CreateRol.jsx'
+import { PermissionsList } from './Pages/configurationSection/PermissionsList.jsx'
 import { Users } from './Pages/configurationSection/Users.jsx'
+import { CreateUser } from './Pages/configurationSection/CreateUser.jsx'
+import { EditUser } from './Pages/configurationSection/EditUser.jsx'
 import { NotFound } from './Pages/NotFound.jsx'
 import { Footer } from './components/Footer.jsx'
 import { Layout } from './components/Layout.jsx'
@@ -68,7 +72,11 @@ function App() {
                 <Route path="/service/:section/" element={<ServiceInfo />} />
                 <Route path="/config/subsidiary" element={<Config />} />
                 <Route path="/config/roles" element={<Roles />} />
+                <Route path="/config/roles/create" element={<CreateRol />} />
+                <Route path="/config/role/permissions/:role" element={<PermissionsList />} />
                 <Route path="/config/user-subsidiaries" element={<Users />} />
+                <Route path="/config/user-subsidiaries/create" element={<CreateUser />} />
+                <Route path="/config/user-subsidiaries/edit/:id" element={<EditUser />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />

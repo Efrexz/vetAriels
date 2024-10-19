@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import TrashIcon from '../../assets/trashIcon.svg?react';
@@ -15,6 +16,8 @@ function Roles() {
         'Médico',
         'Recepcionista',
     ]);
+
+    const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -25,6 +28,7 @@ function Roles() {
                 <div className="overflow-x-auto border border-gray-300 rounded-lg">
                     <button
                         className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 m-3"
+                        onClick={() => navigate("/config/roles/create")}
                     >
                         <PlusIcon className="w-5 h-5" />
                         CREAR NUEVO ROL
@@ -42,7 +46,10 @@ function Roles() {
                                     <tr key={index} className="border hover:bg-gray-50">
                                         <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900 border">{role}</td>
                                         <td className="py-3 text-sm font-medium border text-center">
-                                            <button className="text-yellow-500 hover:text-yellow-600 mx-2">
+                                            <button
+                                                className="text-yellow-500 hover:text-yellow-600 mx-2"
+                                                onClick={() => navigate(`/config/role/permissions/${role}`)}
+                                            >
                                                 <KeyIcon className="w-5 h-5" />
                                             </button>
                                             <button className="text-green-500 hover:text-green-600 mx-2">

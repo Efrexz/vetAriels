@@ -44,6 +44,7 @@ function ClientsProvider({ children }) {
         localStorage.setItem('petsInQueueMedical', JSON.stringify(petsInQueueMedical));
     }, [petsInQueueMedical]);
 
+    //clients
     const addClient = (newClient) => {
         setClients([...clients, newClient]);
     };
@@ -56,10 +57,7 @@ function ClientsProvider({ children }) {
         setClients(clients.filter(client => client.id !== id));
     };
 
-
-
     //pets data
-
     let historyCounter = localStorage.getItem('historyCounter') || 100;
 
     const addPet = (newPet, ownerId, ownerName) => {

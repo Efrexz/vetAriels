@@ -29,7 +29,7 @@ function ProductSearchInput({ addProductToTable }) {
             <input
                 className="border rounded w-full py-2 px-3 hover:border-blue-300 focus-within:border-blue-300"
                 id="clientSearch"
-                type="text"
+                type="search"
                 placeholder="Buscar cliente..."
                 value={searchTerm || ""}
                 onChange={(e) => {
