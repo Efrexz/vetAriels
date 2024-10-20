@@ -104,8 +104,11 @@ function GroomingOrderCreation() {
         const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
 
         const dataToSend = {
+            id: Date.now(),
             petData: petSelectedData,
-            turn: petsInQueueGrooming.length + 1,
+            turn: petsInQueueGrooming.length > 0
+                ? petsInQueueGrooming[petsInQueueGrooming.length - 1].turn + 1
+                : 1, // Si la cola está vacía, el turno será 1
             systemCode: petSelectedData.hc,
             ownerName: `${isClientSelected.firstName} ${isClientSelected.lastName}`,
             notes,

@@ -20,8 +20,8 @@ function Roles() {
     const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <RoleUserIcon className="w-8 h-8 mr-2" />
+            <h1 className="text-2xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
+                <RoleUserIcon className="w-6 h-6 mr-2" />
                 Roles
             </h1>
             <div className="bg-white rounded-lg shadow p-3 mb-6">

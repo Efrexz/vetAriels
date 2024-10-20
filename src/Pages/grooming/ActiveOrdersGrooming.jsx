@@ -17,7 +17,7 @@ const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota
 
 function ActiveOrdersGrooming() {
 
-    const { petsInQueueGrooming } = useContext(ClientsContext);
+    const { petsInQueueGrooming, removePetFromQueueGrooming } = useContext(ClientsContext);
     console.log(petsInQueueGrooming);
 
     const navigate = useNavigate();
@@ -133,7 +133,10 @@ function ActiveOrdersGrooming() {
                                     <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-300">
                                         <PenIcon className="w-4.5 h-4.5 text-blue-500 cursor-pointer" />
                                         <CheckIcon className="w-4.5 h-4.5 text-green-500 cursor-pointer" />
-                                        <BanIcon className="w-4.5 h-4.5 text-red-500 cursor-pointer" />
+                                        <BanIcon
+                                            className="w-4.5 h-4.5 text-red-500 cursor-pointer"
+                                            onClick={() => removePetFromQueueGrooming(groomingData.id)}
+                                        />
                                     </td>
                                 </tr>
                             ))}
