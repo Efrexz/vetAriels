@@ -23,7 +23,7 @@ import GiftIcon from '../../assets/giftIcon.svg?react';
 
 function Sales() {
 
-    const { clients, petsData } = useContext(ClientsContext);
+    const { clients, petsData, removeProductFromClient } = useContext(ClientsContext);
 
     const tableCategories = [
         "Concepto",
@@ -37,11 +37,11 @@ function Sales() {
     ];
 
     const navigate = useNavigate();
-    const { id } = useParams();
-    const isClientSelected = clients.find(client => client.id === Number(id));
+    const { id: clientId } = useParams();
+    const isClientSelected = clients.find(client => client.id === Number(clientId));
 
     //obtenemos las mascotas que pertenecen al cliente seleccionado
-    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
+    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(clientId));
 
     //estado para el evento de hover sobre el nombre de las mascotas que aparecen al seleccionar un cliente
     const [hoveredPetId, setHoveredPetId] = useState(null);
@@ -74,7 +74,7 @@ function Sales() {
 
 
     //estado de productos seleccionados al escribir en nuestro input de busqueda
-    const [selectedProducts, setSelectedProducts] = useState([]);
+    const [selectedProducts, setSelectedProducts] = useState(isClientSelected?.products || []);
 
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
     function addProductToTable(product) {
@@ -99,8 +99,8 @@ function Sales() {
         setSelectedProducts(updatedProducts);
     }
 
-    function removeProduct(id) {
-        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== id);
+    function removeProduct(productId) {
+        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== productId);
         setSelectedProducts(updatedProducts);
     }
 
@@ -219,7 +219,7 @@ function Sales() {
                         }
                         <button
                             className='py-2 px-4 bg-orange-400 hover:bg-orange-500 flex gap-1 items-center rounded-md ml-5'
-                            onClick={() => navigate(`/pets/create/${id}`)}
+                            onClick={() => navigate(`/pets/create/${clientId}`)}
                         >
                             <PetIcon className='w-5 h-5 text-white' />
                             <PlusIcon className='w-3 h-3 text-white' />
@@ -365,7 +365,10 @@ function Sales() {
                                         </button>
                                         <button
                                             className="text-red-500 hover:text-red-700"
-                                            onClick={() => removeProduct(product.provisionalId)}
+                                            onClick={() => {
+                                                removeProductFromClient(Number(clientId), product.provisionalId);
+                                                removeProduct(product.provisionalId)
+                                            }}
                                         >
                                             <TrashIcon className="w-4 h-4" />
                                         </button>

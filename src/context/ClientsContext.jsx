@@ -57,6 +57,28 @@ function ClientsProvider({ children }) {
         setClients(clients.filter(client => client.id !== id));
     };
 
+    const addProductToClient = (clientId, product) => {
+        setClients(clients.map(client =>
+            client.id === clientId
+                ? {
+                    ...client,
+                    products: [...(client.products || []), product]
+                }
+                : client
+        ));
+    };
+
+    const removeProductFromClient = (clientId, productId) => {
+        setClients(clients.map(client =>
+            client.id === clientId
+                ? {
+                    ...client,
+                    products: (client.products || []).filter(product => product.provisionalId !== productId)
+                }
+                : client
+        ));
+    };
+
     //pets data
     let historyCounter = localStorage.getItem('historyCounter') || 100;
 
@@ -101,6 +123,8 @@ function ClientsProvider({ children }) {
             addClient,
             removeClient,
             updateClientData,
+            addProductToClient,
+            removeProductFromClient,
             petsData,
             addPet,
             updatePetData,

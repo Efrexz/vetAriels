@@ -56,7 +56,7 @@ function SideBarMenu() {
                 {
                     name: "Cuadrar caja",
                     icon: MoneyIcon,
-                    path: "/cash-review"
+                    path: "/sales/cash-review"
                 },
             ],
         },

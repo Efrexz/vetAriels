@@ -1,4 +1,6 @@
 import { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ClientsContext } from "../context/ClientsContext";
 import { ProductsAndServicesContext } from "../context/ProductsAndServicesContext";
 
 
@@ -6,6 +8,8 @@ import { ProductsAndServicesContext } from "../context/ProductsAndServicesContex
 function ProductSearchInput({ addProductToTable }) {
 
     const { productsData, servicesData } = useContext(ProductsAndServicesContext);
+    const { addProductToClient } = useContext(ClientsContext);
+    const { id } = useParams();
 
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -21,6 +25,23 @@ function ProductSearchInput({ addProductToTable }) {
         });
 
         return [...productMatch, ...serviceMatch];
+    }
+
+    function addProductByClient(productOrService) {
+        const now = new Date();
+        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
+        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
+        const newProduct = {
+            ...productOrService,
+            provisionalId: Date.now(),
+            additionTime: currentTime,
+            additionDate: currentDate,
+            quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
+        };
+        // agregamos el producto al cliente
+        addProductToClient(Number(id), newProduct);
+        // también lo agregamos a la tabla local 
+        addProductToTable(newProduct);
     }
 
 
@@ -49,7 +70,7 @@ function ProductSearchInput({ addProductToTable }) {
                                 key={index}
                                 className="py-2 pl-3 pr-6 h-20 cursor-pointer hover:bg-blue-100 border flex justify-between items-center"
                                 onClick={() => {
-                                    addProductToTable(productOrService)
+                                    addProductByClient(productOrService)
                                     setSearchTerm('')
                                 }}
                             >
