@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ClientsContext } from '../../context/ClientsContext';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
@@ -8,7 +11,7 @@ import WhatsAppIcon from '../../assets/whatsAppIcon.svg?react';
 import ShoppingCart from '../../assets/shoppingCart.svg?react';
 
 
-const activeAccounts = [
+const test = [
     { client: 'POOL CHRISTIAN, GRADOS VICUÑA', lastMovement: '29-07-2024 02:21 p. m.', items: 2, amount: '40.00' },
     { client: 'ALEXIA HAI-LA, VIGURIA WONG', lastMovement: '29-07-2024 01:05 p. m.', items: 2, amount: '260.00' },
     { client: 'LUIS ALBERTO, TRUJILLO EYZAQUIRRE', lastMovement: '29-07-2024 12:47 p. m.', items: 2, amount: '70.00' },
@@ -24,6 +27,13 @@ const tableHeaders = [
 ];
 
 function ActiveOrders() {
+
+    const { clients } = useContext(ClientsContext);
+
+    const activeAccounts = clients.filter(client => client?.products?.length > 0);
+    console.log(activeAccounts);
+
+    const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6 overflow-auto">
             <h1 className="text-3xl font-medium text-orange-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -76,14 +86,31 @@ function ActiveOrders() {
                             </tr>
                         </thead>
                         <tbody>
-                            {activeAccounts.map((account, index) => (
-                                <tr key={index} className='hover:bg-gray-100'>
-                                    <td className="py-2 text-center border">{account.client}</td>
-                                    <td className="py-2 text-center border">{account.lastMovement}</td>
-                                    <td className="py-2 text-center border">{account.items}</td>
-                                    <td className="py-2 text-center border">{account.amount}</td>
+                            {activeAccounts?.map((account, index) => (
+                                <tr
+                                    key={index}
+                                    className='hover:bg-gray-100 hover:cursor-pointer'
+                                    onClick={() => navigate(`/sales/client/${account?.id}`)}
+                                >
                                     <td className="py-2 text-center border">
-                                        <button className="text-green-500 hover:text-green-700">
+                                        {account?.firstName} {account?.lastName}
+                                    </td>
+                                    <td className="py-2 text-center border">
+                                        {account?.products[0]?.additionDate} {account?.products[0]?.additionTime}
+                                    </td>
+                                    <td className="py-2 text-center border">
+                                        {account?.products?.length}
+                                    </td>
+                                    <td className="py-2 text-center border">
+                                        <span>
+                                            {account?.products?.reduce((acc, product) => acc + product?.price, 0)}
+                                        </span>
+                                    </td>
+                                    <td className="py-2 text-center border">
+                                        <button
+                                            className="text-green-500 hover:text-green-700"
+                                            onClick={() => navigate(`/sales/client/${account?.id}`)}
+                                        >
                                             <SearchIcon className="w-5 h-5" />
                                         </button>
                                         <button className="text-orange-500 hover:text-orange-700 ml-2">
