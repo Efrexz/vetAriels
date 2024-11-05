@@ -6,6 +6,7 @@ import { DashBoard } from './Pages/DashBoard.jsx'
 import { Sales } from './Pages/sales/Sales.jsx'
 import { ActiveOrders } from './Pages/sales/ActiveOrders.jsx'
 import { Invoices } from './Pages/sales/Invoices.jsx'
+import { CreateInvoice } from './Pages/sales/CreateInvoice.jsx'
 import { BalanceReport } from './Pages/sales/BalanceReport.jsx'
 import { Payments } from './Pages/sales/Payments.jsx'
 import { ClinicQueue } from './Pages/ClinicQueue.jsx'
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/sales/client/:id" element={<Sales />} />
                 <Route path="/sales/active-orders" element={<ActiveOrders />} />
                 <Route path="/sales/invoices" element={<Invoices />} />
+                <Route path="/sales/invoices/create/:id" element={<CreateInvoice />} />
                 <Route path="/sales/payments" element={<Payments />} />
                 <Route path='/sales/cash-review' element={<BalanceReport />} />
                 <Route path="/clinic-queue" element={<ClinicQueue />} />

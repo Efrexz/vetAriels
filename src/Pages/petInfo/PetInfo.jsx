@@ -74,7 +74,6 @@ function PetInfo() {
                 {section === 'update' && <PetProfile petData={individualPetData} />}
                 {section === 'clinical-records' && <ClinicalRecords />}
             </div>
-
         </div>
     );
 }

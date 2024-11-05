@@ -10,14 +10,6 @@ import PaperPlaneIcon from '../../assets/paperPlaneIcon.svg?react';
 import WhatsAppIcon from '../../assets/whatsAppIcon.svg?react';
 import ShoppingCart from '../../assets/shoppingCart.svg?react';
 
-
-const test = [
-    { client: 'POOL CHRISTIAN, GRADOS VICUÑA', lastMovement: '29-07-2024 02:21 p. m.', items: 2, amount: '40.00' },
-    { client: 'ALEXIA HAI-LA, VIGURIA WONG', lastMovement: '29-07-2024 01:05 p. m.', items: 2, amount: '260.00' },
-    { client: 'LUIS ALBERTO, TRUJILLO EYZAQUIRRE', lastMovement: '29-07-2024 12:47 p. m.', items: 2, amount: '70.00' },
-    { client: 'PAOLO SEBASTIAN, ZAPATA VICTORIA', lastMovement: '29-07-2024 11:36 a. m.', items: 5, amount: '207.00' },
-];
-
 const tableHeaders = [
     "Cliente",
     "Último movimiento",
@@ -31,8 +23,6 @@ function ActiveOrders() {
     const { clients } = useContext(ClientsContext);
 
     const activeAccounts = clients.filter(client => client?.products?.length > 0);
-    console.log(activeAccounts);
-
     const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6 overflow-auto">

@@ -418,7 +418,11 @@ function Sales() {
             </div>
 
             <div className="bg-gray-100 rounded-lg px-6 py-4 mt-6 flex justify-end">
-                <button className="bg-[#72D78A] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" disabled={true}>
+                <button
+                    className={`${isClientSelected ? "bg-green-500 hover:bg-green-600" : "bg-green-400"} text-white font-bold py-2 px-4 rounded`}
+                    type="button"
+                    onClick={() => navigate(`/sales/invoices/create/${isClientSelected.id}`, { state: { selectedProducts } })}
+                    disabled={!isClientSelected}>
                     Ir a caja y generar comprobante
                 </button>
             </div>
