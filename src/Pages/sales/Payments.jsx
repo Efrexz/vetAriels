@@ -1,4 +1,5 @@
-
+import { useState } from 'react';
+import { PaymentAndDepositModal } from '../../components/PaymentAndDepositModal';
 import SearchIcon from '../../assets/searchIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
@@ -17,6 +18,10 @@ const paymentsData = [
 const tableHeaders = ["Fecha", "ID", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Tipo de Mov.", "Opciones"];
 
 function Payments() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const [typeOfOperation, setTypeOfOperation] = useState('');
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -69,11 +74,29 @@ function Payments() {
                             </select>
                         </div>
                         <div className="flex space-x-4 mt-1.5">
-                            <button className="bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600">ENTRADA</button>
-                            <button className="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-600">SALIDA</button>
+                            <button
+                                className="bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600"
+                                onClick={() => {
+                                    setIsModalOpen(true)
+                                    setTypeOfOperation("Entrada")
+                                }}>
+                                ENTRADA
+                            </button>
+                            <button
+                                className="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-600"
+                                onClick={() => {
+                                    setIsModalOpen(true)
+                                    setTypeOfOperation("Salida")
+                                }}
+                            >SALIDA</button>
                         </div>
                     </div>
                 </div>
+                {
+                    isModalOpen && (
+                        <PaymentAndDepositModal onClose={() => setIsModalOpen(false)} typeOfOperation={typeOfOperation} />
+                    )
+                }
                 <div className="overflow-x-auto border border-gray-300 rounded-lg">
                     <table className="min-w-full bg-white">
                         <thead>
