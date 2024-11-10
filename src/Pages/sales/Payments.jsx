@@ -1,24 +1,22 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { FinancialContext } from '../../context/FinancialContext';
 import { PaymentAndDepositModal } from '../../components/PaymentAndDepositModal';
-import SearchIcon from '../../assets/searchIcon.svg?react';
+import TrashIcon from '../../assets/trashIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import PDFIcon from '../../assets/pdfIcon.svg?react';
 import FileInvoiceIcon from '../../assets/file-invoice.svg?react';
 import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
+import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
+import ImageIcon from '../../assets/imageIcon.svg?react';
 
 
-const paymentsData = [
-    { id: '300EBFEA', date: '31-07-2024 07:43 AM', description: 'APERTURA ANGELLY', paymentMethod: 'EFECTIVO', income: '2,084.00', expense: null, docRef: '', movementType: 'DIRECTO' },
-    { id: 'FD12A67B', date: '30-07-2024 10:05 PM', description: '', paymentMethod: 'VISA', income: '150.00', expense: null, docRef: 'BV01-0003572', movementType: 'VENTA' },
-    { id: 'AB4801FD', date: '30-07-2024 10:00 PM', description: '', paymentMethod: 'VISA', income: '475.00', expense: null, docRef: 'BV01-0003571', movementType: 'VENTA' },
-];
-
-
-const tableHeaders = ["Fecha", "ID", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Tipo de Mov.", "Opciones"];
+const tableHeaders = ["ID", "Fecha", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Tipo de Mov.", "Opciones"];
 
 function Payments() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const { paymentsData } = useContext(FinancialContext);
 
 
     const [typeOfOperation, setTypeOfOperation] = useState('');
@@ -78,7 +76,7 @@ function Payments() {
                                 className="bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600"
                                 onClick={() => {
                                     setIsModalOpen(true)
-                                    setTypeOfOperation("Entrada")
+                                    setTypeOfOperation("ENTRADA")
                                 }}>
                                 ENTRADA
                             </button>
@@ -86,7 +84,7 @@ function Payments() {
                                 className="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-600"
                                 onClick={() => {
                                     setIsModalOpen(true)
-                                    setTypeOfOperation("Salida")
+                                    setTypeOfOperation("SALIDA")
                                 }}
                             >SALIDA</button>
                         </div>
@@ -110,18 +108,24 @@ function Payments() {
                         </thead>
                         <tbody>
                             {paymentsData.map((payment, index) => (
-                                <tr key={index} className="hover:bg-gray-100 cursor-pointer">
+                                <tr key={index} className="hover:bg-gray-100">
+                                    <td className="py-2 px-4 border-b text-center border">{payment.id.slice(0, 9).toUpperCase()}</td>
                                     <td className="py-2 px-4 border-b text-center border">{payment.date}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.id}</td>
                                     <td className="py-2 px-4 border-b text-center border">{payment.description}</td>
                                     <td className="py-2 px-4 border-b text-center border">{payment.paymentMethod}</td>
                                     <td className="py-2 px-4 border-b text-center border text-green-600">{payment.income}</td>
                                     <td className="py-2 px-4 border-b text-center border text-red-600">{payment.expense}</td>
                                     <td className="py-2 px-4 border-b text-center border">{payment.docRef}</td>
                                     <td className="py-2 px-4 border-b text-center border">{payment.movementType}</td>
-                                    <td className="py-2 px-4 border-b text-center">
-                                        <button className="text-green-500 hover:text-green-700">
-                                            <SearchIcon className="w-5 h-5" />
+                                    <td className="py-3 px-4 border-b text-center flex items-center justify-center gap-2">
+                                        <button className="text-blue-400 hover:text-blue-500" title="Ver imagen">
+                                            <ImageIcon className="w-4 h-4" />
+                                        </button>
+                                        <button className="text-red-500 hover:text-red-600">
+                                            <TrashIcon className="w-4 h-4" />
+                                        </button>
+                                        <button className="text-blue-400 hover:text-blue-500">
+                                            <RoleUserIcon className="w-4 h-4" />
                                         </button>
                                     </td>
                                 </tr>

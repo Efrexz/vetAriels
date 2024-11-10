@@ -19,7 +19,7 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity }) {
 
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50">
-            <div className="bg-white p-6 rounded-md w-full h-auto max-w-md mt-8">
+            <div className="bg-white p-6 rounded-md w-full h-auto max-w-md mt-8 modal-appear">
                 <h2 className="text-xl font-medium text-gray-500 mb-4 border-b-2 pb-4">Modificar Cantidad</h2>
                 <div className="flex flex-col gap-4 pb-8">
                     <div>

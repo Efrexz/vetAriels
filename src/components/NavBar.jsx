@@ -169,10 +169,10 @@ function NavBar() {
                 <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg w-80 z-20">
                     <ul>
                         <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">
-                            <div className='flex items-center gap-2'>
+                            <Link to="/config/profile/update" className='flex items-center gap-2'>
                                 <RoleUserIcon className="w-5 h-5 text-gray-600" />
                                 <span className="ml-2 text-gray-600">Administracion</span>
-                            </div>
+                            </Link>
                             <span className="block text-gray-500 text-xs pl-9">administracionAriels@gmail.com</span>
                         </li>
                         <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">

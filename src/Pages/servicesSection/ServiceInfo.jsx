@@ -12,7 +12,7 @@ function ServiceInfo() {
     return (
         <main className="w-full mx-auto p-6 bg-white">
             <h2 className="text-2xl font-medium mb-4 border-b-2 border-gray-200 pb-3 text-blue-400" >Promoción Vacuna Canino (SÉXTUPLE+KC)</h2>
-            <HorizontalMenu mode={"service"} />
+            <HorizontalMenu mode={"services"} />
             <section >
                 {section === 'update' && <UpdateService />}
                 {section === 'prices' && <EditServicePrice />}

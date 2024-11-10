@@ -18,3 +18,19 @@
   background-color: rgba(0, 0, 0, 0.1); /* Color del track */
   border-radius: 10px; /* Radio del borde del track */
 }
+
+/*Animacion para hacer modal aparecer desde arriba*/
+.modal-appear {
+  animation: slide-down 0.5s ease forwards;
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-30%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
