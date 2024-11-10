@@ -1,65 +1,67 @@
-import { Routes, Route } from 'react-router-dom'
-import { GlobalProvider } from './context/GlobalContext.jsx'
-import { ClientsProvider } from './context/ClientsContext'
-import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext.jsx'
-import { FinancialProvider } from './context/FinancialContext.jsx'
-import { DashBoard } from './Pages/DashBoard.jsx'
-import { Sales } from './Pages/sales/Sales.jsx'
-import { ActiveOrders } from './Pages/sales/ActiveOrders.jsx'
-import { Invoices } from './Pages/sales/Invoices.jsx'
-import { CreateInvoice } from './Pages/sales/CreateInvoice.jsx'
-import { BalanceReport } from './Pages/sales/BalanceReport.jsx'
-import { Payments } from './Pages/sales/Payments.jsx'
-import { ClinicQueue } from './Pages/ClinicQueue.jsx'
-import { Internments } from './Pages/Internments.jsx'
-import { ActiveOrdersGrooming } from './Pages/grooming/ActiveOrdersGrooming.jsx'
-import { GroomingHistory } from './Pages/grooming/GroomingHistory.jsx'
-import { GroomingOrderCreation } from './Pages/grooming/GroomingOrderCreation.jsx'
-import { Clients } from './Pages/Clients.jsx'
-import { CreateClientForm } from './Pages/CreateClientForm.jsx'
-import { ClientInfo } from './Pages/clientData.jsx/ClientInfo.jsx'
-import { PetsData } from './Pages/PetsData.jsx'
-import { CreatePetForm } from './Pages/CreatePetForm.jsx'
-import { PetInfo } from './Pages/petInfo/PetInfo.jsx'
-import { Products } from './Pages/products/Products.jsx'
-import { Discharges } from './Pages/products/Discharges.jsx'
-import { Charges } from './Pages/products/Charges.jsx'
-import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStock.jsx'
-import { Services } from './Pages/servicesSection/Services.jsx'
-import { ServiceInfo } from './Pages/servicesSection/ServiceInfo.jsx'
-import { Config } from './Pages/configurationSection/Config.jsx'
-import { Roles } from './Pages/configurationSection/Roles.jsx'
-import { CreateRol } from './Pages/configurationSection/CreateRol.jsx'
-import { PermissionsList } from './Pages/configurationSection/PermissionsList.jsx'
-import { Users } from './Pages/configurationSection/Users.jsx'
-import { CreateUser } from './Pages/configurationSection/CreateUser.jsx'
-import { EditUser } from './Pages/configurationSection/EditUser.jsx'
-import { UserInfo } from './Pages/configurationSection/UserInfo/index.jsx'
-import { NotFound } from './Pages/NotFound.jsx'
-import { Footer } from './components/Footer.jsx'
-import { Layout } from './components/Layout.jsx'
-import ScrollToTop from './components/ScrollToTop.jsx'
-import "./index.css"
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { GlobalProvider } from './context/GlobalContext.jsx';
+import { ClientsProvider } from './context/ClientsContext';
+import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext.jsx';
+import { FinancialProvider } from './context/FinancialContext.jsx';
+import { DashBoard } from './Pages/DashBoard.jsx';
+import { Login } from './Pages/Login.jsx';
+import { Sales } from './Pages/sales/Sales.jsx';
+import { ActiveOrders } from './Pages/sales/ActiveOrders.jsx';
+import { Invoices } from './Pages/sales/Invoices.jsx';
+import { CreateInvoice } from './Pages/sales/CreateInvoice.jsx';
+import { BalanceReport } from './Pages/sales/BalanceReport.jsx';
+import { Payments } from './Pages/sales/Payments.jsx';
+import { ClinicQueue } from './Pages/ClinicQueue.jsx';
+import { Internments } from './Pages/Internments.jsx';
+import { ActiveOrdersGrooming } from './Pages/grooming/ActiveOrdersGrooming.jsx';
+import { GroomingHistory } from './Pages/grooming/GroomingHistory.jsx';
+import { GroomingOrderCreation } from './Pages/grooming/GroomingOrderCreation.jsx';
+import { Clients } from './Pages/Clients.jsx';
+import { CreateClientForm } from './Pages/CreateClientForm.jsx';
+import { ClientInfo } from './Pages/clientData.jsx/ClientInfo.jsx';
+import { PetsData } from './Pages/PetsData.jsx';
+import { CreatePetForm } from './Pages/CreatePetForm.jsx';
+import { PetInfo } from './Pages/petInfo/PetInfo.jsx';
+import { Products } from './Pages/products/Products.jsx';
+import { Discharges } from './Pages/products/Discharges.jsx';
+import { Charges } from './Pages/products/Charges.jsx';
+import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStock.jsx';
+import { Services } from './Pages/servicesSection/Services.jsx';
+import { ServiceInfo } from './Pages/servicesSection/ServiceInfo.jsx';
+import { Config } from './Pages/configurationSection/Config.jsx';
+import { Roles } from './Pages/configurationSection/Roles.jsx';
+import { CreateRol } from './Pages/configurationSection/CreateRol.jsx';
+import { PermissionsList } from './Pages/configurationSection/PermissionsList.jsx';
+import { Users } from './Pages/configurationSection/Users.jsx';
+import { CreateUser } from './Pages/configurationSection/CreateUser.jsx';
+import { EditUser } from './Pages/configurationSection/EditUser.jsx';
+import { UserInfo } from './Pages/configurationSection/UserInfo/index.jsx';
+import { NotFound } from './Pages/NotFound.jsx';
+import { Footer } from './components/Footer.jsx';
+import { Layout } from './components/Layout.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
+import './index.css';
 
 function App() {
+  const location = useLocation();
 
   return (
-    <>
-      <GlobalProvider>
-        <FinancialProvider>
-          <ClientsProvider>
-            <ProductsAndServicesProvider>
+    <GlobalProvider>
+      <FinancialProvider>
+        <ClientsProvider>
+          <ProductsAndServicesProvider>
+            {/* Solo renderizar Layout si no estamos en la ruta de login */}
+            {location.pathname !== '/login' ? (
               <Layout>
                 <ScrollToTop />
                 <Routes>
                   <Route path="/" element={<DashBoard />} />
-                  {/* <Route path="/sales" element={<Sales />} /> */}
                   <Route path="/sales/client/:id" element={<Sales />} />
                   <Route path="/sales/active-orders" element={<ActiveOrders />} />
                   <Route path="/sales/invoices" element={<Invoices />} />
                   <Route path="/sales/invoices/create/:id" element={<CreateInvoice />} />
                   <Route path="/sales/payments" element={<Payments />} />
-                  <Route path='/sales/cash-review' element={<BalanceReport />} />
+                  <Route path="/sales/cash-review" element={<BalanceReport />} />
                   <Route path="/clinic-queue" element={<ClinicQueue />} />
                   <Route path="/internments" element={<Internments />} />
                   <Route path="/grooming" element={<ActiveOrdersGrooming />} />
@@ -90,13 +92,18 @@ function App() {
                 </Routes>
                 <Footer />
               </Layout>
-            </ProductsAndServicesProvider>
-          </ClientsProvider>
-        </FinancialProvider>
-      </GlobalProvider>
-
-    </>
-  )
+            ) : (
+              // Solo renderizar la página de Login sin el Layout
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            )}
+          </ProductsAndServicesProvider>
+        </ClientsProvider>
+      </FinancialProvider>
+    </GlobalProvider>
+  );
 }
 
-export default App
+export default App;
