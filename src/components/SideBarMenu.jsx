@@ -137,7 +137,7 @@ function SideBarMenu() {
                 {
                     name: "Datos fiscales",
                     icon: BuildingShieldIcon,
-                    path: "/config/companies"
+                    path: "/config/fiscal-data"
                 },
                 {
                     name: "Comprobantes",

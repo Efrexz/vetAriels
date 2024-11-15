@@ -9,7 +9,7 @@ function CreateUser() {
     const { addUser } = useContext(GlobalContext);
     const fields = [
         { label: "Correo Electrónico:", name: "email", type: "email" },
-        { label: "Contraseña", name: "password", type: "text" },
+        { label: "Contraseña", name: "password", type: "password" },
         { label: "Nombre", name: "name", type: "text" },
         { label: "Apellido", name: "lastName", type: "text" },
         { label: "Teléfono Móvil", name: "phone", type: "text" },

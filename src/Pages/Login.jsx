@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { GlobalContext } from '../context/GlobalContext';
 import EnvelopeIcon from '../assets/envelope.svg?react';
 import PadLockIcon from '../assets/padLockIcon.svg?react';
 import ArrowRightIcon from '../assets/arrowRight.svg?react';
@@ -9,10 +10,22 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const { users, setActiveUser } = useContext(GlobalContext);
+
     // const handleSubmit = (e: React.FormEvent) => {
     //     e.preventDefault();
     //     // Handle login logic here
     // };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const user = users.find(user => user.email === email);
+        if (user && user.password === password) {
+            setActiveUser(user);
+        } else {
+            alert('Usuario o contraseña incorrectos');
+        }
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-teal-50 flex items-center justify-center p-4">

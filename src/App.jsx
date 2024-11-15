@@ -29,6 +29,9 @@ import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStoc
 import { Services } from './Pages/servicesSection/Services.jsx';
 import { ServiceInfo } from './Pages/servicesSection/ServiceInfo.jsx';
 import { Config } from './Pages/configurationSection/Config.jsx';
+import { FiscalData } from './Pages/configurationSection/FiscalData.jsx';
+import { VoucherConfiguration } from './Pages/configurationSection/VoucherConfiguration.jsx';
+import { PaymentMethods } from './Pages/configurationSection/PaymentMethods.jsx';
 import { Roles } from './Pages/configurationSection/Roles.jsx';
 import { CreateRol } from './Pages/configurationSection/CreateRol.jsx';
 import { PermissionsList } from './Pages/configurationSection/PermissionsList.jsx';
@@ -81,6 +84,9 @@ function App() {
                   <Route path="/services" element={<Services />} />
                   <Route path="/service/:section/" element={<ServiceInfo />} />
                   <Route path="/config/subsidiary" element={<Config />} />
+                  <Route path="/config/fiscal-data" element={<FiscalData />} />
+                  <Route path="/config/invoice-types" element={<VoucherConfiguration />} />
+                  <Route path="/config/payment-methods" element={<PaymentMethods />} />
                   <Route path="/config/roles" element={<Roles />} />
                   <Route path="/config/roles/create" element={<CreateRol />} />
                   <Route path="/config/role/permissions/:role" element={<PermissionsList />} />

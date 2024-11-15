@@ -6,6 +6,8 @@ function GlobalProvider({ children }) {
 
     const [themeColor, setThemeColor] = useState("blue");
 
+    const [activeUser, setActiveUser] = useState(null);
+
     //Users Data
     const [users, setUsers] = useState(
         localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [
