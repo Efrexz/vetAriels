@@ -3,6 +3,7 @@ import { GlobalProvider } from './context/GlobalContext.jsx';
 import { ClientsProvider } from './context/ClientsContext';
 import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext.jsx';
 import { FinancialProvider } from './context/FinancialContext.jsx';
+import { ProtectedRoute } from './components/ProtectedRoute.jsx';
 import { DashBoard } from './Pages/DashBoard.jsx';
 import { Login } from './Pages/Login.jsx';
 import { Sales } from './Pages/sales/Sales.jsx';
@@ -57,45 +58,47 @@ function App() {
             {location.pathname !== '/login' ? (
               <Layout>
                 <ScrollToTop />
-                <Routes>
-                  <Route path="/" element={<DashBoard />} />
-                  <Route path="/sales/client/:id" element={<Sales />} />
-                  <Route path="/sales/active-orders" element={<ActiveOrders />} />
-                  <Route path="/sales/invoices" element={<Invoices />} />
-                  <Route path="/sales/invoices/create/:id" element={<CreateInvoice />} />
-                  <Route path="/sales/payments" element={<Payments />} />
-                  <Route path="/sales/cash-review" element={<BalanceReport />} />
-                  <Route path="/clinic-queue" element={<ClinicQueue />} />
-                  <Route path="/internments" element={<Internments />} />
-                  <Route path="/grooming" element={<ActiveOrdersGrooming />} />
-                  <Route path="/grooming/history" element={<GroomingHistory />} />
-                  <Route path="/grooming/order-creation/:id" element={<GroomingOrderCreation />} />
-                  <Route path="/clients" element={<Clients />} />
-                  <Route path="/clients/create" element={<CreateClientForm />} />
-                  <Route path="/clients/client/:id/:section" element={<ClientInfo />} />
-                  <Route path="/pets" element={<PetsData />} />
-                  <Route path="/pets/create/:id" element={<CreatePetForm />} />
-                  <Route path="/pets/pet/:id/:section" element={<PetInfo />} />
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/discharges" element={<Discharges />} />
-                  <Route path="/charges" element={<Charges />} />
-                  <Route path="/charges/create" element={<DischargeAndChargeStock typeOfOperation="charge" />} />
-                  <Route path="/discharges/create" element={<DischargeAndChargeStock typeOfOperation="discharge" />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/service/:section/" element={<ServiceInfo />} />
-                  <Route path="/config/subsidiary" element={<Config />} />
-                  <Route path="/config/fiscal-data" element={<FiscalData />} />
-                  <Route path="/config/invoice-types" element={<VoucherConfiguration />} />
-                  <Route path="/config/payment-methods" element={<PaymentMethods />} />
-                  <Route path="/config/roles" element={<Roles />} />
-                  <Route path="/config/roles/create" element={<CreateRol />} />
-                  <Route path="/config/role/permissions/:role" element={<PermissionsList />} />
-                  <Route path="/config/user-subsidiaries" element={<Users />} />
-                  <Route path="/config/user-subsidiaries/create" element={<CreateUser />} />
-                  <Route path="/config/user-subsidiaries/edit/:id" element={<EditUser />} />
-                  <Route path="/config/profile/:section" element={<UserInfo />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+                <ProtectedRoute>
+                  <Routes>
+                    <Route path="/" element={<DashBoard />} />
+                    <Route path="/sales/client/:id" element={<Sales />} />
+                    <Route path="/sales/active-orders" element={<ActiveOrders />} />
+                    <Route path="/sales/invoices" element={<Invoices />} />
+                    <Route path="/sales/invoices/create/:id" element={<CreateInvoice />} />
+                    <Route path="/sales/payments" element={<Payments />} />
+                    <Route path="/sales/cash-review" element={<BalanceReport />} />
+                    <Route path="/clinic-queue" element={<ClinicQueue />} />
+                    <Route path="/internments" element={<Internments />} />
+                    <Route path="/grooming" element={<ActiveOrdersGrooming />} />
+                    <Route path="/grooming/history" element={<GroomingHistory />} />
+                    <Route path="/grooming/order-creation/:id" element={<GroomingOrderCreation />} />
+                    <Route path="/clients" element={<Clients />} />
+                    <Route path="/clients/create" element={<CreateClientForm />} />
+                    <Route path="/clients/client/:id/:section" element={<ClientInfo />} />
+                    <Route path="/pets" element={<PetsData />} />
+                    <Route path="/pets/create/:id" element={<CreatePetForm />} />
+                    <Route path="/pets/pet/:id/:section" element={<PetInfo />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/discharges" element={<Discharges />} />
+                    <Route path="/charges" element={<Charges />} />
+                    <Route path="/charges/create" element={<DischargeAndChargeStock typeOfOperation="charge" />} />
+                    <Route path="/discharges/create" element={<DischargeAndChargeStock typeOfOperation="discharge" />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/service/:section/" element={<ServiceInfo />} />
+                    <Route path="/config/subsidiary" element={<Config />} />
+                    <Route path="/config/fiscal-data" element={<FiscalData />} />
+                    <Route path="/config/invoice-types" element={<VoucherConfiguration />} />
+                    <Route path="/config/payment-methods" element={<PaymentMethods />} />
+                    <Route path="/config/roles" element={<Roles />} />
+                    <Route path="/config/roles/create" element={<CreateRol />} />
+                    <Route path="/config/role/permissions/:role" element={<PermissionsList />} />
+                    <Route path="/config/user-subsidiaries" element={<Users />} />
+                    <Route path="/config/user-subsidiaries/create" element={<CreateUser />} />
+                    <Route path="/config/user-subsidiaries/edit/:id" element={<EditUser />} />
+                    <Route path="/config/profile/:section" element={<UserInfo />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </ProtectedRoute>
                 <Footer />
               </Layout>
             ) : (

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
 import EnvelopeIcon from '../assets/envelope.svg?react';
 import PadLockIcon from '../assets/padLockIcon.svg?react';
@@ -9,23 +10,28 @@ import InclinedPaw from '../assets/inclinedPaw.svg?react';
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const { users, setActiveUser } = useContext(GlobalContext);
+    const navigate = useNavigate();
 
-    // const handleSubmit = (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     // Handle login logic here
-    // };
+    const { setActiveUser, users } = useContext(GlobalContext);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const user = users.find(user => user.email === email);
-        if (user && user.password === password) {
-            setActiveUser(user);
+    const handleLogin = (email, password) => {
+        const foundUser = users.find(user => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
+        if (foundUser) {
+            setActiveUser(foundUser);
+            navigate("/")
+            localStorage.setItem('activeUser', JSON.stringify(foundUser));
+
+            return true;
         } else {
-            alert('Usuario o contraseña incorrectos');
+            setError('Email o contraseña incorrectos');
+            console.log(foundUser);
+
+            return false; // Login fallido
         }
-    }
+    };
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-teal-50 flex items-center justify-center p-4">
@@ -45,9 +51,7 @@ function Login() {
                     {/* Login Form */}
                     <div className="p-8">
                         <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Bienvenido de nuevo</h2>
-                        <form
-                        // onSubmit={handleSubmit}
-                        >
+                        <form>
                             <div className="space-y-5">
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -100,10 +104,11 @@ function Login() {
                                         ¿Olvidaste tu contraseña?
                                     </a>
                                 </div>
-
+                                {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
                                 <button
-                                    type="submit"
+                                    type='button'
                                     className="w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50 transition-colors flex items-center justify-center gap-2 font-medium"
+                                    onClick={() => handleLogin(email, password)}
                                 >
                                     Iniciar Sesión
                                     <ArrowRightIcon className="w-4 h-4" />

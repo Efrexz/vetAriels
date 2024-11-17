@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
 import { ClientsContext } from '../context/ClientsContext';
 import { ClientSearchInput } from './ClientSearchInput';
@@ -14,6 +14,8 @@ import StoreIcon from '../assets/storeIcon.svg?react';
 
 function NavBar() {
     const { petsInQueueMedical, petsInQueueGrooming } = useContext(ClientsContext);
+    const { logout } = useContext(GlobalContext);
+    const navigate = useNavigate();
 
     const [showPatientList, setShowPatientList] = useState(false);
     const [showBathList, setShowBathList] = useState(false);
@@ -53,7 +55,7 @@ function NavBar() {
         setActiveIcon(showUserOptions ? null : 'user');
     };
 
-    const { themeColor } = useContext(GlobalContext);
+    const { themeColor, activeUser } = useContext(GlobalContext);
 
     return (
         <nav className={`flex justify-between items-center py-4 px-6 w-full bg-${themeColor}-400 text-white`}>
@@ -100,7 +102,7 @@ function NavBar() {
                     ))}
                     <span className="font-bold mx-3">|</span>
                     <li className={`flex items-center gap-2 cursor-pointer hover:text-[#206D5A] ${activeIcon === "user" ? "text-[#206D5A]" : ""}`} onClick={toggleUserOptions}>
-                        <span>Efrexz</span>
+                        <span>{activeUser?.name}</span>
                         <UserIcon className="w-6 h-6" />
                     </li>
                 </ul>
@@ -168,20 +170,37 @@ function NavBar() {
             {showUserOptions && (
                 <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg w-80 z-20">
                     <ul>
-                        <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">
-                            <Link to="/config/profile/update" className='flex items-center gap-2'>
+                        <li
+                            className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
+                            onClick={() => {
+                                navigate("/config/profile/update")
+                            }}
+                        >
+                            <div className='flex items-center gap-2'>
                                 <RoleUserIcon className="w-5 h-5 text-gray-600" />
                                 <span className="ml-2 text-gray-600">Administracion</span>
-                            </Link>
+                            </div>
                             <span className="block text-gray-500 text-xs pl-9">administracionAriels@gmail.com</span>
                         </li>
-                        <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">
+                        <li
+                            className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
+                            onClick={() => {
+                                navigate("/login")
+                                logout();
+                            }}
+                        >
                             <div className='flex items-center gap-2'>
                                 <DocumentOutIcon className="w-5 h-5 text-gray-600" />
                                 <span className="ml-2 text-gray-600 text-sm ">Cerrar Sesión en este dispositivo</span>
                             </div>
                         </li>
-                        <li className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer">
+                        <li
+                            className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
+                            onClick={() => {
+                                navigate("/login")
+                                logout();
+                            }}
+                        >
                             <div className='flex items-center gap-2'>
                                 <DocumentOutIcon className="w-5 h-5 text-gray-600" />
                                 <span className="ml-2 text-gray-600 text-sm">Cerrar Sesión en todos los dispositivos</span>

@@ -46,6 +46,7 @@ function CreateUser() {
             password: formData.password,
             name: formData.name,
             lastName: formData.lastName,
+            userName: `${formData.lastName.toUpperCase()} ${formData.name.toUpperCase()}`,
             phone: formData.phone,
             rol: formData.rol || "ADMINISTRADOR",
             registrationDate: currentDate,

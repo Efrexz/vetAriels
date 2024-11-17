@@ -3,15 +3,22 @@ import { createContext, useEffect, useState } from 'react';
 const GlobalContext = createContext();
 
 function GlobalProvider({ children }) {
-
     const [themeColor, setThemeColor] = useState("blue");
 
-    const [activeUser, setActiveUser] = useState(null);
+    //buscamos si existe un usuario activo en localStorage para el recargar la pagina no perder la sesion
+    const [activeUser, setActiveUser] = useState(localStorage.getItem('activeUser') ? JSON.parse(localStorage.getItem('activeUser')) : null);
+
+    const logout = () => {
+        setActiveUser(null);
+        localStorage.removeItem('activeUser');
+    };
+
 
     //Users Data
     const [users, setUsers] = useState(
         localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [
         ]);
+
 
     //Roles Data
     const [roles, setRoles] = useState(
@@ -59,6 +66,8 @@ function GlobalProvider({ children }) {
         <GlobalContext.Provider value={{
             themeColor,
             setThemeColor,
+            activeUser,
+            setActiveUser,
             users,
             addUser,
             removeUser,
@@ -67,6 +76,8 @@ function GlobalProvider({ children }) {
             addRole,
             updateRoleData,
             removeRole,
+            logout,
+
         }}>
             {children}
         </GlobalContext.Provider>
