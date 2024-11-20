@@ -51,7 +51,7 @@ const filterOptions = [
 const tableHeaders = ["Cod. de sistema", "Fecha de Registro", "Nombre", "Línea", "Categoría", "Precio de venta", "Estado", "Opciones"];
 
 function Services() {
-    const { servicesData } = useContext(ProductsAndServicesContext);
+    const { servicesData, removeService } = useContext(ProductsAndServicesContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -148,7 +148,10 @@ function Services() {
                                             className="w-4 h-4 text-green-500 cursor-pointer"
                                             onClick={() => navigate("/service/update/")}
                                         />
-                                        <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
+                                        <TrashIcon
+                                            className="w-4 h-4 text-red-500 cursor-pointer"
+                                            onClick={() => removeService(service.id)}
+                                        />
                                     </td>
                                 </tr>
                             ))}

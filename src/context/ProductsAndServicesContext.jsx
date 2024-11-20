@@ -1,60 +1,18 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 const ProductsAndServicesContext = createContext();
 
 function ProductsAndServicesProvider({ children }) {
 
-    const [productsData, setProductsData] = useState([
-        {
-            id: 1,
-            name: 'Vacuna de rabia',
-            price: 55,
-            category: 'Vacunas',
-            quantityAvaible: 10,
-        },
-        {
-            id: 2,
-            name: 'Vacuna de kc',
-            price: 35,
-            category: 'Vacunas',
-            quantityAvaible: 10,
-        },
-        {
-            id: 3,
-            name: 'Vacuna de leptospirosis',
-            price: 45,
-            category: 'Vacunas',
-            quantityAvaible: 10,
-        },
-        {
-            id: 4,
-            name: 'Vacuna triple felina',
-            price: 55,
-            category: 'Vacunas',
-            quantityAvaible: 10,
-        },
-        {
-            id: 5,
-            name: 'Vacuna de sextuple',
-            price: 65,
-            category: 'Vacunas',
-            quantityAvaible: 10,
-        },
-        {
-            id: 8,
-            name: 'Vacuna de sextuple',
-            price: 65,
-            category: 'Vacunas',
-            quantityAvaible: 10,
-        },
-        {
-            id: 9,
-            name: 'Vacuna de sextuple',
-            price: 65,
-            category: 'Vacunas',
-            quantityAvaible: 10,
-        },
-    ]);
+    const isProductsData = localStorage.getItem('productsData');
+    if (!isProductsData) {
+        localStorage.setItem('productsData', JSON.stringify([]));
+    }
+
+    const [productsData, setProductsData] = useState(localStorage.getItem('productsData') ? JSON.parse(localStorage.getItem('productsData')) : []);
+    console.log(productsData);
+
+
 
     function addProduct(product) {
         setProductsData([...productsData, product]);
@@ -64,41 +22,20 @@ function ProductsAndServicesProvider({ children }) {
         setProductsData(productsData.filter((product) => product.id !== id));
     }
 
-    const [servicesData, setServicesData] = useState([
-        {
-            id: 1,
-            serviceName: "Consulta",
-            cost: 0,
-            price: 20,
-            line: "medica",
-            category: 'Consultas',
-            registrationDate: '2023-07-01',
-            registrationTime: '07:43 PM',
-            status: true
-        },
-        {
-            id: 2,
-            serviceName: "Baño Tradicional",
-            cost: 0,
-            price: 30,
-            line: "spa",
-            category: 'baño',
-            registrationDate: '2023-07-01',
-            registrationTime: '07:43 PM',
-            status: true
-        },
-        {
-            id: 3,
-            serviceName: "Hemograma",
-            cost: 0,
-            price: 40,
-            line: "laboratorio",
-            category: 'Hemogramas',
-            registrationDate: '2023-07-01',
-            registrationTime: '07:43 PM',
-            status: true
-        }
-    ])
+    // Guardar en localStorage cada vez que cambien los estados
+    useEffect(() => {
+        localStorage.setItem('productsData', JSON.stringify(productsData));
+    }, [productsData]);
+
+    //Servicios
+
+    const isServiceData = localStorage.getItem('servicesData');
+    if (!isServiceData) {
+        localStorage.setItem('servicesData', JSON.stringify([]));
+    }
+
+    const [servicesData, setServicesData] = useState(localStorage.getItem('servicesData') ? JSON.parse(localStorage.getItem('servicesData')) : []);
+
 
     let serviceId = localStorage.getItem('serviceId') || 100;
 
@@ -112,6 +49,11 @@ function ProductsAndServicesProvider({ children }) {
     function removeService(id) {
         setServicesData(servicesData.filter((newService) => newService.id !== id));
     }
+
+    // Guardar en localStorage cada vez que cambien los estados
+    useEffect(() => {
+        localStorage.setItem('servicesData', JSON.stringify(servicesData));
+    }, [servicesData]);
 
     return (
         <ProductsAndServicesContext.Provider value={{ productsData, addProduct, removeProduct, servicesData, addNewService, removeService }}>

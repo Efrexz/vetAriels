@@ -11,12 +11,12 @@ import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
 import ImageIcon from '../../assets/imageIcon.svg?react';
 
 
-const tableHeaders = ["ID", "Fecha", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Tipo de Mov.", "Opciones"];
+const tableHeaders = ["ID", "Fecha", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Movimiento", "Opciones"];
 
 function Payments() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { paymentsData } = useContext(FinancialContext);
+    const { paymentsData, removePayment } = useContext(FinancialContext);
 
 
     const [typeOfOperation, setTypeOfOperation] = useState('');
@@ -100,7 +100,7 @@ function Payments() {
                         <thead>
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 border text-gray-700 text-center">
+                                    <th key={header} className="py-2 px-2 border text-gray-700 text-center text-xs">
                                         {header}
                                     </th>
                                 ))}
@@ -108,20 +108,23 @@ function Payments() {
                         </thead>
                         <tbody>
                             {paymentsData.map((payment, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 border-b text-center border">{payment.id.slice(0, 9).toUpperCase()}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.date}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.description}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.paymentMethod}</td>
-                                    <td className="py-2 px-4 border-b text-center border text-green-600">{payment.income}</td>
-                                    <td className="py-2 px-4 border-b text-center border text-red-600">{payment.expense}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.docRef}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.movementType}</td>
-                                    <td className="py-3 px-4 border-b text-center flex items-center justify-center gap-2">
+                                <tr key={index} className="hover:bg-gray-100 text-xs">
+                                    <td className="py-2 px-2 border-b text-center border">{payment.id.slice(0, 9).toUpperCase()}</td>
+                                    <td className="py-2 px-2 border-b text-center border">{payment.date}</td>
+                                    <td className="py-2 px-2 border-b text-left border">{payment.description}</td>
+                                    <td className="py-2 px-2 border-b text-center border">{payment.paymentMethod}</td>
+                                    <td className="py-2 px-2 border-b text-center border text-green-600">{payment.income}</td>
+                                    <td className="py-2 px-2 border-b text-center border text-red-600">{payment.expense}</td>
+                                    <td className="py-2 px-2 border-b text-center border">{payment.docRef}</td>
+                                    <td className="py-2 px-2 border-b text-center border">{payment.movementType}</td>
+                                    <td className="py-3 px-2 border-b text-center flex items-center justify-center gap-2">
                                         <button className="text-blue-400 hover:text-blue-500" title="Ver imagen">
                                             <ImageIcon className="w-4 h-4" />
                                         </button>
-                                        <button className="text-red-500 hover:text-red-600">
+                                        <button
+                                            className="text-red-500 hover:text-red-600"
+                                            onClick={() => removePayment(payment.id)}
+                                        >
                                             <TrashIcon className="w-4 h-4" />
                                         </button>
                                         <button className="text-blue-400 hover:text-blue-500">

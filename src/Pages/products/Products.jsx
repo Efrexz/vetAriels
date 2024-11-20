@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import PDFIcon from '../../assets/pdfIcon.svg?react';
@@ -9,11 +10,11 @@ import SearchIcon from '../../assets/searchIcon.svg?react';
 import EyeIcon from '../../assets/eyeIcon.svg?react';
 import EyeSlashIcon from '../../assets/eyeSlash.svg?react';
 
-const productsData = [
-    { id: 1, systemCode: 1520, name: 'NANORMEN PLUS - GATOS', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 10.00, stock: 15, availableStock: 15, status: true },
-    { id: 2, systemCode: 1519, name: 'URANOTEST-PANLEUCOPENIA FELINA', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'LABORATORIO', salePrice: 110.00, stock: 5, availableStock: 5, status: true },
-    { id: 3, systemCode: 1520, name: 'ROTOR 16 PARAMETROS + HEMOGRAMA', brand: 'Imagen Total SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 150.00, stock: 0, availableStock: 0, status: true },
-];
+// const productsData = [
+//     { id: 1, systemCode: 1520, name: 'NANORMEN PLUS - GATOS', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 10.00, stock: 15, availableStock: 15, status: true },
+//     { id: 2, systemCode: 1519, name: 'URANOTEST-PANLEUCOPENIA FELINA', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'LABORATORIO', salePrice: 110.00, stock: 5, availableStock: 5, status: true },
+//     { id: 3, systemCode: 1520, name: 'ROTOR 16 PARAMETROS + HEMOGRAMA', brand: 'Imagen Total SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 150.00, stock: 0, availableStock: 0, status: true },
+// ];
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },
@@ -63,7 +64,7 @@ const filterOptions = [
 const tableHeaders = ["Cod. de sistema", "Producto", "Marca", "Proveedor", "Línea", "Precio de venta", "Stock Contable", "Stock Disponible", "Estado", "Opciones"];
 
 function Products() {
-    const [products, setProducts] = useState(productsData);
+    const { productsData, removeProduct } = useContext(ProductsAndServicesContext);
 
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
@@ -125,27 +126,27 @@ function Products() {
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product, index) => (
+                            {productsData.map((product, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 text-center border">{product.systemCode}</td>
-                                    <td className="py-2 px-4 text-center border">{product.name}</td>
-                                    <td className="py-2 px-4 text-center border">{product.brand}</td>
-                                    <td className="py-2 px-4 text-center border">{product.provider}</td>
-                                    <td className="py-2 px-4 text-center border">{product.line}</td>
-                                    <td className="py-2 px-4 text-center border">{product.salePrice}</td>
+                                    <td className="py-2 px-4 text-center border">{product?.systemCode}</td>
+                                    <td className="py-2 px-4 text-center border">{product?.name}</td>
+                                    <td className="py-2 px-4 text-center border">{product?.brand}</td>
+                                    <td className="py-2 px-4 text-center border">{product?.provider}</td>
+                                    <td className="py-2 px-4 text-center border">{product?.line}</td>
+                                    <td className="py-2 px-4 text-center border">{product?.salePrice}</td>
                                     <td className="py-2 px-4 text-center border">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
-                                            {product.stock}
+                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product?.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
+                                            {product?.stock}
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 text-center border">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
-                                            {product.availableStock}
+                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product?.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
+                                            {product?.availableStock}
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 text-center border ">
                                         <span
-                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${product.status ? "bg-green-500" : "bg-red-500"}`}
+                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${product?.status ? "bg-green-500" : "bg-red-500"}`}
                                         />
                                     </td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">

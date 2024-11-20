@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 const FinancialContext = createContext();
 
@@ -11,14 +11,25 @@ function FinancialProvider({ children }) {
     ];
 
 
-    const [paymentsData, setPaymentsData] = useState(initialPaymentsData);
+    const [paymentsData, setPaymentsData] = useState(localStorage.getItem('paymentsData') ? JSON.parse(localStorage.getItem('paymentsData')) : initialPaymentsData);
 
+    // Guardar en localStorage cada vez que cambien los estados
+    useEffect(() => {
+        localStorage.setItem('paymentsData', JSON.stringify(paymentsData));
+    }, [paymentsData]);
+
+    //agregar nuevo ingreso o egreso
     function addNewPayment(newPayment) {
         setPaymentsData([...paymentsData, newPayment]);
     }
 
+    function removePayment(id) {
+        setPaymentsData(paymentsData.filter(payment => payment.id !== id));
+    }
+
+
     return (
-        <FinancialContext.Provider value={{ paymentsData, addNewPayment }}>
+        <FinancialContext.Provider value={{ paymentsData, addNewPayment, removePayment }}>
             {children}
         </FinancialContext.Provider>
     );

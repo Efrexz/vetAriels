@@ -3,8 +3,6 @@ import { createContext, useEffect, useState } from 'react';
 const GlobalContext = createContext();
 
 function GlobalProvider({ children }) {
-    const [themeColor, setThemeColor] = useState("blue");
-
     //buscamos si existe un usuario activo en localStorage para el recargar la pagina no perder la sesion
     const [activeUser, setActiveUser] = useState(localStorage.getItem('activeUser') ? JSON.parse(localStorage.getItem('activeUser')) : null);
 
@@ -13,12 +11,24 @@ function GlobalProvider({ children }) {
         localStorage.removeItem('activeUser');
     };
 
+    const defaultUser = [{
+        active: true,
+        email: "Zyzz_448@hotmail.com",
+        id: 1729374687071,
+        lastName: "quintero",
+        name: "efrainn",
+        password: "123123",
+        phone: "917104426",
+        registrationDate: "10/19/2024",
+        registrationTime: "4:51:27 PM",
+        rol: "Asistente Administrativo",
+        status: "ACTIVO"
+    }]
+
 
     //Users Data
     const [users, setUsers] = useState(
-        localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [
-        ]);
-
+        localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : defaultUser);
 
     //Roles Data
     const [roles, setRoles] = useState(
@@ -59,6 +69,12 @@ function GlobalProvider({ children }) {
     const removeRole = (id) => {
         setRoles(roles.filter(role => role.id !== id));
     };
+
+    const [themeColor, setThemeColor] = useState(localStorage.getItem('themeColor') ? localStorage.getItem('themeColor') : 'blue');
+
+    useEffect(() => {
+        localStorage.setItem('themeColor', themeColor);
+    }, [themeColor]);
 
 
 

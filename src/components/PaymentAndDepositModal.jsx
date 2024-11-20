@@ -46,7 +46,6 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
         };
         addNewPayment(newPayment);
         onClose();
-
     }
 
     const fields = [
