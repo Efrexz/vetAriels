@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import PropTypes from "prop-types";
 import PlusIcon from '../assets/plusIcon.svg?react';
 
 
@@ -41,3 +41,9 @@ const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity }) => {
 };
 
 export { QuantityCounter };
+
+QuantityCounter.propTypes = {
+    openQuantityModal: PropTypes.func,
+    itemCount: PropTypes.number,
+    changeQuantity: PropTypes.func
+}

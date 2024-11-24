@@ -5,9 +5,10 @@ import MoneyIcon from '../assets/moneyIcon.svg?react';
 import ReturnIcon from '../assets/returnIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 import PillsIcon from '../assets/pillsIcon.svg?react';
+import PropTypes from "prop-types";
 
 
-function AddNewServiceAndProductModal({ onClose }) {
+function AddNewServiceModal({ onClose }) {
     const navigate = useNavigate();
 
     const { addNewService } = useContext(ProductsAndServicesContext);
@@ -90,7 +91,7 @@ function AddNewServiceAndProductModal({ onClose }) {
         <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50">
             <div className="bg-white p-8 rounded-md w-full h-auto max-w-5xl mt-8 modal-appear">
                 <h2 className="text-xl font-bold text-blue-500 mb-4">Agregar nuevo servicio</h2>
-                <div className="grid grid-cols-4 gap-4 border-b border-gray-300 pb-8">
+                <form className="grid grid-cols-4 gap-4 border-b border-gray-300 pb-8">
                     {formFields.map((field, index) => (
                         <div
                             key={index}
@@ -102,14 +103,14 @@ function AddNewServiceAndProductModal({ onClose }) {
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300"
+                                    className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                                 >
                                     {field.options.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
                                     ))}
                                 </select>
                             ) : (
-                                <div className="flex w-full rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
+                                <div className="flex w-full rounded-lg overflow-hidden ">
                                     {field.icon && (
                                         <div className="flex items-center justify-center bg-gray-100 px-3">
                                             <field.icon className="w-5 h-5 text-gray-600" />
@@ -121,13 +122,13 @@ function AddNewServiceAndProductModal({ onClose }) {
                                         placeholder={field.placeholder}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className="border border-gray-300 rounded-r-lg py-2 px-4 w-full hover:border-blue-300 focus-within:border-blue-300"
+                                        className="border border-gray-300 rounded-r-lg py-2 px-4 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                                     />
                                 </div>
                             )}
                         </div>
                     ))}
-                </div>
+                </form>
 
                 <div className="flex justify-end mt-6 gap-4">
                     <button
@@ -150,4 +151,8 @@ function AddNewServiceAndProductModal({ onClose }) {
     )
 }
 
-export { AddNewServiceAndProductModal };
+export { AddNewServiceModal };
+
+AddNewServiceModal.propTypes = {
+    onClose: PropTypes.func
+}

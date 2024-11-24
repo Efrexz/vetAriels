@@ -1,5 +1,6 @@
 import { NavBar } from "./NavBar";
 import { SideBarMenu } from "./SideBarMenu";
+import PropTypes from "prop-types";
 
 function Layout({ children }) {
     return (
@@ -18,3 +19,7 @@ function Layout({ children }) {
 }
 
 export { Layout }
+
+Layout.propTypes = {
+    children: PropTypes.node
+}

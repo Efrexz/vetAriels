@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import PropTypes from "prop-types";
 
 const ProductsAndServicesContext = createContext();
 
@@ -12,14 +13,12 @@ function ProductsAndServicesProvider({ children }) {
     const [productsData, setProductsData] = useState(localStorage.getItem('productsData') ? JSON.parse(localStorage.getItem('productsData')) : []);
     console.log(productsData);
 
-
-
     function addProduct(product) {
         setProductsData([...productsData, product]);
     }
 
     function removeProduct(id) {
-        setProductsData(productsData.filter((product) => product.id !== id));
+        setProductsData(productsData.filter((product) => product.systemCode !== id));
     }
 
     // Guardar en localStorage cada vez que cambien los estados
@@ -63,3 +62,7 @@ function ProductsAndServicesProvider({ children }) {
 }
 
 export { ProductsAndServicesContext, ProductsAndServicesProvider };
+
+ProductsAndServicesProvider.propTypes = {
+    children: PropTypes.node
+}

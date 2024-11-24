@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from "prop-types";
 import ReturnIcon from '../assets/returnIcon.svg?react';
 import PlusIcon from '../assets/plusIcon.svg?react';
 
@@ -57,3 +58,9 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity }) {
 }
 
 export { QuantityModificationModal };
+
+QuantityModificationModal.propTypes = {
+    onClose: PropTypes.func,
+    quantity: PropTypes.number,
+    changeQuantity: PropTypes.func
+}

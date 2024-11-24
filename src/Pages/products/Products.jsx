@@ -1,5 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
+import { AddNewProductModal } from '../../components/AddNewProductModal.jsx';
+import { DeleteProductModal } from '../../components/DeleteProductModal.jsx';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import PDFIcon from '../../assets/pdfIcon.svg?react';
@@ -9,12 +11,7 @@ import TrashIcon from '../../assets/trashIcon.svg?react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
 import EyeIcon from '../../assets/eyeIcon.svg?react';
 import EyeSlashIcon from '../../assets/eyeSlash.svg?react';
-
-// const productsData = [
-//     { id: 1, systemCode: 1520, name: 'NANORMEN PLUS - GATOS', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 10.00, stock: 15, availableStock: 15, status: true },
-//     { id: 2, systemCode: 1519, name: 'URANOTEST-PANLEUCOPENIA FELINA', brand: 'REPRESENTACIONES DURAND SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'LABORATORIO', salePrice: 110.00, stock: 5, availableStock: 5, status: true },
-//     { id: 3, systemCode: 1520, name: 'ROTOR 16 PARAMETROS + HEMOGRAMA', brand: 'Imagen Total SAC', provider: 'REPRESENTACIONES DURAND SAC', line: 'MEDICA', salePrice: 150.00, stock: 0, availableStock: 0, status: true },
-// ];
+import PenIcon from '../../assets/penIcon.svg?react';
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },
@@ -64,7 +61,10 @@ const filterOptions = [
 const tableHeaders = ["Cod. de sistema", "Producto", "Marca", "Proveedor", "Línea", "Precio de venta", "Stock Contable", "Stock Disponible", "Estado", "Opciones"];
 
 function Products() {
-    const { productsData, removeProduct } = useContext(ProductsAndServicesContext);
+    const { productsData } = useContext(ProductsAndServicesContext);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [productToDelete, setProductToDelete] = useState(null);
 
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
@@ -91,11 +91,33 @@ function Products() {
                                 </button>
                             ))}
                         </div>
-                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
+                        <button
+                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            onClick={() => setIsModalOpen(true)}
+                        >
                             <PlusIcon className="w-5 h-5" />
                             CREAR NUEVO PRODUCTO
                         </button>
                     </div>
+
+                    {
+                        isModalOpen && (
+                            <AddNewProductModal
+                                onClose={() => setIsModalOpen(false)}
+                            />
+                        )
+                    }
+
+                    {
+                        isDeleteModalOpen && (
+                            <DeleteProductModal
+                                onClose={() => setIsDeleteModalOpen(false)}
+                                // onConfirm={deleteProduct}
+                                productToDelete={productToDelete}
+                            />
+                        )
+                    }
+
                     <div className="flex items-center space-x-4 mb-1">
                         {
                             filterOptions.map((option, index) => (
@@ -119,7 +141,7 @@ function Products() {
                         <thead className="bg-gray-100">
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 text-center border font-medium text-gray-700">
+                                    <th key={header} className="py-2 px-1 text-center border font-medium text-gray-700">
                                         {header}
                                     </th>
                                 ))}
@@ -127,20 +149,20 @@ function Products() {
                         </thead>
                         <tbody>
                             {productsData.map((product, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 text-center border">{product?.systemCode}</td>
-                                    <td className="py-2 px-4 text-center border">{product?.name}</td>
+                                <tr key={index} className="hover:bg-gray-100 text-sm">
+                                    <td className="py-2 px-4 text-center border">{product?.systemCode.slice(0, 9).toUpperCase()}</td>
+                                    <td className="py-2 px-4 text-left border">{product?.productName}</td>
                                     <td className="py-2 px-4 text-center border">{product?.brand}</td>
                                     <td className="py-2 px-4 text-center border">{product?.provider}</td>
                                     <td className="py-2 px-4 text-center border">{product?.line}</td>
                                     <td className="py-2 px-4 text-center border">{product?.salePrice}</td>
                                     <td className="py-2 px-4 text-center border">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product?.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
-                                            {product?.stock}
+                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-xs text-white ${product?.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
+                                            {product?.availableStock}
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 text-center border">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${product?.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
+                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-xs text-white ${product?.availableStock > 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`}>
                                             {product?.availableStock}
                                         </span>
                                     </td>
@@ -150,8 +172,15 @@ function Products() {
                                         />
                                     </td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
-                                        <SearchIcon className="w-4 h-4 text-blue-500 cursor-pointer" />
-                                        <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
+                                        <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
+                                        <TrashIcon
+                                            className="w-4 h-4 text-red-500 cursor-pointer"
+                                            onClick={() => {
+                                                setIsDeleteModalOpen(true)
+                                                setProductToDelete(product)
+                                            }
+                                            }
+                                        />
                                     </td>
                                 </tr>
                             ))}

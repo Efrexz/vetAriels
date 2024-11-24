@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import PropTypes from "prop-types";
 
 function HorizontalMenu({ mode }) {
     const [selectedTab, setSelectedTab] = useState(mode === 'user' ? 'Datos personales' : 'Editar');
@@ -63,3 +64,7 @@ function HorizontalMenu({ mode }) {
 }
 
 export { HorizontalMenu };
+
+HorizontalMenu.propTypes = {
+    mode: PropTypes.string
+}

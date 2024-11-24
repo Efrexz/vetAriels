@@ -48,7 +48,7 @@ function ProductSearchInput({ addProductToTable }) {
     return (
         <div className="w-full relative">
             <input
-                className="border rounded w-full py-2 px-3 hover:border-blue-300 focus-within:border-blue-300"
+                className="border rounded w-full py-2 px-3 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                 id="clientSearch"
                 type="search"
                 placeholder="Buscar cliente..."

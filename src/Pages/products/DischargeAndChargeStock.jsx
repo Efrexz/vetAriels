@@ -6,6 +6,7 @@ import DocumentJoinIcon from '../../assets/DocumentJoinIcon.svg?react';
 import ReturnIcon from '../../assets/returnIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import TrashIcon from '../../assets/trashIcon.svg?react';
+import PropTypes from "prop-types";
 
 
 
@@ -164,3 +165,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
 }
 
 export { DischargeAndChargeStock };
+
+DischargeAndChargeStock.propTypes = {
+    typeOfOperation: PropTypes.string
+}

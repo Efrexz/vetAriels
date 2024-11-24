@@ -65,7 +65,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         </label>
                         <select
                             id="doctor"
-                            className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300"
+                            className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                             onChange={(e) => setSelectedDoctor(e.target.value)}
                         >
                             <option>Médico 1</option>
@@ -89,7 +89,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         </label>
                         <select
                             id="pet"
-                            className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300"
+                            className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                             onChange={(e) => setSelectedPet(e.target.value)}
                         >
                             {
@@ -118,7 +118,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </label>
                     <textarea
                         id="notes"
-                        className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300  "
+                        className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none "
                         rows="4"
                         placeholder="Escribe las notas aquí..."
                         onChange={(e) => setNotes(e.target.value)}

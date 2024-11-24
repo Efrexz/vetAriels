@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext.jsx';
-import { AddNewServiceAndProductModal } from '../../components/AddNewServiceAndProductModal.jsx';
+import { AddNewServiceModal } from '../../components/AddNewServiceModal.jsx';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import PDFIcon from '../../assets/pdfIcon.svg?react';
@@ -86,13 +86,13 @@ function Services() {
                             onClick={() => setIsModalOpen(true)}
                         >
                             <PlusIcon className="w-5 h-5" />
-                            CREAR NUEVO PRODUCTO
+                            CREAR NUEVO SERVICIO
                         </button>
                     </div>
 
                     {
                         isModalOpen && (
-                            <AddNewServiceAndProductModal
+                            <AddNewServiceModal
                                 onClose={() => setIsModalOpen(false)}
                             />
                         )
