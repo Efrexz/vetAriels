@@ -65,8 +65,6 @@ const EditUser = () => {
         };
 
         updateUserData(Number(id), updateData);
-        console.log(updateData);
-
         navigate(`/config/user-subsidiaries`);
 
     };

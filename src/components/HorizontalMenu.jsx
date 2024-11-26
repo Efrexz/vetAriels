@@ -27,6 +27,11 @@ function HorizontalMenu({ mode }) {
             { name: 'Precios', url: "prices" },
             { name: 'Codigo de barras', url: "barcode" },
         ],
+        products: [
+            { name: 'Editar', url: "update" },
+            { name: 'Precios', url: "prices" },
+            { name: 'Codigo de barras', url: "barcode" },
+        ],
         user: [
             { name: 'Datos personales', url: "update" },
             { name: 'Contraseña', url: "password" },
@@ -41,11 +46,12 @@ function HorizontalMenu({ mode }) {
         clients: `/clients/client/${id}`,
         pets: `/pets/pet/${id}`,
         services: `/service`,
+        products: `/products/product/${id}`,
         user: `/config/profile`,
     }[mode];
 
     return (
-        <div className={`${mode === 'services' ? 'border-b-2 border-gray-200 pb-4 mb-4' : ''}`}>
+        <div className={`${mode === 'services' || mode === "products" ? 'border-b-2 border-gray-200 pb-4 mb-4' : ''}`}>
             <nav className="flex gap-6" aria-label="Tabs">
                 {tabsConfig[mode]?.map((tab, index) => (
                     <Link

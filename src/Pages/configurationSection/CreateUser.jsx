@@ -31,8 +31,6 @@ function CreateUser() {
             ...formData,
             [name]: value,
         });
-        console.log(formData);
-
     };
 
     const createNewUser = () => {

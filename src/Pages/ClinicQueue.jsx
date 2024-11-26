@@ -39,8 +39,6 @@ const tableHeaders = ["N°", "Fecha de Atención", "Mascota", "Propietario", "M�
 function ClinicQueue() {
 
     const { petsInQueueMedical } = useContext(ClientsContext);
-    console.log(petsInQueueMedical);
-
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">

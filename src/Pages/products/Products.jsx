@@ -12,6 +12,7 @@ import SearchIcon from '../../assets/searchIcon.svg?react';
 import EyeIcon from '../../assets/eyeIcon.svg?react';
 import EyeSlashIcon from '../../assets/eyeSlash.svg?react';
 import PenIcon from '../../assets/penIcon.svg?react';
+import { useNavigate } from 'react-router-dom';
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },
@@ -65,6 +66,8 @@ function Products() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
+
+    const navigate = useNavigate();
 
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
@@ -172,7 +175,12 @@ function Products() {
                                         />
                                     </td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
-                                        <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
+                                        <PenIcon
+                                            className="w-4 h-4 text-green-500 cursor-pointer"
+                                            onClick={() => {
+                                                navigate(`/products/product/${product?.systemCode}/update`)
+                                            }}
+                                        />
                                         <TrashIcon
                                             className="w-4 h-4 text-red-500 cursor-pointer"
                                             onClick={() => {

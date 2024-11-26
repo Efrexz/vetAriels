@@ -11,7 +11,6 @@ function ProductsAndServicesProvider({ children }) {
     }
 
     const [productsData, setProductsData] = useState(localStorage.getItem('productsData') ? JSON.parse(localStorage.getItem('productsData')) : []);
-    console.log(productsData);
 
     function addProduct(product) {
         setProductsData([...productsData, product]);

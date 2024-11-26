@@ -26,8 +26,6 @@ function Login() {
             return true;
         } else {
             setError('Email o contraseña incorrectos');
-            console.log(foundUser);
-
             return false; // Login fallido
         }
     };

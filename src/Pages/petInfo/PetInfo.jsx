@@ -12,8 +12,6 @@ function PetInfo() {
     const { id, section } = useParams();
 
     const individualPetData = petsData.find(pet => pet.hc === id);
-    console.log(individualPetData);
-
 
     function calculateAge(birthDate) {
         const today = new Date();

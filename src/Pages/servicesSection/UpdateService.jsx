@@ -54,7 +54,7 @@ function UpdateService() {
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border rounded-md hover:border-blue-300 focus-within:border-blue-300"
                             >
-                                {field.options.map((option, i) => (
+                                {field?.options?.map((option, i) => (
                                     <option key={i} value={option}>
                                         {option}
                                     </option>

@@ -18,8 +18,6 @@ const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota
 function ActiveOrdersGrooming() {
 
     const { petsInQueueGrooming, removePetFromQueueGrooming } = useContext(ClientsContext);
-    console.log(petsInQueueGrooming);
-
     const navigate = useNavigate();
 
 
