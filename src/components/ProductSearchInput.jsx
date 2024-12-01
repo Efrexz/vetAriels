@@ -5,11 +5,12 @@ import { ProductsAndServicesContext } from "../context/ProductsAndServicesContex
 
 
 
-function ProductSearchInput({ addProductToTable }) {
+function ProductSearchInput({ addProductToTable, mode }) {
 
     const { productsData, servicesData } = useContext(ProductsAndServicesContext);
     const { addProductToClient } = useContext(ClientsContext);
     const { id } = useParams();
+
 
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -18,10 +19,10 @@ function ProductSearchInput({ addProductToTable }) {
 
     function getFilteredServicesAndProducts() {
         let productMatch = productsData.filter(product => {
-            return product?.name.toLowerCase().includes(searchTerm.toLowerCase());
+            return product?.productName?.toLowerCase().includes(searchTerm.toLowerCase());
         });
         let serviceMatch = servicesData.filter(service => {
-            return service?.serviceName.toLowerCase().includes(searchTerm.toLowerCase());
+            return service?.serviceName?.toLowerCase().includes(searchTerm.toLowerCase());
         });
 
         return [...productMatch, ...serviceMatch];
@@ -38,8 +39,10 @@ function ProductSearchInput({ addProductToTable }) {
             additionDate: currentDate,
             quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
         };
-        // agregamos el producto al cliente
-        addProductToClient(Number(id), newProduct);
+        if (mode === "sales") {
+            // agregamos el producto al cliente
+            addProductToClient(Number(id), newProduct);
+        }
         // también lo agregamos a la tabla local 
         addProductToTable(newProduct);
     }
@@ -76,21 +79,21 @@ function ProductSearchInput({ addProductToTable }) {
                             >
                                 <div className="flex items-center justify-between w-full">
                                     <span className="font-bold text-gray-700">
-                                        {productOrService?.name || productOrService?.serviceName}
+                                        {productOrService?.productName || productOrService?.serviceName}
                                     </span>
                                     <div className="flex items-center gap-3">
                                         <span className="text-lg font-bold text-gray-700">
-                                            s/{productOrService?.price}
+                                            s/{productOrService?.salePrice}
                                         </span>
                                         {
-                                            productOrService?.quantity && (
+                                            productOrService?.availableStock >= 0 && (
                                                 <div className="text-center">
-                                                    <div className="text-sm text-gray-500">
+                                                    <div className="text-xs text-gray-500">
                                                         <div>Stock</div>
                                                         <div>Disponible</div>
                                                     </div>
-                                                    <div className="bg-blue-400 font-medium w-7 h-6 flex items-center justify-center rounded-full text-white mx-auto">
-                                                        {productOrService?.quantity}
+                                                    <div className={`${productOrService?.availableStock > 0 ? "bg-blue-500" : "bg-red-500"} font-medium w-7 h-6 flex items-center justify-center rounded-full text-white mx-auto`}>
+                                                        {productOrService?.availableStock}
                                                     </div>
                                                 </div>
                                             )

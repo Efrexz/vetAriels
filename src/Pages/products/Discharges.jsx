@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DocumentOutIcon from '../../assets/documentOutIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
@@ -7,12 +7,7 @@ import PDFIcon from '../../assets/pdfIcon.svg?react';
 import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
-
-const initialDischargesData = [
-    { id: 1, date: '2023-07-01', time: "20:56 PM", reason: '	1010- CLIENTE CACANCELA CON YAPE SE ENTREGA BOLETA MASCOTA INTERNA OSLO HC 30283', responsible: 'Juan Pérez', registeredBy: 'Juan Pérez' },
-    { id: 2, date: '2023-07-01', time: "20:56 PM", reason: 'Descarga de caja', responsible: 'Juan Pérez', registeredBy: 'Juan Pérez' },
-    { id: 3, date: '2023-07-01', time: "20:56 PM", reason: 'Descarga de caja', responsible: 'Juan Pérez', registeredBy: 'Juan Pérez' },
-];
+import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },
@@ -25,9 +20,10 @@ const IconsOptions = [
 const tableHeaders = ["N°", "Fecha de creación", "Razon", "Responsable", "Registrado por ", "Opciones"];
 
 function Discharges() {
-    const [discharges, setDischarges] = useState(initialDischargesData);
+    const { dischargesData, } = useContext(ProductsAndServicesContext);
 
     const navigate = useNavigate();
+
 
     return (
         <section className="container mx-auto p-6">
@@ -89,14 +85,16 @@ function Discharges() {
                             </tr>
                         </thead>
                         <tbody>
-                            {discharges.map((discharge, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                            {dischargesData.map((discharge, index) => (
+                                <tr key={index} className="hover:bg-gray-100 text-sm">
                                     <td className="text-center border">{discharge.id}</td>
-                                    <td className="text-center border">{discharge.date}</td>
+                                    <td className="text-center border">{discharge.date} {discharge.time}</td>
                                     <td className="px-4 text-start border">{discharge.reason}</td>
                                     <td className="text-center border">{discharge.responsible}</td>
                                     <td className="text-center border">{discharge.registeredBy}</td>
-                                    ../
+                                    <td className="py-8 px-4  border flex justify-center">
+                                        <SearchIcon className="w-5 h-5 text-green-500 hover:text-green-600 cursor-pointer" />
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

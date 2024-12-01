@@ -25,6 +25,26 @@ function ProductsAndServicesProvider({ children }) {
         localStorage.setItem('productsData', JSON.stringify(productsData));
     }, [productsData]);
 
+
+    //Descargas de Productos
+
+    const isDischargesData = localStorage.getItem('dischargesData');
+    if (!isDischargesData) {
+        localStorage.setItem('dischargesData', JSON.stringify([]));
+    }
+
+    const [dischargesData, setDischargesData] = useState(localStorage.getItem('dischargesData') ? JSON.parse(localStorage.getItem('dischargesData')) : []);
+
+    function addDischarge(discharge) {
+        setDischargesData([discharge, ...dischargesData]);
+    }
+
+    useEffect(() => {
+        localStorage.setItem('dischargesData', JSON.stringify(dischargesData));
+    }, [dischargesData]);
+
+
+
     //Servicios
 
     const isServiceData = localStorage.getItem('servicesData');
@@ -54,7 +74,16 @@ function ProductsAndServicesProvider({ children }) {
     }, [servicesData]);
 
     return (
-        <ProductsAndServicesContext.Provider value={{ productsData, addProduct, removeProduct, servicesData, addNewService, removeService }}>
+        <ProductsAndServicesContext.Provider value={{
+            productsData,
+            addProduct,
+            removeProduct,
+            servicesData,
+            addNewService,
+            removeService,
+            dischargesData,
+            addDischarge,
+        }}>
             {children}
         </ProductsAndServicesContext.Provider>
     );

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import DollarIcon from '../../assets/dollarIcon.svg?react';
 import PercentIcon from '../../assets/percentIcon.svg?react';
 

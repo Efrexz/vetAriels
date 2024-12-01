@@ -115,7 +115,7 @@ function Sales() {
     }
 
     const totalPrice = selectedProducts.reduce(
-        (acc, product) => acc + product.price * product.quantity,
+        (acc, product) => acc + product.salePrice * product.quantity,
         0
     );
 
@@ -132,6 +132,9 @@ function Sales() {
     //Modales
     const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
+
+    console.log({ selectedProducts });
+
 
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar ">
@@ -263,7 +266,7 @@ function Sales() {
                                 <select
                                     id='store'
                                     name="store"
-                                    className="w-full rounded border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300  focus:border-blue-300"
+                                    className="w-full rounded border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300  focus:border-blue-300 focus:outline-none"
                                 >
                                     <option value="">VET ARIEL</option>
                                 </select>
@@ -275,7 +278,7 @@ function Sales() {
                                     className="block text-gray-700 mb-2 pl-2">
                                     Buscar y agregar productos y servicios a la cuenta del cliente:
                                 </label>
-                                <ProductSearchInput addProductToTable={addProductToTable} />
+                                <ProductSearchInput addProductToTable={addProductToTable} mode={"sales"} />
                             </div>
                         </div>
                     )
@@ -304,7 +307,7 @@ function Sales() {
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.name || product.serviceName}
+                                        {product.productName || product.serviceName}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <span
@@ -315,7 +318,7 @@ function Sales() {
                                                 setIsQuantityModalOpen(false)
                                             }}
                                         >
-                                            {product.price}
+                                            {product.salePrice}
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
@@ -331,7 +334,7 @@ function Sales() {
                                             }} />
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.price * product.quantity}
+                                        {product.salePrice * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
@@ -339,7 +342,7 @@ function Sales() {
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.price * product.quantity}
+                                        {product.salePrice * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <select className="border rounded p-1">
