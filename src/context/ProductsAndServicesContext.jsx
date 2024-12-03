@@ -25,6 +25,39 @@ function ProductsAndServicesProvider({ children }) {
         localStorage.setItem('productsData', JSON.stringify(productsData));
     }, [productsData]);
 
+    //Cargar productos 
+
+    const isRestockData = localStorage.getItem('restockData');
+    if (!isRestockData) {
+        localStorage.setItem('restockData', JSON.stringify([]));
+    }
+
+    const [restockData, setRestockData] = useState(localStorage.getItem('restockData') ? JSON.parse(localStorage.getItem('restockData')) : []);
+
+    function addRestock(restock) {
+        // Iteramos sobre los productos incluidos en el restock
+        setProductsData((prevProducts) =>
+            prevProducts.map((product) => {
+                const restockProduct = restock.products.find(
+                    (p) => p.systemCode === product.systemCode
+                );
+                if (restockProduct) {
+                    return {
+                        ...product,
+                        availableStock: product.availableStock + restockProduct.quantity,
+                    };
+                }
+
+                return product;
+            })
+        );
+        setRestockData([restock, ...restockData]);
+    }
+
+    useEffect(() => {
+        localStorage.setItem('restockData', JSON.stringify(restockData));
+    }, [restockData]);
+
 
     //Descargas de Productos
 
@@ -36,6 +69,24 @@ function ProductsAndServicesProvider({ children }) {
     const [dischargesData, setDischargesData] = useState(localStorage.getItem('dischargesData') ? JSON.parse(localStorage.getItem('dischargesData')) : []);
 
     function addDischarge(discharge) {
+        setProductsData((prevProducts) =>
+            prevProducts.map((product) => {
+                const dischargeProduct = discharge.products.find(
+                    (p) => p.systemCode === product.systemCode
+                );
+
+                if (dischargeProduct) {
+                    return {
+                        ...product,
+                        availableStock:
+                            product.availableStock >= dischargeProduct.quantity
+                                ? product.availableStock - dischargeProduct.quantity
+                                : product.availableStock = 0, // Evitar valores negativos
+                    };
+                }
+                return product;
+            })
+        );
         setDischargesData([discharge, ...dischargesData]);
     }
 
@@ -83,6 +134,8 @@ function ProductsAndServicesProvider({ children }) {
             removeService,
             dischargesData,
             addDischarge,
+            restockData,
+            addRestock,
         }}>
             {children}
         </ProductsAndServicesContext.Provider>

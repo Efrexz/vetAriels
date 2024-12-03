@@ -2,6 +2,8 @@ import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ClientsContext } from "../context/ClientsContext";
 import { ProductsAndServicesContext } from "../context/ProductsAndServicesContext";
+import { ErrorModal } from "./ErrorModal";
+import PropTypes from "prop-types";
 
 
 
@@ -9,6 +11,7 @@ function ProductSearchInput({ addProductToTable, mode }) {
 
     const { productsData, servicesData } = useContext(ProductsAndServicesContext);
     const { addProductToClient } = useContext(ClientsContext);
+    const [isOpenErrorModal, setIsOpenErrorModal] = useState(false);
     const { id } = useParams();
 
 
@@ -73,6 +76,12 @@ function ProductSearchInput({ addProductToTable, mode }) {
                                 key={index}
                                 className="py-2 pl-3 pr-6 h-20 cursor-pointer hover:bg-blue-100 border flex justify-between items-center"
                                 onClick={() => {
+                                    //Confirmamos solo mostrar el error del stock solo en las paginas de ventas y descargas
+                                    if (productOrService?.availableStock < 1 && (mode === "discharge" || mode === "sales")) {
+                                        setIsOpenErrorModal(true);
+                                        setSearchTerm('');
+                                        return;
+                                    }
                                     addProductByClient(productOrService)
                                     setSearchTerm('')
                                 }}
@@ -109,9 +118,18 @@ function ProductSearchInput({ addProductToTable, mode }) {
 
                 </ul>
             )}
+            {
+                isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="stock" />
+            }
         </div>
+
 
     );
 }
 
 export { ProductSearchInput };
+
+ProductSearchInput.propTypes = {
+    addProductToTable: PropTypes.func,
+    mode: PropTypes.string
+}

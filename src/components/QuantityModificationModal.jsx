@@ -5,15 +5,23 @@ import PlusIcon from '../assets/plusIcon.svg?react';
 
 
 
-function QuantityModificationModal({ onClose, quantity, changeQuantity }) {
+function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuantity, mode }) {
 
     const [itemQuantity, setItemQuantity] = useState(quantity);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     function handleChange(e) {
         setItemQuantity(e.target.value);
     }
 
     function editQuantity() {
+        if (mode === "discharge" || mode === "sales") {
+            // En descarga o venta, no permitimos que la cantidad supere el stock disponible
+            if (itemQuantity > maxQuantity) {
+                setErrorMessage('La cantidad seleccionada excede el stock disponible.');
+                return;
+            }
+        }
         changeQuantity(parseInt(itemQuantity));//nos aseguramos de que el valor sea un numero para evitar el error que ocurre al enviarlo y lo toma como un string. Luego al modificar la cantidad con los botones genera el bug que lo suma como string
         onClose();
     }
@@ -30,24 +38,29 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity }) {
                             type="number"
                             value={itemQuantity}
                             onChange={handleChange}
-                            className="border border-gray-300 rounded-lg py-2 px-4 w-full hover:border-blue-300 focus-within:border-blue-300 text-center"
+                            className={`border ${errorMessage ? "border-red-400 hover:border-red-400" : "border-gray-300 hover:border-blue-300 focus-within:border-blue-300"} rounded-lg py-2 px-4 w-full   focus:outline-none text-center`}
                         />
+                        {
+                            errorMessage && (
+                                <p className="text-red-500 text-sm">{errorMessage}</p>
+                            )
+                        }
                     </div>
                 </div>
 
-                <div className="flex justify-end mt-6 gap-4">
+                <div className="flex justify-end mt-6 gap-4 text-sm">
                     <button
                         className="border bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 flex items-center gap-3"
                         onClick={() => onClose()}
                     >
-                        <ReturnIcon className="w-5 h-5 text-white" />
+                        <ReturnIcon className="w-4 h-4 text-white" />
                         CANCELAR
                     </button>
                     <button
                         className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
                         onClick={() => editQuantity()}
                     >
-                        <PlusIcon className="w-5 h-5 text-white" />
+                        <PlusIcon className="w-4 h-4 text-white" />
                         CONFIRMAR
                     </button>
                 </div>
@@ -62,5 +75,7 @@ export { QuantityModificationModal };
 QuantityModificationModal.propTypes = {
     onClose: PropTypes.func,
     quantity: PropTypes.number,
-    changeQuantity: PropTypes.func
+    changeQuantity: PropTypes.func,
+    maxQuantity: PropTypes.number,
+    mode: PropTypes.string
 }

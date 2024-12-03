@@ -39,7 +39,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
     };
 
 
-    const { addDischarge } = useContext(ProductsAndServicesContext);
+    const { addDischarge, addRestock } = useContext(ProductsAndServicesContext);
 
     const tableHeaders = ["Código de Barras", "Producto", "Precio Unitario de Compra", "Precio Unitario de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
 
@@ -88,12 +88,13 @@ function DischargeAndChargeStock({ typeOfOperation }) {
         }
 
         // buscamos el último ID guardado en localStorage, o inicializarlo si no existe
-        const lastId = localStorage.getItem('lastOrderId')
-            ? parseInt(localStorage.getItem('lastOrderId'), 10)
+        const typeOfId = typeOfOperation === 'discharge' ? 'lastDischargeId' : 'lastRestockId';
+        const lastId = localStorage.getItem(typeOfId)
+            ? parseInt(localStorage.getItem(typeOfId), 10)
             : 0;
 
         const newId = lastId + 1;
-        localStorage.setItem('lastOrderId', newId);
+        localStorage.setItem(typeOfId, newId);
 
         const now = new Date();
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
@@ -115,9 +116,9 @@ function DischargeAndChargeStock({ typeOfOperation }) {
             if (typeOfOperation === 'discharge') {
                 addDischarge(newOrder);
                 navigate(`/discharges`);
-            } else {
-                // addCharge(newOrder);
-                console.log("carga");
+            } else if (typeOfOperation === 'restock') {
+                addRestock(newOrder);
+                navigate(`/charges`);
             }
         }
     }
@@ -199,7 +200,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                 </form>
             </div>
 
-            {isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} />}
+            {isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />}
 
             <div className="mb-6 bg-gray-50 p-4 rounded-md">
                 <div className='w-full flex flex-col justify-center mb-4'>
@@ -208,7 +209,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                         className="block text-gray-700 mb-2 pl-2">
                         Buscar y agregar productos a la lista:
                     </label>
-                    <ProductSearchInput addProductToTable={addProductToTable} />
+                    <ProductSearchInput addProductToTable={addProductToTable} mode={typeOfOperation} />
                     {errors.products && <p className="text-red-500 text-sm mt-1">{errors.products}</p>}
                 </div>
 
@@ -239,6 +240,8 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                                                 changeQuantity={(newQuantity) => {
                                                     updateProductQuantity(product.provisionalId, newQuantity)
                                                 }}
+                                                maxQuantity={product.availableStock}
+                                                mode={typeOfOperation}
                                                 openQuantityModal={() => {
                                                     setIsQuantityModalOpen(true)
                                                     setProductToEdit(product)
@@ -263,6 +266,8 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                         changeQuantity={(newQuantity) => {
                             updateProductQuantity(productToEdit.provisionalId, newQuantity)
                         }}
+                        maxQuantity={productToEdit?.availableStock}
+                        mode={typeOfOperation}
                         onClose={() => setIsQuantityModalOpen(false)}
                     />
                 )

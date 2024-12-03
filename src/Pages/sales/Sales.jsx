@@ -327,6 +327,8 @@ function Sales() {
                                             changeQuantity={(newQuantity) => {
                                                 updateProductQuantity(product.provisionalId, newQuantity)
                                             }}
+                                            maxQuantity={product.availableStock}
+                                            mode="sales"
                                             openQuantityModal={() => {
                                                 setIsQuantityModalOpen(true)
                                                 setIsPriceModalOpen(false)
@@ -399,6 +401,8 @@ function Sales() {
                             changeQuantity={(newQuantity) => {
                                 updateProductQuantity(productToEdit.provisionalId, newQuantity)
                             }}
+                            maxQuantity={productToEdit?.availableStock}
+                            mode="sales"
                             onClose={() => setIsQuantityModalOpen(false)}
                         />
                     )

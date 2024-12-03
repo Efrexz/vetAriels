@@ -83,7 +83,7 @@ function App() {
                     <Route path='/products/product/:id/:section' element={<ProductInfo />} />
                     <Route path="/discharges" element={<Discharges />} />
                     <Route path="/charges" element={<Charges />} />
-                    <Route path="/charges/create" element={<DischargeAndChargeStock typeOfOperation="charge" />} />
+                    <Route path="/charges/create" element={<DischargeAndChargeStock typeOfOperation="restock" />} />
                     <Route path="/discharges/create" element={<DischargeAndChargeStock typeOfOperation="discharge" />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/service/:section/" element={<ServiceInfo />} />

@@ -2,17 +2,25 @@ import PropTypes from "prop-types";
 import PlusIcon from '../assets/plusIcon.svg?react';
 
 
-const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity }) => {
+const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity, maxQuantity, mode }) => {
 
-    const increaseQuantity = () => {
-        changeQuantity(itemCount + 1);
-    };
+    function increaseQuantity() {
+        if (mode === "discharge" || mode === "sales") {
+            // En descarga o venta, no permitimos que la cantidad supere el stock disponible
+            if (itemCount < maxQuantity) {
+                changeQuantity(itemCount + 1);
+            }
+        } else if (mode === "restock") {
+            // En restock, no hay límite para la cantidad a cargar
+            changeQuantity(itemCount + 1);
+        }
+    }
 
-    const decreaseQuantity = () => {
+    function decreaseQuantity() {
         if (itemCount > 1) {
             changeQuantity(itemCount - 1);
         }
-    };
+    }
 
     return (
         <div className="flex items-center justify-center space-x-2">
@@ -45,5 +53,7 @@ export { QuantityCounter };
 QuantityCounter.propTypes = {
     openQuantityModal: PropTypes.func,
     itemCount: PropTypes.number,
-    changeQuantity: PropTypes.func
+    changeQuantity: PropTypes.func,
+    maxQuantity: PropTypes.number,
+    mode: PropTypes.string
 }

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
 import DocumentJoinIcon from '../../assets/DocumentJoinIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
@@ -8,11 +9,6 @@ import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import SearchIcon from '../../assets/searchIcon.svg?react';
 
-const initialDischargesData = [
-    { id: 1, date: '2023-07-01', time: "20:56 PM", reason: '	1010- CLIENTE CACANCELA CON YAPE SE ENTREGA BOLETA MASCOTA INTERNA OSLO HC 30283', responsible: 'Juan Pérez', registeredBy: 'Juan Pérez' },
-    { id: 2, date: '2023-07-01', time: "20:56 PM", reason: 'Descarga de caja', responsible: 'Juan Pérez', registeredBy: 'Juan Pérez' },
-    { id: 3, date: '2023-07-01', time: "20:56 PM", reason: 'Descarga de caja', responsible: 'Juan Pérez', registeredBy: 'Juan Pérez' },
-];
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },
@@ -25,7 +21,7 @@ const IconsOptions = [
 const tableHeaders = ["N°", "Fecha de creación", "Razon", "Responsable", "Registrado por ", "Opciones"];
 
 function Charges() {
-    const [discharges, setDischarges] = useState(initialDischargesData);
+    const { restockData } = useContext(ProductsAndServicesContext);
 
     const navigate = useNavigate();
 
@@ -89,14 +85,14 @@ function Charges() {
                             </tr>
                         </thead>
                         <tbody>
-                            {discharges.map((discharge, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
-                                    <td className="text-center border">{discharge.id}</td>
-                                    <td className="text-center border">{discharge.date}</td>
-                                    <td className="px-4 text-start border">{discharge.reason}</td>
-                                    <td className="text-center border">{discharge.responsible}</td>
-                                    <td className="text-center border">{discharge.registeredBy}</td>
-                                    <td className="py-2 px-4 text-center border flex justify-center">
+                            {restockData.map((restock, index) => (
+                                <tr key={index} className="hover:bg-gray-100 text-sm">
+                                    <td className="text-center border">{restock.id}</td>
+                                    <td className="text-center border">{restock.date} {restock.time}</td>
+                                    <td className="px-4 text-start border">{restock.reason}</td>
+                                    <td className="text-center border">{restock.responsible}</td>
+                                    <td className="text-center border">{restock.registeredBy}</td>
+                                    <td className="py-4 px-4 border flex justify-center">
                                         <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
                                     </td>
                                 </tr>
