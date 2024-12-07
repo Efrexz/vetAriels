@@ -26,7 +26,7 @@ function PetInfo() {
     const petAge = calculateAge(individualPetData?.birthDate);
 
     return (
-        <div className="container mx-auto p-6">
+        <main className="container mx-auto p-6">
             <div className="flex justify-between items-center mb-6 border-b-2 border-gray-100 pb-5">
                 <h1 className="text-2xl font-semibold text-gray-800">Informacion de la Mascota</h1>
                 <HorizontalMenu mode="pets" />
@@ -72,7 +72,7 @@ function PetInfo() {
                 {section === 'update' && <PetProfile petData={individualPetData} />}
                 {section === 'clinical-records' && <ClinicalRecords />}
             </div>
-        </div>
+        </main>
     );
 }
 

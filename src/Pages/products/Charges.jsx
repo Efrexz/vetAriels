@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
-import DocumentJoinIcon from '../../assets/DocumentJoinIcon.svg?react';
+import DocumentJoinIcon from '../../assets/documentJoinIcon.svg?react';
 import EraserIcon from '../../assets/eraserIcon.svg?react';
 import RefreshIcon from '../../assets/refreshIcon.svg?react';
 import PDFIcon from '../../assets/pdfIcon.svg?react';
@@ -93,7 +93,10 @@ function Charges() {
                                     <td className="text-center border">{restock.responsible}</td>
                                     <td className="text-center border">{restock.registeredBy}</td>
                                     <td className="py-4 px-4 border flex justify-center">
-                                        <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
+                                        <SearchIcon
+                                            className="w-5 h-5 text-green-500 cursor-pointer"
+                                            onClick={() => { navigate(`/charges/charge/${restock.id}/detail`) }}
+                                        />
                                     </td>
                                 </tr>
                             ))}

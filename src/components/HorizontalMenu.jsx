@@ -3,7 +3,17 @@ import { Link, useParams } from 'react-router-dom';
 import PropTypes from "prop-types";
 
 function HorizontalMenu({ mode }) {
-    const [selectedTab, setSelectedTab] = useState(mode === 'user' ? 'Datos personales' : 'Editar');
+    const [selectedTab, setSelectedTab] = useState(() => {
+        switch (mode) {
+            case 'user':
+                return 'Datos personales';
+            case 'discharge':
+            case 'restock':
+                return 'Ver';
+            default:
+                return 'Editar';
+        }
+    });
 
     const handleTabClick = (tabName) => {
         setSelectedTab(tabName);
@@ -37,6 +47,14 @@ function HorizontalMenu({ mode }) {
             { name: 'Contraseña', url: "password" },
             { name: 'Imagen de perfil', url: "gallery" },
         ],
+        restock: [
+            { name: 'Ver', url: "detail" },
+            { name: 'Editar', url: "edit" },
+        ],
+        discharge: [
+            { name: 'Ver', url: "detail" },
+            { name: 'Editar', url: "edit" },
+        ],
     };
 
     const { id } = useParams();
@@ -48,10 +66,14 @@ function HorizontalMenu({ mode }) {
         services: `/service`,
         products: `/products/product/${id}`,
         user: `/config/profile`,
+        restock: `/charges/charge/${id}`,
+        discharge: `/discharges/discharge/${id}`,
     }[mode];
 
+    const alternativeStyles = mode === 'restock' || mode === 'discharge' || mode === 'services' || mode === "products";
+
     return (
-        <div className={`${mode === 'services' || mode === "products" ? 'border-b-2 border-gray-200 pb-4 mb-4' : ''}`}>
+        <div className={`${alternativeStyles ? 'border-b-2 border-gray-200 pb-4 mb-4' : ''}`}>
             <nav className="flex gap-6" aria-label="Tabs">
                 {tabsConfig[mode]?.map((tab, index) => (
                     <Link

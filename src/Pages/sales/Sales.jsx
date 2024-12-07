@@ -377,7 +377,6 @@ function Sales() {
                                         >
                                             <TrashIcon className="w-4 h-4" />
                                         </button>
-                                        {/* Agrega más botones según tus opciones */}
                                     </td>
                                 </tr>
                             ))}

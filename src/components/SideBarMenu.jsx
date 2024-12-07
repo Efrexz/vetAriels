@@ -16,7 +16,7 @@ import MoneyTransferIcon from '../assets/moneyTransferIcon.svg?react';
 import MoneyIcon from '../assets/moneyIcon.svg?react';
 import DocumentIcon from '../assets/documentIcon.svg?react';
 import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
-import DocumentJoinIcon from '../assets/DocumentJoinIcon.svg?react';
+import DocumentJoinIcon from '../assets/documentJoinIcon.svg?react';
 import BuildingShieldIcon from '../assets/buildingShield.svg?react';
 import RoleUserIcon from '../assets/roleUserIcon.svg?react';
 import FileContractIcon from '../assets/fileContract.svg?react';

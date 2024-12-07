@@ -28,6 +28,7 @@ import { ProductInfo } from './Pages/products/ProductInfo.jsx';
 import { Discharges } from './Pages/products/Discharges.jsx';
 import { Charges } from './Pages/products/Charges.jsx';
 import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStock.jsx';
+import { OperationInfo } from './Pages/products/OperationInfo.jsx';
 import { Services } from './Pages/servicesSection/Services.jsx';
 import { ServiceInfo } from './Pages/servicesSection/ServiceInfo.jsx';
 import { Config } from './Pages/configurationSection/Config.jsx';
@@ -84,7 +85,9 @@ function App() {
                     <Route path="/discharges" element={<Discharges />} />
                     <Route path="/charges" element={<Charges />} />
                     <Route path="/charges/create" element={<DischargeAndChargeStock typeOfOperation="restock" />} />
+                    <Route path="/charges/charge/:id/:section" element={<OperationInfo typeOfOperation="restock" />} />
                     <Route path="/discharges/create" element={<DischargeAndChargeStock typeOfOperation="discharge" />} />
+                    <Route path="/discharges/discharge/:id/:section/" element={<OperationInfo typeOfOperation="discharge" />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/service/:section/" element={<ServiceInfo />} />
                     <Route path="/config/subsidiary" element={<Config />} />

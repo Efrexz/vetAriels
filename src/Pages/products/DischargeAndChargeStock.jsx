@@ -7,7 +7,7 @@ import { ProductSearchInput } from '../../components/ProductSearchInput';
 import { QuantityModificationModal } from '../../components/QuantityModificationModal';
 import { ErrorModal } from '../../components/ErrorModal';
 import DocumentOutIcon from '../../assets/documentOutIcon.svg?react';
-import DocumentJoinIcon from '../../assets/DocumentJoinIcon.svg?react';
+import DocumentJoinIcon from '../../assets/documentJoinIcon.svg?react';
 import ReturnIcon from '../../assets/returnIcon.svg?react';
 import PlusIcon from '../../assets/plusIcon.svg?react';
 import TrashIcon from '../../assets/trashIcon.svg?react';

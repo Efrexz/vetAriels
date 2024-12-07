@@ -92,8 +92,11 @@ function Discharges() {
                                     <td className="px-4 text-start border">{discharge.reason}</td>
                                     <td className="text-center border">{discharge.responsible}</td>
                                     <td className="text-center border">{discharge.registeredBy}</td>
-                                    <td className="py-8 px-4  border flex justify-center">
-                                        <SearchIcon className="w-5 h-5 text-green-500 hover:text-green-600 cursor-pointer" />
+                                    <td className="py-4 px-4  border flex justify-center">
+                                        <SearchIcon
+                                            className="w-5 h-5 text-green-500 hover:text-green-600 cursor-pointer"
+                                            onClick={() => { navigate(`/discharges/discharge/${discharge.id}/detail`) }}
+                                        />
                                     </td>
                                 </tr>
                             ))}

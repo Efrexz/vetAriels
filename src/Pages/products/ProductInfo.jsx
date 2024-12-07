@@ -12,7 +12,6 @@ function ProductInfo() {
     const { section, id } = useParams();
     const { productsData } = useContext(ProductsAndServicesContext);
     const product = productsData.find(product => product.systemCode === id);
-    console.log(product);
 
     return (
         <main className="w-full mx-auto p-6 bg-white">
