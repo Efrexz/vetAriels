@@ -1,5 +1,5 @@
-import DollarIcon from '../../assets/dollarIcon.svg?react';
-import PercentIcon from '../../assets/percentIcon.svg?react';
+import DollarIcon from '@assets/dollarIcon.svg?react';
+import PercentIcon from '@assets/percentIcon.svg?react';
 
 function EditProductPrice() {
     const formFields = [

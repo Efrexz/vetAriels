@@ -1,33 +1,11 @@
-import { useParams } from "react-router-dom";
-import { useContext } from "react";
-import { ProductsAndServicesContext } from "../../context/ProductsAndServicesContext";
-import RoleUserIcon from "../../assets/roleUserIcon.svg?react";
-import BookIcon from '../../assets/bookIcon.svg?react';
+import RoleUserIcon from "@assets/roleUserIcon.svg?react";
+import BookIcon from '@assets/bookIcon.svg?react';
 import PropTypes from "prop-types";
 
-function OperationDetail({ typeOfOperation }) {
-
-    const { id } = useParams();
-    const { restockData, dischargesData } = useContext(ProductsAndServicesContext);
-
-
-
-    const isRestock = typeOfOperation === "restock";
-    const operationData = isRestock
-        ? restockData.find((restock) => restock.id === Number(id))
-        : dischargesData.find((discharge) => discharge.id === Number(id));
-    console.log(operationData);
-
+function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
 
     const selectedProducts = operationData?.products || [];
-    const tableCategories = [
-        "Código de barras",
-        "Producto",
-        "Precio Unitario de Compra",
-        "Precio Unitario de Venta",
-        "Cantidad",
-        "Total Compra"
-    ];
+
 
     const subtotal = operationData.products.reduce(
         (acc, product) => acc + product.cost * product.quantity,
@@ -88,10 +66,13 @@ function OperationDetail({ typeOfOperation }) {
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                     {product.cost}
                                 </td>
-                                <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.salePrice}
-                                </td>
-
+                                {
+                                    typeOfOperation === "restock" && (
+                                        <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                            {product.salePrice}
+                                        </td>
+                                    )
+                                }
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                     {product.quantity}
                                 </td>
@@ -118,16 +99,15 @@ function OperationDetail({ typeOfOperation }) {
                     <span>{subtotal.toFixed(2)}</span>
                 </div>
             </div>
-
         </main>
-
-
-
     );
 }
 
 export { OperationDetail };
 
 OperationDetail.propTypes = {
-    typeOfOperation: PropTypes.string
+    typeOfOperation: PropTypes.string,
+    operationData: PropTypes.object,
+    tableCategories: PropTypes.array
+
 }

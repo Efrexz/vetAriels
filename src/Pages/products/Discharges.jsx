@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
-import DocumentOutIcon from '../../assets/documentOutIcon.svg?react';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
+import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },

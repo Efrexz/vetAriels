@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { ProductsAndServicesContext } from "../../context/ProductsAndServicesContext.jsx";
+import { useParams } from "react-router-dom";
+import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext.jsx";
 import { UpdateProduct } from "./UpdateProduct.jsx";
 import { EditProductPrice } from "./EditProductPrice.jsx";
-import { HorizontalMenu } from "../../components/HorizontalMenu.jsx";
-import { useParams } from "react-router-dom";
-import ReturnIcon from "../../assets/returnIcon.svg?react";
-import PlusIcon from "../../assets/plusIcon.svg?react";
+import { HorizontalMenu } from "@components/HorizontalMenu.jsx";
+import ReturnIcon from "@assets/returnIcon.svg?react";
+import PlusIcon from "@assets/plusIcon.svg?react";
 
 function ProductInfo() {
 
