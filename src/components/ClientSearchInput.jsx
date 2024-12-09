@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ClientsContext } from "../context/ClientsContext";
+import { ClientsContext } from "@context/ClientsContext";
 import PropTypes from "prop-types";
 
 

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import AlertIcon from '../assets/alertIcon.svg?react';
+import AlertIcon from '@assets/alertIcon.svg?react';
 
 function ErrorModal({ onClose, typeOfError }) {
 

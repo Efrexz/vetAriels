@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../context/GlobalContext';
-import EnvelopeIcon from '../assets/envelope.svg?react';
-import PadLockIcon from '../assets/padLockIcon.svg?react';
-import ArrowRightIcon from '../assets/arrowRight.svg?react';
-import InclinedPaw from '../assets/inclinedPaw.svg?react';
+import { GlobalContext } from '@context/GlobalContext';
+import EnvelopeIcon from '@assets/envelope.svg?react';
+import PadLockIcon from '@assets/padLockIcon.svg?react';
+import ArrowRightIcon from '@assets/arrowRight.svg?react';
+import InclinedPaw from '@assets/inclinedPaw.svg?react';
 
 
 function Login() {

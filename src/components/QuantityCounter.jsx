@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import PlusIcon from '../assets/plusIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
 
 
 const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity, maxQuantity, mode }) => {

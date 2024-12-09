@@ -1,14 +1,11 @@
-import { useContext, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import PlusIcon from '../../../assets/plusIcon.svg?react';
-import RoleUserIcon from '../../../assets/roleUserIcon.svg?react';
-import phoneIcon from '../../../assets/phoneIcon.svg?react';
-import EmailIcon from '../../../assets/emailIcon.svg?react';
+import { useState } from 'react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import phoneIcon from '@assets/phoneIcon.svg?react';
+import EmailIcon from '@assets/emailIcon.svg?react';
 
 
 function UserProfile() {
-
-    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: 'AdministracionAriels@gmail.com',

@@ -1,10 +1,11 @@
 import { useContext, useState } from 'react';
-import { FinancialContext } from '../context/FinancialContext';
-import CalendarIcon from '../assets/calendarIcon.svg?react';
-import Fileinvoice from '../assets/file-invoice.svg?react';
-import MoneyIcon from '../assets/moneyIcon.svg?react';
-import ReturnIcon from '../assets/returnIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
+import { FinancialContext } from '@context/FinancialContext';
+import CalendarIcon from '@assets/calendarIcon.svg?react';
+import Fileinvoice from '@assets/file-invoice.svg?react';
+import MoneyIcon from '@assets/moneyIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import PropTypes from "prop-types";
 
 function PaymentAndDepositModal({ onClose, typeOfOperation }) {
 
@@ -178,3 +179,8 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
 }
 
 export { PaymentAndDepositModal }
+
+PaymentAndDepositModal.propTypes = {
+    onClose: PropTypes.func,
+    typeOfOperation: PropTypes.string
+}

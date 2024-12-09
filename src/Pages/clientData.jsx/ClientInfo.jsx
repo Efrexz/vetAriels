@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { useParams } from "react-router-dom";
-import { ClientsContext } from '../../context/ClientsContext';
+import { ClientsContext } from '@context/ClientsContext';
 import { ClientProfile } from './ClientProfile';
 import { ClientPets } from './ClientPets';
 import { PurchaseHistory } from './PurchaseHistory';
-import { HorizontalMenu } from '../../components/HorizontalMenu';
-import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
+import { HorizontalMenu } from '@components/HorizontalMenu';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function ClientInfo() {
 

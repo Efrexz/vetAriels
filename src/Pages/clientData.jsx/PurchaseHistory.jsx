@@ -1,8 +1,8 @@
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
 
 
 

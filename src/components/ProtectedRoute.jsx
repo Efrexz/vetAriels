@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { GlobalContext } from "@context/GlobalContext";
 import PropTypes from "prop-types";
-import { GlobalContext } from "../context/GlobalContext";
 
 function ProtectedRoute({ children }) {
     const { activeUser } = useContext(GlobalContext);

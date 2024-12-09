@@ -1,8 +1,8 @@
 import { useState } from "react";
-import PillsIcon from "../../assets/pillsIcon.svg?react";
-import ArrowDown from "../../assets/arrowDown.svg?react";
-import ArrowUp from "../../assets/arrowUp.svg?react";
-import BarCodeIcon from "../../assets/barCodeIcon.svg?react";
+import PillsIcon from "@assets/pillsIcon.svg?react";
+import ArrowDown from "@assets/arrowDown.svg?react";
+import ArrowUp from "@assets/arrowUp.svg?react";
+import BarCodeIcon from "@assets/barCodeIcon.svg?react";
 import PropTypes from "prop-types";
 
 function UpdateProduct({ productData }) {

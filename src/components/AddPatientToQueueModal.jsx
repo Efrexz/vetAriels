@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
-import { ClientsContext } from '../context/ClientsContext';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import ClockIcon from '../assets/clockIcon.svg?react';
-import RoleUserIcon from '../assets/roleUserIcon.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import ClockIcon from '@assets/clockIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     // Estado del formulario

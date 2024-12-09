@@ -1,9 +1,9 @@
+import { useParams } from "react-router-dom";
 import { UpdateService } from "./UpdateService.jsx";
 import { EditServicePrice } from "./EditServicePrice.jsx";
-import { HorizontalMenu } from "../../components/HorizontalMenu.jsx";
-import { useParams } from "react-router-dom";
-import ReturnIcon from "../../assets/returnIcon.svg?react";
-import PlusIcon from "../../assets/plusIcon.svg?react";
+import { HorizontalMenu } from "@components/HorizontalMenu.jsx";
+import ReturnIcon from "@assets/returnIcon.svg?react";
+import PlusIcon from "@assets/plusIcon.svg?react";
 
 function ServiceInfo() {
 

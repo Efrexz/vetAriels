@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import ReturnIcon from '../assets/returnIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import PropTypes from "prop-types";
 
 
 
@@ -67,3 +68,9 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
 }
 
 export { PriceModificationModal };
+
+PriceModificationModal.propTypes = {
+    onClose: PropTypes.func,
+    productToEdit: PropTypes.object,
+    updateProductPrice: PropTypes.func
+}

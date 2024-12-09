@@ -1,5 +1,5 @@
-import ConfigurationIcon from '../../assets/configurationIcon.svg?react';
-import EditIcon from '../../assets/editIcon.svg?react';
+import ConfigurationIcon from '@assets/configurationIcon.svg?react';
+import EditIcon from '@assets/editIcon.svg?react';
 
 const fiscalData = [
     {

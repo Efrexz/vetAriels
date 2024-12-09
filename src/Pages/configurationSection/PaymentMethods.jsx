@@ -1,9 +1,9 @@
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import FileInvoiceIcon from '../../assets/file-invoice.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import EditIcon from '../../assets/editIcon.svg?react';
-import UserIcon from '../../assets/userIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import FileInvoiceIcon from '@assets/file-invoice.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import EditIcon from '@assets/editIcon.svg?react';
+import UserIcon from '@assets/userIcon.svg?react';
 
 
 const tableHeaders = ["Nombre", "Tipo de pago", "Observaciones", "Estado", "Opciones"];

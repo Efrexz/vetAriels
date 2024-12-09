@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '../context/ProductsAndServicesContext';
-import MoneyIcon from '../assets/moneyIcon.svg?react';
-import ReturnIcon from '../assets/returnIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import PillsIcon from '../assets/pillsIcon.svg?react';
+import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import MoneyIcon from '@assets/moneyIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import PillsIcon from '@assets/pillsIcon.svg?react';
 import PropTypes from "prop-types";
 
 

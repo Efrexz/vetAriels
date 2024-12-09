@@ -1,18 +1,18 @@
 import { useContext, useState } from 'react';
-import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
-import { AddNewProductModal } from '../../components/AddNewProductModal.jsx';
-import { DeleteProductModal } from '../../components/DeleteProductModal.jsx';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
-import EyeIcon from '../../assets/eyeIcon.svg?react';
-import EyeSlashIcon from '../../assets/eyeSlash.svg?react';
-import PenIcon from '../../assets/penIcon.svg?react';
 import { useNavigate } from 'react-router-dom';
+import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { AddNewProductModal } from '@components/AddNewProductModal.jsx';
+import { DeleteProductModal } from '@components/DeleteProductModal.jsx';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import EyeIcon from '@assets/eyeIcon.svg?react';
+import EyeSlashIcon from '@assets/eyeSlash.svg?react';
+import PenIcon from '@assets/penIcon.svg?react';
 
 const IconsOptions = [
     { icon: EraserIcon, color: "text-gray-700" },

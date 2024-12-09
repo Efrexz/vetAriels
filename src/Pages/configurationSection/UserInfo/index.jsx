@@ -1,14 +1,14 @@
-import { useContext } from 'react';
-import { Link, useParams } from "react-router-dom";
-import { HorizontalMenu } from '../../../components/HorizontalMenu';
-import RoleUserIcon from '../../../assets/roleUserIcon.svg?react';
+
+import { useParams } from "react-router-dom";
+import { HorizontalMenu } from '@components/HorizontalMenu';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import { UserProfile } from './UserProfile';
 import { UserPassword } from './UserPassword';
 import { UserGallery } from './UserGallery';
 
 function UserInfo() {
 
-    const { id, section } = useParams();
+    const { section } = useParams();
 
     return (
         <div className="container mx-auto p-6">

@@ -1,14 +1,14 @@
-import ShoppingCart from '../assets/shoppingCart.svg?react';
-import BagShoppingIcon from '../assets/bagShopping.svg?react';
-import BookIcon from '../assets/bookIcon.svg?react';
-import ScissorsIcon from '../assets/scissorsIcon.svg?react';
-import UserGroupIcon from '../assets/userGroupIcon.svg?react';
-import PetIcon from '../assets/petIcon.svg?react';
-import BoxesIcon from '../assets/boxesIcon.svg?react';
-import PillsIcon from '../assets/pillsIcon.svg?react';
-import FileInvoiceIcon from '../assets/file-invoice.svg?react';
-import ConfigurationIcon from '../assets/configurationIcon.svg?react';
 import { Link } from 'react-router-dom';
+import ShoppingCart from '@assets/shoppingCart.svg?react';
+import BagShoppingIcon from '@assets/bagShopping.svg?react';
+import BookIcon from '@assets/bookIcon.svg?react';
+import ScissorsIcon from '@assets/scissorsIcon.svg?react';
+import UserGroupIcon from '@assets/userGroupIcon.svg?react';
+import PetIcon from '@assets/petIcon.svg?react';
+import BoxesIcon from '@assets/boxesIcon.svg?react';
+import PillsIcon from '@assets/pillsIcon.svg?react';
+import FileInvoiceIcon from '@assets/file-invoice.svg?react';
+import ConfigurationIcon from '@assets/configurationIcon.svg?react';
 
 function DashBoard() {
 

@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../../context/GlobalContext';
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import UserGroupIcon from '../../assets/userGroupIcon.svg?react';
-import KeyIcon from '../../assets/keyIcon.svg?react';
+import { GlobalContext } from '@context/GlobalContext';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import UserGroupIcon from '@assets/userGroupIcon.svg?react';
+import KeyIcon from '@assets/keyIcon.svg?react';
 
 
 const tableHeaders = ["Fecha de creación", "Nombre y Apellidos", "Correo", "Rol", "Estado", "Opciones"];

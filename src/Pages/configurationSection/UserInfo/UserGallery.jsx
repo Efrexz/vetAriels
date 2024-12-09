@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import UpLoadIcon from '../../../assets/uploadIcon.svg?react';
+import UpLoadIcon from '@assets/uploadIcon.svg?react';
 
 function UserGallery() {
     const [selectedFile, setSelectedFile] = useState(null);

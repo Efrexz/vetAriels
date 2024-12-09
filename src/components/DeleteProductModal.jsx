@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
+import DiskIcon from '@assets/diskIcon.svg?react';
+import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
 import PropTypes from "prop-types";
-import DiskIcon from '../assets/diskIcon.svg?react';
-import { ProductsAndServicesContext } from '../context/ProductsAndServicesContext';
 
 function DeleteProductModal({ productToDelete, onClose }) {
 

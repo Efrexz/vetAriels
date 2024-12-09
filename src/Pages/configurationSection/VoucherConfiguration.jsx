@@ -1,8 +1,8 @@
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import FileInvoiceIcon from '../../assets/file-invoice.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import FileInvoiceIcon from '@assets/file-invoice.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
 
 
 const tableHeaders = ["Fecha de registro", "Empresa", "	Nombre de comprobante", "Serie (actual)", "Ultimo número emitido", "Predeterminado", "Opciones"];

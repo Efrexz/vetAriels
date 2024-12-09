@@ -1,15 +1,15 @@
-import { ClientsContext } from '../context/ClientsContext';
 import { useContext } from 'react';
-import EraserIcon from '../assets/eraserIcon.svg?react';
-import RefreshIcon from '../assets/refreshIcon.svg?react';
-import PDFIcon from '../assets/pdfIcon.svg?react';
-import BookIcon from '../assets/bookIcon.svg?react';
-import ExcelIcon from '../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import Stethoscope from '../assets/stethoscope.svg?react';
-import PenIcon from '../assets/penIcon.svg?react';
-import TrashIcon from '../assets/trashIcon.svg?react';
-import EjectIcon from '../assets/ejectIcon.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import BookIcon from '@assets/bookIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import Stethoscope from '@assets/stethoscope.svg?react';
+import PenIcon from '@assets/penIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import EjectIcon from '@assets/ejectIcon.svg?react';
 import { Link } from 'react-router-dom';
 
 

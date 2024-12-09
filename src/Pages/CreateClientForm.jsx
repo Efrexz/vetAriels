@@ -1,14 +1,14 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { ClientsContext } from '../context/ClientsContext';
-import UserGroupIcon from '../assets/userGroupIcon.svg?react';
-import RoleUserIcon from '../assets/roleUserIcon.svg?react';
-import DocumentIcon from '../assets/documentIcon.svg?react';
-import EmailIcon from '../assets/emailIcon.svg?react';
-import PhoneIcon from '../assets/phoneIcon.svg?react';
-import LocationIcon from '../assets/locationIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import ReturnIcon from '../assets/returnIcon.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import UserGroupIcon from '@assets/userGroupIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import DocumentIcon from '@assets/documentIcon.svg?react';
+import EmailIcon from '@assets/emailIcon.svg?react';
+import PhoneIcon from '@assets/phoneIcon.svg?react';
+import LocationIcon from '@assets/locationIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
 
 
 function CreateClientForm() {

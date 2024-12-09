@@ -1,11 +1,11 @@
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import Stethoscope from '../../assets/stethoscope.svg?react';
-import PrintIcon from '../../assets/printIcon.svg?react';
-import ClipIcon from '../../assets/clipIcon.svg?react';
-import FileContract from '../../assets/fileContract.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import Stethoscope from '@assets/stethoscope.svg?react';
+import PrintIcon from '@assets/printIcon.svg?react';
+import ClipIcon from '@assets/clipIcon.svg?react';
+import FileContract from '@assets/fileContract.svg?react';
 
 
 

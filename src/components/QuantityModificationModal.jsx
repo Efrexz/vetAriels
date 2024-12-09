@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
 import PropTypes from "prop-types";
-import ReturnIcon from '../assets/returnIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
 
 
 

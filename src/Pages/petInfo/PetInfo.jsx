@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Link, useParams } from "react-router-dom";
-import { ClientsContext } from '../../context/ClientsContext';
-import { HorizontalMenu } from '../../components/HorizontalMenu';
-import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import { HorizontalMenu } from '@components/HorizontalMenu';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import { PetProfile } from './PetProfile';
 import { ClinicalRecords } from './ClinicalRecords';
 

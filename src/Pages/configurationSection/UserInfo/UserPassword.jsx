@@ -1,13 +1,11 @@
-import { useContext, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import PlusIcon from '../../../assets/plusIcon.svg?react';
-import KeyIcon from '../../../assets/keyIcon.svg?react';
-import InfoIcon from '../../../assets/infoIcon.svg?react';
+import { useState } from 'react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import KeyIcon from '@assets/keyIcon.svg?react';
+import InfoIcon from '@assets/infoIcon.svg?react';
 
 
 function UserPassword() {
 
-    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         oldPassword: '',

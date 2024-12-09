@@ -1,7 +1,7 @@
-import FileInvoiceIcon from '../../assets/file-invoice.svg?react';
-import CalendarIcon from '../../assets/calendarIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
+import FileInvoiceIcon from '@assets/file-invoice.svg?react';
+import CalendarIcon from '@assets/calendarIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
 
 const sections = [
     {

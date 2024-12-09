@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { ClientsContext } from '../../context/ClientsContext';
-import FileIcon from '../../assets/file-invoice.svg?react';
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import ReturnIcon from '../../assets/returnIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import LightbulbIcon from '../../assets/lightbulb.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import FileIcon from '@assets/file-invoice.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import LightbulbIcon from '@assets/lightbulb.svg?react';
 
 function CreateInvoice() {
     const { id } = useParams();

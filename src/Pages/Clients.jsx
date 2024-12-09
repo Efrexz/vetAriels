@@ -1,16 +1,16 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClientsContext } from '../context/ClientsContext';
-import EraserIcon from '../assets/eraserIcon.svg?react';
-import RefreshIcon from '../assets/refreshIcon.svg?react';
-import PDFIcon from '../assets/pdfIcon.svg?react';
-import ExcelIcon from '../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import PenIcon from '../assets/penIcon.svg?react';
-import TrashIcon from '../assets/trashIcon.svg?react';
-import UserGroupIcon from '../assets/userGroupIcon.svg?react';
-import SearchIcon from '../assets/searchIcon.svg?react';
-import PawIcon from '../assets/pawIcon.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import PenIcon from '@assets/penIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import UserGroupIcon from '@assets/userGroupIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import PawIcon from '@assets/pawIcon.svg?react';
 
 
 

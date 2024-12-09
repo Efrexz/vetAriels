@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GlobalContext } from "../../context/GlobalContext";
-import ReturnIcon from "../../assets/returnIcon.svg?react";
-import PlusIcon from "../../assets/plusIcon.svg?react";
-import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
+import { GlobalContext } from "@context/GlobalContext";
+import ReturnIcon from "@assets/returnIcon.svg?react";
+import PlusIcon from "@assets/plusIcon.svg?react";
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function CreateUser() {
     const { addUser } = useContext(GlobalContext);

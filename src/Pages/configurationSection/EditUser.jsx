@@ -1,12 +1,12 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../context/GlobalContext';
-import UserGroupIcon from '../../assets/userGroupIcon.svg?react';
-import EmailIcon from '../../assets/emailIcon.svg?react';
-import PhoneIcon from '../../assets/phoneIcon.svg?react';
-import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
-import ReturnIcon from '../../assets/returnIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
+import { GlobalContext } from '@context/GlobalContext';
+import UserGroupIcon from '@assets/userGroupIcon.svg?react';
+import EmailIcon from '@assets/emailIcon.svg?react';
+import PhoneIcon from '@assets/phoneIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
 
 
 const userFields = [

@@ -1,13 +1,13 @@
-import BathIcon from '../../assets/bathIcon.svg?react';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import PenIcon from '../../assets/penIcon.svg?react';
-import CheckIcon from '../../assets/checkIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
-import BanIcon from '../../assets/banIcon.svg?react';
+import BathIcon from '@assets/bathIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import PenIcon from '@assets/penIcon.svg?react';
+import CheckIcon from '@assets/checkIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import BanIcon from '@assets/banIcon.svg?react';
 
 
 const groomingOrderData = [

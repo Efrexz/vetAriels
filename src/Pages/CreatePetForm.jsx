@@ -1,13 +1,13 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import { ClientsContext } from '../context/ClientsContext';
-import PawIcon from '../assets/pawIcon.svg?react';
-import RoleUserIcon from '../assets/roleUserIcon.svg?react';
-import PlusIcon from '../assets/plusIcon.svg?react';
-import ReturnIcon from '../assets/returnIcon.svg?react';
-import CakeIcon from '../assets/cakeIcon.svg?react';
-import BookIcon from '../assets/bookIcon.svg?react';
-import MicrochipIcon from '../assets/microChip.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import PawIcon from '@assets/pawIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import CakeIcon from '@assets/cakeIcon.svg?react';
+import BookIcon from '@assets/bookIcon.svg?react';
+import MicrochipIcon from '@assets/microChip.svg?react';
 
 
 function CreatePetForm() {

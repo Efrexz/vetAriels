@@ -1,14 +1,14 @@
 import { useContext, useState } from 'react';
-import { FinancialContext } from '../../context/FinancialContext';
-import { PaymentAndDepositModal } from '../../components/PaymentAndDepositModal';
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import FileInvoiceIcon from '../../assets/file-invoice.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
-import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
-import ImageIcon from '../../assets/imageIcon.svg?react';
+import { FinancialContext } from '@context/FinancialContext';
+import { PaymentAndDepositModal } from '@components/PaymentAndDepositModal';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import FileInvoiceIcon from '@assets/file-invoice.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import ImageIcon from '@assets/imageIcon.svg?react';
 
 
 const tableHeaders = ["ID", "Fecha", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Movimiento", "Opciones"];

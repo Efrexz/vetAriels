@@ -1,18 +1,18 @@
 import { useContext, useState } from 'react';
-import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext.jsx';
-import { AddNewServiceModal } from '../../components/AddNewServiceModal.jsx';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
-import PenIcon from '../../assets/penIcon.svg?react';
-import EyeIcon from '../../assets/eyeIcon.svg?react';
-import EyeSlashIcon from '../../assets/eyeSlash.svg?react';
-import KitMedical from '../../assets/kitMedical.svg?react';
 import { useNavigate } from 'react-router-dom';
+import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext.jsx';
+import { AddNewServiceModal } from '@components/AddNewServiceModal.jsx';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import PenIcon from '@assets/penIcon.svg?react';
+import EyeIcon from '@assets/eyeIcon.svg?react';
+import EyeSlashIcon from '@assets/eyeSlash.svg?react';
+import KitMedical from '@assets/kitMedical.svg?react';
 
 
 const IconsOptions = [

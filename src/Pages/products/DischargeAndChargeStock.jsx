@@ -1,16 +1,16 @@
-
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '../../context/ProductsAndServicesContext';
-import { QuantityCounter } from '../../components/QuantityCounter';
-import { ProductSearchInput } from '../../components/ProductSearchInput';
-import { QuantityModificationModal } from '../../components/QuantityModificationModal';
-import { ErrorModal } from '../../components/ErrorModal';
-import DocumentOutIcon from '../../assets/documentOutIcon.svg?react';
-import DocumentJoinIcon from '../../assets/documentJoinIcon.svg?react';
-import ReturnIcon from '../../assets/returnIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import TrashIcon from '../../assets/trashIcon.svg?react';
+import { GlobalContext } from '@context/GlobalContext';
+import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { QuantityCounter } from '@components/QuantityCounter';
+import { ProductSearchInput } from '@components/ProductSearchInput';
+import { QuantityModificationModal } from '@components/QuantityModificationModal';
+import { ErrorModal } from '@components/ErrorModal';
+import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
+import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
 import PropTypes from "prop-types";
 
 
@@ -125,12 +125,16 @@ function DischargeAndChargeStock({ typeOfOperation }) {
 
     const navigate = useNavigate();
 
+    const { users } = useContext(GlobalContext);
+    // obtenemos los nombres de los usuarios registrados
+    const userOptions = users.map(user => `${user.name} ${user.lastName}`);
+
     const formFields = [
         {
             label: 'Responsable / Solicitante',
             id: 'requestor',
             type: 'select',
-            options: ['NIOMARA TREMONT SANCHEZ', 'JUAN CARLOS PEREZ'],
+            options: userOptions,
             required: true
         },
         {

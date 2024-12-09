@@ -1,24 +1,24 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ClientsContext } from '../../context/ClientsContext';
-import { AddPatientToQueueModal } from '../../components/AddPatientToQueueModal';
-import { ClientSearchInput } from '../../components/ClientSearchInput';
-import { ProductSearchInput } from '../../components/ProductSearchInput';
-import { QuantityCounter } from '../../components/QuantityCounter';
-import { PriceModificationModal } from '../../components/PriceModificationModal';
-import { QuantityModificationModal } from '../../components/QuantityModificationModal';
-import ShoppingCartPlusIcon from '../../assets/shoppingCartPlus.svg?react';
-import NewUserIcon from '../../assets/newUserIcon.svg?react';
-import UserPenIcon from '../../assets/userPenIcon.svg?react';
-import AngleDown from '../../assets/angleDown.svg?react';
-import PetIcon from '../../assets/petIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import Stethoscope from '../../assets/stethoscope.svg?react';
-import PenIcon from '../../assets/penIcon.svg?react';
-import ClockIcon from '../../assets/clockIcon.svg?react';
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import TagIcon from '../../assets/tagIcon.svg?react';
-import GiftIcon from '../../assets/giftIcon.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import { AddPatientToQueueModal } from '@components/AddPatientToQueueModal';
+import { ClientSearchInput } from '@components/ClientSearchInput';
+import { ProductSearchInput } from '@components/ProductSearchInput';
+import { QuantityCounter } from '@components/QuantityCounter';
+import { PriceModificationModal } from '@components/PriceModificationModal';
+import { QuantityModificationModal } from '@components/QuantityModificationModal';
+import ShoppingCartPlusIcon from '@assets/shoppingCartPlus.svg?react';
+import NewUserIcon from '@assets/newUserIcon.svg?react';
+import UserPenIcon from '@assets/userPenIcon.svg?react';
+import AngleDown from '@assets/angleDown.svg?react';
+import PetIcon from '@assets/petIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import Stethoscope from '@assets/stethoscope.svg?react';
+import PenIcon from '@assets/penIcon.svg?react';
+import ClockIcon from '@assets/clockIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import TagIcon from '@assets/tagIcon.svg?react';
+import GiftIcon from '@assets/giftIcon.svg?react';
 
 
 function Sales() {

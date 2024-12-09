@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import PropTypes from "prop-types";
 
 const GlobalContext = createContext();
 
@@ -29,6 +30,7 @@ function GlobalProvider({ children }) {
     //Users Data
     const [users, setUsers] = useState(
         localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : defaultUser);
+
 
     //Roles Data
     const [roles, setRoles] = useState(
@@ -101,3 +103,7 @@ function GlobalProvider({ children }) {
 }
 
 export { GlobalContext, GlobalProvider };
+
+GlobalProvider.propTypes = {
+    children: PropTypes.node
+}

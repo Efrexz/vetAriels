@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ReturnIcon from "../../assets/returnIcon.svg?react";
-import PlusIcon from "../../assets/plusIcon.svg?react";
-import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
+import ReturnIcon from "@assets/returnIcon.svg?react";
+import PlusIcon from "@assets/plusIcon.svg?react";
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function CreateRol() {
     const fields = [

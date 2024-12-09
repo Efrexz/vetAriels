@@ -1,25 +1,25 @@
 import { Link } from "react-router-dom";
-import HomeIcon from '../assets/homeIcon.svg?react';
-import ShoppingCart from '../assets/shoppingCart.svg?react';
-import BookIcon from '../assets/bookIcon.svg?react';
-import HospitalIcon from '../assets/hospitalIcon.svg?react';
-import BathIcon from '../assets/bathIcon.svg?react';
-import UserGroupIcon from '../assets/userGroupIcon.svg?react';
-import PetIcon from '../assets/petIcon.svg?react';
-import BoxesIcon from '../assets/boxesIcon.svg?react';
-import PillsIcon from '../assets/pillsIcon.svg?react';
-import ConfigurationIcon from '../assets/configurationIcon.svg?react';
-import ShoppingCartPlusIcon from '../assets/shoppingCartPlus.svg?react';
-import BagShoppingIcon from '../assets/bagShopping.svg?react';
-import FileInvoiceIcon from '../assets/file-invoice.svg?react';
-import MoneyTransferIcon from '../assets/moneyTransferIcon.svg?react';
-import MoneyIcon from '../assets/moneyIcon.svg?react';
-import DocumentIcon from '../assets/documentIcon.svg?react';
-import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
-import DocumentJoinIcon from '../assets/documentJoinIcon.svg?react';
-import BuildingShieldIcon from '../assets/buildingShield.svg?react';
-import RoleUserIcon from '../assets/roleUserIcon.svg?react';
-import FileContractIcon from '../assets/fileContract.svg?react';
+import HomeIcon from '@assets/homeIcon.svg?react';
+import ShoppingCart from '@assets/shoppingCart.svg?react';
+import BookIcon from '@assets/bookIcon.svg?react';
+import HospitalIcon from '@assets/hospitalIcon.svg?react';
+import BathIcon from '@assets/bathIcon.svg?react';
+import UserGroupIcon from '@assets/userGroupIcon.svg?react';
+import PetIcon from '@assets/petIcon.svg?react';
+import BoxesIcon from '@assets/boxesIcon.svg?react';
+import PillsIcon from '@assets/pillsIcon.svg?react';
+import ConfigurationIcon from '@assets/configurationIcon.svg?react';
+import ShoppingCartPlusIcon from '@assets/shoppingCartPlus.svg?react';
+import BagShoppingIcon from '@assets/bagShopping.svg?react';
+import FileInvoiceIcon from '@assets/file-invoice.svg?react';
+import MoneyTransferIcon from '@assets/moneyTransferIcon.svg?react';
+import MoneyIcon from '@assets/moneyIcon.svg?react';
+import DocumentIcon from '@assets/documentIcon.svg?react';
+import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
+import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
+import BuildingShieldIcon from '@assets/buildingShield.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import FileContractIcon from '@assets/fileContract.svg?react';
 
 function SideBarMenu() {
 

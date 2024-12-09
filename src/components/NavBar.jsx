@@ -1,16 +1,16 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../context/GlobalContext';
-import { ClientsContext } from '../context/ClientsContext';
+import { GlobalContext } from '@context/GlobalContext';
+import { ClientsContext } from '@context/ClientsContext';
 import { ClientSearchInput } from './ClientSearchInput';
-import UserIcon from '../assets/userIcon.svg?react';
-import SearchIcon from '../assets/searchIcon.svg?react';
-import BathIcon from '../assets/bathIcon.svg?react';
-import Stethoscope from '../assets/stethoscope.svg?react';
-import NewUserIcon from '../assets/newUserIcon.svg?react';
-import RoleUserIcon from '../assets/roleUserIcon.svg?react';
-import DocumentOutIcon from '../assets/documentOutIcon.svg?react';
-import StoreIcon from '../assets/storeIcon.svg?react';
+import UserIcon from '@assets/userIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import BathIcon from '@assets/bathIcon.svg?react';
+import Stethoscope from '@assets/stethoscope.svg?react';
+import NewUserIcon from '@assets/newUserIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
+import StoreIcon from '@assets/storeIcon.svg?react';
 
 function NavBar() {
     const { petsInQueueMedical, petsInQueueGrooming } = useContext(ClientsContext);

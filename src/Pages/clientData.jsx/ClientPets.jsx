@@ -1,9 +1,9 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ClientsContext } from '../../context/ClientsContext';
+import { ClientsContext } from '@context/ClientsContext';
 import { useContext } from 'react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
 
 function ClientPets() {
 

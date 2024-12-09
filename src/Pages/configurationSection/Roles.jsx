@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import RoleUserIcon from '../../assets/roleUserIcon.svg?react';
-import PlusIcon from '../../assets/plusIcon.svg?react';
-import TrashIcon from '../../assets/trashIcon.svg?react';
-import KeyIcon from '../../assets/keyIcon.svg?react';
-import EditIcon from '../../assets/editIcon.svg?react';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import PlusIcon from '@assets/plusIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import KeyIcon from '@assets/keyIcon.svg?react';
+import EditIcon from '@assets/editIcon.svg?react';
 
 function Roles() {
 

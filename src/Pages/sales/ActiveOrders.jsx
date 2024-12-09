@@ -1,14 +1,14 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClientsContext } from '../../context/ClientsContext';
-import RefreshIcon from '../../assets/refreshIcon.svg?react';
-import EraserIcon from '../../assets/eraserIcon.svg?react';
-import SearchIcon from '../../assets/searchIcon.svg?react';
-import PDFIcon from '../../assets/pdfIcon.svg?react';
-import ExcelIcon from '../../assets/fileExcelIcon.svg?react';
-import PaperPlaneIcon from '../../assets/paperPlaneIcon.svg?react';
-import WhatsAppIcon from '../../assets/whatsAppIcon.svg?react';
-import ShoppingCart from '../../assets/shoppingCart.svg?react';
+import { ClientsContext } from '@context/ClientsContext';
+import RefreshIcon from '@assets/refreshIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
+import PDFIcon from '@assets/pdfIcon.svg?react';
+import ExcelIcon from '@assets/fileExcelIcon.svg?react';
+import PaperPlaneIcon from '@assets/paperPlaneIcon.svg?react';
+import WhatsAppIcon from '@assets/whatsAppIcon.svg?react';
+import ShoppingCart from '@assets/shoppingCart.svg?react';
 
 const tableHeaders = [
     "Cliente",
