@@ -115,7 +115,8 @@ function Sales() {
     }
 
     const totalPrice = selectedProducts.reduce(
-        (acc, product) => acc + product.salePrice * product.quantity,
+        //coloco salePrice o price porque en los servicio el precio esta como price y en los productos salePrice
+        (acc, product) => acc + (product.salePrice || product.price) * product.quantity,
         0
     );
 
@@ -318,7 +319,7 @@ function Sales() {
                                                 setIsQuantityModalOpen(false)
                                             }}
                                         >
-                                            {product.salePrice}
+                                            {product.salePrice || product.price}
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
@@ -336,7 +337,7 @@ function Sales() {
                                             }} />
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.salePrice * product.quantity}
+                                        {(product.salePrice || product.price) * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
@@ -344,7 +345,7 @@ function Sales() {
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.salePrice * product.quantity}
+                                        {(product.salePrice || product.price) * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <select className="border rounded p-1">

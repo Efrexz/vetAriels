@@ -118,7 +118,7 @@ function ActiveOrdersGrooming() {
                                         <ul className='list-disc pl-4'>
                                             {groomingData?.productsAndServices?.map((service) => (
                                                 <li key={service?.provisionalId} >
-                                                    {service?.name || service?.serviceName}
+                                                    {service?.productName || service?.serviceName}
                                                 </li>
                                             ))}
                                         </ul>
@@ -129,7 +129,10 @@ function ActiveOrdersGrooming() {
                                         </span>
                                     </td>
                                     <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-300">
-                                        <PenIcon className="w-4.5 h-4.5 text-blue-500 cursor-pointer" />
+                                        <PenIcon
+                                            className="w-4.5 h-4.5 text-blue-500 cursor-pointer"
+                                            onClick={() => navigate(`/grooming/update/${groomingData.id}`)}
+                                        />
                                         <CheckIcon className="w-4.5 h-4.5 text-green-500 cursor-pointer" />
                                         <BanIcon
                                             className="w-4.5 h-4.5 text-red-500 cursor-pointer"

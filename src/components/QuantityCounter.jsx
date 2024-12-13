@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import PlusIcon from '@assets/plusIcon.svg?react';
+import MinusIcon from '@assets/minusIcon.svg?react';
 
 
 const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity, maxQuantity, mode }) => {
@@ -28,7 +29,7 @@ const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity, maxQuan
                 className="bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600 focus:outline-none"
                 onClick={decreaseQuantity}
             >
-                <PlusIcon className="w-4 h-4" />
+                <MinusIcon className="w-4 h-4" />
             </button>
 
             <div

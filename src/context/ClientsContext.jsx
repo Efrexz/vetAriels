@@ -45,19 +45,19 @@ function ClientsProvider({ children }) {
     }, [petsInQueueMedical]);
 
     //clients
-    const addClient = (newClient) => {
+    function addClient(newClient) {
         setClients([...clients, newClient]);
-    };
+    }
 
-    const updateClientData = (id, newData) => {
+    function updateClientData(id, newData) {
         setClients(clients.map(client => client.id === id ? { ...client, ...newData } : client));
-    };
+    }
 
-    const removeClient = (id) => {
+    function removeClient(id) {
         setClients(clients.filter(client => client.id !== id));
-    };
+    }
 
-    const addProductToClient = (clientId, product) => {
+    function addProductToClient(clientId, product) {
         setClients(clients.map(client =>
             client.id === clientId
                 ? {
@@ -66,9 +66,9 @@ function ClientsProvider({ children }) {
                 }
                 : client
         ));
-    };
+    }
 
-    const removeProductFromClient = (clientId, productId) => {
+    function removeProductFromClient(clientId, productId) {
         setClients(clients.map(client =>
             client.id === clientId
                 ? {
@@ -77,45 +77,48 @@ function ClientsProvider({ children }) {
                 }
                 : client
         ));
-    };
+    }
 
     //pets data
     let historyCounter = localStorage.getItem('historyCounter') || 100;
 
-    const addPet = (newPet, ownerId, ownerName) => {
+    function addPet(newPet, ownerId, ownerName) {
         const petWithOwner = { ...newPet, ownerId, ownerName, hc: historyCounter, id: historyCounter };
         setPetsData([...petsData, petWithOwner]);
         historyCounter++;
         localStorage.setItem('historyCounter', historyCounter);
-    };
+    }
 
-    const updatePetData = (id, newData) => {
+    function updatePetData(id, newData) {
         setPetsData(petsData.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+    }
 
-    };
-
-    const removePet = (id) => {
+    function removePet(id) {
         setPetsData(petsData.filter(pet => pet.id !== id));
-    };
+    }
 
     //Mascotas en cola de espera
 
-    const addPetToQueueMedical = (newPet) => {
+    function addPetToQueueMedical(newPet) {
         setPetsInQueueMedical([...petsInQueueMedical, newPet]);
-    };
+    }
 
-    const removePetFromQueueMedical = (id) => {
+    function removePetFromQueueMedical(id) {
         setPetsInQueueMedical(petsInQueueMedical.filter(pet => pet.id !== id));
-    };
+    }
 
     //Mascotas en cola grooming
-    const addPetToQueueGrooming = (newPet) => {
+    function addPetToQueueGrooming(newPet) {
         setPetsInQueueGrooming([...petsInQueueGrooming, newPet]);
-    };
+    }
 
-    const removePetFromQueueGrooming = (id) => {
+    function updatePetInQueueGrooming(id, newData) {
+        setPetsInQueueGrooming(petsInQueueGrooming.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+    }
+
+    function removePetFromQueueGrooming(id) {
         setPetsInQueueGrooming(petsInQueueGrooming.filter(pet => pet.id !== id));
-    };
+    }
 
     return (
         <ClientsContext.Provider value={{
@@ -135,6 +138,7 @@ function ClientsProvider({ children }) {
             removePetFromQueueMedical,
             petsInQueueGrooming,
             addPetToQueueGrooming,
+            updatePetInQueueGrooming,
             removePetFromQueueGrooming,
         }}>
             {children}

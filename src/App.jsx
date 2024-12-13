@@ -17,6 +17,7 @@ import { Internments } from './Pages/Internments.jsx';
 import { ActiveOrdersGrooming } from './Pages/grooming/ActiveOrdersGrooming.jsx';
 import { GroomingHistory } from './Pages/grooming/GroomingHistory.jsx';
 import { GroomingOrderCreation } from './Pages/grooming/GroomingOrderCreation.jsx';
+import { EditGroomingOrder } from './Pages/grooming/EditGroomingOrder.jsx';
 import { Clients } from './Pages/Clients.jsx';
 import { CreateClientForm } from './Pages/CreateClientForm.jsx';
 import { ClientInfo } from './Pages/clientData.jsx/ClientInfo.jsx';
@@ -74,6 +75,7 @@ function App() {
                     <Route path="/grooming" element={<ActiveOrdersGrooming />} />
                     <Route path="/grooming/history" element={<GroomingHistory />} />
                     <Route path="/grooming/order-creation/:id" element={<GroomingOrderCreation />} />
+                    <Route path="/grooming/update/:id" element={<EditGroomingOrder />} />
                     <Route path="/clients" element={<Clients />} />
                     <Route path="/clients/create" element={<CreateClientForm />} />
                     <Route path="/clients/client/:id/:section" element={<ClientInfo />} />

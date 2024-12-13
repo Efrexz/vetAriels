@@ -27,6 +27,8 @@ function ProductSearchInput({ addProductToTable, mode }) {
         let serviceMatch = servicesData.filter(service => {
             return service?.serviceName?.toLowerCase().includes(searchTerm.toLowerCase());
         });
+        console.log(serviceMatch);
+
 
         return [...productMatch, ...serviceMatch];
     }
@@ -92,7 +94,7 @@ function ProductSearchInput({ addProductToTable, mode }) {
                                     </span>
                                     <div className="flex items-center gap-3">
                                         <span className="text-lg font-bold text-gray-700">
-                                            s/{productOrService?.salePrice}
+                                            s/{productOrService?.salePrice || productOrService?.price}
                                         </span>
                                         {
                                             productOrService?.availableStock >= 0 && (
