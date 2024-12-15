@@ -102,7 +102,7 @@ function App() {
                     <Route path="/config/user-subsidiaries" element={<Users />} />
                     <Route path="/config/user-subsidiaries/create" element={<CreateUser />} />
                     <Route path="/config/user-subsidiaries/edit/:id" element={<EditUser />} />
-                    <Route path="/config/profile/:section" element={<UserInfo />} />
+                    <Route path="/config/profile/:id/:section" element={<UserInfo />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </ProtectedRoute>

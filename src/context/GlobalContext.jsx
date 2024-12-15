@@ -31,7 +31,6 @@ function GlobalProvider({ children }) {
     const [users, setUsers] = useState(
         localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : defaultUser);
 
-
     //Roles Data
     const [roles, setRoles] = useState(
         localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [
@@ -53,6 +52,10 @@ function GlobalProvider({ children }) {
 
     const updateUserData = (id, newData) => {
         setUsers(users.map(user => user.id === id ? { ...user, ...newData } : user));
+        //si el usuario actual es el que se está actualizando, actualizamos la informacion del active user para que se refleje en la interfaz
+        if (activeUser && activeUser.id === id) {
+            setActiveUser({ ...activeUser, ...newData });
+        }
     };
 
     const removeUser = (id) => {

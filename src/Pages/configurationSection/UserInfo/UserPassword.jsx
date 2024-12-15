@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { GlobalContext } from '@context/GlobalContext';
+import { ErrorModal } from '@components/ErrorModal';
+import { SuccessModal } from '@components/SuccessModal';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import KeyIcon from '@assets/keyIcon.svg?react';
 import InfoIcon from '@assets/infoIcon.svg?react';
@@ -6,29 +10,63 @@ import InfoIcon from '@assets/infoIcon.svg?react';
 
 function UserPassword() {
 
+    const { activeUser, updateUserData } = useContext(GlobalContext);
+    const { id } = useParams();
+
+
+    //Modales
+    const [isErrorModalOpen, setErrorModalOpen] = useState(false);
+    const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
 
     const [formData, setFormData] = useState({
         oldPassword: '',
         newPassword: '',
     });
 
-    const handleChange = (e) => {
+    const [errors, setErrors] = useState({});
+
+    function handleChange(e) {
         const { id, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
             [id]: value
         }));
-    };
+    }
 
-    const updateData = () => {
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.oldPassword || formData.oldPassword.length < 6) {
+            newErrors.oldPassword = 'La contraseña debe tener al menos 6 caracteres';
+        }
+        else if (!formData.newPassword || formData.newPassword.length < 6) {
+            newErrors.newPassword = 'La contraseña debe tener al menos 6 caracteres.';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
+
+    function updatePassword() {
+        //Si el formulario no es válido, no actualizamos nada y mostramos los errores
+        if (!validateForm()) {
+            return;
+        }
         const updatedUserData = {
-            ...formData,
-            mobile: formData.mobile,
-            name: formData.name,
-            lastName: formData.lastName,
+            ...activeUser,
+            password: formData.newPassword,
         };
-        // updatePetData(individualPetData.id, updatedPetInfo);
-    };
+        if (formData.oldPassword === activeUser.password) {
+            updateUserData(Number(id), updatedUserData);
+            setSuccessModalOpen(true);
+            formData.oldPassword = '';
+            formData.newPassword = '';
+        }
+        else {
+            setErrorModalOpen(true);
+        }
+    }
 
     const formFields = [
         {
@@ -74,22 +112,34 @@ function UserPassword() {
                                     value={formData[field.id]}
                                     onChange={handleChange}
                                     disabled={field.disabled}
-                                    className="border rounded-r-lg p-3  w-full hover:border-blue-300 focus-within:border-blue-300"
+                                    className={`border rounded-r-lg p-3 w-full hover:border-blue-300 focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-300'}`}
                                 />
-
                             </div>
+                            {errors[field.id] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                            )}
                         </div>
                     ))}
                 </div>
             </div>
             <div className='flex justify-end items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg'>
                 <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    onClick={updateData}
+                    onClick={updatePassword}
                 >
                     <PlusIcon className="w-5 h-5 text-white" />
                     GUARDAR CAMBIOS
                 </button>
             </div>
+            {
+                isErrorModalOpen && (
+                    <ErrorModal onClose={() => setErrorModalOpen(false)} typeOfError="password" />
+                )
+            }
+            {
+                isSuccessModalOpen && (
+                    <SuccessModal onClose={() => setSuccessModalOpen(false)} />
+                )
+            }
         </div >
 
     );

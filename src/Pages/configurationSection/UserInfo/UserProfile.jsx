@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { GlobalContext } from '@context/GlobalContext';
+import { useParams } from 'react-router-dom';
+import { SuccessModal } from '@components/SuccessModal';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import phoneIcon from '@assets/phoneIcon.svg?react';
@@ -6,13 +9,18 @@ import EmailIcon from '@assets/emailIcon.svg?react';
 
 
 function UserProfile() {
+    const { activeUser, updateUserData } = useContext(GlobalContext);
+    const { id } = useParams();
+
+    //Modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [formData, setFormData] = useState({
-        email: 'AdministracionAriels@gmail.com',
-        mobile: '917104426',
-        name: 'Administracion',
-        lastName: 'Ariels',
-        role: 'Jefe de jefes',
+        email: activeUser?.email || '',
+        mobile: activeUser?.phone || '',
+        name: activeUser?.name || '',
+        lastName: activeUser?.lastName || '',
+        role: activeUser?.rol || '',
     });
 
     const handleChange = (e) => {
@@ -25,12 +33,12 @@ function UserProfile() {
 
     const updateData = () => {
         const updatedUserData = {
-            ...formData,
+            ...activeUser,
             mobile: formData.mobile,
             name: formData.name,
             lastName: formData.lastName,
         };
-        // updatePetData(individualPetData.id, updatedPetInfo);
+        updateUserData(Number(id), updatedUserData);
     };
 
     const formFields = [
@@ -90,30 +98,14 @@ function UserProfile() {
                                         <field.icon className="w-5 h-5 text-gray-600" />
                                     </div>
                                 }
-
-                                {field.type === 'select' ? (
-                                    <select
-                                        id={field.id}
-                                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-0"
-                                        onChange={handleChange}
-                                        value={formData[field.id]}
-                                    >
-                                        {field.options.map((option, i) => (
-                                            <option key={i} value={option}>
-                                                {option}
-                                            </option>
-                                        ))}
-                                    </select>
-                                ) : (
-                                    <input
-                                        type={field.type}
-                                        id={field.id}
-                                        value={formData[field.id]}
-                                        onChange={handleChange}
-                                        disabled={field.disabled}
-                                        className="border rounded-r-lg p-3  w-full hover:border-blue-300 focus-within:border-blue-300"
-                                    />
-                                )}
+                                <input
+                                    type={field.type}
+                                    id={field.id}
+                                    value={formData[field.id]}
+                                    onChange={handleChange}
+                                    disabled={field.disabled}
+                                    className="border rounded-r-lg p-3  w-full hover:border-blue-300 focus-within:border-blue-300"
+                                />
                             </div>
                         </div>
                     ))}
@@ -121,12 +113,20 @@ function UserProfile() {
             </div>
             <div className='flex justify-end items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg'>
                 <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    onClick={updateData}
+                    onClick={() => {
+                        updateData()
+                        setIsModalOpen(true)
+                    }}
                 >
                     <PlusIcon className="w-5 h-5 text-white" />
                     GUARDAR CAMBIOS
                 </button>
             </div>
+            {
+                isModalOpen && (
+                    <SuccessModal onClose={() => setIsModalOpen(false)} />
+                )
+            }
         </div >
 
     );

@@ -65,7 +65,7 @@ function HorizontalMenu({ mode }) {
         pets: `/pets/pet/${id}`,
         services: `/service`,
         products: `/products/product/${id}`,
-        user: `/config/profile`,
+        user: `/config/profile/${id}`,
         restock: `/charges/charge/${id}`,
         discharge: `/discharges/discharge/${id}`,
     }[mode];

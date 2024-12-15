@@ -127,7 +127,7 @@ function NavBar() {
                             <Link
                                 className="text-blue-500 cursor-pointer hover:underline"
                                 onClick={() => {
-                                    setShowPatientList(false);
+                                    showBathList(false);
                                     setActiveIcon(null);// Cerramos el menu y desactivamos el icono
                                 }}
                                 to="/grooming">
@@ -173,14 +173,15 @@ function NavBar() {
                         <li
                             className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
                             onClick={() => {
-                                navigate("/config/profile/update")
+                                setShowUserOptions(false);
+                                navigate(`/config/profile/${activeUser?.id}/update`)
                             }}
                         >
-                            <div className='flex items-center gap-2'>
+                            <div className='flex items-center just gap-2'>
                                 <RoleUserIcon className="w-5 h-5 text-gray-600" />
-                                <span className="ml-2 text-gray-600">Administracion</span>
+                                <span className="ml-2 text-gray-600">{activeUser?.name}</span>
                             </div>
-                            <span className="block text-gray-500 text-xs pl-9">administracionAriels@gmail.com</span>
+                            <span className="block text-gray-500 text-xs pl-9">{activeUser?.email}</span>
                         </li>
                         <li
                             className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"

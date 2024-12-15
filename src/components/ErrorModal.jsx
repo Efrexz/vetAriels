@@ -7,6 +7,7 @@ function ErrorModal({ onClose, typeOfError }) {
         stock: "El producto seleccionado no tiene stock disponible.",
         form: "El formulario contiene errores.",
         permission: "No tienes permisos para realizar esta acción.",
+        password: "La contraseña ingresada no es correcta.",
         default: "Ha ocurrido un error inesperado.",
     };
 

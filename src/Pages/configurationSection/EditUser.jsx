@@ -63,7 +63,6 @@ const EditUser = () => {
             rol: formData.rol,
             status: formData.status,
         };
-
         updateUserData(Number(id), updateData);
         navigate(`/config/user-subsidiaries`);
 

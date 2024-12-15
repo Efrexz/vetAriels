@@ -5,7 +5,7 @@ import { ProductSearchInput } from '@components/ProductSearchInput';
 import { QuantityCounter } from '@components/QuantityCounter';
 import { PriceModificationModal } from '@components/PriceModificationModal';
 import { QuantityModificationModal } from '@components/QuantityModificationModal';
-import { SuccesModal } from '../../components/SuccesModal';
+import { SuccessModal } from '@components/SuccessModal';
 import BathIcon from '@assets/bathIcon.svg?react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
@@ -303,7 +303,7 @@ function EditGroomingOrder() {
                 }
                 {
                     isSuccessModalOpen && (
-                        <SuccesModal
+                        <SuccessModal
                             onClose={() => setIsSuccessModalOpen(false)}
                         />
                     )

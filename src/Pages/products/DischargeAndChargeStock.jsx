@@ -30,13 +30,13 @@ function DischargeAndChargeStock({ typeOfOperation }) {
         operationType: "",
     });
 
-    const handleChange = (e) => {
+    function handleChange(e) {
         const { id, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
             [id]: value
         }));
-    };
+    }
 
 
     const { addDischarge, addRestock } = useContext(ProductsAndServicesContext);
@@ -64,6 +64,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
         setSelectedProducts(updatedProducts);
     }
 
+    //Validación de los campos
     function validateForm() {
         const newErrors = {};
 
