@@ -27,9 +27,6 @@ function ProductSearchInput({ addProductToTable, mode }) {
         let serviceMatch = servicesData.filter(service => {
             return service?.serviceName?.toLowerCase().includes(searchTerm.toLowerCase());
         });
-        console.log(serviceMatch);
-
-
         return [...productMatch, ...serviceMatch];
     }
 

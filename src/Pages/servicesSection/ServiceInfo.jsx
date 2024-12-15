@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UpdateService } from "./UpdateService.jsx";
 import { EditServicePrice } from "./EditServicePrice.jsx";
 import { HorizontalMenu } from "@components/HorizontalMenu.jsx";
@@ -8,6 +8,7 @@ import PlusIcon from "@assets/plusIcon.svg?react";
 function ServiceInfo() {
 
     const { section } = useParams();
+    const navigate = useNavigate();
 
     return (
         <main className="w-full mx-auto p-6 bg-white">
@@ -19,7 +20,7 @@ function ServiceInfo() {
                 <div className='flex justify-end items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md '>
                     <button
                         className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                    // onClick={() => navigate(-1)}
+                        onClick={() => navigate("/services")}
                     >
                         <ReturnIcon className="w-5 h-5 text-gray-700" />
                         REGRESAR

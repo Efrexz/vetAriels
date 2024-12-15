@@ -59,10 +59,10 @@ function AddNewProductModal({ onClose }) {
             line: formData.line,
             category: formData.category,
             subcategory: formData.subcategory,
-            stockMinimum: formData.stockMinimum,
+            stockMinimum: Number(formData.stockMinimum),
             availableStock: 0,
-            cost: formData.cost,
-            salePrice: formData.salePrice,
+            cost: Number(formData.cost),
+            salePrice: Number(formData.salePrice),
             registrationDate: currentDate,
             registrationTime: currentTime,
             status: true

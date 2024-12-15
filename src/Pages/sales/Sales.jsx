@@ -134,9 +134,6 @@ function Sales() {
     const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 
-    console.log({ selectedProducts });
-
-
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar ">
             <h1 className="text-3xl font-bold text-[#4CAF50] flex items-center mb-4 border-b-2 border-gray-100 pb-5">
@@ -360,13 +357,13 @@ function Sales() {
                                         <button className="text-blue-500 hover:text-blue-700">
                                             <ClockIcon className="w-4 h-4" />
                                         </button>
-                                        <button className="text-green-500 hover:text-blue-700">
+                                        <button className="text-green-500 hover:text-green-600">
                                             <NewUserIcon className="w-4 h-4" />
                                         </button>
-                                        <button className="text-orange-400 hover:text-blue-700">
+                                        <button className="text-orange-400 hover:text-orange-500">
                                             <TagIcon className='w-4 h-4  cursor-pointer' />
                                         </button>
-                                        <button className="text-orange-500 hover:text-blue-700">
+                                        <button className="text-orange-400 hover:text-orange-500">
                                             <GiftIcon className='w-4 h-4 cursor-pointer' />
                                         </button>
                                         <button

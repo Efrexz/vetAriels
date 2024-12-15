@@ -137,7 +137,7 @@ function Services() {
                                     <td className="py-2 px-4 text-center border-2">{service?.serviceName}</td>
                                     <td className="py-2 px-4 text-center border-2">{service?.line}</td>
                                     <td className="py-2 px-4 text-center border-2">{service?.category}</td>
-                                    <td className="py-2 px-4 text-center border-2">{service?.price}</td>
+                                    <td className="py-2 px-4 text-center border-2">{service?.salePrice}</td>
                                     <td className="py-2 px-4 text-center border-2 ">
                                         <span
                                             className={`inline-block cursor-pointer w-4 h-4 rounded-full ${service?.status ? "bg-green-500" : "bg-red-500"}`}

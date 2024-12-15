@@ -18,7 +18,7 @@ function DashBoard() {
             name: "Ventas",
             icon: ShoppingCart,
             color: "bg-green-500",
-            link: "/sales"
+            link: "/sales/client/no_client"
         },
         {
             name: "Cuentas activas",
@@ -72,7 +72,7 @@ function DashBoard() {
             name: "Configuración",
             icon: ConfigurationIcon,
             color: "bg-gray-400",
-            link: "/config"
+            link: "/config/subsidiary"
         },
     ]
     return (

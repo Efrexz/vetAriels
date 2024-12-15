@@ -14,7 +14,7 @@ import StoreIcon from '@assets/storeIcon.svg?react';
 
 function NavBar() {
     const { petsInQueueMedical, petsInQueueGrooming } = useContext(ClientsContext);
-    const { logout } = useContext(GlobalContext);
+    const { logout, companyData } = useContext(GlobalContext);
     const navigate = useNavigate();
 
     const [showPatientList, setShowPatientList] = useState(false);
@@ -63,7 +63,7 @@ function NavBar() {
                 to="/"
                 className='w-[50%] items-center cursor-pointer'
             >
-                <h1 className="text-2xl font-medium cursor-pointer">VETERINARIA ARIEL´S EIRL</h1>
+                <h1 className="text-2xl font-medium cursor-pointer">{companyData?.clinicName || 'VETERINARIA ARIEL´S EIRL'}</h1>
             </Link>
             <div className="flex justify-end items-center gap-5 w-full">
                 <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" onClick={toggleSearchInput} />

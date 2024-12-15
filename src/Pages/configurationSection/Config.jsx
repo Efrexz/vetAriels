@@ -1,7 +1,7 @@
-
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { GlobalContext } from '@context/GlobalContext';
 import { HorizontalMenu } from '@components/HorizontalMenu';
+import { SuccessModal } from "@components/SuccessModal";
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
 import PhoneIcon from '@assets/phoneIcon.svg?react';
@@ -12,12 +12,32 @@ import FacebookIcon from '@assets/facebook.svg?react';
 
 function Config() {
 
-    const { setThemeColor } = useContext(GlobalContext);
+    const { setThemeColor, companyData, setCompanyData } = useContext(GlobalContext);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+    const [formData, setFormData] = useState({
+        clinicName: companyData?.clinicName || '',
+        email: companyData?.email || '',
+        department: companyData?.department || '',
+        province: companyData?.province || '',
+        district: companyData?.district || '',
+        address: companyData?.address || '',
+        phone: companyData?.phone || '',
+        facebook: companyData?.facebook || '',
+    });
+
+    function handleChange(e) {
+        const { id, value } = e.target;
+        setFormData({
+            ...formData,
+            [id]: value
+        });
+    }
 
     const formFields = [
         {
             label: 'Nombre de la clínica',
-            id: 'clinic_name',
+            id: 'clinicName',
             type: 'text',
             icon: HospitalIcon,
             required: true
@@ -31,38 +51,38 @@ function Config() {
         },
         {
             label: 'Departamento *',
-            id: 'departamento',
+            id: 'department',
             type: 'select',
             options: ['LIMA']
         },
         {
             label: 'Provincia *',
-            id: 'provincia',
+            id: 'province',
             type: 'select',
             options: ['LIMA']
         },
         {
             label: 'Distrito',
-            id: 'distrito',
+            id: 'district',
             type: 'select',
             options: ['LIMA']
         },
         {
             label: 'Dirección',
-            id: 'direccion',
+            id: 'address',
             type: 'text',
             icon: LocationIcon,
         },
         {
             label: 'Teléfono Fijo',
-            id: 'telefono_fijo',
+            id: 'landPhone',
             type: 'text',
             icon: PhoneIcon,
             required: true
         },
         {
             label: 'Celular',
-            id: 'celular',
+            id: 'phone',
             type: 'text',
             icon: PhoneIcon,
         },
@@ -82,6 +102,22 @@ function Config() {
         { color: 'purple', bgClass: 'bg-purple-400', hoverClass: 'hover:bg-purple-500' },
         { color: 'gray', bgClass: 'bg-gray-400', hoverClass: 'hover:bg-gray-500' },
     ];
+
+    function updateCompanyData() {
+        const updatedCompanyData = {
+            ...companyData,
+            clinicName: formData.clinicName,
+            email: formData.email,
+            department: formData.department,
+            province: formData.province,
+            district: formData.district,
+            address: formData.address,
+            phone: formData.phone,
+            facebook: formData.facebook,
+        };
+        setIsSuccessModalOpen(true);
+        setCompanyData(updatedCompanyData);
+    }
 
     return (
         <div className="container mx-auto p-6">
@@ -113,6 +149,8 @@ function Config() {
                                         <select
                                             id={field.id}
                                             className="border rounded-lg p-3 bg-gray-50 w-full hover:border-blue-300 focus-within:border-blue-300"
+                                            value={formData[field.id]}
+                                            onChange={handleChange}
                                         >
                                             {field.options.map((option, i) => (
                                                 <option key={i} value={option}>
@@ -125,6 +163,8 @@ function Config() {
                                             className="border rounded-r-lg p-3 bg-gray-50 w-full hover:border-blue-300 focus-within:border-blue-300"
                                             type={field.type}
                                             id={field.id}
+                                            value={formData[field.id]}
+                                            onChange={handleChange}
                                             required={field.required}
                                         />
                                     )}
@@ -150,11 +190,18 @@ function Config() {
             </div>
             <div className='flex justify-end items-center bg-gray-100 py-3 px-5 shadow-lg rounded-b-lg'>
                 <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
+                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
+                    onClick={updateCompanyData}
+                >
                     <PlusIcon className="w-5 h-5 text-white" />
                     ACTUALIZAR
                 </button>
             </div>
+            {
+                isSuccessModalOpen && (
+                    <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
+                )
+            }
         </div>
     );
 }

@@ -22,7 +22,10 @@ function ActiveOrders() {
 
     const { clients } = useContext(ClientsContext);
 
+    //filtramos los clientes que tengan por lo menos un producto en la cola de ventas
     const activeAccounts = clients.filter(client => client?.products?.length > 0);
+    console.log(activeAccounts);
+
     const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6 overflow-auto">
@@ -93,7 +96,7 @@ function ActiveOrders() {
                                     </td>
                                     <td className="py-2 text-center border">
                                         <span>
-                                            {account?.products?.reduce((acc, product) => acc + product?.price, 0)}
+                                            {account?.products?.reduce((acc, product) => acc + product?.salePrice, 0)}
                                         </span>
                                     </td>
                                     <td className="py-2 text-center border">

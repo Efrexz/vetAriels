@@ -24,7 +24,18 @@ function GlobalProvider({ children }) {
         registrationTime: "4:51:27 PM",
         rol: "Asistente Administrativo",
         status: "ACTIVO"
-    }]
+    }];
+
+    const defaultCompanyData = {
+        clinicName: "VETERINARIA ARIEL´S EIRL",
+        email: "vetariel@gmail.com",
+        department: "LIMA",
+        province: "LIMA",
+        district: "LIMA",
+        address: "Av. de la Constitución, No. 100, Lima",
+        phone: "917104426",
+        facebook: "https://www.facebook.com/vetariel/"
+    };
 
 
     //Users Data
@@ -76,10 +87,15 @@ function GlobalProvider({ children }) {
     };
 
     const [themeColor, setThemeColor] = useState(localStorage.getItem('themeColor') ? localStorage.getItem('themeColor') : 'blue');
+    const [companyData, setCompanyData] = useState(localStorage.getItem('companyData') ? JSON.parse(localStorage.getItem('companyData')) : defaultCompanyData);
 
     useEffect(() => {
         localStorage.setItem('themeColor', themeColor);
     }, [themeColor]);
+
+    useEffect(() => {
+        localStorage.setItem('companyData', JSON.stringify(companyData));
+    }, [companyData]);
 
 
 
@@ -97,8 +113,9 @@ function GlobalProvider({ children }) {
             addRole,
             updateRoleData,
             removeRole,
+            companyData,
+            setCompanyData,
             logout,
-
         }}>
             {children}
         </GlobalContext.Provider>

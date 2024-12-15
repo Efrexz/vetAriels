@@ -19,7 +19,6 @@ import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
 import BuildingShieldIcon from '@assets/buildingShield.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
-import FileContractIcon from '@assets/fileContract.svg?react';
 
 function SideBarMenu() {
 
@@ -158,11 +157,6 @@ function SideBarMenu() {
                     name: "Roles",
                     icon: RoleUserIcon,
                     path: "/config/roles"
-                },
-                {
-                    name: "Cuenta",
-                    icon: FileContractIcon,
-                    path: "/config/subscriptions"
                 },
             ],
             path: "/configuracion"
