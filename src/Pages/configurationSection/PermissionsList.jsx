@@ -1,4 +1,5 @@
 import { ToggleSwitchButton } from "@components/ToggleSwitchButton";
+import KeyIcon from '@assets/keyIcon.svg?react';
 
 function PermissionsList() {
     const sections = [
@@ -137,6 +138,10 @@ function PermissionsList() {
 
     return (
         <div className="p-6 bg-gray-100 ">
+            <h1 className="text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <KeyIcon className="w-9 h-9 mr-2" />
+                Permisos
+            </h1>
             <div className="w-full mx-auto bg-white shadow-md rounded-lg p-6">
                 {sections.map((section, index) => (
                     <div key={index} className="mb-3 border-b border-gray-200 pb-3">

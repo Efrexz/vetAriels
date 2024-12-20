@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext.jsx';
 import { AddNewServiceModal } from '@components/AddNewServiceModal.jsx';
+import { DeleteModal } from '@components/DeleteModal.jsx';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
@@ -52,7 +53,9 @@ const tableHeaders = ["Cod. de sistema", "Fecha de Registro", "Nombre", "Línea"
 
 function Services() {
     const { servicesData, removeService } = useContext(ProductsAndServicesContext);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [serviceToDelete, setServiceToDelete] = useState(null);
 
     const navigate = useNavigate();
     return (
@@ -83,20 +86,12 @@ function Services() {
                         </div>
                         <button
                             className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => setIsSuccessModalOpen(true)}
                         >
                             <PlusIcon className="w-5 h-5" />
                             CREAR NUEVO SERVICIO
                         </button>
                     </div>
-
-                    {
-                        isModalOpen && (
-                            <AddNewServiceModal
-                                onClose={() => setIsModalOpen(false)}
-                            />
-                        )
-                    }
                     <div className="flex items-center space-x-4 mb-1">
                         {
                             filterOptions.map((option, index) => (
@@ -146,17 +141,37 @@ function Services() {
                                     <td className="py-6 px-4 text-center border-t-2 border-l-2 border-r-2 flex justify-center gap-2">
                                         <PenIcon
                                             className="w-4 h-4 text-green-500 cursor-pointer"
-                                            onClick={() => navigate("/service/update/")}
+                                            onClick={() => navigate(`/service/${service.id}/update`)}
                                         />
                                         <TrashIcon
                                             className="w-4 h-4 text-red-500 cursor-pointer"
-                                            onClick={() => removeService(service.id)}
+                                            onClick={() => {
+                                                setIsDeleteModalOpen(true)
+                                                setServiceToDelete(service)
+                                            }}
                                         />
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    {
+                        isSuccessModalOpen && (
+                            <AddNewServiceModal
+                                onClose={() => setIsSuccessModalOpen(false)}
+                            />
+                        )
+                    }
+                    {
+                        isDeleteModalOpen && (
+                            <DeleteModal
+                                onClose={() => setIsDeleteModalOpen(false)}
+                                // onConfirm={deleteProduct}
+                                productOrServiceToDelete={serviceToDelete}
+                                mode="services"
+                            />
+                        )
+                    }
                 </div>
                 <div className="flex justify-between items-center mt-4">
                     <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 2 | Total 2</p>

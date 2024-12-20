@@ -60,7 +60,6 @@ function ProductsAndServicesProvider({ children }) {
 
 
     //Descargas de Productos
-
     const isDischargesData = localStorage.getItem('dischargesData');
     if (!isDischargesData) {
         localStorage.setItem('dischargesData', JSON.stringify([]));
@@ -104,6 +103,8 @@ function ProductsAndServicesProvider({ children }) {
     }
 
     const [servicesData, setServicesData] = useState(localStorage.getItem('servicesData') ? JSON.parse(localStorage.getItem('servicesData')) : []);
+    console.log(servicesData);
+
 
 
     let serviceId = localStorage.getItem('serviceId') || 100;
@@ -113,6 +114,10 @@ function ProductsAndServicesProvider({ children }) {
         setServicesData([...servicesData, newServiceData]);
         serviceId++;
         localStorage.setItem('serviceId', serviceId);
+    }
+
+    function updateServiceData(id, newData) {
+        setServicesData(servicesData.map(service => service.id === id ? { ...service, ...newData } : service));
     }
 
     function removeService(id) {
@@ -131,6 +136,7 @@ function ProductsAndServicesProvider({ children }) {
             removeProduct,
             servicesData,
             addNewService,
+            updateServiceData,
             removeService,
             dischargesData,
             addDischarge,

@@ -35,7 +35,7 @@ function HorizontalMenu({ mode }) {
         services: [
             { name: 'Editar', url: "update" },
             { name: 'Precios', url: "prices" },
-            { name: 'Codigo de barras', url: "barcode" },
+            // { name: 'Codigo de barras', url: "barcode" },
         ],
         products: [
             { name: 'Editar', url: "update" },
@@ -63,7 +63,7 @@ function HorizontalMenu({ mode }) {
     const baseUrl = {
         clients: `/clients/client/${id}`,
         pets: `/pets/pet/${id}`,
-        services: `/service`,
+        services: `/service/${id}`,
         products: `/products/product/${id}`,
         user: `/config/profile/${id}`,
         restock: `/charges/charge/${id}`,

@@ -42,6 +42,7 @@ function AddNewServiceModal({ onClose }) {
             registrationDate: currentDate,
             registrationTime: currentTime,
             status: true,
+            availableForSale: true,
         };
         addNewService(newService);
         onClose();

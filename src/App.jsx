@@ -91,7 +91,7 @@ function App() {
                     <Route path="/discharges/create" element={<DischargeAndChargeStock typeOfOperation="discharge" />} />
                     <Route path="/discharges/discharge/:id/:section/" element={<OperationInfo typeOfOperation="discharge" />} />
                     <Route path="/services" element={<Services />} />
-                    <Route path="/service/:section/" element={<ServiceInfo />} />
+                    <Route path="/service/:id/:section" element={<ServiceInfo />} />
                     <Route path="/config/subsidiary" element={<Config />} />
                     <Route path="/config/fiscal-data" element={<FiscalData />} />
                     <Route path="/config/invoice-types" element={<VoucherConfiguration />} />

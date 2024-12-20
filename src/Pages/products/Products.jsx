@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
 import { AddNewProductModal } from '@components/AddNewProductModal.jsx';
-import { DeleteProductModal } from '@components/DeleteProductModal.jsx';
+import { DeleteModal } from '@components/DeleteModal.jsx';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
@@ -113,10 +113,11 @@ function Products() {
 
                     {
                         isDeleteModalOpen && (
-                            <DeleteProductModal
+                            <DeleteModal
                                 onClose={() => setIsDeleteModalOpen(false)}
                                 // onConfirm={deleteProduct}
-                                productToDelete={productToDelete}
+                                productOrServiceToDelete={productToDelete}
+                                mode="products"
                             />
                         )
                     }
