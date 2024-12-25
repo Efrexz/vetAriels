@@ -20,6 +20,7 @@ function ClientsProvider({ children }) {
     const [petsInQueueMedical, setPetsInQueueMedical] = useState(
         localStorage.getItem('petsInQueueMedical') ? JSON.parse(localStorage.getItem('petsInQueueMedical')) : []
     );
+    console.log(petsInQueueMedical);
 
     //Mascotas en cola grooming
     const [petsInQueueGrooming, setPetsInQueueGrooming] = useState(
@@ -97,10 +98,14 @@ function ClientsProvider({ children }) {
         setPetsData(petsData.filter(pet => pet.id !== id));
     }
 
-    //Mascotas en cola de espera
+    //Mascotas en cola de espera clinica
 
     function addPetToQueueMedical(newPet) {
         setPetsInQueueMedical([...petsInQueueMedical, newPet]);
+    }
+
+    function updatePetInQueueMedical(id, newData) {
+        setPetsInQueueMedical(petsInQueueMedical.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
     }
 
     function removePetFromQueueMedical(id) {
@@ -135,6 +140,7 @@ function ClientsProvider({ children }) {
             historyCounter,
             petsInQueueMedical,
             addPetToQueueMedical,
+            updatePetInQueueMedical,
             removePetFromQueueMedical,
             petsInQueueGrooming,
             addPetToQueueGrooming,

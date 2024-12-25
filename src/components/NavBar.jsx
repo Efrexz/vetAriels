@@ -114,7 +114,13 @@ function NavBar() {
                     <ul>
                         {
                             petsInQueueGrooming.map((pet, index) => (
-                                <li className="p-3 border-b flex items-center" key={index}>
+                                <li
+                                    key={index}
+                                    className="p-3 border-b flex items-center"
+                                    onClick={() => {
+                                        window.location.href = `/pets/pet/${pet?.petData?.id}/update`;
+                                    }}
+                                >
                                     <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
                                     <div className='ml-2 gap-2'>
                                         <span className=" text-blue-500 cursor-pointer hover:underline">{pet.petData.petName}</span>
@@ -143,8 +149,14 @@ function NavBar() {
                 <div className="absolute top-16 right-24 bg-white shadow-lg rounded-lg w-64 z-20">
                     <ul>
                         {petsInQueueMedical.map((pet, index) => (
-                            <li key={index} className="p-3 border-b flex items-center hover:bg-gray-50">
-                                <img src={pet.img || "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg"} alt="PetImage" className="w-10 h-10 rounded-lg" />
+                            <li
+                                key={index}
+                                className="p-3 border-b flex items-center hover:bg-gray-50"
+                                onClick={() => {
+                                    window.location.href = `/pets/pet/${pet?.petData?.id}/update`;
+                                }}
+                            >
+                                <img src={pet.img || "https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp"} alt="PetImage" className="w-10 h-10 rounded-lg" />
                                 <div className='ml-3 gap-2'>
                                     <span className=" text-blue-500 cursor-pointer hover:underline">{pet.petData.petName}</span>
                                     <span className="block text-gray-500 text-xs">{pet.timeOfAttention}</span>

@@ -1,5 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
+import { EditQueuePatientModal } from '@components/EditQueuePatientModal';
+import { ConfirmActionModal } from '@components/ConfirmActionModal';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
@@ -10,7 +13,7 @@ import Stethoscope from '@assets/stethoscope.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import EjectIcon from '@assets/ejectIcon.svg?react';
-import { Link } from 'react-router-dom';
+
 
 
 const headlinesOptions = [
@@ -39,6 +42,11 @@ const tableHeaders = ["N°", "Fecha de Atención", "Mascota", "Propietario", "M�
 function ClinicQueue() {
 
     const { petsInQueueMedical } = useContext(ClientsContext);
+    const [isEditQueueModalOpen, setIsEditQueueModalOpen] = useState(false);
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
+    const [patientToDelete, setPatientToDelete] = useState(null);
+    const [queueDataToEdit, setQueueDataToEdit] = useState(null);
+
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -145,9 +153,21 @@ function ClinicQueue() {
                                         <Stethoscope className="w-5 h-5 text-blue-500 cursor-pointer" />
                                     </td>
                                     <td className="py-10 px-4 text-center border flex justify-center space-x-2">
-                                        <PenIcon className="w-4 h-4 text-orange-500 cursor-pointer" />
+                                        <PenIcon
+                                            className="w-4 h-4 text-orange-500 cursor-pointer"
+                                            onClick={() => {
+                                                setQueueDataToEdit(petInQueue)
+                                                setIsEditQueueModalOpen(true)
+                                            }}
+                                        />
                                         <Stethoscope className="w-4 h-4 text-blue-500 cursor-pointer" />
-                                        <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
+                                        <TrashIcon
+                                            className="w-4 h-4 text-red-500 cursor-pointer"
+                                            onClick={() => {
+                                                setPatientToDelete(petInQueue)
+                                                setIsConfirmActionModalOpen(true)
+                                            }}
+                                        />
                                         <EjectIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>
                                 </tr>
@@ -155,6 +175,24 @@ function ClinicQueue() {
                         </tbody>
                     </table>
                 </div>
+
+                {
+                    isEditQueueModalOpen && (
+                        <EditQueuePatientModal
+                            queueData={queueDataToEdit}
+                            onClose={() => setIsEditQueueModalOpen(false)}
+                        />
+                    )
+                }
+
+                {
+                    isConfirmActionModalOpen && (
+                        <ConfirmActionModal
+                            elementToDelete={patientToDelete}
+                            onClose={() => setIsConfirmActionModalOpen(false)}
+                        />
+                    )
+                }
                 <div className="flex justify-between items-center mt-4">
                     <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
                     <div className="flex space-x-2">

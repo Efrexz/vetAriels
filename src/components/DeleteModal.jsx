@@ -13,7 +13,7 @@ function DeleteModal({ productOrServiceToDelete, onClose, mode }) {
         setItemValue(value);
     }
 
-    function deleteService() {
+    function deleteProductOrService() {
         // Validamos si el valor que escribimos coincide con el nombre del producto o servicio
         const isValid = itemValue.toLowerCase() === productOrServiceToDelete?.productName?.toLowerCase() || itemValue.toLowerCase() === productOrServiceToDelete?.serviceName?.toLowerCase();
 
@@ -73,7 +73,7 @@ function DeleteModal({ productOrServiceToDelete, onClose, mode }) {
                         <button
                             type="button"
                             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 flex items-center"
-                            onClick={deleteService}
+                            onClick={deleteProductOrService}
                         >
                             <DiskIcon className="w-5 h-5 mr-2" />
                             Confirmar Eliminado

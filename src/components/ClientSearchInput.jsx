@@ -66,7 +66,6 @@ function ClientSearchInput({ mode }) {
                                     setSearchTerm(`${client.firstName} ${client.lastName}`);
                                     setIsFilteredListVisible(false); // Ocultar dropdown al seleccionar
                                     window.location.href = `${mode === "sales" ? "/sales/client" : "/grooming/order-creation"}/${client.id}`;//Usamos el window.location en vez del navigate para poder recargar la pagina al seleccionar un cliente para evitar el error que teniamos que quedaba el nombre del antiguo usuario en el input de busqueda
-
                                 }}
                             >
                                 <div className="font-bold text-black">{`${client.firstName} ${client.lastName}`}</div>

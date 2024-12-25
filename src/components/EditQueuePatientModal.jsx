@@ -5,42 +5,27 @@ import PlusIcon from '@assets/plusIcon.svg?react';
 import ClockIcon from '@assets/clockIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
-function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
+function EditQueuePatientModal({ onClose, queueData }) {
+    const { petsData } = useContext(ClientsContext);
+    const { updatePetInQueueMedical } = useContext(ClientsContext);
+    const petsByOwner = petsData.filter(pet => pet.ownerId === queueData?.petData?.ownerId);
     // Estado del formulario
-    const [selectedDoctor, setSelectedDoctor] = useState("Medico 1");
-    const [selectedPet, setSelectedPet] = useState(petsByOwner[0]?.petName);
-    const [notes, setNotes] = useState('');
+    const [selectedDoctor, setSelectedDoctor] = useState(queueData?.assignedDoctor);
+    const [selectedPet, setSelectedPet] = useState(queueData?.petData?.petName);
+    const [notes, setNotes] = useState(queueData?.notes || '');
 
-    //obtenemos la fecha y la hora actuales a la cual se esta enviando a cola al paciente
-    const now = new Date();
-    const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-    const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
+    //De las mascotas filtradas por dueño, buscamos la que seleccionamos para poderle enviar de nuevo la nueva data
+    const newPetDataSelected = petsByOwner.find(pet => pet.petName === selectedPet);
 
-    const { addPetToQueueMedical } = useContext(ClientsContext);
-
-    // Manejo del envío del formulario
-    function sendPatientToQueue() {
-        const petSelected = petsByOwner?.find(pet => pet.petName === selectedPet);
-        function generateId() {
-            const part1 = Date.now().toString(35)
-            const part2 = Math.random().toString(36).slice(2)
-            return part1 + part2
-        }
-
-        const dataToSend = {
-            id: generateId(),
+    function updateQueueData() {
+        const dataToUpdate = {
+            ...queueData,
             assignedDoctor: selectedDoctor,
-            petData: petSelected,
+            petData: newPetDataSelected,
             notes,
-            dateOfAttention: currentDate,
-            timeOfAttention: currentTime,
             state: "En espera",
         };
-
-        // agregamos el paciente a la cola médica
-        addPetToQueueMedical(dataToSend);
-
-        // cerramos el modal después de enviar los datos
+        updatePetInQueueMedical(queueData.id, dataToUpdate);
         onClose();
     }
 
@@ -59,7 +44,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                                 type="text"
                                 id="date"
                                 className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300"
-                                value={`${currentDate} ${currentTime}`}
+                                value={`${queueData?.dateOfAttention} ${queueData?.timeOfAttention}`}
                                 disabled
                             />
                         </div>
@@ -72,6 +57,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         <select
                             id="doctor"
                             className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                            value={selectedDoctor}
                             onChange={(e) => setSelectedDoctor(e.target.value)}
                         >
                             <option>Médico 1</option>
@@ -85,7 +71,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         </label>
                         <div className="flex items-center bg-gray-100 p-2 rounded-md">
                             <RoleUserIcon className="w-5 h-5 mr-3 text-gray-600" />
-                            <span>{clientData.firstName} {clientData.lastName}</span>
+                            <span>{queueData?.petData?.ownerName}</span>
                         </div>
                     </div>
 
@@ -96,7 +82,8 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         <select
                             id="pet"
                             className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
-                            onChange={(e) => setSelectedPet(e.target.value)}
+                            value={selectedPet}
+                            onChange={(e) => { setSelectedPet(e.target.value) }}
                         >
                             {
                                 petsByOwner?.map((pet, index) => (
@@ -127,6 +114,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none "
                         rows="4"
                         placeholder="Escribe las notas aquí..."
+                        value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                     ></textarea>
                 </div>
@@ -141,7 +129,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </button>
                     <button
                         className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md text-md font-semibold hover:bg-green-600"
-                        onClick={sendPatientToQueue}
+                        onClick={updateQueueData}
                     >
                         <PlusIcon className="w-5 h-5 mr-2" />
                         Generar
@@ -153,10 +141,9 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
 }
 
 
-AddPatientToQueueModal.propTypes = {
+EditQueuePatientModal.propTypes = {
     onClose: PropTypes.func.isRequired,
-    petsByOwner: PropTypes.array.isRequired,
-    clientData: PropTypes.object.isRequired,
+    queueData: PropTypes.object.isRequired,
 };
 
-export { AddPatientToQueueModal };
+export { EditQueuePatientModal };

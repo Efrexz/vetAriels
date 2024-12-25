@@ -103,9 +103,6 @@ function ProductsAndServicesProvider({ children }) {
     }
 
     const [servicesData, setServicesData] = useState(localStorage.getItem('servicesData') ? JSON.parse(localStorage.getItem('servicesData')) : []);
-    console.log(servicesData);
-
-
 
     let serviceId = localStorage.getItem('serviceId') || 100;
 
