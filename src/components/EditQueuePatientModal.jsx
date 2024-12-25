@@ -13,6 +13,7 @@ function EditQueuePatientModal({ onClose, queueData }) {
     const [selectedDoctor, setSelectedDoctor] = useState(queueData?.assignedDoctor);
     const [selectedPet, setSelectedPet] = useState(queueData?.petData?.petName);
     const [notes, setNotes] = useState(queueData?.notes || '');
+    const [status, setStatus] = useState(queueData?.state);
 
     //De las mascotas filtradas por dueño, buscamos la que seleccionamos para poderle enviar de nuevo la nueva data
     const newPetDataSelected = petsByOwner.find(pet => pet.petName === selectedPet);
@@ -23,7 +24,7 @@ function EditQueuePatientModal({ onClose, queueData }) {
             assignedDoctor: selectedDoctor,
             petData: newPetDataSelected,
             notes,
-            state: "En espera",
+            state: status,
         };
         updatePetInQueueMedical(queueData.id, dataToUpdate);
         onClose();
@@ -105,7 +106,7 @@ function EditQueuePatientModal({ onClose, queueData }) {
                     </label>
                 </div>
 
-                <div className="flex flex-col mb-6">
+                <div className="flex flex-col mb-3">
                     <label htmlFor="notes" className="text-sm font-semibold mb-1">
                         Notas
                     </label>
@@ -119,7 +120,25 @@ function EditQueuePatientModal({ onClose, queueData }) {
                     ></textarea>
                 </div>
 
-                <div className="flex justify-end space-x-4">
+                <div className="flex flex-col w-[50%] mb-4">
+                    <label htmlFor="doctor" className="text-md font-semibold mb-2">
+                        Estado
+                    </label>
+                    <select
+                        id="status"
+                        className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                    >
+                        <option>Atendido</option>
+                        <option>En espera</option>
+                        <option>En atención</option>
+                        <option>Suspendido</option>
+                    </select>
+                </div>
+
+
+                <div className="flex justify-end space-x-4 border-t border-gray-300 pt-4">
                     <button
                         onClick={onClose}
                         className="flex items-center px-4 py-2 border border-gray-300 rounded-md text-md font-semibold hover:bg-gray-200"

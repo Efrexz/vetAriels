@@ -12,7 +12,6 @@ import PlusIcon from '@assets/plusIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
-import EjectIcon from '@assets/ejectIcon.svg?react';
 
 
 
@@ -46,6 +45,22 @@ function ClinicQueue() {
     const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
     const [patientToDelete, setPatientToDelete] = useState(null);
     const [queueDataToEdit, setQueueDataToEdit] = useState(null);
+
+    // determinar el color de fondo según el estado
+    function getStateColor(state) {
+        switch (state) {
+            case "En espera":
+                return "bg-red-500";
+            case "En atención":
+                return "bg-orange-500";
+            case "Atendido":
+                return "bg-green-500";
+            case "Suspendido":
+                return "bg-red-500";
+            default:
+                return "bg-gray-500";
+        }
+    }
 
     return (
         <section className="container mx-auto p-6">
@@ -145,7 +160,10 @@ function ClinicQueue() {
                                     </td>
                                     <td className="py-2 px-4 text-center border">{petInQueue?.assignedDoctor}</td>
                                     <td className="py-2 px-4 text-center border">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${petInQueue?.state === "En espera" ? "bg-red-500" : "bg-green-500"} rounded-full`}>
+                                        <span
+                                            className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(petInQueue?.state)} rounded-full cursor-pointer`}
+                                            onClick={() => setIsEditQueueModalOpen(true)}
+                                        >
                                             {petInQueue?.state}
                                         </span>
                                     </td>
@@ -168,7 +186,6 @@ function ClinicQueue() {
                                                 setIsConfirmActionModalOpen(true)
                                             }}
                                         />
-                                        <EjectIcon className="w-4 h-4 text-red-500 cursor-pointer" />
                                     </td>
                                 </tr>
                             ))}

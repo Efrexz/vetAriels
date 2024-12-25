@@ -24,10 +24,38 @@ function AddNewProductModal({ onClose }) {
         line: '',
         category: '',
         subcategory: '',
-        stockMinimum: '',
+        minStock: '',
         cost: '',
         salePrice: '',
     });
+
+    const [errors, setErrors] = useState({});
+
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.productName || formData.productName.length < 4) {
+            newErrors.productName = 'El nombre del producto debe tener al menos 4 caracteres';
+        }
+        else if (!formData.brand || formData.brand < 2) {
+            newErrors.brand = 'El nombre de la marca debe tener al menos 2 caracteres';
+        }
+        else if (!formData.line || formData.line === "Seleccionar línea") {
+            newErrors.line = 'Este campo es obligatorio';
+        }
+        else if (!formData.category || formData.category === "Seleccionar categoría") {
+            newErrors.category = 'Este campo es obligatorio';
+        }
+        else if (!formData.salePrice || formData.salePrice <= 0) {
+            newErrors.salePrice = 'El precio del producto no puede ser menor a 0';
+        }
+        setErrors(newErrors);
+        console.log(newErrors);
+
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,6 +66,9 @@ function AddNewProductModal({ onClose }) {
     };
 
     function createProduct() {
+        if (!validateForm()) {
+            return;
+        }
         function generateId() {
             const part1 = Date.now().toString(35)
             const part2 = Math.random().toString(36).slice(2)
@@ -54,12 +85,12 @@ function AddNewProductModal({ onClose }) {
             unitOfMeasurement: formData.unitOfMeasurement,
             presentation: formData.presentation,
             content: formData.content,
-            provider: formData.provider,
+            provider: formData.provider || 'CENTRO',
             barcode: formData.barcode,
             line: formData.line,
             category: formData.category,
             subcategory: formData.subcategory,
-            stockMinimum: Number(formData.stockMinimum),
+            minStock: Number(formData.minStock),
             availableStock: 0,
             cost: Number(formData.cost),
             salePrice: Number(formData.salePrice),
@@ -92,13 +123,13 @@ function AddNewProductModal({ onClose }) {
             label: 'Unidad de Medida *',
             name: 'unitOfMeasurement',
             type: 'select',
-            options: ['Seleccione', 'Unidad 1', 'Unidad 2', 'Unidad 3'],
+            options: ["N.A.", "Litros", "Kilogramos", "Unidades"],
         },
         {
             label: 'Presentación',
             name: 'presentation',
             type: 'select',
-            options: ['Seleccione', 'Presentación 1', 'Presentación 2', 'Presentación 3'],
+            options: ["Unidad", "Caja", "Paquete"],
         },
         {
             label: 'Contenido',
@@ -109,7 +140,7 @@ function AddNewProductModal({ onClose }) {
             label: 'Proveedor',
             name: 'provider',
             type: 'select',
-            options: ['Seleccione', 'Proveedor 1', 'Proveedor 2', 'Proveedor 3'],
+            options: ["CENTRO", "OTRO"],
         },
         {
             label: 'Codigo de barras',
@@ -117,26 +148,26 @@ function AddNewProductModal({ onClose }) {
             type: 'text',
         },
         {
-            label: 'Linea',
+            label: 'Linea *',
             name: 'line',
             type: 'select',
-            options: ['Seleccione', 'Linea 1', 'Linea 2', 'Linea 3'],
+            options: ["Seleccionar línea", "PET SHOP", "OTRA"],
         },
         {
             label: 'Categoría *',
             name: 'category',
             type: 'select',
-            options: ['Seleccione', 'Categoría 1', 'Categoría 2', 'Categoría 3'],
+            options: ["Seleccionar categoría", "ACCESORIOS", "OTRA"],
         },
         {
             label: 'Subcategoría',
             name: 'subcategory',
             type: 'select',
-            options: ['Seleccione', 'Subcategoría 1', 'Subcategoría 2', 'Subcategoría 3'],
+            options: ["Seleccionar subcategoría", "SUB1", "SUB2"],
         },
         {
             label: 'Stock Minimo',
-            name: 'stockMinimum',
+            name: 'minStock',
             type: 'number',
             icon: ArrowDown,
             infoMessage: '¿Qué cantidad de este producto deberíamos tener como mínimo para evitar quedarnos sin stock?',
@@ -172,7 +203,7 @@ function AddNewProductModal({ onClose }) {
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                                    className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus:border-blue-300 '} focus:outline-none`}
                                 >
                                     {field.options.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
@@ -193,14 +224,18 @@ function AddNewProductModal({ onClose }) {
                                             value={formData[field.name]}
                                             onChange={handleChange}
                                             className={`border border-gray-300 ${field.icon ? 'rounded-r-lg' : 'rounded-lg'}
-                                            py-2 px-4 w-full hover:border-blue-300 focus:border-blue-300 focus:outline-none`}
+                                            py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus:border-blue-300 '} focus:outline-none`}
                                         />
                                     </div>
 
                                     {field.infoMessage && (
                                         <p className="text-xs text-gray-500 mt-1">{field.infoMessage}</p>
                                     )}
+
                                 </div>
+                            )}
+                            {errors[field.name] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
                             )}
                         </div>
                     ))}

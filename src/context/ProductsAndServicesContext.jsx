@@ -16,6 +16,10 @@ function ProductsAndServicesProvider({ children }) {
         setProductsData([...productsData, product]);
     }
 
+    function updateProductData(id, newData) {
+        setProductsData(productsData.map(product => product.systemCode === id ? { ...product, ...newData } : product));
+    }
+
     function removeProduct(id) {
         setProductsData(productsData.filter((product) => product.systemCode !== id));
     }
@@ -130,6 +134,7 @@ function ProductsAndServicesProvider({ children }) {
         <ProductsAndServicesContext.Provider value={{
             productsData,
             addProduct,
+            updateProductData,
             removeProduct,
             servicesData,
             addNewService,
