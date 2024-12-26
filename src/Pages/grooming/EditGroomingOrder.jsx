@@ -206,7 +206,7 @@ function EditGroomingOrder() {
                     </div>
                     <div className='col-span-3'>
                         <label className="block text-gray-700 mb-2">Buscar y agregar productos y/o servicios:</label>
-                        <ProductSearchInput addProductToTable={addProductToTable} />
+                        <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                     </div>
                 </div>
 

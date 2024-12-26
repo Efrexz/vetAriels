@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
+import { ErrorModal } from "@components/ErrorModal";
 import PillsIcon from "@assets/pillsIcon.svg?react";
 import ArrowDown from "@assets/arrowDown.svg?react";
 import ArrowUp from "@assets/arrowUp.svg?react";
@@ -11,6 +12,7 @@ import PropTypes from "prop-types";
 
 function UpdateProduct({ productData }) {
     const { updateProductData } = useContext(ProductsAndServicesContext);
+    const [isOpenErrorModal, setIsOpenErrorModal] = useState(false);
     const fields = [
         { label: "Nombre del Producto *", name: "productName", type: "text", icon: PillsIcon, columsNumber: 4 },
         { label: "Marca", name: "brand", type: "text", icon: PillsIcon, columsNumber: 1 },
@@ -49,9 +51,6 @@ function UpdateProduct({ productData }) {
         status: productData?.status ? "ACTIVO" : "INACTIVO",
     });
 
-    console.log(productData);
-
-
     const [errors, setErrors] = useState({});
 
     // Validación de los campos
@@ -61,16 +60,16 @@ function UpdateProduct({ productData }) {
         if (!formData.productName || formData.productName.length < 4) {
             newErrors.productName = 'El nombre del producto debe tener al menos 4 caracteres';
         }
-        else if (!formData.brand || formData.brand < 2) {
+        if (!formData.brand || formData.brand < 2) {
             newErrors.brand = 'El nombre de la marca debe tener al menos 2 caracteres';
         }
-        else if (!formData.line || formData.line === "Seleccionar línea") {
+        if (!formData.line || formData.line === "Seleccionar línea") {
             newErrors.line = 'Este campo es obligatorio';
         }
-        else if (!formData.category || formData.category === "Seleccionar categoría") {
+        if (!formData.category || formData.category === "Seleccionar categoría") {
             newErrors.category = 'Este campo es obligatorio';
         }
-        else if (!formData.salePrice || formData.salePrice <= 0) {
+        if (!formData.salePrice || formData.salePrice <= 0) {
             newErrors.salePrice = 'El precio del producto no puede ser menor a 0';
         }
         setErrors(newErrors);
@@ -86,6 +85,7 @@ function UpdateProduct({ productData }) {
 
     function updateProduct() {
         if (!validateForm()) {
+            setIsOpenErrorModal(true);
             return;
         }
         const updatedProduct = {
@@ -159,6 +159,9 @@ function UpdateProduct({ productData }) {
                     </div>
                 ))}
             </div>
+            {
+                isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />
+            }
             <div className='flex justify-between items-center gap-4 pt-4 px-4 border-t border-gray-200 bg-gray-50 '>
                 <button
                     className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"

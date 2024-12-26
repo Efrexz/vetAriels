@@ -12,6 +12,7 @@ function AddNewServiceModal({ onClose }) {
     const navigate = useNavigate();
 
     const { addNewService } = useContext(ProductsAndServicesContext);
+    const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
         serviceName: '',
         line: '',
@@ -19,6 +20,27 @@ function AddNewServiceModal({ onClose }) {
         cost: 0,
         price: 0,
     });
+
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.serviceName || formData.serviceName.length < 4) {
+            newErrors.serviceName = 'El nombre del servicio debe tener al menos 4 caracteres';
+        }
+        if (!formData.line || formData.line === "Seleccione") {
+            newErrors.line = 'Este campo es obligatorio';
+        }
+        if (!formData.category || formData.category === "Seleccione") {
+            newErrors.category = 'Este campo es obligatorio';
+        }
+        if (!formData.price || formData.price <= 0) {
+            newErrors.price = 'El precio del servicio no puede ser menor a 0';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,6 +51,9 @@ function AddNewServiceModal({ onClose }) {
     };
 
     function createService() {
+        if (!validateForm()) {
+            return;
+        }
         const now = new Date();
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
@@ -86,8 +111,6 @@ function AddNewServiceModal({ onClose }) {
         },
     ];
 
-
-
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50">
             <div className="bg-white p-8 rounded-md w-full h-auto max-w-5xl mt-8 modal-appear">
@@ -104,7 +127,7 @@ function AddNewServiceModal({ onClose }) {
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                                    className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
                                 >
                                     {field.options.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
@@ -123,9 +146,12 @@ function AddNewServiceModal({ onClose }) {
                                         placeholder={field.placeholder}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className="border border-gray-300 rounded-r-lg py-2 px-4 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                                        className={`border border-gray-300 rounded-r-lg py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
                                     />
                                 </div>
+                            )}
+                            {errors[field.name] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
                             )}
                         </div>
                     ))}

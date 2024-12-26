@@ -10,8 +10,6 @@ function ProductInfo() {
     const { section, id } = useParams();
     const { productsData } = useContext(ProductsAndServicesContext);
     const product = productsData.find(product => product.systemCode === id);
-    console.log(product);
-
     return (
         <main className="w-full mx-auto p-6 bg-white">
             <h2 className="text-xl font-medium mb-4 border-b-2 border-gray-200 pb-3 text-blue-400" >{product?.productName}</h2>

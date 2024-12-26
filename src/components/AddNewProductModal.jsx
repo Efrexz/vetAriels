@@ -38,21 +38,19 @@ function AddNewProductModal({ onClose }) {
         if (!formData.productName || formData.productName.length < 4) {
             newErrors.productName = 'El nombre del producto debe tener al menos 4 caracteres';
         }
-        else if (!formData.brand || formData.brand < 2) {
+        if (!formData.brand || formData.brand < 2) {
             newErrors.brand = 'El nombre de la marca debe tener al menos 2 caracteres';
         }
-        else if (!formData.line || formData.line === "Seleccionar línea") {
+        if (!formData.line || formData.line === "Seleccionar línea") {
             newErrors.line = 'Este campo es obligatorio';
         }
-        else if (!formData.category || formData.category === "Seleccionar categoría") {
+        if (!formData.category || formData.category === "Seleccionar categoría") {
             newErrors.category = 'Este campo es obligatorio';
         }
-        else if (!formData.salePrice || formData.salePrice <= 0) {
+        if (!formData.salePrice || formData.salePrice <= 0) {
             newErrors.salePrice = 'El precio del producto no puede ser menor a 0';
         }
         setErrors(newErrors);
-        console.log(newErrors);
-
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
     }
 

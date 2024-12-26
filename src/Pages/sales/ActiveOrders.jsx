@@ -24,8 +24,6 @@ function ActiveOrders() {
 
     //filtramos los clientes que tengan por lo menos un producto en la cola de ventas
     const activeAccounts = clients.filter(client => client?.products?.length > 0);
-    console.log(activeAccounts);
-
     const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6 overflow-auto">

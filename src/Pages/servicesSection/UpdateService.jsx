@@ -2,34 +2,51 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
 import { SuccessModal } from "../../components/SuccessModal";
+import { ErrorModal } from "../../components/ErrorModal";
 import ReturnIcon from "@assets/returnIcon.svg?react";
 import PlusIcon from "@assets/plusIcon.svg?react";
 import PropTypes from "prop-types";
 
 function UpdateService({ serviceData }) {
     const { updateServiceData } = useContext(ProductsAndServicesContext);
-
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-    const [errors, setErrors] = useState(null);
-
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
 
     const fields = [
         { label: "Nombre del servicio", name: "serviceName", type: "text" },
-        { label: "Línea", name: "line", type: "select", options: ['Línea 1', 'Línea 2', 'Línea 3'] },
-        { label: "Categoría", name: "category", type: "select", options: ['Categoría 1', 'Categoría 2', 'Categoría 3'] },
+        { label: "Línea", name: "line", type: "select", options: ['Seleccione', 'Línea 1', 'Línea 2', 'Línea 3'] },
+        { label: "Categoría", name: "category", type: "select", options: ['Seleccione', 'Categoría 1', 'Categoría 2', 'Categoría 3'] },
         { label: "Disponible para Ventas", name: "availableForSale", type: "select", options: ["SI", "NO"] },
         { label: "Estado", name: "status", type: "select", options: ["ACTIVO", "INACTIVO"] },
     ];
 
     const [formData, setFormData] = useState({
         serviceName: serviceData?.serviceName || "",
-        line: serviceData?.line || "OTRO",
-        category: serviceData?.category || "OTRA",
+        line: serviceData?.line || "Seleccione",
+        category: serviceData?.category || "Seleccione",
         availableForSale: serviceData?.availableForSale ? "SI" : "NO",
         status: serviceData?.status ? "ACTIVO" : "INACTIVO",
     });
+
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.serviceName || formData.serviceName.length < 4) {
+            newErrors.serviceName = 'El nombre del servicio debe tener al menos 4 caracteres';
+        }
+        if (!formData.line || formData.line === "Seleccione") {
+            newErrors.line = 'Este campo es obligatorio';
+        }
+        if (!formData.category || formData.category === "Seleccione") {
+            newErrors.category = 'Este campo es obligatorio';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
 
     function handleChange(e) {
         setFormData({
@@ -39,8 +56,8 @@ function UpdateService({ serviceData }) {
     }
 
     function updateService() {
-        if (formData.serviceName.length < 4) {
-            setErrors("El nombre del servicio debe tener al menos 4 caracteres");
+        if (!validateForm()) {
+            setIsErrorModalOpen(true);
             return;
         }
         const updatedServiceData = {
@@ -52,7 +69,6 @@ function UpdateService({ serviceData }) {
             availableForSale: formData.availableForSale === "SI",
             status: formData.status === "ACTIVO",
         };
-        setErrors(null);
         setIsSuccessModalOpen(true);
         updateServiceData(serviceData.id, updatedServiceData);
     }
@@ -61,7 +77,7 @@ function UpdateService({ serviceData }) {
         <form className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md ">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 {fields.map((field, index) => (
-                    <div key={index} className={`mb-4 ${field.name === 'nombreServicio' ? 'col-span-4' : 'col-span-2'} `}>
+                    <div key={index} className={`mb-4 ${field.name === 'serviceName' ? 'col-span-4' : 'col-span-2'} `}>
                         <label className="block text-gray-500 font-medium mb-2" htmlFor={field.name}>
                             {field.label}
                         </label>
@@ -72,20 +88,15 @@ function UpdateService({ serviceData }) {
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors && field.name === "serviceName" ? "border-red-500" : "border-gray-200 hover:border-blue-300 focus-within:border-blue-300"}`}
+                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
                                 />
-                                {errors && field.name === "serviceName" && (
-                                    <span className="text-red-500 text-sm">
-                                        {errors}
-                                    </span>
-                                )}
                             </>
                         ) : (
                             <select
                                 name={field.name}
                                 value={formData[field.name]}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2 border rounded-md hover:border-blue-300 focus-within:border-blue-300"
+                                className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
                             >
                                 {field?.options?.map((option, i) => (
                                     <option key={i} value={option}>
@@ -93,6 +104,9 @@ function UpdateService({ serviceData }) {
                                     </option>
                                 ))}
                             </select>
+                        )}
+                        {errors[field.name] && (
+                            <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
                         )}
                     </div>
                 ))}
@@ -120,8 +134,12 @@ function UpdateService({ serviceData }) {
                     ACTUALIZAR SERVICIO
                 </button>
             </div>
+            {
+                isErrorModalOpen && (
+                    <ErrorModal onClose={() => setIsErrorModalOpen(false)} typeOfError="form" />
+                )
+            }
         </form>
-
     );
 }
 
