@@ -1,6 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
+import { DeleteModal } from '@components/DeleteModal';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
@@ -19,6 +20,8 @@ const tableHeaders = ["Fecha de registro", "Nombres y Apellidos", "Teléfono", "
 function Clients() {
 
     const { clients } = useContext(ClientsContext);
+    const [clientDataToDelete, setClientDataToDelete] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
 
     return (
@@ -107,13 +110,28 @@ function Clients() {
                                         <PawIcon
                                             className="w-4 h-4 text-[#7266BA] cursor-pointer"
                                             onClick={() => navigate(`/clients/client/${userData.id}/pets`)} />
-                                        <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
+                                        <TrashIcon
+                                            className="w-4 h-4 text-red-500 cursor-pointer"
+                                            onClick={() => {
+                                                setClientDataToDelete(userData)
+                                                setIsDeleteModalOpen(true)
+                                            }}
+                                        />
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+                {
+                    isDeleteModalOpen && (
+                        <DeleteModal
+                            elementToDelete={clientDataToDelete}
+                            onClose={() => setIsDeleteModalOpen(false)}
+                            mode="clients"
+                        />
+                    )
+                }
                 <div className="flex justify-between items-center mt-4">
                     <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total {clients.length}</p>
                     <div className="flex space-x-2">

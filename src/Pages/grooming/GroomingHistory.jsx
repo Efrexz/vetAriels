@@ -1,3 +1,7 @@
+import { useContext, useState } from 'react';
+import { ClientsContext } from '@context/ClientsContext';
+import { UpdateStateModal } from '@components/UpdateStateModal';
+import { ConfirmActionModal } from '@components/ConfirmActionModal';
 import BathIcon from '@assets/bathIcon.svg?react';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
@@ -5,51 +9,36 @@ import PDFIcon from '@assets/pdfIcon.svg?react';
 import ExcelIcon from '@assets/fileExcelIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
-import CheckIcon from '@assets/checkIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
-import BanIcon from '@assets/banIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
 
 
-const groomingOrderData = [
-    {
-        code: "245",
-        date: '31-07-2024',
-        entryTime: '10:00 PM',
-        exitTime: '11:05 PM',
-        petName: 'FRAC',
-        owner: 'LEONARDO PAUL, ROJAS HERNANDEZ',
-        breed: "CRUCE CANINO CHICO PELO CORTO (MESTIZO) ",
-        services: ["Baño Tradicional", "Rebaje 1 cm", "Desparasitacion 0 A 10 kg", "Movilidad", "Limpieza"],
-        state: "Pendiente"
-    },
-    {
-        code: "246",
-        date: '31-07-2024',
-        entryTime: '10:00 PM',
-        exitTime: '11:05 PM',
-        petName: 'Layla',
-        owner: 'RICARDO, RIOS',
-        breed: "CRUCE CANINO CHICO PELO CORTO (MESTIZO) ",
-        services: ["Baño Tradicional", "Rebaje 1 cm", "Desparasitacion 0 A 10 kg", "Movilidad", "Limpieza"],
-        state: "Pendiente"
-    },
-    {
-        code: "247",
-        date: '31-07-2024',
-        entryTime: '10:00 PM',
-        exitTime: '11:05 PM',
-        petName: 'FRAC',
-        owner: 'LEONARDO PAUL, ROJAS HERNANDEZ',
-        breed: "CRUCE CANINO CHICO PELO CORTO (MESTIZO) ",
-        services: ["Baño Tradicional", "Rebaje 1 cm", "Desparasitacion 0 A 10 kg", "Movilidad", "Limpieza"],
-        state: "Pendiente"
-    },
-];
-
-
-const tableHeaders = ["Cod. de Sistema", "Fecha", "Entreda", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
+const tableHeaders = ["Cod. de Sistema", "Fecha", "Entrada", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
 
 function GroomingHistory() {
+
+    const { petsInQueueGroomingHistory } = useContext(ClientsContext);
+
+    const [isUpdateStateModalOpen, setIsUpdateStateModalOpen] = useState(false);
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
+    const [groomingDataToUpdate, setGroomingDataToUpdate] = useState(null);
+
+    // determinar el color de fondo según el estado
+    function getStateColor(state) {
+        switch (state) {
+            case "En atención":
+                return "bg-blue-400";
+            case "Pendiente":
+                return "bg-orange-500";
+            case "Terminado":
+                return "bg-green-500";
+            case "Entregado":
+                return "bg-blue-400";
+            default:
+                return "bg-orange-500";
+        }
+    }
+
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
             <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -117,43 +106,78 @@ function GroomingHistory() {
                             </tr>
                         </thead>
                         <tbody>
-                            {groomingOrderData.map((groomingData, index) => (
+                            {petsInQueueGroomingHistory.map((groomingData, index) => (
                                 <tr key={index} className="hover:bg-gray-100 border-b">
-                                    <td className="py-2 px-4 text-center border align-top pt-4">{groomingData.code}</td>
-                                    <td className="py-2 px-4 text-center border align-top pt-4">{groomingData.date}</td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.entryTime}</td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.exitTime}</td>
+                                    <td className="py-2 px-4 text-center border align-top pt-4">
+                                        {groomingData.systemCode.slice(0, 9).toUpperCase()}
+                                    </td>
+                                    <td className="py-2 px-4 text-center border align-top pt-4">{groomingData.dateOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.timeOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.timeOfAttention}</td>
                                     <td className="py-2 px-4 border-b text-center border align-top pt-4">
-                                        <span className="text-md  cursor-pointer text-blue-500 hover:underline ">{groomingData.owner}</span>
+                                        <span className="text-md  cursor-pointer text-blue-500 hover:underline ">
+                                            {groomingData.ownerName}
+                                        </span>
                                     </td>
                                     <td className="py-2 px-4 border-b text-center border-2 align-top pt-4">
-                                        <span className="text-md cursor-pointer text-blue-500 hover:underline">{groomingData.petName}</span>
+                                        <span className="text-md cursor-pointer text-blue-500 hover:underline">
+                                            {groomingData.petData?.petName}
+                                        </span>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.breed}</td>
+                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData.petData?.breed}</td>
                                     <td className="py-2 px-4 border-2 align-top pt-3">
                                         <ul className='list-disc pl-4'>
-                                            {groomingData.services.map((service) => (
-                                                <li key={service} >
-                                                    {service}
+                                            {groomingData.productsAndServices.map((item) => (
+                                                <li key={item.provisionalId} >
+                                                    {item.serviceName}
                                                 </li>
                                             ))}
                                         </ul>
                                     </td>
                                     <td className="py-2 px-4 border-2 align-top pt-5">
-                                        <span className="inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white bg-orange-500 rounded-full">
+                                        <span
+                                            className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(groomingData?.state)} rounded-full cursor-pointer whitespace-nowrap`}
+                                            onClick={() => {
+                                                setIsUpdateStateModalOpen(true)
+                                                setGroomingDataToUpdate(groomingData)
+                                            }}
+                                        >
                                             {groomingData.state}
                                         </span>
                                     </td>
                                     <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-300">
-                                        <PenIcon className="w-4.5 h-4.5 text-blue-500 cursor-pointer" />
-                                        <CheckIcon className="w-4.5 h-4.5 text-green-500 cursor-pointer" />
-                                        <BanIcon className="w-4.5 h-4.5 text-red-500 cursor-pointer" />
+                                        <PenIcon className="w-5 h-5 text-blue-500 cursor-pointer" />
+                                        <ReturnIcon
+                                            className="w-5 h-5 text-orange-400 cursor-pointer"
+                                            onClick={() => {
+                                                setIsConfirmActionModalOpen(true)
+                                                setGroomingDataToUpdate(groomingData)
+                                            }}
+                                        />
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+                {
+                    isUpdateStateModalOpen && (
+                        <UpdateStateModal
+                            dataToUpdate={groomingDataToUpdate}
+                            mode="history"
+                            onClose={() => setIsUpdateStateModalOpen(false)}
+                        />
+                    )
+                }
+                {
+                    isConfirmActionModalOpen && (
+                        <ConfirmActionModal
+                            elementData={groomingDataToUpdate}
+                            typeOfOperation="returnGrooming"
+                            onClose={() => setIsConfirmActionModalOpen(false)}
+                        />
+                    )
+                }
                 <div className="flex justify-between items-center mt-4">
                     <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
                     <div className="flex space-x-2">

@@ -68,6 +68,11 @@ function EditGroomingOrder() {
         setSelectedProducts([...selectedProducts, newProduct]);
     }
 
+    function removeProduct(productId) {
+        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== productId);
+        setSelectedProducts(updatedProducts);
+    }
+
     const totalPrice = selectedProducts.reduce(
         (acc, product) => acc + (product.salePrice || product.price) * product.quantity,
         0
@@ -131,6 +136,9 @@ function EditGroomingOrder() {
         };
         updatePetInQueueGrooming(Number(id), dataToSend);
     }
+
+    console.log(selectedProducts);
+
 
 
     return (
@@ -271,7 +279,7 @@ function EditGroomingOrder() {
                                 <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
                                     <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
                                     <TrashIcon
-                                        // onClick={() => removeProduct(product.provisionalId)}
+                                        onClick={() => removeProduct(product.provisionalId)}
                                         className='w-5 h-5 text-red-500 cursor-pointer' />
                                 </td>
                             </tr>

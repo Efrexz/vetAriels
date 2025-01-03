@@ -52,7 +52,7 @@ const filterOptions = [
 const tableHeaders = ["Cod. de sistema", "Fecha de Registro", "Nombre", "Línea", "Categoría", "Precio de venta", "Estado", "Opciones"];
 
 function Services() {
-    const { servicesData, removeService } = useContext(ProductsAndServicesContext);
+    const { servicesData } = useContext(ProductsAndServicesContext);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [serviceToDelete, setServiceToDelete] = useState(null);
@@ -166,8 +166,7 @@ function Services() {
                         isDeleteModalOpen && (
                             <DeleteModal
                                 onClose={() => setIsDeleteModalOpen(false)}
-                                // onConfirm={deleteProduct}
-                                productOrServiceToDelete={serviceToDelete}
+                                elementToDelete={serviceToDelete}
                                 mode="services"
                             />
                         )

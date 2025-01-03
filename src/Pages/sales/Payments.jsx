@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { FinancialContext } from '@context/FinancialContext';
 import { PaymentAndDepositModal } from '@components/PaymentAndDepositModal';
+import { ConfirmActionModal } from '../../components/ConfirmActionModal';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
@@ -16,9 +17,9 @@ const tableHeaders = ["ID", "Fecha", "Descripción", "Medio de Pago", "Entrada",
 function Payments() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { paymentsData, removePayment } = useContext(FinancialContext);
-
-
+    const { paymentsData } = useContext(FinancialContext);
+    const [paymentsDataToEdit, setPaymentsDataToEdit] = useState(null);
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
     const [typeOfOperation, setTypeOfOperation] = useState('');
     return (
         <section className="container mx-auto p-6">
@@ -123,7 +124,10 @@ function Payments() {
                                         </button>
                                         <button
                                             className="text-red-500 hover:text-red-600"
-                                            onClick={() => removePayment(payment.id)}
+                                            onClick={() => {
+                                                setPaymentsDataToEdit(payment)
+                                                setIsConfirmActionModalOpen(true)
+                                            }}
                                         >
                                             <TrashIcon className="w-4 h-4" />
                                         </button>
@@ -136,6 +140,16 @@ function Payments() {
                         </tbody>
                     </table>
                 </div>
+
+                {
+                    isConfirmActionModalOpen && (
+                        <ConfirmActionModal
+                            elementData={paymentsDataToEdit}
+                            typeOfOperation="payments"
+                            onClose={() => setIsConfirmActionModalOpen(false)}
+                        />
+                    )
+                }
                 <div className="flex justify-between items-center mt-4">
                     <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al {paymentsData.length} | Total {paymentsData.length}</p>
                     <div className="flex space-x-2">

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
 import { EditQueuePatientModal } from '@components/EditQueuePatientModal';
 import { ConfirmActionModal } from '@components/ConfirmActionModal';
@@ -45,6 +45,8 @@ function ClinicQueue() {
     const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
     const [patientToDelete, setPatientToDelete] = useState(null);
     const [queueDataToEdit, setQueueDataToEdit] = useState(null);
+
+    const navigate = useNavigate();
 
     // determinar el color de fondo según el estado
     function getStateColor(state) {
@@ -96,7 +98,10 @@ function ClinicQueue() {
                                 <ExcelIcon className="w-5 h-5" />
                             </button>
                         </div>
-                        <button className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2">
+                        <button
+                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            onClick={() => navigate("/sales/client/no_client")}
+                        >
                             <PlusIcon className="w-5 h-5" />
                             AGREGAR PACIENTE
                         </button>
@@ -162,7 +167,11 @@ function ClinicQueue() {
                                     <td className="py-2 px-4 text-center border">
                                         <span
                                             className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(petInQueue?.state)} rounded-full cursor-pointer`}
-                                            onClick={() => setIsEditQueueModalOpen(true)}
+                                            onClick={() => {
+                                                setQueueDataToEdit(petInQueue)
+                                                setIsEditQueueModalOpen(true)
+                                            }
+                                            }
                                         >
                                             {petInQueue?.state}
                                         </span>
@@ -205,7 +214,8 @@ function ClinicQueue() {
                 {
                     isConfirmActionModalOpen && (
                         <ConfirmActionModal
-                            elementToDelete={patientToDelete}
+                            elementData={patientToDelete}
+                            typeOfOperation="medical"
                             onClose={() => setIsConfirmActionModalOpen(false)}
                         />
                     )

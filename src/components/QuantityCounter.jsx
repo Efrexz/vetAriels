@@ -3,11 +3,14 @@ import PlusIcon from '@assets/plusIcon.svg?react';
 import MinusIcon from '@assets/minusIcon.svg?react';
 
 const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity, maxQuantity, mode }) => {
+    console.log(itemCount);
+
 
     function increaseQuantity() {
         if (mode === "discharge" || mode === "sales") {
             // En descarga o venta, no permitimos que la cantidad supere el stock disponible
-            if (itemCount < maxQuantity) {
+            // Si maxQuantity no está definido, incrementamos la cantidad libremente porque es un servicio y por ello no contiene stock
+            if (maxQuantity === undefined || itemCount < maxQuantity) {
                 changeQuantity(itemCount + 1);
             }
         } else if (mode === "restock") {

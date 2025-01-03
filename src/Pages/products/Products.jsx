@@ -116,7 +116,7 @@ function Products() {
                             <DeleteModal
                                 onClose={() => setIsDeleteModalOpen(false)}
                                 // onConfirm={deleteProduct}
-                                productOrServiceToDelete={productToDelete}
+                                elementToDelete={productToDelete}
                                 mode="products"
                             />
                         )

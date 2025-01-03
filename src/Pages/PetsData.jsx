@@ -1,6 +1,7 @@
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
 import { ClientsContext } from '@context/ClientsContext';
+import { DeleteModal } from '@components/DeleteModal';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
@@ -89,7 +90,8 @@ const tableHeaders = ["Fecha de Registro", "#H.C", "Nombre", "Especie", "Raza", 
 function PetsData() {
 
     const { petsData } = useContext(ClientsContext);
-
+    const [petsDataToDelete, setPetsDataToDelete] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6">
@@ -191,13 +193,29 @@ function PetsData() {
                                             <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
                                         </Link>
                                         <Stethoscope className="w-4 h-4 text-blue-500 cursor-pointer" />
-                                        <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
+                                        <TrashIcon
+                                            className="w-4 h-4 text-red-500 cursor-pointer"
+                                            onClick={() => {
+                                                setPetsDataToDelete(petData)
+                                                setIsDeleteModalOpen(true)
+                                            }}
+                                        />
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+
+                {
+                    isDeleteModalOpen && (
+                        <DeleteModal
+                            elementToDelete={petsDataToDelete}
+                            onClose={() => setIsDeleteModalOpen(false)}
+                            mode="pets"
+                        />
+                    )
+                }
                 <div className="flex justify-between items-center mt-4">
                     <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
                     <div className="flex space-x-2">

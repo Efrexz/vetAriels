@@ -1,6 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
+import { ConfirmActionModal } from '@components/ConfirmActionModal';
+import { UpdateStateModal } from '@components/UpdateStateModal';
 import BathIcon from '@assets/bathIcon.svg?react';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
@@ -17,8 +19,27 @@ const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota
 
 function ActiveOrdersGrooming() {
 
-    const { petsInQueueGrooming, removePetFromQueueGrooming } = useContext(ClientsContext);
+    const { petsInQueueGrooming } = useContext(ClientsContext);
+
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
+    const [isUpdateStateModalOpen, setIsUpdateStateModalOpen] = useState(false);
+    const [groomingDataToEdit, setGroomingDataToEdit] = useState(null);
+    const [typeOfOperation, setTypeOfOperation] = useState('');
     const navigate = useNavigate();
+
+    // determinar el color de fondo según el estado
+    function getStateColor(state) {
+        switch (state) {
+            case "En atención":
+                return "bg-blue-400";
+            case "Pendiente":
+                return "bg-orange-500";
+            case "Terminado":
+                return "bg-green-500";
+            default:
+                return "bg-orange-500";
+        }
+    }
 
 
     return (
@@ -124,7 +145,13 @@ function ActiveOrdersGrooming() {
                                         </ul>
                                     </td>
                                     <td className="py-2 px-4 border-2 align-top pt-5">
-                                        <span className="inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white bg-orange-500 rounded-full whitespace-nowrap">
+                                        <span
+                                            className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white  ${getStateColor(groomingData?.state)} rounded-full whitespace-nowrap cursor-pointer`}
+                                            onClick={() => {
+                                                setIsUpdateStateModalOpen(true)
+                                                setGroomingDataToEdit(groomingData)
+                                            }}
+                                        >
                                             {groomingData.state}
                                         </span>
                                     </td>
@@ -133,10 +160,21 @@ function ActiveOrdersGrooming() {
                                             className="w-4.5 h-4.5 text-blue-500 cursor-pointer"
                                             onClick={() => navigate(`/grooming/update/${groomingData.id}`)}
                                         />
-                                        <CheckIcon className="w-4.5 h-4.5 text-green-500 cursor-pointer" />
+                                        <CheckIcon
+                                            className="w-4.5 h-4.5 text-green-500 cursor-pointer"
+                                            onClick={() => {
+                                                setGroomingDataToEdit({ ...groomingData, state: "Terminado" })
+                                                setTypeOfOperation("finishGrooming")
+                                                setIsConfirmActionModalOpen(true)
+                                            }}
+                                        />
                                         <BanIcon
                                             className="w-4.5 h-4.5 text-red-500 cursor-pointer"
-                                            onClick={() => removePetFromQueueGrooming(groomingData.id)}
+                                            onClick={() => {
+                                                setGroomingDataToEdit(groomingData)
+                                                setTypeOfOperation("deleteGrooming")
+                                                setIsConfirmActionModalOpen(true)
+                                            }}
                                         />
                                     </td>
                                 </tr>
@@ -144,6 +182,26 @@ function ActiveOrdersGrooming() {
                         </tbody>
                     </table>
                 </div>
+
+                {
+                    isConfirmActionModalOpen && (
+                        <ConfirmActionModal
+                            elementData={groomingDataToEdit}
+                            typeOfOperation={typeOfOperation}
+                            onClose={() => setIsConfirmActionModalOpen(false)}
+                        />
+                    )
+                }
+                {
+                    isUpdateStateModalOpen && (
+                        <UpdateStateModal
+                            dataToUpdate={groomingDataToEdit}
+                            mode="grooming"
+                            onClose={() => setIsUpdateStateModalOpen(false)}
+                        />
+                    )
+                }
+
                 <div className="flex justify-between items-center mt-4">
                     <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
                     <div className="flex space-x-2">

@@ -114,7 +114,7 @@ function GroomingOrderCreation() {
             notes,
             dateOfAttention: currentDate,
             timeOfAttention: currentTime,
-            state: "En espera",
+            state: "Pendiente",
             productsAndServices: selectedProducts,
         };
         addPetToQueueGrooming(dataToSend);
