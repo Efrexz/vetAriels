@@ -3,8 +3,6 @@ import PlusIcon from '@assets/plusIcon.svg?react';
 import MinusIcon from '@assets/minusIcon.svg?react';
 
 const QuantityCounter = ({ openQuantityModal, itemCount, changeQuantity, maxQuantity, mode }) => {
-    console.log(itemCount);
-
 
     function increaseQuantity() {
         if (mode === "discharge" || mode === "sales") {

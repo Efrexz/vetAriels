@@ -22,8 +22,6 @@ function DeleteModal({ elementToDelete, onClose, mode }) {
                 return "";
         }
     }
-    console.log(elementToDelete);
-
 
     const operationName = elementToDelete?.productName || elementToDelete?.serviceName || elementToDelete?.petName || elementToDelete?.firstName + " " + elementToDelete?.lastName;
 

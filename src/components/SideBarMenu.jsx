@@ -164,7 +164,7 @@ function SideBarMenu() {
     ]
 
     return (
-        <ul className="space-y-1">
+        <ul className="space-y-1 w-full">
             {categories.map((category, index) => (
                 !category.subCategories ? (
                     <li key={index}>

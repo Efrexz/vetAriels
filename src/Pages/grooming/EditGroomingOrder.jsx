@@ -137,9 +137,6 @@ function EditGroomingOrder() {
         updatePetInQueueGrooming(Number(id), dataToSend);
     }
 
-    console.log(selectedProducts);
-
-
 
     return (
         <section className="bg-white p-6 overflow-auto custom-scrollbar">
