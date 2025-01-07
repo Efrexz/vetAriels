@@ -76,20 +76,20 @@ function DashBoard() {
         },
     ]
     return (
-        <main className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-[#03A9F4] mb-4">Escritorio</h1>
-            <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 border-t-2 border-gray-100 pt-6">
+        <main className="container mx-auto p-4 sm:p-6">
+            <h1 className="text-2xl sm:text-3xl font-medium text-[#03A9F4] mb-4">Escritorio</h1>
+            <section className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6 border-t-2 border-gray-100 pt-4 sm:pt-6">
                 {dashBoardCategories.map((category) => (
                     <Link key={category.name} to={category.link}>
-                        <div key={category.name} className={`${category.color} text-white rounded-lg flex flex-col items-center justify-center p-4 cursor-pointer transform transition-transform duration-300 hover:scale-105`}>
-                            {<category.icon className="h-12 w-12 mb-2" />}
-                            <p className="font-semibold">{category.name}</p>
+                        <div className={`${category.color} text-white rounded-lg flex flex-col items-center justify-center p-3 sm:p-4 min-h-[100px] sm:min-h-[120px] cursor-pointer transform transition-transform duration-300 hover:scale-105`}>
+                            {<category.icon className="h-8 w-8 sm:h-12 sm:w-12 mb-2" />}
+                            <p className="font-semibold text-sm sm:text-base text-center">{category.name}</p>
                         </div>
                     </Link>
                 ))}
             </section>
         </main>
-    )
+    );
 }
 
 export { DashBoard }

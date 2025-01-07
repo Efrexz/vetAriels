@@ -133,8 +133,8 @@ function CreateClientForm() {
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <UserGroupIcon className="w-9 h-9  mr-2" />
+            <h1 className="text-xl sm:text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Clientes
             </h1>
             <div className="bg-white p-4 pb-10 rounded-t-lg shadow-lg">
@@ -177,16 +177,18 @@ function CreateClientForm() {
                     ))}
                 </form>
             </div>
-            <div className='flex justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg'>
+            <div className='flex flex-col xs:flex-row justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg gap-4'>
                 <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
+                    className="bg-white border border-gray-300 text-xs md:text-sm lg:text-base text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto"
                     onClick={() => navigate(-1)}
                 >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
+                    <ReturnIcon className="w-4 h-4 text-gray-700" />
                     CANCELAR
                 </button>
-                <button onClick={handleSubmit} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
-                    <PlusIcon className="w-5 h-5 text-white" />
+                <button
+                    onClick={handleSubmit}
+                    className="bg-green-500 text-xs md:text-sm text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3 w-full sm:w-auto">
+                    <PlusIcon className="w-4 h-4 text-white" />
                     CREAR NUEVO CLIENTE
                 </button>
             </div>

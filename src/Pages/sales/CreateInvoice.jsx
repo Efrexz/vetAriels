@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
 import FileIcon from '@assets/file-invoice.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -12,6 +12,7 @@ function CreateInvoice() {
 
     const { clients } = useContext(ClientsContext);
     const clientData = clients.find(client => client.id === Number(id));
+    const navigate = useNavigate();
 
     const invoiceData = [
         { label: 'Fecha de emisión', value: '29-10-2024 12:21 PM', type: "text", disabled: true },
@@ -53,7 +54,7 @@ function CreateInvoice() {
     const { selectedProducts } = location.state || [];
 
     const totalPrice = selectedProducts.reduce(
-        (acc, product) => acc + product.price * product.quantity,
+        (acc, product) => acc + (product.price || product.salePrice) * product.quantity,
         0
     );
 
@@ -68,11 +69,8 @@ function CreateInvoice() {
 
     //observaciones del comprobante
     const [notes, setNotes] = useState('');
-
     const [paymentNote, setPaymentNote] = useState('');
-
     const [paymentAmount, setPaymentAmount] = useState("");
-
     const [methodOfPayment, setMethodOfPayment] = useState("");
 
     const paymentData = [
@@ -125,65 +123,61 @@ function CreateInvoice() {
                 Comprobantes
             </h1>
 
-            {/* Contenedor general del formulario */}
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Primera Sección: Datos del Comprobante */}
                 <div className="bg-gray-50 p-6 rounded-lg">
-                    <div className="grid grid-cols-2 gap-4">
-                        {
-                            invoiceData.map((data, index) => (
-                                <div key={index} className="flex flex-col">
-                                    <label className="text-sm font-medium text-gray-700">{data.label}</label>
-                                    <div className="flex items-center mt-1">
-                                        {
-                                            data.type === "select" ? (
-                                                <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus-within:border-blue-300">
-                                                    {
-                                                        data.options.map((option, index) => (
-                                                            <option key={index} value={option}>{option}</option>
-                                                        ))
-                                                    }
-                                                </select>
-                                            ) : (
-
-                                                <input
-                                                    type={data.type}
-                                                    value={data.value}
-                                                    disabled={data.disabled}
-                                                    className={`w-full border rounded-md px-3 py-2 ${data.disabled ? "bg-gray-200" : "bg-white"} text-sm`}
-                                                />
-                                            )
-                                        }
-                                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {invoiceData.map((data, index) => (
+                            <div key={index} className="flex flex-col">
+                                <label className="text-sm font-medium text-gray-700">{data.label}</label>
+                                <div className="flex items-center mt-1">
+                                    {data.type === "select" ? (
+                                        <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300">
+                                            {data.options.map((option, idx) => (
+                                                <option key={idx} value={option}>
+                                                    {option}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type={data.type}
+                                            value={data.value}
+                                            disabled={data.disabled}
+                                            className={`w-full border rounded-md px-3 py-2 ${data.disabled ? "bg-gray-200" : "bg-white"
+                                                } text-sm`}
+                                        />
+                                    )}
                                 </div>
-                            ))
-                        }
+                            </div>
+                        ))}
                     </div>
                 </div>
 
                 {/* Segunda Sección: Datos del Cliente */}
                 <div className="bg-gray-50 p-6 rounded-lg">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {clientInfo.map((data, index) => (
                             <div
                                 key={index}
-                                className={`flex flex-col ${data.fullWidth ? "col-span-2" : ""}`}
+                                className={`flex flex-col ${data.fullWidth ? "sm:col-span-2" : ""}`}
                             >
                                 <label className="text-sm font-medium text-gray-700">{data.label}</label>
-                                <div className={`flex items-center mt-1 ${data.fullWidth ? "w-full" : ""}`}>
+                                <div className={`flex items-center mt-1`}>
                                     {data.type === "select" ? (
-                                        <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus-within:border-blue-300">
-                                            {data.options.map((option, index) => (
-                                                <option key={index} value={option}>{option}</option>
+                                        <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300">
+                                            {data.options.map((option, idx) => (
+                                                <option key={idx} value={option}>
+                                                    {option}
+                                                </option>
                                             ))}
                                         </select>
                                     ) : (
-
                                         <input
                                             type={data.type}
                                             value={data.value}
                                             readOnly
-                                            className={`w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus-within:border-blue-300`}
+                                            className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300"
                                         />
                                     )}
                                 </div>
@@ -193,55 +187,58 @@ function CreateInvoice() {
                 </div>
             </div>
 
-            <div className="overflow-x-auto mt-4 p-4 bg-gray-50 rounded-md shadow-md">
-                <table className="min-w-full bg-white shadow-md  overflow-hidden ">
-                    <thead>
-                        <tr>
-                            {tableCategories.map((category, index) => (
-                                <th
-                                    key={index}
-                                    className="py-2 px-4 bg-gray-200 text-gray-600 font-bold uppercase text-xs border-gray-300 border-2"
-                                >
-                                    {category}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {selectedProducts.map((product, index) => (
-                            <tr key={index} className="border-b text-gray-600">
-                                <td className="py-2 px-4 border-gray-300 border-2 text-left">
-                                    {product.name || product.serviceName}
-                                </td>
-                                <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.price}
-                                </td>
-                                <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.quantity}
-                                </td>
-                                <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.price}
-                                </td>
-                                <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    0.00
-                                </td>
-                                <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    0.00
-                                </td>
-                                <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.price * product.quantity}
-                                </td>
+            <div className="mt-4 p-4 bg-gray-50 rounded-md shadow-md">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white shadow-md overflow-hidden">
+                        <thead>
+                            <tr>
+                                {tableCategories.map((category, index) => (
+                                    <th
+                                        key={index}
+                                        className="py-2 px-4 bg-gray-200 text-gray-600 font-bold uppercase text-xs border-gray-300 border-2"
+                                    >
+                                        {category}
+                                    </th>
+                                ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {selectedProducts.map((product, index) => (
+                                <tr key={index} className="border-b text-gray-600">
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-left">
+                                        {product.productName || product.serviceName}
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        {product.price || product.salePrice}
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        {product.quantity}
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        {product.price || product.salePrice}
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        0.00
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        0.00
+                                    </td>
+                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                        {(product.price || product.salePrice) * product.quantity}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
 
+                {/* Resumen de impuestos */}
                 <div className="p-6">
                     <div className="w-full lg:w-1/2 ml-auto">
-                        <table className="min-w-full ">
+                        <table className="min-w-full">
                             <tbody>
                                 {taxesData.map((row, index) => (
-                                    <tr key={index} className={`border-t border-gray-300 ${row.bold ? 'font-bold' : ''}`}>
+                                    <tr key={index} className={`border-t border-gray-300 ${row.bold ? "font-bold" : ""}`}>
                                         <td className="py-2 text-gray-600">{row.label}</td>
                                         <td className="py-2 text-right text-gray-600">{row.value}</td>
                                     </tr>
@@ -252,72 +249,70 @@ function CreateInvoice() {
                 </div>
 
                 {/* Observaciones */}
-                <div className='p-4 '>
+                <div className="p-4">
                     <label className="block text-gray-700">Observaciones o comentarios para este comprobante</label>
                     <textarea
-                        className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-14 hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-14 hover:border-blue-300 focus:border-blue-300"
                         rows="2"
                         placeholder="Añadir observaciones..."
                         value={notes}
-                        onChange={(e) => setNotes(e.targetvalue)}
+                        onChange={(e) => setNotes(e.target.value)}
                     ></textarea>
                 </div>
             </div>
 
-            <div className="bg-gray-50 p-6 rounded-lg shadow-md mt-4 ">
-                <div className="flex gap-4 justify-end mb-4 ">
-                    {
-                        paymentData.map((data, index) => (
-                            <div key={index} className="flex flex-col">
-                                <label className="text-sm font-medium text-gray-700">{data.label}</label>
-                                <div className={`flex items-center mt-1`}>
-                                    {data.type === "select" ? (
-                                        <select
-                                            className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus-within:border-blue-300"
-                                            defaultValue=""
-                                            onChange={data.onChange}
-                                        >
-                                            <option value="" disabled>--- Seleccione ---</option>
-                                            {data.options.map((option, index) => (
-                                                <option key={index} value={option}>{option}</option>
-                                            ))}
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type={data.type}
-                                            value={data.value}
-                                            onChange={data.onChange}
-                                            placeholder={data.placeholder}
-                                            className={`w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus-within:border-blue-300`}
-                                        />
-                                    )}
-                                </div>
+            <div className="bg-gray-50 p-6 rounded-lg shadow-md mt-4">
+                {/* Controles de entrada */}
+                <div className="flex flex-wrap gap-4 justify-end mb-4">
+                    {paymentData.map((data, index) => (
+                        <div key={index} className="flex flex-col w-full sm:w-auto">
+                            <label className="text-sm font-medium text-gray-700">{data.label}</label>
+                            <div className="flex items-center mt-1">
+                                {data.type === "select" ? (
+                                    <select
+                                        className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300"
+                                        defaultValue=""
+                                        onChange={data.onChange}
+                                    >
+                                        <option value="" disabled>--- Seleccione ---</option>
+                                        {data.options.map((option, index) => (
+                                            <option key={index} value={option}>{option}</option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    <input
+                                        type={data.type}
+                                        value={data.value}
+                                        onChange={data.onChange}
+                                        placeholder={data.placeholder}
+                                        className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300"
+                                    />
+                                )}
                             </div>
-                        ))
-                    }
-                    <div className="self-end">
+                        </div>
+                    ))}
+                    <div className="self-end w-full sm:w-auto">
                         <button
-                            className="bg-orange-500 text-white font-medium px-4 py-2 rounded-md hover:bg-orange-600"
+                            className="w-full sm:w-auto bg-orange-500 text-white font-medium px-4 py-2 rounded-md hover:bg-orange-600"
                             onClick={() => {
                                 let paymentData = {
                                     id: Date.now(),
                                     label: methodOfPayment,
                                     description: paymentNote,
                                     amortization: Number(paymentAmount),
-                                    amount: Number(paymentAmount)
-                                }
+                                    amount: Number(paymentAmount),
+                                };
                                 setMethodsOfPaymentList([...methodsOfPaymentList, paymentData]);
                                 setPaymentAmount("");
                                 setPaymentNote("");
-                            }
-                            }
+                            }}
                         >
                             + AGREGAR
                         </button>
                     </div>
                 </div>
 
-                {/* Table */}
+                {/* Tabla */}
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left text-gray-700 border-collapse border-gray-300 border-2">
                         <thead className="bg-gray-200">
@@ -330,33 +325,40 @@ function CreateInvoice() {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                methodsOfPaymentList.map((method, index) => (
-                                    <tr key={index} className="border-b">
-                                        <td className="border border-gray-200 px-4 py-2">{method.label}</td>
-                                        <td className="border border-gray-200 px-4 py-2">{method.description}</td>
-                                        <td className="border border-gray-200 px-4 py-2 text-right">{method.amortization.toFixed(2)}</td>
-                                        <td className="border border-gray-200 px-4 py-2 text-right">{method.amount.toFixed(2)}</td>
-                                        <td className="border border-gray-200 px-4 py-2 text-center">
-                                            <button
-                                                className="text-red-500 hover:text-red-600"
-                                                onClick={() => setMethodsOfPaymentList(methodsOfPaymentList.filter(payment => method.id !== payment.id))}
-                                            >
-                                                <TrashIcon className="w-4 h-4" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            }
+                            {methodsOfPaymentList.map((method, index) => (
+                                <tr key={index} className="border-b">
+                                    <td className="border border-gray-200 px-4 py-2">{method.label}</td>
+                                    <td className="border border-gray-200 px-4 py-2">{method.description}</td>
+                                    <td className="border border-gray-200 px-4 py-2 text-right">{method.amortization.toFixed(2)}</td>
+                                    <td className="border border-gray-200 px-4 py-2 text-right">{method.amount.toFixed(2)}</td>
+                                    <td className="border border-gray-200 px-4 py-2 text-center">
+                                        <button
+                                            className="text-red-500 hover:text-red-600"
+                                            onClick={() =>
+                                                setMethodsOfPaymentList(
+                                                    methodsOfPaymentList.filter(payment => method.id !== payment.id)
+                                                )
+                                            }
+                                        >
+                                            <TrashIcon className="w-4 h-4" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Resumen */}
                 <div className="p-6">
                     <div className="w-full lg:w-1/2 ml-auto">
-                        <table className="min-w-full ">
+                        <table className="min-w-full">
                             <tbody>
                                 {paymentMethods.map((row, index) => (
-                                    <tr key={index} className={`border-y border-gray-300 ${row.bold ? 'font-bold' : ''}`}>
+                                    <tr
+                                        key={index}
+                                        className={`border-y border-gray-300 ${row.bold ? "font-bold" : ""}`}
+                                    >
                                         <td className="py-2 text-gray-600">{row.label}</td>
                                         <td className="py-2 text-right text-gray-600">{row.value}</td>
                                     </tr>
@@ -367,16 +369,17 @@ function CreateInvoice() {
                 </div>
             </div>
 
-            <div className='flex justify-between items-center bg-gray-50 py-3 px-4 shadow-md rounded-b-lg mt-4'>
+            <div className='flex flex-col xs:flex-row justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg gap-4'>
                 <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
+                    className="bg-white border border-gray-300 text-xs md:text-sm lg:text-base text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto"
+                    onClick={() => navigate(-1)}
                 >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
+                    <ReturnIcon className="w-4 h-4 text-gray-700" />
                     CANCELAR
                 </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
+                <button
+                    className="bg-green-500 text-xs md:text-sm text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3 w-full sm:w-auto">
+                    <PlusIcon className="w-4 h-4 text-white" />
                     GENERAR COMPROBANTE
                 </button>
             </div>

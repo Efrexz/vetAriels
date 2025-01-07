@@ -4,10 +4,6 @@ import { ClientsContext } from '@context/ClientsContext';
 import { ConfirmActionModal } from '@components/ConfirmActionModal';
 import { UpdateStateModal } from '@components/UpdateStateModal';
 import BathIcon from '@assets/bathIcon.svg?react';
-import EraserIcon from '@assets/eraserIcon.svg?react';
-import RefreshIcon from '@assets/refreshIcon.svg?react';
-import PDFIcon from '@assets/pdfIcon.svg?react';
-import ExcelIcon from '@assets/fileExcelIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
 import CheckIcon from '@assets/checkIcon.svg?react';
@@ -43,15 +39,16 @@ function ActiveOrdersGrooming() {
 
 
     return (
-        <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
-            <h1 className="text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <BathIcon className="w-9 h-9 text-blue-400 mr-2" />
+        <section className="container mx-auto p-4 sm:p-6 overflow-auto custom-scrollbar">
+            <h1 className="text-xl sm:text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
+                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-blue-400 mr-2" />
                 Peluquería: <span className="text-green-600 font-light pl-1"> Turnos de hoy</span>
             </h1>
             <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <div className="p-4 rounded-lg mb-2">
-                    <div className="flex items-center space-x-2 mb-4">
-                        <div className="flex w-[30%] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4">
+                        {/* Input de búsqueda */}
+                        <div className="flex w-full md:w-[350px] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
                             <div className="flex items-center justify-center bg-gray-100 px-3">
                                 <SearchIcon className="w-5 h-5 text-gray-600" />
                             </div>
@@ -61,32 +58,22 @@ function ActiveOrdersGrooming() {
                                 className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                             />
                         </div>
-                        <div>
-                            <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                                <EraserIcon className="w-5 h-5" />
-                            </button>
-                            <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                                <RefreshIcon className="w-5 h-5" />
-                            </button>
-                            <button className="bg-transparent border border-gray-300 text-orange-500 py-2 px-4 rounded hover:bg-gray-200">
-                                <PDFIcon className="w-5 h-5" />
-                            </button>
-                            <button className="bg-transparent border border-gray-300 text-green-600 py-2 px-4 rounded hover:bg-gray-200">
-                                <ExcelIcon className="w-5 h-5" />
-                            </button>
-                        </div>
+
+                        {/* Botón de creación */}
                         <button
-                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            className="w-full md:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-2"
                             onClick={() => navigate("/grooming/order-creation/no_client")}
                         >
                             <PlusIcon className="w-5 h-5" />
                             CREAR ORDEN DE SERVICIO
                         </button>
                     </div>
+
+                    {/* Select de estado */}
                     <div>
                         <select
                             name="status"
-                            className="w-[30%] rounded-lg border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300  focus:border-blue-300"
+                            className="w-full md:w-[30%] rounded-lg border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300 focus:border-blue-300"
                         >
                             <option value="">--Seleccionar estado--</option>
                             <option value="pendiente">Pendiente</option>
@@ -202,9 +189,12 @@ function ActiveOrdersGrooming() {
                     )
                 }
 
-                <div className="flex justify-between items-center mt-4">
-                    <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
-                    <div className="flex space-x-2">
+                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
+                    <p className="text-gray-600 text-center md:text-left">
+                        Página: 1 de 1 | Registros del 1 al {petsInQueueGrooming.length} | Total{" "}
+                        {petsInQueueGrooming.length}
+                    </p>
+                    <div className="flex justify-center space-x-2">
                         <button className="py-2 px-4 border rounded">Primera</button>
                         <button className="py-2 px-4 border rounded">Anterior</button>
                         <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>

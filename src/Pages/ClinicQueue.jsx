@@ -67,7 +67,7 @@ function ClinicQueue() {
             <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <div className="p-4 rounded-lg mb-2">
                     <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
-                        <div className="flex flex-col sm:flex-row gap-4 w-full">
+                        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
                             <input
                                 type="text"
                                 placeholder="Buscar por ID..."
@@ -75,11 +75,11 @@ function ClinicQueue() {
                             />
                             <input
                                 type="date"
-                                className="w-full sm:w-[250px] py-2 px-4 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                                className="w-full sm:w-[200px] py-2 px-4 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                             />
                         </div>
                         <button
-                            className="w-full sm:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 justify-center"
+                            className="w-full sm:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 justify-center whitespace-nowrap"
                             onClick={() => navigate("/sales/client/no_client")}
                         >
                             <PlusIcon className="w-5 h-5" />

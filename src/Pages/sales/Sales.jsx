@@ -17,7 +17,6 @@ import Stethoscope from '@assets/stethoscope.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
 import ClockIcon from '@assets/clockIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
-import TagIcon from '@assets/tagIcon.svg?react';
 import GiftIcon from '@assets/giftIcon.svg?react';
 
 
@@ -136,8 +135,8 @@ function Sales() {
 
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar ">
-            <h1 className="text-3xl font-bold text-[#4CAF50] flex items-center mb-4 border-b-2 border-gray-100 pb-5">
-                <ShoppingCartPlusIcon className="h-8 w-8 mr-2" />
+            <h1 className="text-xl sm:text-2xl font-bold text-[#4CAF50] flex items-center mb-4 border-b-2 border-gray-100 pb-5">
+                <ShoppingCartPlusIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Ventas
             </h1>
 
@@ -145,10 +144,12 @@ function Sales() {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="clientSearch">
                     Buscar y seleccionar cliente:
                 </label>
-                <div className="flex gap-4">
+
+                <div className="flex flex-col md:flex-row items-center gap-4">
                     <ClientSearchInput mode={"sales"} />
                     <button
-                        className={`ml-2 ${isClientSelected ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"} text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline px-24`}
+                        className={`${isClientSelected ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"
+                            } flex justify-center items-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-[200px] `}
                         type="button"
                         disabled={!isClientSelected}
                         onClick={() => navigate(`/clients/client/${isClientSelected.id}/update`)}
@@ -156,80 +157,79 @@ function Sales() {
                         <UserPenIcon className="w-5 h-5" />
                     </button>
                     <button
-                        className="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline px-24"
+                        className="bg-purple-500 hover:bg-purple-700 flex justify-center items-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-[200px]"
                         type="button"
-                        onClick={() => navigate("/clients/create")}>
+                        onClick={() => navigate("/clients/create")}
+                    >
                         <NewUserIcon className="w-5 h-5" />
                     </button>
                 </div>
 
                 {/* Mascotas del cliente seleccionado */}
-                {
-                    isClientSelected &&
-                    (<div className='flex gap-2 mt-6'>
-                        {
-                            petsByOwner.map((pet, index) => {
-                                //calculamos la edad de cada mascotita para poder mostrarla en el cuadro de información
-                                const petAge = calculateAge(pet.birthDate);
+                {isClientSelected && (
+                    <div className="flex flex-wrap gap-4 mt-6">
+                        {petsByOwner.map((pet, index) => {
+                            const petAge = calculateAge(pet.birthDate); // Calcula la edad de cada mascota
 
-                                return (
-                                    <div key={index} className="relative">
-                                        <button
-                                            onMouseEnter={() => setHoveredPetId(pet.id)}
-                                            onMouseLeave={() => setHoveredPetId(null)}
-                                            className='py-2 px-4 bg-white hover:bg-gray-100 text-gray-600 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-300 flex gap-1 items-center'
-                                            onClick={() => setActivePetMenu(activePetMenu === pet.id ? null : pet.id)}
-                                        >
-                                            {pet.petName}
-                                            <AngleDown className='w-5 h-5' />
-                                        </button>
+                            return (
+                                <div key={index} className="relative">
+                                    <button
+                                        onMouseEnter={() => setHoveredPetId(pet.id)}
+                                        onMouseLeave={() => setHoveredPetId(null)}
+                                        className="py-2 px-4 bg-white hover:bg-gray-100 text-gray-600 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-300 flex gap-1 items-center w-full md:w-auto"
+                                        onClick={() => setActivePetMenu(activePetMenu === pet.id ? null : pet.id)}
+                                    >
+                                        {pet.petName}
+                                        <AngleDown className="w-5 h-5" />
+                                    </button>
 
-                                        {/* Menu desplegable por mascota*/}
-                                        {activePetMenu === pet.id && (
-                                            <div className="absolute left-0 w-52 bg-white border rounded-lg shadow-lg z-10">
-                                                <ul className="py-2">
-                                                    {
-                                                        menuOptions.map((option, index) => (
-                                                            <li key={index} className="flex gap-1 px-2 py-2 hover:bg-gray-100 cursor-pointer border-b-2 text-sm">
-                                                                <option.icon className={`w-5 h-5 ${option.iconColor}`} />
-                                                                {option.tooltip}
-                                                            </li>
-                                                        ))
-                                                    }
-                                                </ul>
-                                            </div>
-                                        )}
+                                    {/* Menú desplegable */}
+                                    {activePetMenu === pet.id && (
+                                        <div className="absolute left-0 w-[200px] bg-white border rounded-lg shadow-lg z-10 ">
+                                            <ul className="py-2">
+                                                {menuOptions.map((option, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className="flex gap-1 px-2 py-2 hover:bg-gray-100 cursor-pointer border-b-2 text-sm"
+                                                    >
+                                                        <option.icon className={`w-5 h-5 ${option.iconColor}`} />
+                                                        {option.tooltip}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
 
-                                        {/* información al hacer hover */}
-                                        {
-                                            hoveredPetId === pet.id && (
-                                                <div className="absolute left-0 bottom-full w-52 bg-black text-white p-4 rounded shadow-lg">
-                                                    <span className='block'>#HC: {pet.hc}</span>
-                                                    <span
-                                                        className='block'>
-                                                        {petAge.years} {petAge.years === 1 ? "año" : "años"} y {petAge.months} {petAge.months === 1 ? "mes" : "meses"}
-                                                    </span>
-                                                    <span className='block'>ESPECIE: {pet.species}</span>
-                                                    <span className='block'>RAZA: {pet.breed}</span>
-                                                    <span className='block'>SEXO: {pet.sex}</span>
-                                                </div>
-                                            )}
-                                    </div>
-                                )
-                            })
-                        }
+                                    {/* Información al hacer hover */}
+                                    {hoveredPetId === pet.id && (
+                                        <div className="absolute left-0 bottom-full w-[160px] md:w-52 bg-black text-white p-4 rounded shadow-lg">
+                                            <span className="block">#HC: {pet.hc}</span>
+                                            <span className="block">
+                                                {petAge.years} {petAge.years === 1 ? "año" : "años"} y{" "}
+                                                {petAge.months} {petAge.months === 1 ? "mes" : "meses"}
+                                            </span>
+                                            <span className="block">ESPECIE: {pet.species}</span>
+                                            <span className="block">RAZA: {pet.breed}</span>
+                                            <span className="block">SEXO: {pet.sex}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+
+                        {/* Botón para agregar mascotas */}
                         <button
-                            className='py-2 px-4 bg-orange-400 hover:bg-orange-500 flex gap-1 items-center rounded-md ml-5'
+                            className="py-2 px-4 bg-orange-400 hover:bg-orange-500 flex gap-1 items-center rounded-md ml-0 md:ml-5"
                             onClick={() => navigate(`/pets/create/${clientId}`)}
                         >
-                            <PetIcon className='w-5 h-5 text-white' />
-                            <PlusIcon className='w-3 h-3 text-white' />
+                            <PetIcon className="w-5 h-5 text-white" />
+                            <PlusIcon className="w-3 h-3 text-white" />
                         </button>
-                    </div>)
-                }
+                    </div>
+                )}
             </div>
 
-            <div className="bg-gray-100 rounded-lg px-6 py-4 mb-6 flex justify-between items-center gap-4">
+            <div className="bg-gray-100 rounded-lg px-6 py-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <button
                     className={`${isClientSelected ? "bg-blue-500 hover:bg-blue-700" : "bg-[#70D0EE]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
                     disabled={!isClientSelected}
@@ -258,8 +258,8 @@ function Sales() {
             <div className="bg-white shadow-md rounded-lg p-6">
                 {
                     isClientSelected && (
-                        <div className='flex gap-4 mb-6 items-center'>
-                            <div className='w-[40%]'>
+                        <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-6'>
+                            <div className=' col-span-1'>
                                 <label htmlFor="store" className="block text-gray-700 mb-2 pl-2">Almacén de origen</label>
                                 <select
                                     id='store'
@@ -270,7 +270,7 @@ function Sales() {
                                 </select>
                             </div>
 
-                            <div className='w-full flex flex-col justify-center'>
+                            <div className='col-span-1 md:col-span-3'>
                                 <label
                                     htmlFor="search"
                                     className="block text-gray-700 mb-2 pl-2">
@@ -353,28 +353,21 @@ function Sales() {
                                             }
                                         </select>
                                     </td>
-                                    <td className="py-5 px-4  flex space-x-2 justify-center align-center border-gray-300 border-b-2 border-r-2" >
-                                        <button className="text-blue-500 hover:text-blue-700">
-                                            <ClockIcon className="w-4 h-4" />
-                                        </button>
-                                        <button className="text-green-500 hover:text-green-600">
-                                            <NewUserIcon className="w-4 h-4" />
-                                        </button>
-                                        <button className="text-orange-400 hover:text-orange-500">
-                                            <TagIcon className='w-4 h-4  cursor-pointer' />
-                                        </button>
-                                        <button className="text-orange-400 hover:text-orange-500">
-                                            <GiftIcon className='w-4 h-4 cursor-pointer' />
-                                        </button>
-                                        <button
-                                            className="text-red-500 hover:text-red-700"
-                                            onClick={() => {
-                                                removeProductFromClient(Number(clientId), product.provisionalId);
-                                                removeProduct(product.provisionalId)
-                                            }}
-                                        >
-                                            <TrashIcon className="w-4 h-4" />
-                                        </button>
+                                    <td className="py-8 px-4 text-center border-2 border-gray-300" >
+                                        <div className="flex justify-center items-center h-full space-x-2">
+                                            <button className="text-orange-400 hover:text-orange-500">
+                                                <GiftIcon className='w-4 h-4 cursor-pointer' />
+                                            </button>
+                                            <button
+                                                className="text-red-500 hover:text-red-700"
+                                                onClick={() => {
+                                                    removeProductFromClient(Number(clientId), product.provisionalId);
+                                                    removeProduct(product.provisionalId)
+                                                }}
+                                            >
+                                                <TrashIcon className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -421,7 +414,7 @@ function Sales() {
                 </div>
             </div>
 
-            <div className="bg-gray-100 rounded-lg px-6 py-4 mt-6 flex justify-end">
+            <div className="bg-gray-100 rounded-lg px-6 py-4 mt-6 flex justify-center md:justify-end">
                 <button
                     className={`${isClientSelected ? "bg-green-500 hover:bg-green-600" : "bg-green-400"} text-white font-bold py-2 px-4 rounded`}
                     type="button"

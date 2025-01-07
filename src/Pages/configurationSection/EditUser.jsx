@@ -28,7 +28,7 @@ const userFields = [
     },
 ];
 
-const EditUser = () => {
+function EditUser() {
 
     const { users, updateUserData } = useContext(GlobalContext);
     const { id } = useParams();
@@ -54,7 +54,7 @@ const EditUser = () => {
         });
     }
 
-    const updateUserInfo = () => {
+    function updateUserInfo() {
         const updateData = {
             email: formData.email,
             name: formData.name,
@@ -64,13 +64,13 @@ const EditUser = () => {
             status: formData.status,
         };
         updateUserData(Number(id), updateData);
-        navigate(`/config/user-subsidiaries`);
+        navigate("/config/user - subsidiaries");
 
-    };
+    }
     return (
         <section className="w-full mx-auto p-6 bg-white">
-            <h1 className="text-2xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
-                <UserGroupIcon className="w-6 h-6 mr-2" />
+            <h1 className="text-2xl md:text-3xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
+                <UserGroupIcon className="w-6 md:w-9 h-6 md:h-9 mr-2" />
                 Editar Usuario
             </h1>
             <div className="bg-blue-100 p-4 rounded mb-4">
@@ -116,23 +116,25 @@ const EditUser = () => {
                     </div>
                 ))}
             </form>
-            <div className='flex justify-end items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md '>
+            <div className='flex flex-col xs:flex-row justify-end items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md '>
                 <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
+                    className="bg-white w-full xs:w-auto border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center justify-center gap-3"
                     onClick={() => navigate(-1)}
                 >
                     <ReturnIcon className="w-5 h-5 text-gray-700" />
                     CANCELAR
                 </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
+                <button className="bg-green-500 w-full xs:w-auto text-white py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-3"
                     onClick={updateUserInfo}
                 >
                     <PlusIcon className="w-5 h-5 text-white" />
                     CREAR NUEVO ROL
                 </button>
             </div>
+
+
         </section>
     );
-};
+}
 
 export { EditUser };

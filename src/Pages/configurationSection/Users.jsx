@@ -16,8 +16,8 @@ function Users() {
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-2xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
-                <UserGroupIcon className="w-6 h-6 mr-2" />
+            <h1 className="text-xl sm:text-3xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
+                <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9  mr-2" />
                 Usuarios
             </h1>
             <div className="bg-white rounded-lg shadow p-3 mb-6">
@@ -65,24 +65,29 @@ function Users() {
                                             {user?.status === "ACTIVO" ? "Activo" : "Inactivo"}
                                         </span>
                                     </td>
-                                    <td className="py-3 px-4 text-center border flex justify-center gap-2">
-                                        <KeyIcon
-                                            className="w-5 h-5 text-yellow-500 cursor-pointer"
-                                            onClick={() => navigate(`/config/user-subsidiaries/edit/${user.id}`)}
-                                        />
-                                        <TrashIcon
-                                            className="w-5 h-5 text-red-500 cursor-pointer"
-                                            onClick={() => removeUser(user.id)}
-                                        />
+                                    <td className="py-8 px-4 text-center border">
+                                        <div className="flex justify-center items-center h-full space-x-2">
+                                            <KeyIcon
+                                                className="w-5 h-5 text-orange-400 hover:text-orange-500 cursor-pointer"
+                                                onClick={() => navigate("/config/user-subsidiaries/edit/${user.id}")}
+                                            />
+                                            <TrashIcon
+                                                className="w-5 h-5 text-red-400  hover:text-red-500 cursor-pointer"
+                                                onClick={() => removeUser(user.id)}
+                                            />
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                    <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 2 | Total 2</p>
-                    <div className="flex space-x-2">
+                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
+                    <p className="text-gray-600 text-center md:text-left">
+                        Página: 1 de 1 | Registros del 1 al {users.length} | Total{" "}
+                        {users.length}
+                    </p>
+                    <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
                         <button className="py-2 px-4 border rounded">Primera</button>
                         <button className="py-2 px-4 border rounded">Anterior</button>
                         <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>

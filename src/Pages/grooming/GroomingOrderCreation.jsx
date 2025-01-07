@@ -123,13 +123,12 @@ function GroomingOrderCreation() {
 
     return (
         <section className="bg-white p-6 overflow-auto custom-scrollbar">
-            <h1 className="text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
+            <h1 className="text-xl md:text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <BathIcon className="w-7 h-7 text-blue-400 mr-2" />
                 Peluquería
             </h1>
             <div className="bg-gray-100 p-4 rounded mb-4">
-
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="col-span-2">
                         <label className="block text-gray-700 mb-2">Propietario</label>
                         <ClientSearchInput mode={"grooming"} />
@@ -195,106 +194,108 @@ function GroomingOrderCreation() {
             </div>
 
             <div className="bg-gray-100 p-4 rounded shadow">
-                <div className="grid grid-cols-4 gap-4 mb-4">
-                    <div className='col-span-1'>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    {/* Almacén de origen */}
+                    <div className="col-span-1">
                         <label className="block text-gray-700 mb-2">Almacén de origen</label>
-                        {
-                            isClientSelected ? (
-                                <select className="w-full  border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300" >
-                                    <option>ALMACEN PRODUCTOS P/VENTAS</option>
-                                </select>
-                            ) :
-                                (
-                                    <input
-                                        className="w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
-                                        value="ALMACEN PRODUCTOS P/VENTAS"
-                                        disabled
-                                    />
-                                )
-                        }
+                        {isClientSelected ? (
+                            <select className="w-full border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300">
+                                <option>ALMACEN PRODUCTOS P/VENTAS</option>
+                            </select>
+                        ) : (
+                            <input
+                                className="w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
+                                value="ALMACEN PRODUCTOS P/VENTAS"
+                                disabled
+                            />
+                        )}
                     </div>
-                    <div className='col-span-3'>
-                        <label className="block text-gray-700 mb-2">Buscar y agregar productos y/o servicios:</label>
-                        {
-                            isClientSelected ? (
-                                <ProductSearchInput addProductToTable={addProductToTable} />
-                            ) :
-                                (
-                                    <input
-                                        className="w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
-                                        value=""
-                                        disabled
-                                    />
-                                )
-                        }
+
+                    {/* Buscar y agregar productos y/o servicios */}
+                    <div className="col-span-1 md:col-span-3">
+                        <label className="block text-gray-700 mb-2">
+                            Buscar y agregar productos y/o servicios:
+                        </label>
+                        {isClientSelected ? (
+                            <ProductSearchInput addProductToTable={addProductToTable} />
+                        ) : (
+                            <input
+                                className="w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
+                                value=""
+                                disabled
+                            />
+                        )}
                     </div>
                 </div>
 
-                <table className="w-full border border-gray-300 rounded-lg mt-8">
-                    <thead>
-                        <tr>
-                            <th className="py-2 px-4 border border-gray-300 text-center">Concepto</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Valor Unitario</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Cantidad</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Sub Total</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Impuestos</th>
-                            <th className="py-2 px-4 border border-gray-300  text-center">Total</th>
-                            <th className="py-2 px-4 border border-gray-300  text-center">Mascota</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {selectedProducts.map((product) => (
-                            <tr key={product.provisionalId}>
-                                <td className='py-2 px-4 border border-gray-300 text-center'>
-                                    {product.productName || product.serviceName}
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    <span
-                                        className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
-                                        onClick={() => {
-                                            setProductToEdit(product)
-                                            setIsPriceModalOpen(true)
-                                            setIsQuantityModalOpen(false)
-                                        }}
-                                    >
-                                        {product.salePrice || product.price}
-                                    </span>
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    <QuantityCounter
-                                        itemCount={product.quantity}
-                                        changeQuantity={(newQuantity) => {
-                                            updateProductQuantity(product.provisionalId, newQuantity)
-                                        }}
-                                        openQuantityModal={() => {
-                                            setIsQuantityModalOpen(true)
-                                            setIsPriceModalOpen(false)
-                                            setProductToEdit(product)
-                                        }} />
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    {(product.salePrice || product.price) * product.quantity}
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
-                                        0.00
-                                    </span>
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    {(product.salePrice || product.price) * product.quantity}
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
-                                <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
-                                    <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
-                                    <TrashIcon
-                                        onClick={() => removeProduct(product.provisionalId)}
-                                        className='w-5 h-5 text-red-500 cursor-pointer' />
-                                </td>
+                <div className='overflow-x-auto'>
+                    <table className="w-full border border-gray-300 rounded-lg mt-8">
+                        <thead>
+                            <tr>
+                                <th className="py-2 px-4 border border-gray-300 text-center">Concepto</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Valor Unitario</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Cantidad</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Sub Total</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Impuestos</th>
+                                <th className="py-2 px-4 border border-gray-300  text-center">Total</th>
+                                <th className="py-2 px-4 border border-gray-300  text-center">Mascota</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Opciones</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {selectedProducts.map((product) => (
+                                <tr key={product.provisionalId}>
+                                    <td className='py-2 px-4 border border-gray-300 text-center'>
+                                        {product.productName || product.serviceName}
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        <span
+                                            className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
+                                            onClick={() => {
+                                                setProductToEdit(product)
+                                                setIsPriceModalOpen(true)
+                                                setIsQuantityModalOpen(false)
+                                            }}
+                                        >
+                                            {product.salePrice || product.price}
+                                        </span>
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        <QuantityCounter
+                                            itemCount={product.quantity}
+                                            changeQuantity={(newQuantity) => {
+                                                updateProductQuantity(product.provisionalId, newQuantity)
+                                            }}
+                                            openQuantityModal={() => {
+                                                setIsQuantityModalOpen(true)
+                                                setIsPriceModalOpen(false)
+                                                setProductToEdit(product)
+                                            }} />
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        {(product.salePrice || product.price) * product.quantity}
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
+                                            0.00
+                                        </span>
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        {(product.salePrice || product.price) * product.quantity}
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
+                                    <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
+                                        <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
+                                        <TrashIcon
+                                            onClick={() => removeProduct(product.provisionalId)}
+                                            className='w-5 h-5 text-red-500 cursor-pointer' />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
 
                 {
                     isPriceModalOpen && (
@@ -335,9 +336,10 @@ function GroomingOrderCreation() {
 
             {/* Observaciones */}
             <div className='bg-gray-100 p-4 mb-4 mt-4 rounded shadow'>
-                <label className="block text-gray-700">Observaciones o comentarios de ésta orden de servicio</label>
+                <label htmlFor="note" className="block text-gray-700 ">Observaciones o comentarios de ésta orden de servicio</label>
                 <textarea
-                    className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-20 hover:border-blue-300 focus-within:border-blue-300"
+                    className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-20 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                    id="note"
                     rows="3"
                     placeholder="Añadir observaciones..."
                     value={notes}
@@ -346,47 +348,50 @@ function GroomingOrderCreation() {
             </div>
 
             {/* recordatorio en agenda */}
-            <div className='bg-gray-100 p-4 mb-4 mt-1 rounded shadow flex  items-center gap-4'>
-
+            <div className="bg-gray-100 p-4 mb-4 mt-1 rounded shadow flex flex-col md:flex-row items-center gap-4">
+                {/* Fecha de próximo servicio */}
                 <div className="w-full">
-                    <label htmlFor="date">Fecha de próximo servicio (recordatorio en agenda)</label>
+                    <label htmlFor="date" className="block text-gray-700 ">Fecha de próximo servicio (recordatorio en agenda)</label>
                     <input
                         type="date"
                         id="date"
-                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus:border-blue-300 focus:outline-none"
                     />
                 </div>
 
-                <div className=" w-full">
-                    <label htmlFor="typeService">Tipo de evento </label>
+                {/* Tipo de evento */}
+                <div className="w-full">
+                    <label htmlFor="typeService" className="block text-gray-700 ">Tipo de evento</label>
                     <select
                         name="type"
                         id="typeService"
-                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus:border-blue-300 focus:outline-none"
                     >
                         <option value="baño">Baño</option>
                     </select>
                 </div>
 
-                <div className='w-full'>
-                    <label htmlFor="client">Anotaciones</label>
+                {/* Anotaciones */}
+                <div className="w-full">
+                    <label htmlFor="client" className="block text-gray-700 ">Anotaciones</label>
                     <input
                         type="text"
                         placeholder="Anotaciones..."
-                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus:border-blue-300 focus:outline-none"
                     />
                 </div>
             </div>
-            <div className="flex justify-between items-center bg-gray-100 p-4 mb-4 mt-1 rounded shadow ">
+            <div className="flex flex-col xs:flex-row justify-between items-center bg-gray-100 p-4 mb-4 mt-1 rounded shadow gap-4">
                 <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
+                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto text-xs md:text-sm"
                     onClick={() => navigate(-1)}
                 >
                     <ReturnIcon className="w-5 h-5 text-gray-700" />
                     CANCELAR
                 </button>
+
                 <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
+                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3 w-full sm:w-auto text-xs md:text-sm"
                     onClick={() => sendInfoToQueueGrooming()}
                 >
                     <PlusIcon className="w-5 h-5 text-white" />
