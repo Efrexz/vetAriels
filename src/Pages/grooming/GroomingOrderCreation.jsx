@@ -6,12 +6,10 @@ import { QuantityCounter } from '@components/QuantityCounter';
 import { PriceModificationModal } from '@components/PriceModificationModal';
 import { QuantityModificationModal } from '@components/QuantityModificationModal';
 import { ClientSearchInput } from '@components/ClientSearchInput';
+import { ActionButtons } from '@components/ActionButtons';
 import BathIcon from '@assets/bathIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import TagIcon from '@assets/tagIcon.svg?react';
-
 
 function GroomingOrderCreation() {
 
@@ -381,23 +379,12 @@ function GroomingOrderCreation() {
                     />
                 </div>
             </div>
-            <div className="flex flex-col xs:flex-row justify-between items-center bg-gray-100 p-4 mb-4 mt-1 rounded shadow gap-4">
-                <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto text-xs md:text-sm"
-                    onClick={() => navigate(-1)}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    CANCELAR
-                </button>
 
-                <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3 w-full sm:w-auto text-xs md:text-sm"
-                    onClick={() => sendInfoToQueueGrooming()}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    CREAR ORDEN DE SERVICIO
-                </button>
-            </div>
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                onSubmit={sendInfoToQueueGrooming}
+                submitText="CREAR ORDEN DE SERVICIO"
+            />
         </section>
     );
 }

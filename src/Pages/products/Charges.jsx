@@ -2,21 +2,8 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
-import EraserIcon from '@assets/eraserIcon.svg?react';
-import RefreshIcon from '@assets/refreshIcon.svg?react';
-import PDFIcon from '@assets/pdfIcon.svg?react';
-import ExcelIcon from '@assets/fileExcelIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
-
-
-const IconsOptions = [
-    { icon: EraserIcon, color: "text-gray-700" },
-    { icon: RefreshIcon, color: "text-gray-700" },
-    { icon: PDFIcon, color: "text-orange-500" },
-    { icon: ExcelIcon, color: "text-green-600" },
-];
-
 
 const tableHeaders = ["N°", "Fecha de creación", "Razon", "Responsable", "Registrado por ", "Opciones"];
 
@@ -27,8 +14,8 @@ function Charges() {
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-2xl items-center font-medium text-green-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <DocumentJoinIcon className="w-9 h-9 mr-2" />
+            <h1 className="text-xl md:text-3xl items-center font-medium text-green-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Cargas de stock
             </h1>
 
@@ -39,33 +26,23 @@ function Charges() {
 
             <div className="bg-white rounded-lg shadow p-3 mb-6">
                 <div className="p-4 rounded-lg mb-2">
-                    <div className="flex items-center space-x-2 mb-4">
-                        <div className="w-[60%] flex gap-2">
-                            <div className="flex w-[50%] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
-                                <div className="flex items-center justify-center bg-gray-100 px-3">
-                                    <SearchIcon className="w-5 h-5 text-gray-600" />
-                                </div>
-                                <input
-                                    type="text"
-                                    placeholder="Buscar..."
-                                    className="w-[40%] py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
-                                />
+                    <div className="flex flex-wrap items-center gap-4 mb-4">
+                        <div className="flex w-full md:w-[350px] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
+                            <div className="flex items-center justify-center bg-gray-100 px-3">
+                                <SearchIcon className="w-5 h-5 text-gray-600" />
                             </div>
                             <input
-                                type="date"
-                                className="w-[50%] py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                                type="text"
+                                placeholder="Buscar..."
+                                className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                             />
                         </div>
-
-                        <div>
-                            {IconsOptions.map((option, index) => (
-                                <button key={index} className={`bg-transparent border border-gray-300 ${option.color} py-2 px-4 rounded hover:bg-gray-200`}>
-                                    <option.icon className="w-5 h-5" />
-                                </button>
-                            ))}
-                        </div>
+                        <input
+                            type="date"
+                            className="w-full md:w-[250px] py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                        />
                         <button
-                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            className="w-full md:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-2"
                             onClick={() => navigate('/charges/create')}
                         >
                             <PlusIcon className="w-5 h-5" />
@@ -92,20 +69,25 @@ function Charges() {
                                     <td className="px-4 text-start border">{restock.reason}</td>
                                     <td className="text-center border">{restock.responsible}</td>
                                     <td className="text-center border">{restock.registeredBy}</td>
-                                    <td className="py-4 px-4 border flex justify-center">
-                                        <SearchIcon
-                                            className="w-5 h-5 text-green-500 cursor-pointer"
-                                            onClick={() => { navigate(`/charges/charge/${restock.id}/detail`) }}
-                                        />
+                                    <td className="py-4 px-4 text-center border">
+                                        <div className="flex justify-center items-center h-full">
+                                            <SearchIcon
+                                                className="w-5 h-5 text-green-500 hover:text-green-600 cursor-pointer"
+                                                onClick={() => { navigate(`/charges/charge/${restock.id}/detail`) }}
+                                            />
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                    <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 2 | Total 2</p>
-                    <div className="flex space-x-2">
+                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
+                    <p className="text-gray-600 text-center md:text-left">
+                        Página: 1 de 1 | Registros del 1 al {restockData.length} | Total{" "}
+                        {restockData.length} | Total{" "}
+                    </p>
+                    <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
                         <button className="py-2 px-4 border rounded">Primera</button>
                         <button className="py-2 px-4 border rounded">Anterior</button>
                         <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>

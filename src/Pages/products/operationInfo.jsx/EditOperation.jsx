@@ -7,8 +7,8 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
 
     return (
         <main className="w-full mx-auto p-6 bg-white shadow-md ">
-            <div className="w-full flex gap-4">
-                <div className="w-[50%]">
+            <div className="w-full flex flex-wrap gap-4">
+                <div className="w-full md:w-[30%]">
                     <label
                         htmlFor="responsible"
                         className="block mb-1 text-sm font-medium text-gray-600"
@@ -25,8 +25,7 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
                         <option value="2">Carlos Perez</option>
                     </select>
                 </div>
-
-                <div className="w-full">
+                <div className="w-full md:w-[50%]">
                     <label
                         htmlFor="reason"
                         className="block mb-1 text-sm font-medium text-gray-600"

@@ -5,10 +5,9 @@ import { ProductSearchInput } from '@components/ProductSearchInput';
 import { QuantityCounter } from '@components/QuantityCounter';
 import { PriceModificationModal } from '@components/PriceModificationModal';
 import { QuantityModificationModal } from '@components/QuantityModificationModal';
+import { ActionButtons } from '@components/ActionButtons';
 import { SuccessModal } from '@components/SuccessModal';
 import BathIcon from '@assets/bathIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import TagIcon from '@assets/tagIcon.svg?react';
 
@@ -400,25 +399,16 @@ function EditGroomingOrder() {
                     />
                 </div>
             </div>
-            <div className="flex justify-between items-center bg-gray-100 p-4 mb-4 mt-1 rounded shadow ">
-                <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                    onClick={() => navigate("/grooming")}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    REGRESAR AL LISTADO DE ORDENES DE SERVICIO
-                </button>
-                <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    onClick={() => {
-                        updateGroomingOrder();
-                        setIsSuccessModalOpen(true);
-                    }}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    GUARDAR CAMBIOS
-                </button>
-            </div>
+
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                cancelText="REGRESAR AL LISTADO DE ORDENES DE SERVICIO"
+                onSubmit={() => {
+                    updateGroomingOrder();
+                    setIsSuccessModalOpen(true);
+                }}
+                submitText="GUARDAR CAMBIOS"
+            />
         </section>
     );
 }

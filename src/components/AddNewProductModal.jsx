@@ -1,10 +1,9 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { ActionButtons } from '@components/ActionButtons';
 import ArrowDown from '@assets/arrowDown.svg?react';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
 import PillsIcon from '@assets/pillsIcon.svg?react';
 import PropTypes from "prop-types";
 
@@ -186,9 +185,9 @@ function AddNewProductModal({ onClose }) {
 
 
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50">
-            <div className="bg-white p-8 rounded-md w-full h-auto max-w-5xl mt-8 modal-appear">
-                <h2 className="text-xl font-bold text-blue-500 mb-4">Agregar nuevo producto</h2>
+        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50">
+            <div className="bg-white py-4 px-8 rounded-md w-full h-auto max-w-5xl mt-6 modal-appear">
+                <h2 className="text-xl font-bold text-blue-500 mb-2">Agregar nuevo producto</h2>
                 <form className="grid grid-cols-3 gap-4 border-b border-gray-300 pb-8">
                     {formFields.map((field, index) => (
                         <div
@@ -240,20 +239,12 @@ function AddNewProductModal({ onClose }) {
                 </form>
 
                 <div className="flex justify-end mt-6 gap-4">
-                    <button
-                        className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                        onClick={() => onClose()}
-                    >
-                        <ReturnIcon className="w-5 h-5 text-gray-700" />
-                        CANCELAR
-                    </button>
-                    <button
-                        className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                        onClick={() => createProduct()}
-                    >
-                        <PlusIcon className="w-5 h-5 text-white" />
-                        CREAR NUEVO PRODUCTO
-                    </button>
+                    <ActionButtons
+                        onCancel={onClose}
+                        onSubmit={createProduct}
+                        submitText="CREAR NUEVO PRODUCTO"
+                        mode="modal"
+                    />
                 </div>
             </div>
         </div >

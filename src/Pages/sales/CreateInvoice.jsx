@@ -1,10 +1,9 @@
 import { useContext, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
+import { ActionButtons } from '@components/ActionButtons';
 import FileIcon from '@assets/file-invoice.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
 import LightbulbIcon from '@assets/lightbulb.svg?react';
 
 function CreateInvoice() {
@@ -369,20 +368,10 @@ function CreateInvoice() {
                 </div>
             </div>
 
-            <div className='flex flex-col xs:flex-row justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg gap-4'>
-                <button
-                    className="bg-white border border-gray-300 text-xs md:text-sm lg:text-base text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto"
-                    onClick={() => navigate(-1)}
-                >
-                    <ReturnIcon className="w-4 h-4 text-gray-700" />
-                    CANCELAR
-                </button>
-                <button
-                    className="bg-green-500 text-xs md:text-sm text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3 w-full sm:w-auto">
-                    <PlusIcon className="w-4 h-4 text-white" />
-                    GENERAR COMPROBANTE
-                </button>
-            </div>
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                submitText="GENERAR COMPROBANTE"
+            />
 
             <div className="mt-6 p-4 bg-blue-500 text-white rounded-lg m-3 flex gap-2">
                 <LightbulbIcon className="w-5 h-5 text-white" />

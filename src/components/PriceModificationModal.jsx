@@ -24,7 +24,7 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
         onClose();
     }
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50">
             <div className="bg-white p-6 rounded-md w-full h-auto max-w-xl mt-8 modal-appear">
                 <h2 className="text-xl font-medium text-gray-500 mb-4 border-b-2 pb-4">Cambiar precio</h2>
                 <div className="flex flex-col gap-4 border-b border-gray-300 pb-8">

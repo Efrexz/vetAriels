@@ -194,7 +194,7 @@ function ActiveOrdersGrooming() {
                         Página: 1 de 1 | Registros del 1 al {petsInQueueGrooming.length} | Total{" "}
                         {petsInQueueGrooming.length}
                     </p>
-                    <div className="flex justify-center space-x-2">
+                    <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
                         <button className="py-2 px-4 border rounded">Primera</button>
                         <button className="py-2 px-4 border rounded">Anterior</button>
                         <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>

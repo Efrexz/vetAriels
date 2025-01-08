@@ -15,9 +15,11 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
 
     return (
         <main className="w-full mx-auto p-6 bg-white shadow-md ">
-            <div className="grid grid-cols-2 text-sm">
-                <div className="flex gap-8 border-r border-gray-200 text-gray-500 pl-6">
-                    <BookIcon className="w-8 h-8 mr-2" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 text-sm gap-6">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-8 border-b md:border-b-0 md:border-r border-gray-200 text-gray-500 pb-4 md:pb-0 md:pl-6">
+                    <div className="flex-shrink-0">
+                        <BookIcon className="w-8 h-8" />
+                    </div>
                     <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2">
                         <p>Fecha de registro:</p>
                         <span className="font-medium">{operationData.date} - {operationData.time}</span>
@@ -28,8 +30,11 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
                     </div>
                 </div>
 
-                <div className="flex gap-8 border-l border-gray-200 text-gray-500 pl-6">
-                    <RoleUserIcon className="w-8 h-8 mr-2" />
+
+                <div className="flex flex-col md:flex-row gap-4 md:gap-8 border-gray-200 text-gray-500 pt-4 md:pt-0 md:pl-6">
+                    <div className="flex-shrink-0">
+                        <RoleUserIcon className="w-8 h-8" />
+                    </div>
                     <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2">
                         <p>Responsable:</p>
                         <span className="font-medium">{operationData.responsible}</span>
@@ -38,6 +43,7 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
                     </div>
                 </div>
             </div>
+
 
             <div className="overflow-x-auto mt-8">
                 <table className="min-w-full bg-white overflow-hidden">

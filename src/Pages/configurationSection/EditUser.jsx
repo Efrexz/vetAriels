@@ -1,13 +1,11 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalContext } from '@context/GlobalContext';
+import { ActionButtons } from '@components/ActionButtons';
 import UserGroupIcon from '@assets/userGroupIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
 import PhoneIcon from '@assets/phoneIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
-
 
 const userFields = [
     { label: 'Correo Electrónico', type: 'email', id: 'email', icon: EmailIcon },
@@ -35,6 +33,8 @@ function EditUser() {
     const navigate = useNavigate();
 
     const individualUserData = users.find(user => user.id === Number(id));
+    console.log(individualUserData);
+
 
 
     const [formData, setFormData] = useState({
@@ -64,7 +64,7 @@ function EditUser() {
             status: formData.status,
         };
         updateUserData(Number(id), updateData);
-        navigate("/config/user - subsidiaries");
+        navigate("/config/user-subsidiaries");
 
     }
     return (
@@ -116,21 +116,11 @@ function EditUser() {
                     </div>
                 ))}
             </form>
-            <div className='flex flex-col xs:flex-row justify-end items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md '>
-                <button
-                    className="bg-white w-full xs:w-auto border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center justify-center gap-3"
-                    onClick={() => navigate(-1)}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    CANCELAR
-                </button>
-                <button className="bg-green-500 w-full xs:w-auto text-white py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-3"
-                    onClick={updateUserInfo}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    CREAR NUEVO ROL
-                </button>
-            </div>
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                onSubmit={updateUserInfo}
+                submitText="GUARDAR INFORMACION"
+            />
 
 
         </section>

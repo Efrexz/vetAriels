@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { ClientsContext } from '@context/ClientsContext';
-import PlusIcon from '@assets/plusIcon.svg?react';
-import ClockIcon from '@assets/clockIcon.svg?react';
+import { ActionButtons } from '@components/ActionButtons';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function EditQueuePatientModal({ onClose, queueData }) {
@@ -137,22 +136,13 @@ function EditQueuePatientModal({ onClose, queueData }) {
                     </select>
                 </div>
 
-
-                <div className="flex justify-end space-x-4 border-t border-gray-300 pt-4">
-                    <button
-                        onClick={onClose}
-                        className="flex items-center px-4 py-2 border border-gray-300 rounded-md text-md font-semibold hover:bg-gray-200"
-                    >
-                        <ClockIcon className="w-5 h-5 mr-2 text-gray-500" />
-                        Cancelar
-                    </button>
-                    <button
-                        className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md text-md font-semibold hover:bg-green-600"
-                        onClick={updateQueueData}
-                    >
-                        <PlusIcon className="w-5 h-5 mr-2" />
-                        Generar
-                    </button>
+                <div className="border-t border-gray-300 pt-4">
+                    <ActionButtons
+                        onCancel={onClose}
+                        onSubmit={updateQueueData}
+                        submitText="GUARDAR CAMBIOS"
+                        mode="modal"
+                    />
                 </div>
             </div>
         </div>

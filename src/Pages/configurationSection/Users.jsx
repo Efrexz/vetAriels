@@ -69,7 +69,7 @@ function Users() {
                                         <div className="flex justify-center items-center h-full space-x-2">
                                             <KeyIcon
                                                 className="w-5 h-5 text-orange-400 hover:text-orange-500 cursor-pointer"
-                                                onClick={() => navigate("/config/user-subsidiaries/edit/${user.id}")}
+                                                onClick={() => navigate(`/config/user-subsidiaries/edit/${user.id}`)}
                                             />
                                             <TrashIcon
                                                 className="w-5 h-5 text-red-400  hover:text-red-500 cursor-pointer"

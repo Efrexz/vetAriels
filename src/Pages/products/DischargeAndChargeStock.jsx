@@ -8,10 +8,9 @@ import { QuantityModificationModal } from '@components/QuantityModificationModal
 import { ErrorModal } from '@components/ErrorModal';
 import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import PropTypes from "prop-types";
+import { ActionButtons } from '../../components/ActionButtons';
 
 
 
@@ -61,6 +60,11 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                 ? { ...product, quantity: newQuantity }
                 : product
         );
+        setSelectedProducts(updatedProducts);
+    }
+
+    function removeProduct(productData) {
+        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== productData.provisionalId);
         setSelectedProducts(updatedProducts);
     }
 
@@ -163,8 +167,8 @@ function DischargeAndChargeStock({ typeOfOperation }) {
     return (
         <section className="container mx-auto p-6 border-b-2 border-gray-100">
             <header className="flex items-center mb-6 border-b-2 border-gray-100 pb-4">
-                <h1 className={`text-2xl font-medium flex items-center ${typeOfOperation === 'discharge' ? 'text-red-500' : 'text-green-500'}`}>
-                    {typeOfOperation === 'discharge' ? <DocumentOutIcon className="w-9 h-9 mr-2" /> : <DocumentJoinIcon className="w-9 h-9 mr-2" />}
+                <h1 className={`text-xl md:text-3xl font-medium flex items-center ${typeOfOperation === 'discharge' ? 'text-red-500' : 'text-green-500'}`}>
+                    {typeOfOperation === 'discharge' ? <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" /> : <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />}
                     {typeOfOperation === 'discharge' ? 'Descargar Stock' : 'Cargar Stock'}
                 </h1>
             </header>
@@ -253,10 +257,15 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                                                 }}
                                             />}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">
-                                            <button className="text-red-500 hover:text-red-600">
-                                                <TrashIcon className="w-4 h-4" />
-                                            </button>
+                                        <td className="py-6 px-4 text-center border">
+                                            <div className="flex justify-center items-center h-full">
+                                                <TrashIcon
+                                                    className="w-4 h-4 text-red-500 hover:text-red-600 cursor-pointer"
+                                                    onClick={() => {
+                                                        removeProduct(product)
+                                                    }}
+                                                />
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -278,24 +287,12 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                 )
                 }
 
-                <div className="flex justify-between items-center mt-4">
-                    <button
-                        className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                        onClick={() => navigate(-1)}
-                    >
-                        <ReturnIcon className="w-5 h-5 text-gray-700" />
-                        CANCELAR
-                    </button>
-                    <button
-                        className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                        onClick={() => {
-                            submitOrder()
-                        }}
-                    >
-                        <PlusIcon className="w-5 h-5 text-white" />
-                        {typeOfOperation === 'discharge' ? 'DESCARGAR PRODUCTOS' : 'CARGAR PRODUCTOS'}
-                    </button>
-                </div>
+                <ActionButtons
+                    onCancel={() => navigate(-1)}
+                    onSubmit={submitOrder}
+                    submitText="CREAR ORDEN DE SERVICIO"
+                />
+
             </div>
 
             <div className="mt-6 p-4 bg-blue-100 text-blue-700 rounded-lg">

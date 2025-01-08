@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { ClientsContext } from '@context/ClientsContext';
-import PlusIcon from '@assets/plusIcon.svg?react';
-import ClockIcon from '@assets/clockIcon.svg?react';
+import { ActionButtons } from '@components/ActionButtons';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
@@ -131,22 +130,12 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     ></textarea>
                 </div>
 
-                <div className="flex justify-end space-x-4">
-                    <button
-                        onClick={onClose}
-                        className="flex items-center px-4 py-2 border border-gray-300 rounded-md text-md font-semibold hover:bg-gray-200"
-                    >
-                        <ClockIcon className="w-5 h-5 mr-2 text-gray-500" />
-                        Cancelar
-                    </button>
-                    <button
-                        className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md text-md font-semibold hover:bg-green-600"
-                        onClick={sendPatientToQueue}
-                    >
-                        <PlusIcon className="w-5 h-5 mr-2" />
-                        Generar
-                    </button>
-                </div>
+                <ActionButtons
+                    onCancel={onClose}
+                    onSubmit={sendPatientToQueue}
+                    submitText="ENVIAR A LA COLA"
+                    mode="modal"
+                />
             </div>
         </div>
     );

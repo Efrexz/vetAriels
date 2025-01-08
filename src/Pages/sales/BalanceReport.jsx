@@ -60,14 +60,14 @@ const sections = [
 
 function BalanceReport() {
     return (
-        <section className="container mx-auto p-6 overflow-auto">
+        <section className="container mx-auto p-6 ">
             <h1 className="text-2xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
                 <FileInvoiceIcon className="w-7 h-7 mr-2" />
                 Cuadre de caja
             </h1>
 
-            <div className="flex items-center gap-3 py-2 px-4 bg-gray-50 rounded-lg shadow mb-6 w-full">
-                <div className="flex items-center border rounded w-[25%]">
+            <div className="flex flex-col sm:flex-row items-center gap-3 py-2 px-4 bg-gray-50 rounded-lg shadow mb-6 w-full">
+                <div className="flex items-center border rounded w-full md:w-[25%]">
                     <span className="bg-gray-200 p-2 flex items-center justify-center">
                         <CalendarIcon className="w-5 h-5 text-gray-600" />
                     </span>
@@ -76,13 +76,14 @@ function BalanceReport() {
                         className="px-2 py-1.5 w-full text-sm text-gray-700 focus:outline-none focus:border-blue-500 hover:border-blue-400"
                     />
                 </div>
-                <select className="border rounded p-2 text-sm text-gray-700 focus:outline-none focus:border-blue-500  hover:border-blue-400 w-[20%]">
+                <select className="border rounded p-2 text-sm text-gray-700 focus:outline-none focus:border-blue-500 hover:border-blue-400 w-full md:w-[20%]">
                     <option>Seleccione empresa</option>
                 </select>
-                <button className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">
+                <button className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 w-full md:w-auto justify-center">
                     HISTORIAL
                 </button>
             </div>
+
 
             {sections.map((section, index) => {
                 return !section.payments ? (
@@ -125,16 +126,17 @@ function BalanceReport() {
                     );
             })}
 
-            <div className="bg-gray-50 shadow rounded-md p-4 mb-4 flex items-center gap-8">
-                <button className='bg-orange-400 text-white font-medium py-3 px-4 rounded hover:bg-orange-500 flex items-center justify-center gap-2 w-60'>
+            <div className="bg-gray-50 shadow rounded-md p-4 mb-4 flex flex-col sm:flex-row items-center gap-4 md:gap-8">
+                <button className="bg-orange-400 text-white font-medium py-3 px-4 rounded hover:bg-orange-500 flex items-center justify-center gap-2 w-full md:w-60 text-sm">
                     <PDFIcon className="w-5 h-5" />
                     IMPRIMIR
                 </button>
-                <button className='bg-green-400 text-white font-medium py-3 px-4 rounded hover:bg-green-500 flex items-center justify-center gap-2 w-60' >
+                <button className="bg-green-400 text-white font-medium py-3 px-4 rounded hover:bg-green-500 flex items-center justify-center gap-2 w-full md:w-60 text-sm">
                     <ExcelIcon className="w-5 h-5" />
                     EXPORTAR A EXCEL
                 </button>
             </div>
+
         </section>
     );
 }

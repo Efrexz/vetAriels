@@ -1,10 +1,9 @@
 import { useContext, useState } from 'react';
 import { FinancialContext } from '@context/FinancialContext';
+import { ActionButtons } from '@components/ActionButtons';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import Fileinvoice from '@assets/file-invoice.svg?react';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
 import PropTypes from "prop-types";
 
 function PaymentAndDepositModal({ onClose, typeOfOperation }) {
@@ -106,7 +105,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
     ];
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg w-full max-w-2xl p-6 modal-appear">
                 <h2
                     className="text-md font-medium mb-4 pb-4 border-b-2 text-gray-600">
@@ -149,29 +148,19 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                     />
                                 )}
                             </div>
-
                         </div>
                     ))}
 
-                    <div className="col-span-2 flex justify-end gap-5 mt-4 border-t border-gray-300 pt-4">
-                        <button
-                            className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                            onClick={() => { onClose() }}
-                        >
-                            <ReturnIcon className="w-5 h-5 text-gray-700" />
-                            CANCELAR
-                        </button>
-                        <button
-                            onClick={() => {
+                    <div className="col-span-2 mt-4 border-t border-gray-300 pt-4">
+                        <ActionButtons
+                            mode="modal"
+                            onCancel={onClose}
+                            submitText="GENERAR"
+                            onSubmit={() => {
                                 handleSubmit()
                                 onClose()
-                            }}
-                            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
-                            <PlusIcon className="w-5 h-5 text-white" />
-                            GENERAR
-                        </button>
+                            }} />
                     </div>
-
                 </form >
             </div >
         </div >

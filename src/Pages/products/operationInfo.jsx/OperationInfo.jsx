@@ -48,18 +48,18 @@ function OperationInfo({ typeOfOperation }) {
     return (
         <main className="w-full mx-auto p-6 bg-white ">
             <h2
-                className={`text-2xl font-medium mb-4 border-b-2 border-gray-200 pb-3 flex items-center gap-2 ${typeOfOperation === "discharge" ? "text-red-400" : "text-green-400"
+                className={`text-xl md:text-3xl font-medium mb-4 border-b-2 border-gray-200 pb-3 flex items-center gap-2 ${typeOfOperation === "discharge" ? "text-red-400" : "text-green-400"
                     }`}
             >
                 <span className="flex items-center gap-2">
                     {typeOfOperation === "discharge" ? (
                         <>
-                            <DocumentJoinIcon className="w-6 h-6" />
+                            <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9" />
                             <span>Descarga de stock #{id}</span>
                         </>
                     ) : (
                         <>
-                            <DocumentOutIcon className="w-6 h-6" />
+                            <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9" />
                             <span>Carga de stock #{id}</span>
                         </>
                     )}
@@ -69,15 +69,15 @@ function OperationInfo({ typeOfOperation }) {
             <section >
                 {section === 'detail' && <OperationDetail typeOfOperation={typeOfOperation} operationData={operationData} tableCategories={tableCategories} />}
                 {section === 'edit' && <EditOperation typeOfOperation={typeOfOperation} operationData={operationData} tableCategories={tableCategories} />}
-                <div className='flex justify-between items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md text-sm'>
+                <div className='flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md text-sm'>
                     <button
-                        className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
+                        className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto"
                         onClick={() => navigate(`${typeOfOperation === "discharge" ? "/discharges" : "/charges"}`)}
                     >
                         <ReturnIcon className="w-5 h-5 text-gray-700" />
                         REGRESAR AL LISTADO DE {typeOfOperation === "discharge" ? "DESCARGAS" : "CARGAS"}
                     </button>
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 flex items-center gap-3"
+                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 flex items-center gap-3 w-full sm:w-auto"
                     >
                         <FileContract className="w-5 h-5 text-white" />
                         IMPRIMIR
