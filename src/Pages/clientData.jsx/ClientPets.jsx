@@ -23,10 +23,10 @@ function ClientPets() {
     ];
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-t-lg overflow-hidden px-10 py-4">
-                <div className="bg-white rounded-lg shadow p-4 mb-6">
-                    <div className="flex items-center space-x-4 mb-4">
+        <div className="container mx-auto p-4">
+            <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-t-lg p-2 lg:px-10">
+                <div className="bg-white rounded-lg shadow p-2 mb-6 w-full">
+                    <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
                         <button
                             className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
                             onClick={() => navigate(`/pets/create/${id}`)}
@@ -38,8 +38,8 @@ function ClientPets() {
                             <RefreshIcon className="w-5 h-5" />
                         </button>
                     </div>
-                    <div className="overflow-x-auto border border-gray-300 rounded-lg hover:cursor-pointer">
-                        <table className="min-w-full bg-white">
+                    <div className="overflow-x-auto border border-gray-300 rounded-lg hover:cursor-pointer custom-scrollbar">
+                        <table className="w-full table-auto bg-white">
                             <thead>
                                 <tr>
                                     <th className="py-2 px-4 text-left border">
@@ -58,15 +58,15 @@ function ClientPets() {
                                         <td className="py-2 px-4 text-center border">
                                             <input type="checkbox" className="form-checkbox" />
                                         </td>
-                                        <td className="py-2 px-4 border-b text-center border ">
-                                            <span className='block'>{petData.registrationDate}</span>
-                                            <span className='block'>{petData.registrationTime}</span>
+                                        <td className="py-2 px-4 border-b text-center border whitespace-nowrap">
+                                            <span className="block">{petData.registrationDate}</span>
+                                            <span className="block">{petData.registrationTime}</span>
                                         </td>
-                                        <td className="py-2 px-4 border-b text-center border ">{petData.hc}</td>
-                                        <td className="py-2 px-4 border-b text-center border ">{petData.petName}</td>
+                                        <td className="py-2 px-4 border-b text-center border">{petData.hc}</td>
+                                        <td className="py-2 px-4 border-b text-center border">{petData.petName}</td>
                                         <td className="py-2 px-4 border-b text-center border whitespace-nowrap">{petData.species}-{petData.breed}</td>
-                                        <td className="py-2 px-4 border-b text-center border ">{petData.sex}</td>
-                                        <td className="py-2 px-4 border-b text-center border whitespace-nowrap ">{petData.birthDate}</td>
+                                        <td className="py-2 px-4 border-b text-center border">{petData.sex}</td>
+                                        <td className="py-2 px-4 border-b text-center border whitespace-nowrap">{petData.birthDate}</td>
                                         <td className="py-6 px-4 text-center border flex justify-center">
                                             <Link to={`/pets/pet/${petData.id}/update`}>
                                                 <SearchIcon className="w-5 h-5 text-green-500 cursor-pointer" />
@@ -77,9 +77,12 @@ function ClientPets() {
                             </tbody>
                         </table>
                     </div>
-                    <div className="flex justify-between items-center mt-4 ">
-                        <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
-                        <div className="flex space-x-2">
+                    <div className="flex flex-col xl:flex-row justify-between items-center mt-4 gap-4">
+                        <p className="text-gray-600 text-center md:text-left">
+                            Página: 1 de 1 | Registros del 1 al {petsData.length} | Total{" "}
+                            {petsData.length}
+                        </p>
+                        <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
                             <button className="py-2 px-4 border rounded">Primera</button>
                             <button className="py-2 px-4 border rounded">Anterior</button>
                             <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
@@ -89,7 +92,6 @@ function ClientPets() {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }

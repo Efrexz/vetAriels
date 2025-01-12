@@ -1,9 +1,5 @@
-import EraserIcon from '@assets/eraserIcon.svg?react';
-import RefreshIcon from '@assets/refreshIcon.svg?react';
-import PDFIcon from '@assets/pdfIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';
-import PrintIcon from '@assets/printIcon.svg?react';
 import ClipIcon from '@assets/clipIcon.svg?react';
 import FileContract from '@assets/fileContract.svg?react';
 
@@ -47,50 +43,43 @@ function ClinicalRecords() {
 
     return (
         <section className="w-full mx-auto bg-white p-6 shadow-md rounded-lg">
-            <div className="flex items-center space-x-4 mb-6 border-b-2 border-gray-200 pb-5">
-                <div>
-                    <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                        <EraserIcon className="w-5 h-5" />
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6 border-b-2 border-gray-200 pb-5">
+                {/* Grupo de Botones */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                    <button
+                        className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-2 w-full"
+                    // onClick={() => navigate("/pets/create/no_client")}
+                    >
+                        <PlusIcon className="w-5 h-5" />
+                        NUEVO REGISTRO
                     </button>
-                    <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                        <RefreshIcon className="w-5 h-5" />
+                    <button
+                        className="border border-gray-300 text-black bg-gray-50 py-2 px-4 rounded hover:bg-gray-100 flex items-center justify-center gap-2 w-full"
+                    // onClick={() => navigate("/pets/create/no_client")}
+                    >
+                        <ClipIcon className="w-5 h-5" />
+                        ADJUNTAR ARCHIVO
                     </button>
-                    <button className="bg-transparent border border-gray-300 text-orange-500 py-2 px-4 rounded hover:bg-gray-200">
-                        <PDFIcon className="w-5 h-5" />
-                    </button>
-                    <button className="bg-transparent border border-gray-300 text-black py-2 px-4 rounded hover:bg-gray-200">
-                        <PrintIcon className="w-5 h-5" />
+                    <button
+                        className="border border-gray-300 text-black bg-gray-50 py-2 px-4 rounded hover:bg-gray-100 flex items-center justify-center gap-2 w-full"
+                    // onClick={() => navigate("/pets/create/no_client")}
+                    >
+                        <FileContract className="w-5 h-5" />
+                        NOTA
                     </button>
                 </div>
-                <button
-                    className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
-                // onClick={() => navigate("/pets/create/no_client")}
-                >
-                    <PlusIcon className="w-5 h-5" />
-                    NUEVO REGISTRO
-                </button>
-                <button
-                    className="border border-gray-300 text-black bg-gray-50 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-2"
-                // onClick={() => navigate("/pets/create/no_client")}
-                >
-                    <ClipIcon className="w-5 h-5" />
-                    ADJUNTAR ARCHIVO
-                </button>
-                <button
-                    className="border border-gray-300 text-black bg-gray-50 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-2"
-                // onClick={() => navigate("/pets/create/no_client")}
-                >
-                    <FileContract className="w-5 h-5" />
-                    NOTA
-                </button>
-                <div className=" w-[250px]">
+
+                {/* Dropdown */}
+                <div className="w-full lg:w-auto">
                     <select
                         name="type"
-                        className=" w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2 hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full lg:w-[250px] rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2 hover:border-blue-300 focus-within:border-blue-300"
                     >
                         <option value="filterType">Filtrar por tipo</option>
                         {filterType.map((option, index) => (
-                            <option key={index} value={option.value}>{option.label}</option>
+                            <option key={index} value={option.value}>
+                                {option.label}
+                            </option>
                         ))}
                     </select>
                 </div>

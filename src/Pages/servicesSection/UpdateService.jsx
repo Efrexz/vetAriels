@@ -1,10 +1,9 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
-import { SuccessModal } from "../../components/SuccessModal";
-import { ErrorModal } from "../../components/ErrorModal";
-import ReturnIcon from "@assets/returnIcon.svg?react";
-import PlusIcon from "@assets/plusIcon.svg?react";
+import { SuccessModal } from "@components/SuccessModal";
+import { ErrorModal } from "@components/ErrorModal";
+import { ActionButtons } from "@components/ActionButtons";
 import PropTypes from "prop-types";
 
 function UpdateService({ serviceData }) {
@@ -75,28 +74,38 @@ function UpdateService({ serviceData }) {
 
     return (
         <form className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md ">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {fields.map((field, index) => (
-                    <div key={index} className={`mb-4 ${field.name === 'serviceName' ? 'col-span-4' : 'col-span-2'} `}>
+                    <div
+                        key={index}
+                        className={`mb-4 ${field.name === 'serviceName'
+                                ? 'col-span-1 sm:col-span-2 md:col-span-4'
+                                : 'col-span-1 sm:col-span-1 md:col-span-2'
+                            }`}
+                    >
                         <label className="block text-gray-500 font-medium mb-2" htmlFor={field.name}>
                             {field.label}
                         </label>
-                        {field.type === "text" ? (
-                            <>
-                                <input
-                                    type="text"
-                                    name={field.name}
-                                    value={formData[field.name]}
-                                    onChange={handleChange}
-                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
-                                />
-                            </>
+                        {field.type === 'text' ? (
+                            <input
+                                type="text"
+                                name={field.name}
+                                value={formData[field.name]}
+                                onChange={handleChange}
+                                className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
+                                        ? 'border-red-500'
+                                        : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'
+                                    }`}
+                            />
                         ) : (
                             <select
                                 name={field.name}
                                 value={formData[field.name]}
                                 onChange={handleChange}
-                                className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
+                                className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
+                                        ? 'border-red-500'
+                                        : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'
+                                    }`}
                             >
                                 {field?.options?.map((option, i) => (
                                     <option key={i} value={option}>
@@ -110,30 +119,16 @@ function UpdateService({ serviceData }) {
                         )}
                     </div>
                 ))}
-                {
-                    isSuccessModalOpen && (
-                        <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
-                    )
-                }
+                {isSuccessModalOpen && <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />}
             </div>
-            <div className='flex justify-end items-center gap-4 pt-4 px-4 border-t border-gray-200 bg-gray-50 '>
-                <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                    type="button"
-                    onClick={() => navigate("/services")}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    REGRESAR
-                </button>
-                <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    type="button"
-                    onClick={() => updateService()}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    ACTUALIZAR SERVICIO
-                </button>
-            </div>
+
+            <ActionButtons
+                onCancel={() => navigate("/services")}
+                onSubmit={updateService}
+                submitText="ACTUALIZAR SERVICIO"
+                cancelText="REGRESAR"
+                mode="modal"
+            />
             {
                 isErrorModalOpen && (
                     <ErrorModal onClose={() => setIsErrorModalOpen(false)} typeOfError="form" />

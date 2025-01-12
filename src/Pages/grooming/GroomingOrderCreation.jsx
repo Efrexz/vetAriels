@@ -108,7 +108,7 @@ function GroomingOrderCreation() {
                 ? petsInQueueGrooming[petsInQueueGrooming.length - 1].turn + 1
                 : 1, // Si la cola está vacía, el turno será 1
             systemCode: petSelectedData.hc,
-            ownerName: `${isClientSelected.firstName} ${isClientSelected.lastName}`,
+            ownerName: ` ${isClientSelected.firstName} ${isClientSelected.lastName}`,
             notes,
             dateOfAttention: currentDate,
             timeOfAttention: currentTime,
@@ -122,7 +122,7 @@ function GroomingOrderCreation() {
     return (
         <section className="bg-white p-6 overflow-auto custom-scrollbar">
             <h1 className="text-xl md:text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <BathIcon className="w-7 h-7 text-blue-400 mr-2" />
+                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-blue-400 mr-2" />
                 Peluquería
             </h1>
             <div className="bg-gray-100 p-4 rounded mb-4">
@@ -130,11 +130,6 @@ function GroomingOrderCreation() {
                     <div className="col-span-2">
                         <label className="block text-gray-700 mb-2">Propietario</label>
                         <ClientSearchInput mode={"grooming"} />
-                        {/* <input
-                            className="w-full mt-2 bg-gray-200 py-2 px-4 rounded"
-                            value={isClientSelected ? `${isClientSelected.firstName} ${isClientSelected.lastName}` : ''}
-                            disabled
-                        /> */}
                     </div>
                     <div className="col-span-2">
                         <label className="block text-gray-700">Mascota</label>
@@ -164,7 +159,7 @@ function GroomingOrderCreation() {
                     <div className="col-span-2">
                         <label className="block text-gray-700">Dirección</label>
                         <input
-                            value={isClientSelected ? `${isClientSelected.address}, ${isClientSelected.distrit}, ${isClientSelected.city}` : ''}
+                            value={isClientSelected ? `${isClientSelected.address}, ${isClientSelected.distrit}, ${isClientSelected.city} ` : ''}
                             className="mt-2 w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
                             disabled
                         />
@@ -193,7 +188,7 @@ function GroomingOrderCreation() {
 
             <div className="bg-gray-100 p-4 rounded shadow">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                    {/* Almacén de origen */}
+
                     <div className="col-span-1">
                         <label className="block text-gray-700 mb-2">Almacén de origen</label>
                         {isClientSelected ? (
@@ -264,6 +259,8 @@ function GroomingOrderCreation() {
                                             changeQuantity={(newQuantity) => {
                                                 updateProductQuantity(product.provisionalId, newQuantity)
                                             }}
+                                            maxQuantity={product.availableStock}
+                                            mode="sales"
                                             openQuantityModal={() => {
                                                 setIsQuantityModalOpen(true)
                                                 setIsPriceModalOpen(false)
@@ -282,11 +279,13 @@ function GroomingOrderCreation() {
                                         {(product.salePrice || product.price) * product.quantity}
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
-                                    <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
-                                        <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
-                                        <TrashIcon
-                                            onClick={() => removeProduct(product.provisionalId)}
-                                            className='w-5 h-5 text-red-500 cursor-pointer' />
+                                    <td className='py-8 px-4 text-center border border-gray-300'>
+                                        <div className="flex justify-center items-center h-full space-x-2">
+                                            <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
+                                            <TrashIcon
+                                                onClick={() => removeProduct(product.provisionalId)}
+                                                className='w-5 h-5 text-red-500 cursor-pointer' />
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -308,6 +307,8 @@ function GroomingOrderCreation() {
                     isQuantityModalOpen && (
                         <QuantityModificationModal
                             quantity={productToEdit?.quantity}
+                            maxQuantity={productToEdit?.availableStock}
+                            mode="sales"
                             changeQuantity={(newQuantity) => {
                                 updateProductQuantity(productToEdit.provisionalId, newQuantity)
                             }}
@@ -347,7 +348,7 @@ function GroomingOrderCreation() {
 
             {/* recordatorio en agenda */}
             <div className="bg-gray-100 p-4 mb-4 mt-1 rounded shadow flex flex-col md:flex-row items-center gap-4">
-                {/* Fecha de próximo servicio */}
+
                 <div className="w-full">
                     <label htmlFor="date" className="block text-gray-700 ">Fecha de próximo servicio (recordatorio en agenda)</label>
                     <input
@@ -357,7 +358,6 @@ function GroomingOrderCreation() {
                     />
                 </div>
 
-                {/* Tipo de evento */}
                 <div className="w-full">
                     <label htmlFor="typeService" className="block text-gray-700 ">Tipo de evento</label>
                     <select
@@ -369,7 +369,6 @@ function GroomingOrderCreation() {
                     </select>
                 </div>
 
-                {/* Anotaciones */}
                 <div className="w-full">
                     <label htmlFor="client" className="block text-gray-700 ">Anotaciones</label>
                     <input
@@ -385,7 +384,7 @@ function GroomingOrderCreation() {
                 onSubmit={sendInfoToQueueGrooming}
                 submitText="CREAR ORDEN DE SERVICIO"
             />
-        </section>
+        </section >
     );
 }
 

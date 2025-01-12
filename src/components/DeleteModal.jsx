@@ -45,7 +45,7 @@ function DeleteModal({ elementToDelete, onClose, mode }) {
     }
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg modal-appear">
+            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg modal-appear mx-4">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-medium text-gray-600">Eliminar {getElementName()}</h2>
                 </div>
@@ -77,7 +77,7 @@ function DeleteModal({ elementToDelete, onClose, mode }) {
                         }
                     </div>
 
-                    <div className="flex justify-end space-x-2 border-t border-gray-300 pt-4">
+                    <div className="flex flex-col xs:flex-row justify-end gap-2 border-t border-gray-300 pt-4">
                         <button
                             type="button"
                             onClick={onClose}

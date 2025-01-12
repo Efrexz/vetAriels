@@ -28,7 +28,7 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
 
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md w-full h-auto max-w-md mt-8 modal-appear">
+            <div className="bg-white p-6 rounded-md w-full h-auto max-w-md mt-8 modal-appear mx-4">
                 <h2 className="text-xl font-medium text-gray-500 mb-4 border-b-2 pb-4">Modificar Cantidad</h2>
                 <div className="flex flex-col gap-4 pb-8">
                     <div>
@@ -48,7 +48,7 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
                     </div>
                 </div>
 
-                <div className="flex justify-end mt-6 gap-4 text-sm">
+                <div className="flex flex-col xs:flex-row justify-end mt-4 gap-4 text-sm">
                     <button
                         className="border bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 flex items-center gap-3"
                         onClick={() => onClose()}

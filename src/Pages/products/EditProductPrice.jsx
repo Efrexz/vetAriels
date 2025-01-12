@@ -1,8 +1,5 @@
 import DollarIcon from '@assets/dollarIcon.svg?react';
 import PercentIcon from '@assets/percentIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
-import { useNavigate } from 'react-router-dom';
 
 function EditProductPrice() {
     const formFields = [
@@ -67,7 +64,6 @@ function EditProductPrice() {
         },
     ];
 
-    const navigate = useNavigate();
     return (
         <form className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md space-y-6">
             {formFields.map((field, index) => (
@@ -106,24 +102,6 @@ function EditProductPrice() {
 
                 </div>
             ))}
-            <div className='flex justify-between items-center gap-4 pt-4 px-4 border-t border-gray-200 bg-gray-50 '>
-                <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                    type="button"
-                    onClick={() => navigate("/products")}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    REGRESAR AL LISTADO
-                </button>
-                <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    type="button"
-                // onClick={() => updateProduct()}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    ACTUALIZAR PRODUCTO
-                </button>
-            </div>
         </form>
     );
 }

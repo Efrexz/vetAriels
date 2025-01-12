@@ -61,33 +61,37 @@ function GlobalProvider({ children }) {
         setUsers([...users, newUser]);
     };
 
-    const updateUserData = (id, newData) => {
+    function updateUserData(id, newData) {
         setUsers(users.map(user => user.id === id ? { ...user, ...newData } : user));
         //si el usuario actual es el que se está actualizando, actualizamos la informacion del active user para que se refleje en la interfaz
         if (activeUser && activeUser.id === id) {
             setActiveUser({ ...activeUser, ...newData });
         }
-    };
+    }
 
-    const removeUser = (id) => {
+    function removeUser(id) {
         setUsers(users.filter(user => user.id !== id));
-    };
+    }
 
     //roles
-    const addRole = (newRole) => {
+    function addRole(newRole) {
         setRoles([...roles, newRole]);
-    };
+    }
 
-    const updateRoleData = (id, newData) => {
+    function updateRoleData(id, newData) {
         setRoles(roles.map(role => role.id === id ? { ...role, ...newData } : role));
-    };
+    }
 
-    const removeRole = (id) => {
+    function removeRole(id) {
         setRoles(roles.filter(role => role.id !== id));
-    };
+    }
 
     const [themeColor, setThemeColor] = useState(localStorage.getItem('themeColor') ? localStorage.getItem('themeColor') : 'blue');
     const [companyData, setCompanyData] = useState(localStorage.getItem('companyData') ? JSON.parse(localStorage.getItem('companyData')) : defaultCompanyData);
+
+    useEffect(() => {
+        localStorage.setItem('activeUser', JSON.stringify(activeUser));
+    }, [activeUser]);
 
     useEffect(() => {
         localStorage.setItem('themeColor', themeColor);

@@ -155,16 +155,15 @@ function ClientProfile() {
                     ))}
                 </div>
             </div>
-            <div className='flex justify-end items-center bg-gray-100 py-3 px-5 shadow-lg rounded-b-lg'>
+            <div className='flex w-full justify-end  items-center bg-gray-100 py-3 px-5 shadow-lg rounded-b-lg'>
                 <button
                     onClick={updateData}
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
+                    className="bg-green-500 w-full sm:w-auto justify-center text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
                     <PlusIcon className="w-5 h-5 text-white" />
                     GUARDAR CAMBIOS
                 </button>
             </div>
         </div >
-
     );
 }
 

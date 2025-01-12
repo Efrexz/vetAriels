@@ -1,13 +1,13 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
-import PlusIcon from '@assets/plusIcon.svg?react';
+import { ActionButtons } from '@components/ActionButtons';
 import CakeIcon from '@assets/cakeIcon.svg?react';
 import PawIcon from '@assets/pawIcon.svg?react';
 import BookIcon from '@assets/bookIcon.svg?react';
 import MicroChip from '@assets/microChip.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import PropTypes from 'prop-types';
 
 
 function PetProfile({ petData }) {
@@ -39,7 +39,7 @@ function PetProfile({ petData }) {
     const updateData = () => {
 
         const updatedPetInfo = {
-            ...individualPetData, //Mantenemos los datos que no son modificados en este formulario
+            ...individualPetData,
             petName: formData.petName,
             birthDate: formData.birthDate,
             microchip: formData.microchip,
@@ -123,10 +123,8 @@ function PetProfile({ petData }) {
         },
     ];
 
-
-
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full justify-between ">
             <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-4 mt-4 mb-6">
                     {formFields.map((field, index) => (
@@ -167,24 +165,19 @@ function PetProfile({ petData }) {
                     ))}
                 </div>
             </div>
-            <div className='flex justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg'>
-                <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                    onClick={() => navigate(-1)}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    CANCELAR
-                </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    onClick={updateData}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    GUARDAR CAMBIOS
-                </button>
-            </div>
+
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                onSubmit={updateData}
+                submitText="GUARDAR CAMBIOS"
+            />
         </div >
 
     );
 }
 
 export { PetProfile };
+
+PetProfile.propTypes = {
+    petData: PropTypes.object
+}

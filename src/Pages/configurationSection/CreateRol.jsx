@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ReturnIcon from "@assets/returnIcon.svg?react";
-import PlusIcon from "@assets/plusIcon.svg?react";
+import { ActionButtons } from "@components/ActionButtons";
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function CreateRol() {
@@ -31,8 +30,8 @@ function CreateRol() {
 
     return (
         <main className="w-full mx-auto p-6 bg-white">
-            <h2 className="text-3xl font-light text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
-                <RoleUserIcon className="w-7 h-7 mr-2" />
+            <h2 className="text-xl sm:text-3xl font-light text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
+                <RoleUserIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Crear Rol
             </h2>
             <section >
@@ -70,24 +69,14 @@ function CreateRol() {
                         ))}
                     </div>
                 </form>
-                <div className='flex justify-end items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md '>
-                    <button
-                        className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                        onClick={() => navigate(-1)}
-                    >
-                        <ReturnIcon className="w-5 h-5 text-gray-700" />
-                        CANCELAR
-                    </button>
-                    <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    // onClick={createNewPet}
-                    >
-                        <PlusIcon className="w-5 h-5 text-white" />
-                        CREAR NUEVO ROL
-                    </button>
-                </div>
+                <ActionButtons
+                    onCancel={() => navigate(-1)}
+                    // onConfirm={createNewRol}
+                    submitText="CREAR NUEVO ROL"
+                />
             </section>
         </main>
     );
 }
 
-export { CreateRol }; 
+export { CreateRol };

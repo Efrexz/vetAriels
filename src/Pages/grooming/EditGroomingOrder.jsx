@@ -139,13 +139,13 @@ function EditGroomingOrder() {
 
     return (
         <section className="bg-white p-6 overflow-auto custom-scrollbar">
-            <h1 className="text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <BathIcon className="w-7 h-7 text-blue-400 mr-2" />
+            <h1 className="text-xl md:text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Peluquería
             </h1>
             <div className="bg-gray-100 p-4 rounded mb-4">
-                <div className="grid grid-cols-4 gap-4">
-                    <div className="col-span-1">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="col-span-2">
                         <label className="block text-gray-700 mb-2">Propietario</label>
                         <input
                             className="w-full bg-gray-200 py-2 px-4 rounded text-gray-600"
@@ -161,7 +161,7 @@ function EditGroomingOrder() {
                             disabled
                         />
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-2">
                         <label className="block text-gray-700 mb-2">Telefonos</label>
                         <input
                             className="w-full bg-gray-200 py-2 px-4 rounded text-gray-600"
@@ -201,87 +201,91 @@ function EditGroomingOrder() {
             </div>
 
             <div className="bg-gray-100 p-4 rounded shadow">
-                <div className="grid grid-cols-4 gap-4 mb-4">
-                    <div className='col-span-1'>
+                <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
+                    <div className='w-full md:w-[420px]'>
                         <label className="block text-gray-700 mb-2">Almacén de origen</label>
                         <select className="w-full  border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300" >
                             <option>ALMACEN PRODUCTOS P/VENTAS</option>
                         </select>
                     </div>
-                    <div className='col-span-3'>
+                    <div className='w-full'>
                         <label className="block text-gray-700 mb-2">Buscar y agregar productos y/o servicios:</label>
                         <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                     </div>
                 </div>
 
-                <table className="w-full border border-gray-300 rounded-lg mt-8">
-                    <thead>
-                        <tr>
-                            <th className="py-2 px-4 border border-gray-300 text-center">Concepto</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Valor Unitario</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Cantidad</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Sub Total</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Impuestos</th>
-                            <th className="py-2 px-4 border border-gray-300  text-center">Total</th>
-                            <th className="py-2 px-4 border border-gray-300  text-center">Mascota</th>
-                            <th className="py-2 px-4 border  border-gray-300 text-center">Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {selectedProducts.map((product) => (
-                            <tr key={product.provisionalId}>
-                                <td className='py-2 px-4 border border-gray-300 text-center'>
-                                    {product.productName || product.serviceName}
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    <span
-                                        className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
-                                        onClick={() => {
-                                            setProductToEdit(product)
-                                            setIsPriceModalOpen(true)
-                                            setIsQuantityModalOpen(false)
-                                        }}
-                                    >
-                                        {product.salePrice || product.price}
-                                    </span>
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    <QuantityCounter
-                                        itemCount={product.quantity}
-                                        changeQuantity={(newQuantity) => {
-                                            updateProductQuantity(product.provisionalId, newQuantity)
-                                        }}
-                                        maxQuantity={product?.availableStock}
-                                        mode="sales"
-                                        openQuantityModal={() => {
-                                            setIsQuantityModalOpen(true)
-                                            setIsPriceModalOpen(false)
-                                            setProductToEdit(product)
-                                        }}
-                                    />
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    {(product.salePrice || product.price) * product.quantity}
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
-                                        0.00
-                                    </span>
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>
-                                    {(product.salePrice || product.price) * product.quantity}
-                                </td>
-                                <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
-                                <td className='py-4 px-4  border border-gray-300 text-center flex justify-center gap-2'>
-                                    <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
-                                    <TrashIcon
-                                        onClick={() => removeProduct(product.provisionalId)}
-                                        className='w-5 h-5 text-red-500 cursor-pointer' />
-                                </td>
+                <div className='overflow-x-auto'>
+                    <table className="w-full border border-gray-300 rounded-lg mt-8">
+                        <thead>
+                            <tr>
+                                <th className="py-2 px-4 border border-gray-300 text-center">Concepto</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Valor Unitario</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Cantidad</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Sub Total</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Impuestos</th>
+                                <th className="py-2 px-4 border border-gray-300  text-center">Total</th>
+                                <th className="py-2 px-4 border border-gray-300  text-center">Mascota</th>
+                                <th className="py-2 px-4 border  border-gray-300 text-center">Opciones</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {selectedProducts.map((product) => (
+                                <tr key={product.provisionalId}>
+                                    <td className='py-2 px-4 border border-gray-300 text-center'>
+                                        {product.productName || product.serviceName}
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        <span
+                                            className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
+                                            onClick={() => {
+                                                setProductToEdit(product)
+                                                setIsPriceModalOpen(true)
+                                                setIsQuantityModalOpen(false)
+                                            }}
+                                        >
+                                            {product.salePrice || product.price}
+                                        </span>
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        <QuantityCounter
+                                            itemCount={product.quantity}
+                                            changeQuantity={(newQuantity) => {
+                                                updateProductQuantity(product.provisionalId, newQuantity)
+                                            }}
+                                            maxQuantity={product?.availableStock}
+                                            mode="sales"
+                                            openQuantityModal={() => {
+                                                setIsQuantityModalOpen(true)
+                                                setIsPriceModalOpen(false)
+                                                setProductToEdit(product)
+                                            }}
+                                        />
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        {(product.salePrice || product.price) * product.quantity}
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
+                                            0.00
+                                        </span>
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                        {(product.salePrice || product.price) * product.quantity}
+                                    </td>
+                                    <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
+                                    <td className='py-8 px-4 text-center border border-gray-300'>
+                                        <div className="flex justify-center items-center h-full space-x-2">
+                                            <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
+                                            <TrashIcon
+                                                onClick={() => removeProduct(product.provisionalId)}
+                                                className='w-5 h-5 text-red-500 cursor-pointer' />
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
 
                 {
                     isPriceModalOpen && (
@@ -332,7 +336,7 @@ function EditGroomingOrder() {
             {/* Observaciones de Salud de la mascota */}
             <div className="w-full bg-gray-100 p-6 rounded mt-4">
                 <h2 className="text-xl font-semibold text-gray-700 mb-6">Observaciones de Salud de la mascota</h2>
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid.cols-3 gap-6">
                     {healthObservations.map((section, index) => (
                         <div key={index}>
                             <h3 className="font-semibold mb-4">{section.title}</h3>
@@ -353,10 +357,10 @@ function EditGroomingOrder() {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div >
 
             {/* Observaciones */}
-            <div className='bg-gray-100 p-4 mb-4 mt-4 rounded'>
+            <div className='bg-gray-100 p-4 mb-4 mt-4 rounded' >
                 <label className="block text-gray-700">Observaciones o comentarios de ésta orden de servicio</label>
                 <textarea
                     className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-20 hover:border-blue-300 focus-within:border-blue-300"
@@ -368,7 +372,7 @@ function EditGroomingOrder() {
             </div>
 
             {/* recordatorio en agenda */}
-            <div className='bg-gray-100 p-4 mb-4 mt-1 rounded shadow flex  items-center gap-4'>
+            <div className='bg-gray-100 p-4 mb-4 mt-1 rounded shadow flex flex-col md:flex-row items-center gap-4' >
 
                 <div className="w-full">
                     <label htmlFor="date">Fecha de próximo servicio (recordatorio en agenda)</label>
@@ -409,7 +413,7 @@ function EditGroomingOrder() {
                 }}
                 submitText="GUARDAR CAMBIOS"
             />
-        </section>
+        </section >
     );
 }
 

@@ -17,7 +17,6 @@ import MoneyIcon from '@assets/moneyIcon.svg?react';
 import DocumentIcon from '@assets/documentIcon.svg?react';
 import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
-import BuildingShieldIcon from '@assets/buildingShield.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function SideBarMenu() {
@@ -112,11 +111,11 @@ function SideBarMenu() {
                     icon: DocumentJoinIcon,
                     path: "/charges"
                 },
-                {
-                    name: "Stock por almacén",
-                    icon: BoxesIcon,
-                    path: "/depot-stocks"
-                },
+                // {
+                //     name: "Stock por almacén",
+                //     icon: BoxesIcon,
+                //     path: "/depot-stocks"
+                // },
             ],
         },
         {
@@ -133,21 +132,21 @@ function SideBarMenu() {
                     icon: HospitalIcon,
                     path: "/config/subsidiary"
                 },
-                {
-                    name: "Datos fiscales",
-                    icon: BuildingShieldIcon,
-                    path: "/config/fiscal-data"
-                },
-                {
-                    name: "Comprobantes",
-                    icon: FileInvoiceIcon,
-                    path: "/config/invoice-types"
-                },
-                {
-                    name: "Metodos de pago",
-                    icon: MoneyIcon,
-                    path: "/config/payment-methods"
-                },
+                // {
+                //     name: "Datos fiscales",
+                //     icon: BuildingShieldIcon,
+                //     path: "/config/fiscal-data"
+                // },
+                // {
+                //     name: "Comprobantes",
+                //     icon: FileInvoiceIcon,
+                //     path: "/config/invoice-types"
+                // },
+                // {
+                //     name: "Metodos de pago",
+                //     icon: MoneyIcon,
+                //     path: "/config/payment-methods"
+                // },
                 {
                     name: "Usuarios",
                     icon: UserGroupIcon,

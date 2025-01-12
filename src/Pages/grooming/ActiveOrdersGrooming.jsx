@@ -39,7 +39,7 @@ function ActiveOrdersGrooming() {
 
 
     return (
-        <section className="container mx-auto p-4 sm:p-6 overflow-auto custom-scrollbar">
+        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8  overflow-auto custom-scrollbar">
             <h1 className="text-xl sm:text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
                 <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-blue-400 mr-2" />
                 Peluquería: <span className="text-green-600 font-light pl-1"> Turnos de hoy</span>
@@ -47,7 +47,6 @@ function ActiveOrdersGrooming() {
             <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <div className="p-4 rounded-lg mb-2">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4">
-                        {/* Input de búsqueda */}
                         <div className="flex w-full md:w-[350px] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
                             <div className="flex items-center justify-center bg-gray-100 px-3">
                                 <SearchIcon className="w-5 h-5 text-gray-600" />
@@ -58,8 +57,6 @@ function ActiveOrdersGrooming() {
                                 className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                             />
                         </div>
-
-                        {/* Botón de creación */}
                         <button
                             className="w-full md:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-2"
                             onClick={() => navigate("/grooming/order-creation/no_client")}
@@ -68,8 +65,6 @@ function ActiveOrdersGrooming() {
                             CREAR ORDEN DE SERVICIO
                         </button>
                     </div>
-
-                    {/* Select de estado */}
                     <div>
                         <select
                             name="status"

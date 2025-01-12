@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
+import { ActionButtons } from '@components/ActionButtons';
 import PawIcon from '@assets/pawIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
@@ -129,8 +130,8 @@ function CreatePetForm() {
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <PawIcon className="w-9 h-9  mr-2" />
+            <h1 className="text-xl md:text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+                <PawIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Mascotas
             </h1>
             <div className="bg-white p-4 pb-10 rounded-t-lg shadow-lg">
@@ -175,21 +176,12 @@ function CreatePetForm() {
                     ))}
                 </form>
             </div>
-            <div className='flex justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg'>
-                <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                    onClick={() => navigate(-1)}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    CANCELAR
-                </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    onClick={createNewPet}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    CREAR NUEVA MASCOTA
-                </button>
-            </div>
+
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                onSubmit={createNewPet}
+                submitText="CREAR NUEVA MASCOTA"
+            />
         </section>
     )
 }

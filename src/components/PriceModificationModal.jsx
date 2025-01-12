@@ -6,8 +6,7 @@ import PropTypes from "prop-types";
 
 
 function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) {
-
-    const [itemPrice, setItemPrice] = useState(productToEdit?.price)
+    const [itemPrice, setItemPrice] = useState(productToEdit?.salePrice)
 
     function handleChange(e) {
         setItemPrice(e.target.value)
@@ -17,15 +16,14 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
     function editPrice() {
         const updatedProduct = {
             ...productToEdit,
-            price: itemPrice
+            salePrice: Number(itemPrice),
         };
-
         updateProductPrice(updatedProduct);
         onClose();
     }
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md w-full h-auto max-w-xl mt-8 modal-appear">
+            <div className="bg-white p-6 rounded-md w-full h-auto max-w-xl mt-8 modal-appear mx-4">
                 <h2 className="text-xl font-medium text-gray-500 mb-4 border-b-2 pb-4">Cambiar precio</h2>
                 <div className="flex flex-col gap-4 border-b border-gray-300 pb-8">
                     <div className="bg-orange-400 text-white p-4 rounded-md">
@@ -46,7 +44,7 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
 
                 </div>
 
-                <div className="flex justify-end mt-6 gap-4">
+                <div className="flex flex-col xs:flex-row justify-end mt-6 gap-4">
                     <button
                         className="border bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 flex items-center gap-3"
                         onClick={() => onClose()}
@@ -56,7 +54,7 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
                     </button>
                     <button
                         className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                        onClick={() => { editPrice() }}
+                        onClick={editPrice}
                     >
                         <PlusIcon className="w-5 h-5 text-white" />
                         CAMBIAR PRECIO

@@ -6,8 +6,7 @@ import PillsIcon from "@assets/pillsIcon.svg?react";
 import ArrowDown from "@assets/arrowDown.svg?react";
 import ArrowUp from "@assets/arrowUp.svg?react";
 import BarCodeIcon from "@assets/barCodeIcon.svg?react";
-import ReturnIcon from "@assets/returnIcon.svg?react";
-import PlusIcon from "@assets/plusIcon.svg?react";
+import { ActionButtons } from "@components/ActionButtons";
 import PropTypes from "prop-types";
 
 function UpdateProduct({ productData }) {
@@ -103,42 +102,55 @@ function UpdateProduct({ productData }) {
             status: formData.status === "ACTIVO",
         };
         updateProductData(productData.systemCode, updatedProduct);
-        navigate(`/products`);
+        navigate("/products");
     }
 
     const navigate = useNavigate();
 
     return (
-        <form className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md ">
-            <div className="grid grid-cols-1 md:grid-cols-6 gap-2 mb-6">
+        <form className="pt-4 bg-gray-50 py-4 px-6 shadow-md rounded-t-md ">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
                 {fields.map((field, index) => (
-                    <div key={index} className={`mb-2 col-span-${field.columsNumber} `}>
+                    <div
+                        key={index}
+                        className={`mb-4 col-span-1 sm:col-span-${Math.min(
+                            field.columsNumber,
+                            2
+                        )} md:col-span-${Math.min(
+                            field.columsNumber,
+                            4
+                        )} lg:col-span-${field.columsNumber}`}
+                    >
                         <label className="block text-gray-500 font-medium mb-2" htmlFor={field.name}>
                             {field.label}
                         </label>
                         <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden text-gray-600">
-                            {
-                                field.icon && (
-                                    <div className="flex items-center justify-center bg-gray-100 px-3">
-                                        <field.icon className="w-5 h-5 text-gray-600" />
-                                    </div>
-                                )
-                            }
+                            {field.icon && (
+                                <div className="flex items-center justify-center bg-gray-100 px-3">
+                                    <field.icon className="w-5 h-5 text-gray-600" />
+                                </div>
+                            )}
                             {field.type === "text" || field.type === "number" ? (
                                 <input
-                                    type="text"
+                                    type={field.type}
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
                                     disabled={field.disabled}
-                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name] ? "border-red-500" : "border-gray-200 hover:border-blue-300 focus-within:border-blue-300"}`}
+                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
+                                        ? "border-red-500"
+                                        : "border-gray-200 hover:border-blue-300 focus:border-blue-300"
+                                        }`}
                                 />
                             ) : (
                                 <select
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
+                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
+                                        ? "border-red-500"
+                                        : "border-gray-200 hover:border-blue-300 focus:border-blue-300"
+                                        }`}
                                 >
                                     {field?.options?.map((option, i) => (
                                         <option key={i} value={option}>
@@ -148,11 +160,9 @@ function UpdateProduct({ productData }) {
                                 </select>
                             )}
                         </div>
-                        {
-                            field.tooltip && (
-                                <p className="text-xs text-gray-500 mt-1">{field.tooltip}</p>
-                            )
-                        }
+                        {field.tooltip && (
+                            <p className="text-xs text-gray-500 mt-1">{field.tooltip}</p>
+                        )}
                         {errors[field.name] && (
                             <p className="text-red-500 text-sm mt-1 whitespace-nowrap">{errors[field.name]}</p>
                         )}
@@ -162,24 +172,13 @@ function UpdateProduct({ productData }) {
             {
                 isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />
             }
-            <div className='flex justify-between items-center gap-4 pt-4 px-4 border-t border-gray-200 bg-gray-50 '>
-                <button
-                    className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                    type="button"
-                    onClick={() => navigate("/products")}
-                >
-                    <ReturnIcon className="w-5 h-5 text-gray-700" />
-                    REGRESAR AL LISTADO
-                </button>
-                <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                    type="button"
-                    onClick={() => updateProduct()}
-                >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    ACTUALIZAR PRODUCTO
-                </button>
-            </div>
+
+            <ActionButtons
+                onCancel={() => navigate("/products")}
+                onSubmit={updateProduct}
+                submitText="ACTUALIZAR PRODUCTO"
+                cancelText="REGRESAR AL LISTADO"
+            />
         </form>
 
     );

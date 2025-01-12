@@ -21,7 +21,7 @@ function ActiveOrders() {
     const activeAccounts = clients.filter(client => client?.products?.length > 0);
     const navigate = useNavigate();
     return (
-        <section className="container mx-auto p-6 overflow-auto">
+        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8  overflow-auto">
             <h1 className="text-xl sm:text-3xl font-medium text-orange-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <ShoppingCart className="w-6 sm:w-9 h-6 sm:h-9  mr-2" />
                 Cuentas activas
@@ -93,14 +93,14 @@ function ActiveOrders() {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div >
 
             <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
                 <p className="text-gray-600 text-center md:text-left">
                     Página: 1 de 1 | Registros del 1 al {activeAccounts.length} | Total{" "}
                     {activeAccounts.length}
                 </p>
-                <div className="flex justify-center space-x-2">
+                <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
                     <button className="py-2 px-4 border rounded">Primera</button>
                     <button className="py-2 px-4 border rounded">Anterior</button>
                     <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
@@ -108,7 +108,7 @@ function ActiveOrders() {
                     <button className="py-2 px-4 border rounded">Última</button>
                 </div>
             </div>
-        </section>
+        </section >
     );
 }
 

@@ -57,7 +57,7 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation }) {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 pt-20">
-            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg modal-appear">
+            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg modal-appear mx-4">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-medium text-gray-600">
                         {title[typeOfOperation] || "¿Estás seguro de esta acción?"}
@@ -89,17 +89,17 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation }) {
                     </div>
                 )}
 
-                <div className="flex justify-end space-x-2 border-t border-gray-300 pt-4">
+                <div className="flex flex-col sm:flex-row justify-end border-t border-gray-300 pt-4 gap-4">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg hover:bg-gray-400"
+                        className="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg hover:bg-gray-400 w-full md:w-auto"
                     >
                         Cancelar
                     </button>
                     <button
                         type="button"
-                        className={`px-4 py-2 ${operationConfig[typeOfOperation]?.color || "bg-red-500 hover:bg-red-600"} text-white rounded-lg flex items-center`}
+                        className={`px-4 py-2 ${operationConfig[typeOfOperation]?.color || "bg-red-500 hover:bg-red-600"} text-white rounded-lg flex items-center w-full md:w-auto whitespace-nowrap`}
                         onClick={typeOfOperationConfirm}
                     >
                         <DiskIcon className="w-5 h-5 mr-2" />

@@ -97,7 +97,7 @@ function AddNewProductModal({ onClose }) {
         };
         addProduct(newService);
         onClose();
-        navigate(`/products`);
+        navigate("/products");
     }
 
     const formFields = [
@@ -185,14 +185,14 @@ function AddNewProductModal({ onClose }) {
 
 
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50">
-            <div className="bg-white py-4 px-8 rounded-md w-full h-auto max-w-5xl mt-6 modal-appear">
+        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50 overflow-y-scroll custom-scrollbar" >
+            <div className="bg-white py-4 px-8 rounded-md w-full h-auto max-w-5xl mt-6 mx-4 modal-appear">
                 <h2 className="text-xl font-bold text-blue-500 mb-2">Agregar nuevo producto</h2>
-                <form className="grid grid-cols-3 gap-4 border-b border-gray-300 pb-8">
+                <form className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-b border-gray-300 pb-6 mb-4">
                     {formFields.map((field, index) => (
                         <div
                             key={index}
-                            className={`items - center ${field.fullWidth ? 'col-span-3' : 'col-span-1'}`}
+                            className={`items-center ${field.fullWidth ? 'col-span-1 sm:col-span-2 lg:col-span-3' : 'col-span-1'}`}
                         >
                             <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
                             {field.type === 'select' ? (
@@ -208,7 +208,7 @@ function AddNewProductModal({ onClose }) {
                                 </select>
                             ) : (
                                 <div className="rounded-lg overflow-hidden">
-                                    <div className='flex w-full'>
+                                    <div className="flex w-full">
                                         {field.icon && (
                                             <div className="flex items-center justify-center bg-gray-100 px-3">
                                                 <field.icon className="w-5 h-5 text-gray-600" />
@@ -220,15 +220,12 @@ function AddNewProductModal({ onClose }) {
                                             placeholder={field.placeholder}
                                             value={formData[field.name]}
                                             onChange={handleChange}
-                                            className={`border border-gray-300 ${field.icon ? 'rounded-r-lg' : 'rounded-lg'}
-                                            py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus:border-blue-300 '} focus:outline-none`}
+                                            className={`border border-gray-300 ${field.icon ? 'rounded-r-lg' : 'rounded-lg'} py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus:border-blue-300 '} focus:outline-none`}
                                         />
                                     </div>
-
                                     {field.infoMessage && (
                                         <p className="text-xs text-gray-500 mt-1">{field.infoMessage}</p>
                                     )}
-
                                 </div>
                             )}
                             {errors[field.name] && (
@@ -238,14 +235,12 @@ function AddNewProductModal({ onClose }) {
                     ))}
                 </form>
 
-                <div className="flex justify-end mt-6 gap-4">
-                    <ActionButtons
-                        onCancel={onClose}
-                        onSubmit={createProduct}
-                        submitText="CREAR NUEVO PRODUCTO"
-                        mode="modal"
-                    />
-                </div>
+                <ActionButtons
+                    onCancel={onClose}
+                    onSubmit={createProduct}
+                    submitText="CREAR NUEVO PRODUCTO"
+                    mode="modal"
+                />
             </div>
         </div >
     )

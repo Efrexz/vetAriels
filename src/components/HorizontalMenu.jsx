@@ -25,7 +25,7 @@ function HorizontalMenu({ mode }) {
             { name: 'Editar', url: "update" },
             { name: 'Mascotas', url: "pets" },
             { name: 'Historial de compras', url: "purchase-history" },
-            { name: 'Galería', url: "gallery" },
+            // { name: 'Galería', url: "gallery" },
         ],
         pets: [
             { name: 'Editar', url: "update" },
@@ -40,7 +40,7 @@ function HorizontalMenu({ mode }) {
         products: [
             { name: 'Editar', url: "update" },
             { name: 'Precios', url: "prices" },
-            { name: 'Codigo de barras', url: "barcode" },
+            // { name: 'Codigo de barras', url: "barcode" },
         ],
         user: [
             { name: 'Datos personales', url: "update" },

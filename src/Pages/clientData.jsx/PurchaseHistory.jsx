@@ -1,9 +1,4 @@
-import RefreshIcon from '@assets/refreshIcon.svg?react';
-import EraserIcon from '@assets/eraserIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
-import PDFIcon from '@assets/pdfIcon.svg?react';
-import ExcelIcon from '@assets/fileExcelIcon.svg?react';
-
 
 
 const comprobantes = [
@@ -79,57 +74,42 @@ const headlinesOptions = [
 
 function PurchaseHistory() {
     return (
-        <section className="bg-white rounded-lg shadow p-4 mb-6">
-            <div className="p-4 rounded-lg mb-1">
-                <div className="flex items-center space-x-2 mb-2">
-                    <div className=" w-full flex gap-2">
-                        <div className="flex w-80 border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
+        <section className="bg-white rounded-lg shadow p-4">
+            <div className="p-4 rounded-lg mb-4">
+                <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+                    <div className="flex flex-col sm:flex-row gap-4 w-full">
+                        <div className="flex w-full sm:w-auto border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
                             <div className="flex items-center justify-center bg-gray-100 px-3">
                                 <SearchIcon className="w-5 h-5 text-gray-600" />
                             </div>
                             <input
                                 type="text"
                                 placeholder="Buscar..."
-                                className="w-[40%] py-2 px-4 focus:outline-none focus:ring-0 hover:border-blue-300 focus-within:border-blue-300 "
+                                className="w-full sm:w-[250px] py-2 px-4 focus:outline-none focus:ring-0"
                             />
                         </div>
                         <input
                             type="date"
-                            className="w-80 py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                            className="w-full sm:w-auto py-2 px-4 border-gray-200 border rounded-lg focus:outline-none focus:border-blue-500"
                         />
-                        <div>
-                            <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                                <EraserIcon className="w-5 h-5" />
-                            </button>
-                            <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
-                                <RefreshIcon className="w-5 h-5" />
-                            </button>
-                            <button className="bg-transparent border border-gray-300 text-orange-500 py-2 px-4 rounded hover:bg-gray-200">
-                                <PDFIcon className="w-5 h-5" />
-                            </button>
-                            <button className="bg-transparent border border-gray-300 text-green-600 py-2 px-4 rounded hover:bg-gray-200">
-                                <ExcelIcon className="w-5 h-5" />
-                            </button>
-                        </div>
-
                     </div>
                 </div>
-                <div className="flex items-center space-x-2 mb-2">
-                    {
-                        headlinesOptions.map((option, index) => (
-                            <div key={index} className=" w-[310px] flex gap-2">
-                                <select
-                                    name={option.type}
-                                    className="mt-1.5 w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2 hover:border-blue-300 focus-within:border-blue-300"
-                                >
-                                    <option value="">{option.type}</option>
-                                    {option.options.map((option, index) => (
-                                        <option key={index} value={option.value}>{option.label}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        ))
-                    }
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+                    {headlinesOptions.map((option, index) => (
+                        <div key={index} className="w-full">
+                            <select
+                                name={option.type}
+                                className="w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2 hover:border-blue-300 focus-within:border-blue-300"
+                            >
+                                <option value="">{option.type}</option>
+                                {option.options.map((opt, optIndex) => (
+                                    <option key={optIndex} value={opt.value}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    ))}
                 </div>
             </div>
             <div className="overflow-x-auto border border-gray-300 rounded-lg">
@@ -146,14 +126,16 @@ function PurchaseHistory() {
                     <tbody>
                         {comprobantes.map((comprobante, index) => (
                             <tr key={index} className="hover:bg-gray-100 cursor-pointer">
-                                <td className="py-2 px-4 border-b text-center border ">{comprobante.date}</td>
-                                <td className="py-2 px-4 border-b text-center border">{comprobante.comprobante}</td>
-                                <td className="py-2 px-4 border-b text-center border">{comprobante.concept}</td>
-                                <td className="py-2 px-4 border-b text-center border">{comprobante.pet}</td>
-                                <td className="py-2 px-4 border-b text-center border">{comprobante.price}</td>
-                                <td className="py-2 px-4 border-b text-center border">{comprobante.quantity}</td>
-                                <td className="py-2 px-4 border-b text-center border">{comprobante.total}</td>
-                                <td className="py-2 px-4 border-b text-center border text-white bg-green-500 rounded">{comprobante.status}</td>
+                                <td className="py-2 px-4 border-b text-center">{comprobante.date}</td>
+                                <td className="py-2 px-4 border-b text-center">{comprobante.comprobante}</td>
+                                <td className="py-2 px-4 border-b text-center">{comprobante.concept}</td>
+                                <td className="py-2 px-4 border-b text-center">{comprobante.pet}</td>
+                                <td className="py-2 px-4 border-b text-center">{comprobante.price}</td>
+                                <td className="py-2 px-4 border-b text-center">{comprobante.quantity}</td>
+                                <td className="py-2 px-4 border-b text-center">{comprobante.total}</td>
+                                <td className="py-2 px-4 border-b text-center text-white bg-green-500 rounded">
+                                    {comprobante.status}
+                                </td>
                                 <td className="py-2 px-4 border-b text-center">
                                     <button className="text-green-500 hover:text-green-700">
                                         <SearchIcon className="w-5 h-5" />
@@ -164,8 +146,10 @@ function PurchaseHistory() {
                     </tbody>
                 </table>
             </div>
-            <div className="flex justify-between items-center mt-4">
-                <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
+            <div className="flex flex-col md:flex-row justify-between items-center mt-4 space-y-4 md:space-y-0">
+                <p className="text-gray-600 text-sm text-center md:text-left">
+                    Página: 1 de 1 | Registros del 1 al 4 | Total 4
+                </p>
                 <div className="flex space-x-2">
                     <button className="py-2 px-4 border rounded">Primera</button>
                     <button className="py-2 px-4 border rounded">Anterior</button>
@@ -175,6 +159,7 @@ function PurchaseHistory() {
                 </div>
             </div>
         </section>
+
     );
 }
 
