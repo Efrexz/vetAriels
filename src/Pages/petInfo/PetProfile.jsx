@@ -16,6 +16,7 @@ function PetProfile({ petData }) {
     const navigate = useNavigate();
     const individualPetData = petData;
 
+    const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
         petName: individualPetData?.petName || '',
         owner: individualPetData?.ownerName || '',
@@ -28,6 +29,20 @@ function PetProfile({ petData }) {
         esterilized: individualPetData?.esterilized || '',
     });
 
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.petName || formData.petName.length < 3) {
+            newErrors.petName = 'El nombre del mascote debe tener al menos 3 caracteres';
+        }
+        if (!formData.birthDate) {
+            newErrors.birthDate = 'Introduzca una fecha de nacimiento válida';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
     const handleChange = (e) => {
         const { id, value } = e.target;
         setFormData((prevState) => ({
@@ -36,7 +51,10 @@ function PetProfile({ petData }) {
         }));
     };
 
-    const updateData = () => {
+    function updateData() {
+        if (!validateForm()) {
+            return;
+        }
 
         const updatedPetInfo = {
             ...individualPetData,
@@ -51,7 +69,7 @@ function PetProfile({ petData }) {
 
         updatePetData(individualPetData.id, updatedPetInfo);
         navigate(`/pets`);
-    };
+    }
 
     const formFields = [
         {
@@ -75,7 +93,7 @@ function PetProfile({ petData }) {
         {
             label: 'Fecha de nacimiento:',
             id: 'birthDate',
-            type: 'text',
+            type: 'date',
             value: formData.documento,
             icon: CakeIcon,
             disabled: false
@@ -132,7 +150,7 @@ function PetProfile({ petData }) {
                             <label className="block text-gray-600 mb-1">{field.label}</label>
                             <div className="flex items-center ">
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-100 px-3 py-3.5 rounded-l-lg">
+                                    <div className={`flex items-center justify-center bg-gray-100 px-3 py-3.5 rounded-l-lg `}>
                                         <field.icon className="w-5 h-5 text-gray-600" />
                                     </div>
                                 }
@@ -140,7 +158,7 @@ function PetProfile({ petData }) {
                                 {field.type === 'select' ? (
                                     <select
                                         id={field.id}
-                                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-0"
+                                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'} `}
                                         onChange={handleChange}
                                         value={formData[field.id]}// aseguramos que el valor predeterminado sea el que tiene la mascota
                                     >
@@ -157,10 +175,13 @@ function PetProfile({ petData }) {
                                         value={formData[field.id]}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className="border rounded-r-lg p-3  w-full hover:border-blue-300 focus-within:border-blue-300"
+                                        className={`border rounded-r-lg p-3  w-full focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
                                     />
                                 )}
                             </div>
+                            {errors[field.id] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                            )}
                         </div>
                     ))}
                 </div>

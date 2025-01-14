@@ -12,6 +12,13 @@ function ClientSearchInput({ mode }) {
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
 
+    const baseUrl = {
+        sales: "/sales/client",
+        grooming: `/grooming/order-creation`,
+        pets: `/pets/create`
+    }
+
+
     //si existe un cliente seleccionado, mostramos su nombre en el buscador y asi evitamos el error que al cambiar de pagina y volver el input esta vacio
     const [searchTerm, setSearchTerm] = useState(isClientSelected ? `${isClientSelected?.firstName} ${isClientSelected?.lastName}` : '');
 
@@ -65,7 +72,7 @@ function ClientSearchInput({ mode }) {
                                     e.preventDefault();// Evita que React Router intercepte la navegación.
                                     setSearchTerm(`${client.firstName} ${client.lastName}`);
                                     setIsFilteredListVisible(false); // Ocultar dropdown al seleccionar
-                                    window.location.href = `${mode === "sales" ? "/sales/client" : "/grooming/order-creation"}/${client.id}`;//Usamos el window.location en vez del navigate para poder recargar la pagina al seleccionar un cliente para evitar el error que teniamos que quedaba el nombre del antiguo usuario en el input de busqueda
+                                    window.location.href = `${baseUrl[mode]}/${client.id}`;//Usamos el window.location en vez del navigate para poder recargar la pagina al seleccionar un cliente para evitar el error que teniamos que quedaba el nombre del antiguo usuario en el input de busqueda
                                 }}
                             >
                                 <div className="font-bold text-black">{`${client.firstName} ${client.lastName}`}</div>

@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { FinancialContext } from '@context/FinancialContext';
+import { GlobalContext } from '@context/GlobalContext';
 import { ActionButtons } from '@components/ActionButtons';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import Fileinvoice from '@assets/file-invoice.svg?react';
@@ -9,12 +10,16 @@ import PropTypes from "prop-types";
 function PaymentAndDepositModal({ onClose, typeOfOperation }) {
 
     const { addNewPayment } = useContext(FinancialContext);
+    const { activeUser, companyData, users } = useContext(GlobalContext);
+
+    const [errors, setErrors] = useState({});
+
     const now = new Date();
     const currentDate = now.toLocaleDateString(); //  "22/05/2023"
     const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
     const [formData, setFormData] = useState({
-        company: '',
-        generatedBy: 'administracion ariel',
+        company: companyData?.clinicName,
+        generatedBy: `${activeUser?.name} ${activeUser?.lastName}`,
         responsible: 'administracion ariel',
         date: `${currentDate} ${currentTime}`,
         reason: '',
@@ -23,13 +28,29 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
         tag: '',
     });
 
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.reason || formData.reason.length < 4) {
+            newErrors.reason = 'El motivo debe tener al menos 4 caracteres';
+        }
+        if (!formData.amount || formData.amount < 1) {
+            newErrors.amount = 'El monto debe ser mayor a 0';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
     function handleChange(e) {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     }
 
     function handleSubmit() {
-        const generateId = () => {
+        if (!validateForm()) {
+            return;
+        }
+        function generateId() {
             const part1 = Date.now().toString(35)
             const part2 = Math.random().toString(36).slice(2)
             return part1 + part2
@@ -48,12 +69,15 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
         onClose();
     }
 
+    const userOptions = users.map(user => `${user.name} ${user.lastName}`);
+
     const fields = [
         {
             label: 'Empresa',
             name: 'company',
-            type: 'select',
-            options: ['MALDONADO MARTEL RICARDO ANTONIO 0001 - 10005083317'],
+            type: 'text',
+            value: formData.company,
+            disabled: true,
             fullWidth: true
         },
         {
@@ -67,7 +91,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
             label: 'Responsable',
             name: 'responsible',
             type: 'select',
-            options: ['Administración Ariel', "Efrain Andrade", "Lesly Abraham"],
+            options: userOptions,
             fullWidth: true
         },
         {
@@ -128,7 +152,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 text-gray-600"
+                                        className={`border border-gray-300 rounded-md p-2 w-full  text-gray-600 focus:outline-none ${errors[field.name] ? 'border-red-500' : 'hover:border-blue-300 focus-within:border-blue-300'}`}
                                     >
                                         {field.options.map((option, index) => (
                                             <option key={index} value={option}>
@@ -138,7 +162,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                     </select>
                                 ) : (
                                     <input
-                                        className={`border border-gray-300 ${field.icon ? 'rounded-r-md' : 'rounded-md'} p-2 w-full hover:border-blue-300 focus-within:border-blue-300 text-gray-600`}
+                                        className={`border border-gray-300 ${field.icon ? 'rounded-r-md' : 'rounded-md'} p-2 w-full text-gray-600 ${errors[field.name] ? 'border-red-500' : 'hover:border-blue-300 focus-within:border-blue-300'}`}
                                         type={field.type}
                                         name={field.name}
                                         value={formData[field.name]}
@@ -148,6 +172,11 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                     />
                                 )}
                             </div>
+                            {
+                                errors[field.name] && (
+                                    <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                                )
+                            }
                         </div>
                     ))}
 
@@ -156,10 +185,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                             mode="modal"
                             onCancel={onClose}
                             submitText="GENERAR"
-                            onSubmit={() => {
-                                handleSubmit()
-                                onClose()
-                            }} />
+                            onSubmit={handleSubmit} />
                     </div>
                 </form >
             </div >

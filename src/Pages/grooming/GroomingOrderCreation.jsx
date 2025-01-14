@@ -7,6 +7,7 @@ import { PriceModificationModal } from '@components/PriceModificationModal';
 import { QuantityModificationModal } from '@components/QuantityModificationModal';
 import { ClientSearchInput } from '@components/ClientSearchInput';
 import { ActionButtons } from '@components/ActionButtons';
+import { ErrorModal } from '@components/ErrorModal';
 import BathIcon from '@assets/bathIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import TagIcon from '@assets/tagIcon.svg?react';
@@ -17,6 +18,8 @@ function GroomingOrderCreation() {
 
     //estado de productos seleccionados al escribir en nuestro input de busqueda
     const [selectedProducts, setSelectedProducts] = useState([]);
+
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
     //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
     const [productToEdit, setProductToEdit] = useState(null);
@@ -100,6 +103,12 @@ function GroomingOrderCreation() {
         const now = new Date();
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
         const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
+
+        //Validamos que haya seleccionado al menos un producto agregado
+        if (selectedProducts.length < 1) {
+            setIsErrorModalOpen(true);
+            return;
+        }
 
         const dataToSend = {
             id: Date.now(),
@@ -314,6 +323,12 @@ function GroomingOrderCreation() {
                             }}
                             onClose={() => setIsQuantityModalOpen(false)}
                         />
+                    )
+                }
+
+                {
+                    isErrorModalOpen && (
+                        <ErrorModal onClose={() => setIsErrorModalOpen(false)} typeOfError="emptyList" />
                     )
                 }
 

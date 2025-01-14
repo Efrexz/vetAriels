@@ -1,32 +1,57 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
+import { ActionButtons } from '@components/ActionButtons';
 import UserGroupIcon from '@assets/userGroupIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import DocumentIcon from '@assets/documentIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
 import PhoneIcon from '@assets/phoneIcon.svg?react';
 import LocationIcon from '@assets/locationIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-
 
 function CreateClientForm() {
     const { addClient } = useContext(ClientsContext);
     const navigate = useNavigate();
 
+    const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
-        nombre: '',
-        apellido: '',
-        documento: '',
+        name: '',
+        lastName: '',
+        document: '',
         email: '',
-        telefono_movil: '',
-        telefono_trabajo: '',
-        distrito: 'LIMA',
-        direccion: '',
-        referencia: '',
-        observaciones: ''
+        mobile: '',
+        phone: '',
+        district: 'LIMA',
+        address: '',
+        reference: '',
+        observations: ''
     });
+
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.name || formData.name.length < 4) {
+            newErrors.name = 'El nombre del cliente debe tener al menos 4 caracteres';
+        }
+        if (!formData.lastName || formData.lastName.length < 4) {
+            newErrors.lastName = 'El apellido del cliente debe tener al menos 4 caracteres';
+        }
+        if (!formData.document || formData.document.length < 8) {
+            newErrors.document = 'El número de documento de identidad debe tener al menos 8 caracteres';
+        }
+        if (!formData.email || formData.email.length < 6) {
+            newErrors.email = 'El correo electrónico del cliente debe tener al menos 6 caracteres';
+        }
+        if (!formData.mobile || formData.mobile.length < 9) {
+            newErrors.mobile = 'El número de teléfono móvil del cliente debe tener al menos 9 caracteres';
+        }
+        if (!formData.address || formData.address.length < 4) {
+            newErrors.address = 'La dirección del cliente debe tener al menos 4 caracteres';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -36,52 +61,53 @@ function CreateClientForm() {
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
+    function createNewClient() {
+        if (!validateForm()) {
+            return;
+        }
         const now = new Date();
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newClient = {
             id: Date.now(),
-            firstName: formData.nombre,
-            lastName: formData.apellido,
+            firstName: formData.name,
+            lastName: formData.lastName,
             email: formData.email,
-            dni: formData.documento,
+            dni: formData.document,
             date: currentDate,
             hour: currentTime,
-            phone1: formData.telefono_movil,
-            phone2: formData.telefono_trabajo,
-            address: formData.direccion,
-            distrit: formData.distrito,
-            reference: formData.referencia,
-            observations: formData.observaciones,
+            phone1: formData.mobile,
+            phone2: formData.phone,
+            address: formData.address,
+            distrit: formData.district,
+            reference: formData.reference,
+            observations: formData.observations,
             pets: []
         };
 
         addClient(newClient);
         navigate(`/clients/client/${newClient.id}/update`);
-    };
+    }
 
     const formFields = [
         {
             label: 'Nombre *',
-            id: 'nombre',
+            id: 'name',
             type: 'text',
             icon: RoleUserIcon,
             required: true
         },
         {
             label: 'Apellido *',
-            id: 'apellido',
+            id: 'lastName',
             type: 'text',
             icon: RoleUserIcon,
             required: true
         },
         {
             label: 'Número de documento de identidad',
-            id: 'documento',
+            id: 'document',
             icon: DocumentIcon,
             type: 'text'
         },
@@ -94,7 +120,7 @@ function CreateClientForm() {
         },
         {
             label: 'Teléfono móvil *',
-            id: 'telefono_movil',
+            id: 'mobile',
             icon: PhoneIcon,
             type: 'text',
             helperText: 'Para utilizar WhatsApp, registrar el código de país delante del teléfono móvil. Ej. +51',
@@ -102,30 +128,30 @@ function CreateClientForm() {
         },
         {
             label: 'Teléfono de trabajo',
-            id: 'telefono_trabajo',
+            id: 'phone',
             icon: PhoneIcon,
             type: 'text'
         },
         {
             label: 'Distrito',
-            id: 'departamento',
+            id: 'district',
             type: 'select',
             options: ['LIMA']
         },
         {
             label: 'Dirección *',
-            id: 'direccion',
+            id: 'address',
             type: 'text'
         },
         {
             label: 'Referencias de la dirección',
-            id: 'referencia',
+            id: 'reference',
             icon: LocationIcon,
             type: 'text'
         },
         {
             label: 'Observaciones del cliente',
-            id: 'observaciones',
+            id: 'observations',
             icon: LocationIcon,
             type: 'text'
         },
@@ -142,7 +168,7 @@ function CreateClientForm() {
                     {formFields.map((field, index) => (
                         <div key={index}>
                             <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
+                            <div className={`flex w-full border-gray-200 border rounded-lg overflow-hidden ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}>
                                 {field.icon &&
                                     <div className="flex items-center justify-center bg-gray-100 px-3">
                                         <field.icon className="w-5 h-5 text-gray-600" />
@@ -152,7 +178,7 @@ function CreateClientForm() {
                                 {field.type === 'select' ? (
                                     <select
                                         id={field.id}
-                                        className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0"
+                                        className={`w-full px-3 py-2 border-none focus:outline-none focus:ring-0`}
                                     >
                                         {field.options.map((option, i) => (
                                             <option key={i} value={option}>
@@ -170,6 +196,9 @@ function CreateClientForm() {
                                     />
                                 )}
                             </div>
+                            {errors[field.id] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                            )}
                             {field.helperText && (
                                 <p className="text-sm text-gray-600 mt-1">{field.helperText}</p>
                             )}
@@ -177,21 +206,12 @@ function CreateClientForm() {
                     ))}
                 </form>
             </div>
-            <div className='flex flex-col xs:flex-row justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg gap-4'>
-                <button
-                    className="bg-white border border-gray-300 text-xs md:text-sm lg:text-base text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto"
-                    onClick={() => navigate(-1)}
-                >
-                    <ReturnIcon className="w-4 h-4 text-gray-700" />
-                    CANCELAR
-                </button>
-                <button
-                    onClick={handleSubmit}
-                    className="bg-green-500 text-xs md:text-sm text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3 w-full sm:w-auto">
-                    <PlusIcon className="w-4 h-4 text-white" />
-                    CREAR NUEVO CLIENTE
-                </button>
-            </div>
+
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                onSubmit={createNewClient}
+                submitText="CREAR NUEVO CLIENTE"
+            />
         </section>
     )
 }

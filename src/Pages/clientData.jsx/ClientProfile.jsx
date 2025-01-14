@@ -16,72 +16,98 @@ function ClientProfile() {
 
 
     const individualClientData = clients.find(client => client.id === Number(id));
+    const [errors, setErrors] = useState({});
 
 
     const [formData, setFormData] = useState({
-        nombre: individualClientData?.firstName || '',
-        apellido: individualClientData?.lastName || '',
-        documento: individualClientData?.dni || '',
+        name: individualClientData?.firstName || '',
+        lastName: individualClientData?.lastName || '',
+        document: individualClientData?.dni || '',
         email: individualClientData?.email || '',
-        telefono_movil: individualClientData?.phone1 || '',
-        telefono_trabajo: individualClientData?.phone2 || '',
-        distrito: individualClientData?.district || '',
-        direccion: individualClientData?.address || '',
-        referencia: individualClientData?.reference || '',
-        observaciones: individualClientData?.observations || ''
+        mobile: individualClientData?.phone1 || '',
+        phone: individualClientData?.phone2 || '',
+        district: individualClientData?.district || '',
+        address: individualClientData?.address || '',
+        reference: individualClientData?.reference || '',
+        observations: individualClientData?.observations || ''
     });
 
-    const handleChange = (e) => {
+    function validateForm() {
+        const newErrors = {};
+        if (!formData.name || formData.name.length < 4) {
+            newErrors.name = 'El nombre del cliente debe tener al menos 4 caracteres';
+        }
+        if (!formData.lastName || formData.lastName.length < 4) {
+            newErrors.lastName = 'El apellido del cliente debe tener al menos 4 caracteres';
+        }
+        if (!formData.document || formData.document.length < 8) {
+            newErrors.document = 'El número de documento de identidad debe tener al menos 8 caracteres';
+        }
+        if (!formData.email || formData.email.length < 6) {
+            newErrors.email = 'El correo electrónico del cliente debe tener al menos 6 caracteres';
+        }
+        if (!formData.mobile || formData.mobile.length < 9) {
+            newErrors.mobile = 'El número de teléfono móvil del cliente debe tener al menos 9 caracteres';
+        }
+        if (!formData.address || formData.address.length < 4) {
+            newErrors.address = 'La dirección del cliente debe tener al menos 4 caracteres';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
+    function handleChange(e) {
         const { id, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
             [id]: value
         }));
-    };
+    }
 
-    const updateData = (e) => {
-        e.preventDefault();
-
+    function updateData() {
+        if (!validateForm()) {
+            return;
+        }
         const updatedClient = {
             ...individualClientData, //Mantenemos el id y las mascotas existentes
-            firstName: formData.nombre,
-            lastName: formData.apellido,
+            firstName: formData.name,
+            lastName: formData.lastName,
             email: formData.email,
-            dni: formData.documento,
-            phone1: formData.telefono_movil,
-            phone2: formData.telefono_trabajo,
-            address: formData.direccion,
-            district: formData.distrito,
-            reference: formData.referencia,
-            observations: formData.observaciones,
+            dni: formData.document,
+            phone1: formData.mobile,
+            phone2: formData.phone,
+            address: formData.address,
+            district: formData.district,
+            reference: formData.reference,
+            observations: formData.observations,
         };
 
         updateClientData(individualClientData.id, updatedClient);
         navigate(`/clients`);
-    };
+    }
 
     const formFields = [
         {
             label: 'Nombre',
-            id: 'nombre',
+            id: 'name',
             type: 'text',
-            value: formData.nombre,
+            value: formData.name,
             icon: RoleUserIcon,
             required: true
         },
         {
             label: 'Apellido',
-            id: 'apellido',
+            id: 'lastName',
             type: 'text',
-            value: formData.apellido,
+            value: formData.lastName,
             icon: RoleUserIcon,
             required: true
         },
         {
             label: 'Número de documento de identidad',
-            id: 'documento',
+            id: 'document',
             type: 'text',
-            value: formData.documento,
+            value: formData.document,
             icon: DocumentIcon,
         },
         {
@@ -94,45 +120,44 @@ function ClientProfile() {
         },
         {
             label: 'Teléfono móvil',
-            id: 'telefono_movil',
+            id: 'mobile',
             type: 'text',
-            value: formData.telefono_movil,
+            value: formData.mobile,
             icon: PhoneIcon,
             required: true
         },
         {
             label: 'Teléfono de trabajo',
-            id: 'telefono_trabajo',
+            id: 'phone',
             type: 'text',
-            value: formData.telefono_trabajo,
+            value: formData.phone,
             icon: PhoneIcon,
         },
         {
             label: 'Dirección',
-            id: 'direccion',
+            id: 'address',
             type: 'text',
-            value: formData.direccion,
+            value: formData.address,
             icon: LocationIcon,
         },
         {
             label: 'Referencias de la dirección',
-            id: 'referencia',
+            id: 'reference',
             type: 'text',
-            value: formData.referencia,
+            value: formData.reference,
             icon: LocationIcon,
         },
         {
             label: 'Observaciones del cliente',
-            id: 'observaciones',
+            id: 'observations',
             type: 'text',
-            value: formData.observaciones,
+            value: formData.observation,
             icon: LocationIcon,
         },
     ];
 
     return (
         <div className="flex flex-col w-full">
-            {/* Información del cliente */}
             <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-4 mt-4 mb-6">
                     {formFields.map((field, index) => (
@@ -143,7 +168,7 @@ function ClientProfile() {
                                     <field.icon className="w-5 h-5 text-gray-500" />
                                 </div>
                                 <input
-                                    className="border rounded-r-lg p-3 bg-gray-50 w-full hover:border-blue-300 focus-within:border-blue-300"
+                                    className={`border rounded-r-lg p-3 bg-gray-50 w-full focus:outline-none ${errors[field.id] ? "border-red-500" : "hover:border-blue-300 focus-within:border-blue-300"} `}
                                     type={field.type}
                                     id={field.id}
                                     value={formData[field.id]}
@@ -151,6 +176,9 @@ function ClientProfile() {
                                     onChange={handleChange}
                                 />
                             </div>
+                            {
+                                errors[field.id] && <p className="text-red-500 text-xs">{errors[field.id]}</p>
+                            }
                         </div>
                     ))}
                 </div>

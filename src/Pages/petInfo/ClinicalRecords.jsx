@@ -44,8 +44,7 @@ function ClinicalRecords() {
     return (
         <section className="w-full mx-auto bg-white p-6 shadow-md rounded-lg">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6 border-b-2 border-gray-200 pb-5">
-                {/* Grupo de Botones */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
                     <button
                         className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-2 w-full"
                     // onClick={() => navigate("/pets/create/no_client")}
@@ -69,7 +68,6 @@ function ClinicalRecords() {
                     </button>
                 </div>
 
-                {/* Dropdown */}
                 <div className="w-full lg:w-auto">
                     <select
                         name="type"

@@ -7,6 +7,7 @@ import { PriceModificationModal } from '@components/PriceModificationModal';
 import { QuantityModificationModal } from '@components/QuantityModificationModal';
 import { ActionButtons } from '@components/ActionButtons';
 import { SuccessModal } from '@components/SuccessModal';
+import { ErrorModal } from '@components/ErrorModal';
 import BathIcon from '@assets/bathIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import TagIcon from '@assets/tagIcon.svg?react';
@@ -16,6 +17,8 @@ function EditGroomingOrder() {
 
     //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
     const [productToEdit, setProductToEdit] = useState(null);
+
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
     //Modales
     const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
@@ -127,6 +130,10 @@ function EditGroomingOrder() {
 
     //actualizar la orden de servicio
     function updateGroomingOrder() {
+        if (selectedProducts.length < 1) {
+            setIsErrorModalOpen(true);
+            return;
+        }
         const dataToSend = {
             ...petInQueueGrommingData,
             productsAndServices: selectedProducts,
@@ -134,6 +141,7 @@ function EditGroomingOrder() {
             healthObservations: selectedObservations,
         };
         updatePetInQueueGrooming(Number(id), dataToSend);
+        setIsSuccessModalOpen(true);
     }
 
 
@@ -317,6 +325,12 @@ function EditGroomingOrder() {
                     )
                 }
 
+                {
+                    isErrorModalOpen && (
+                        <ErrorModal onClose={() => setIsErrorModalOpen(false)} typeOfError="emptyList" />
+                    )
+                }
+
                 <div className="bg-gray-100 pt-6 pb-6">
                     <div className="w-full lg:w-1/2 ml-auto">
                         <table className="min-w-full bg-gray-100">
@@ -407,10 +421,7 @@ function EditGroomingOrder() {
             <ActionButtons
                 onCancel={() => navigate(-1)}
                 cancelText="REGRESAR AL LISTADO DE ORDENES DE SERVICIO"
-                onSubmit={() => {
-                    updateGroomingOrder();
-                    setIsSuccessModalOpen(true);
-                }}
+                onSubmit={updateGroomingOrder}
                 submitText="GUARDAR CAMBIOS"
             />
         </section >

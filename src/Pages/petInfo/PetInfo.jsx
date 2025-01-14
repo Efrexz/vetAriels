@@ -21,6 +21,18 @@ function PetInfo() {
         let ageMonths = today.getMonth() - birth.getMonth();
         let ageDays = today.getDate() - birth.getDate();
 
+        // Ajustar los días y meses si es necesario
+        if (ageDays < 0) {
+            ageMonths -= 1; // Quitar un mes
+            // Obtener los días del mes anterior
+            const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+            ageDays += lastMonth.getDate(); // Sumar días del mes anterior
+        }
+
+        if (ageMonths < 0) {
+            ageYears -= 1; // Quitar un año
+            ageMonths += 12; // Ajustar los meses
+        }
         return { years: ageYears, months: ageMonths, days: ageDays };
     }
     const petAge = calculateAge(individualPetData?.birthDate);

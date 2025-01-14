@@ -5,6 +5,7 @@ function ErrorModal({ onClose, typeOfError }) {
 
     const errorMessages = {
         stock: "El producto seleccionado no tiene stock disponible.",
+        emptyList: "Debe seleccionar al menos un producto o servicio.",
         form: "El formulario contiene errores.",
         permission: "No tienes permisos para realizar esta acción.",
         password: "La contraseña ingresada no es correcta.",

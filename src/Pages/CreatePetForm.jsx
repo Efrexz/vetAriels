@@ -2,10 +2,9 @@ import { useContext, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
 import { ActionButtons } from '@components/ActionButtons';
+import { ClientSearchInput } from '@components/ClientSearchInput';
 import PawIcon from '@assets/pawIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
 import CakeIcon from '@assets/cakeIcon.svg?react';
 import BookIcon from '@assets/bookIcon.svg?react';
 import MicrochipIcon from '@assets/microChip.svg?react';
@@ -16,8 +15,9 @@ function CreatePetForm() {
     const { clients, addPet, historyCounter } = useContext(ClientsContext);
     const { id } = useParams();
 
-    const individualClientData = clients.find(client => client.id === Number(id));
 
+    const individualClientData = clients.find(client => client.id === Number(id));
+    const [errors, setErrors] = useState({});
 
 
     const [formData, setFormData] = useState({
@@ -31,6 +31,23 @@ function CreatePetForm() {
         sex: '',
     });
 
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (id === 'no_client') {
+            newErrors.owner = 'Debe seleccionar un propietario';
+        }
+        if (!formData.petName || formData.petName.length < 3) {
+            newErrors.petName = 'El nombre del mascote debe tener al menos 3 caracteres';
+        }
+        if (!formData.birthDate) {
+            newErrors.birthDate = 'Introduzca una fecha de nacimiento válida';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
     function handleChange(e) {
         const { id, value } = e.target;
         setFormData({
@@ -39,7 +56,10 @@ function CreatePetForm() {
         });
     }
 
-    const createNewPet = () => {
+    function createNewPet() {
+        if (!validateForm()) {
+            return;
+        }
         const now = new Date();
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
@@ -60,70 +80,66 @@ function CreatePetForm() {
 
         addPet(newPet, Number(id), formData.owner);
         navigate(`/pets`);
-    };
+    }
 
 
     const formFields = [
-        {
-            label: 'Propietario *',
-            id: 'owner',
-            type: 'text',
-            icon: RoleUserIcon,
-            required: true,
-            disabled: id !== "no_client" ? true : false
-        },
         {
             label: 'Nombre de la mascota *',
             id: 'petName',
             type: 'text',
             icon: PawIcon,
             required: true,
-            disabled: false,
+            disabled: id !== "no_client" ? false : true,
         },
         {
             label: 'Fecha de nacimiento',
             id: 'birthDate',
             icon: CakeIcon,
-            type: 'text',
-            disabled: false,
+            type: 'date',
+            disabled: id !== "no_client" ? false : true,
         },
         {
             label: 'N° de historia',
             id: 'hc',
             icon: BookIcon,
             type: 'text',
-            disabled: id !== "no_client" ? true : false
+            disabled: id !== "no_client" ? false : true
         },
         {
             label: 'Número de microchip',
             id: 'microchip',
             icon: MicrochipIcon,
             type: 'text',
-            disabled: false
+            disabled: id !== "no_client" ? false : true
         },
         {
             label: 'Especie',
             id: 'species',
             type: 'select',
-            options: ['CANINO', 'FELINO', 'CONEJO', 'HAMSTER', 'ERIZO', 'EXOTICO']
+            options: ['CANINO', 'FELINO', 'CONEJO', 'HAMSTER', 'ERIZO', 'EXOTICO'],
+            disabled: id !== "no_client" ? false : true
         },
         {
             label: 'Raza',
             id: 'breed',
             type: 'select',
-            options: ['CRUCE', 'BULLDOG INGLES', 'CHIHUAHUA', 'COCKER SPANIEL', 'COLLIE', 'BOXER']
+            options: ['CRUCE', 'BULLDOG INGLES', 'CHIHUAHUA', 'COCKER SPANIEL', 'COLLIE', 'BOXER'],
+            disabled: id !== "no_client" ? false : true
         },
         {
             label: 'Sexo',
             id: 'sex',
             type: 'select',
-            options: ['MACHO', 'HEMBRA']
+            options: ['MACHO', 'HEMBRA'],
+            disabled: id !== "no_client" ? false : true
         },
         {
             label: '¿Ha sido esterilizado?',
             id: 'esterilized',
             type: 'select',
-            options: ['SI', 'NO']
+            options: ['SI', 'NO'],
+            disabled: id !== "no_client" ? false : true
         },
 
     ];
@@ -136,10 +152,25 @@ function CreatePetForm() {
             </h1>
             <div className="bg-white p-4 pb-10 rounded-t-lg shadow-lg">
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-gray-700 font-medium mb-2">Propietario*</label>
+                        <div
+                            className={`flex w-full border-gray-200 border rounded-md ${errors["owner"] ? "border-red-500" : "hover:border-blue-300 focus-within:border-blue-300"}`}
+                        >
+                            <div className="flex items-center justify-center bg-gray-100 px-3">
+                                <RoleUserIcon className="w-5 h-5 text-gray-600" />
+                            </div>
+                            <ClientSearchInput mode={"pets"} />
+                        </div>
+                        {errors["owner"] && (
+                            <p className="text-red-500 text-sm mt-1">{errors["owner"]}</p>
+                        )}
+                    </div>
+
                     {formFields.map((field, index) => (
                         <div key={index}>
                             <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
+                            <div className={`flex w-full border-gray-200 border rounded-md overflow-hidden ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}>
                                 {field.icon &&
                                     <div className="flex items-center justify-center bg-gray-100 px-3">
                                         <field.icon className="w-5 h-5 text-gray-600" />
@@ -151,6 +182,7 @@ function CreatePetForm() {
                                         id={field.id}
                                         onChange={handleChange}
                                         className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0"
+                                        disabled={field.disabled}
                                     >
                                         {field.options.map((option, i) => (
                                             <option key={i} value={option}>
@@ -171,6 +203,9 @@ function CreatePetForm() {
                             </div>
                             {field.helperText && (
                                 <p className="text-sm text-gray-600 mt-1">{field.helperText}</p>
+                            )}
+                            {errors[field.id] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
                             )}
                         </div>
                     ))}

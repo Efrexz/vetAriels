@@ -40,7 +40,7 @@ function UserPassword() {
         if (!formData.oldPassword || formData.oldPassword.length < 6) {
             newErrors.oldPassword = 'La contraseña debe tener al menos 6 caracteres';
         }
-        else if (!formData.newPassword || formData.newPassword.length < 6) {
+        if (!formData.newPassword || formData.newPassword.length < 6) {
             newErrors.newPassword = 'La contraseña debe tener al menos 6 caracteres.';
         }
         setErrors(newErrors);
