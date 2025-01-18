@@ -24,13 +24,13 @@ function HorizontalMenu({ mode }) {
         clients: [
             { name: 'Editar', url: "update" },
             { name: 'Mascotas', url: "pets" },
-            { name: 'Historial de compras', url: "purchase-history" },
+            // { name: 'Historial de compras', url: "purchase-history" },
             // { name: 'Galería', url: "gallery" },
         ],
         pets: [
             { name: 'Editar', url: "update" },
             { name: 'Historial Clínica', url: "clinical-records" },
-            { name: 'Historial de compras', url: "purchase-history" },
+            // { name: 'Historial de compras', url: "purchase-history" },   
         ],
         services: [
             { name: 'Editar', url: "update" },

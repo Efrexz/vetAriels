@@ -16,6 +16,11 @@ function ClientsProvider({ children }) {
         ]
     );
 
+    //agregar nuevo record de consulta por mascota
+    function addRecord(newRecord, id) {
+        setPetsData(petsData.map(pet => pet.id === id ? { ...pet, records: [newRecord, ...(pet.records || [])] } : pet));
+    }
+
     //Mascotas en cola de espera
     const [petsInQueueMedical, setPetsInQueueMedical] = useState(
         localStorage.getItem('petsInQueueMedical') ? JSON.parse(localStorage.getItem('petsInQueueMedical')) : []
@@ -177,7 +182,8 @@ function ClientsProvider({ children }) {
             petsInQueueGroomingHistory,
             addPetInQueueGroomingHistory,
             updatePetInQueueGroomingHistory,
-            returnPetToQueueGrooming
+            returnPetToQueueGrooming,
+            addRecord
         }}>
             {children}
         </ClientsContext.Provider>

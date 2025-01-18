@@ -2,9 +2,11 @@ import { useContext } from 'react';
 import { Link, useParams } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
 import { HorizontalMenu } from '@components/HorizontalMenu';
-import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import { PetProfile } from './PetProfile';
 import { ClinicalRecords } from './ClinicalRecords';
+import { NewRecord } from './NewRecord';
+import { AddClinicalNote } from './AddClinicalNote';
+import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function PetInfo() {
 
@@ -76,7 +78,7 @@ function PetInfo() {
                         </div>
                         <p className="text-gray-600">
                             <strong>Propietario: </strong>
-                            <Link to={`/clients/client/${individualPetData.ownerId}/update`} className="text-blue-500 underline">
+                            <Link to={`/clients/client/${individualPetData?.ownerId}/update `} className="text-blue-500 underline">
                                 {individualPetData?.ownerName}
                             </Link>
                         </p>
@@ -84,6 +86,9 @@ function PetInfo() {
                 </div>
                 {section === 'update' && <PetProfile petData={individualPetData} />}
                 {section === 'clinical-records' && <ClinicalRecords />}
+                {section === 'new-record' && <NewRecord />}
+                {section === 'create-note' && <AddClinicalNote />}
+
             </div>
         </main>
     );

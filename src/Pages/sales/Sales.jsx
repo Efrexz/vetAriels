@@ -15,7 +15,7 @@ import PetIcon from '@assets/petIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
-import ClockIcon from '@assets/clockIcon.svg?react';
+// import ClockIcon from '@assets/clockIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import GiftIcon from '@assets/giftIcon.svg?react';
 
@@ -74,11 +74,10 @@ function Sales() {
 
     //opciones para el menú desplegable de la mascota
     const menuOptions = [
-        { icon: Stethoscope, iconColor: "text-red-500", tooltip: 'Enviar a la cola médica', path: '/sales/active-orders' },
-        { icon: ClockIcon, iconColor: "text-gray-400", tooltip: 'Ver historíal de compras', path: '/sales/invoices' },
-        { icon: ClockIcon, iconColor: "text-gray-700", tooltip: 'Ver historial de grooming', path: '/sales/payments' },
-        { icon: PenIcon, iconColor: "text-gray-700", tooltip: 'Actualizar datos', path: '/sales/payments' },
-        { icon: Stethoscope, iconColor: "text-blue-400", tooltip: 'Ir a la historia clínica', path: '/sales/payments' },
+        { icon: Stethoscope, iconColor: "text-red-500", tooltip: 'Enviar a la cola médica' },
+        // { icon: ClockIcon, iconColor: "text-gray-400", tooltip: 'Ver historíal de compras', path: '/sales/invoices' },
+        { icon: PenIcon, iconColor: "text-gray-700", tooltip: 'Actualizar datos', path: '/pets/pet/id/update' },
+        { icon: Stethoscope, iconColor: "text-blue-400", tooltip: 'Ir a la historia clínica', path: '/pets/pet/id/clinical-records' },
     ];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -203,6 +202,16 @@ function Sales() {
                                                     <li
                                                         key={index}
                                                         className="flex gap-1 px-2 py-2 hover:bg-gray-100 cursor-pointer border-b-2 text-sm"
+                                                        onClick={() => {
+                                                            if (option.path) {
+                                                                const updatedPath = option.path.replace('/id', `/${pet.id}`);
+                                                                navigate(updatedPath);
+                                                            }
+                                                            else {
+                                                                setIsModalOpen(true);
+                                                                setActivePetMenu(null)
+                                                            }
+                                                        }}
                                                     >
                                                         <option.icon className={`w-5 h-5 ${option.iconColor}`} />
                                                         {option.tooltip}

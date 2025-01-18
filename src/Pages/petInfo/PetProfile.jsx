@@ -15,6 +15,8 @@ function PetProfile({ petData }) {
     const { updatePetData } = useContext(ClientsContext);
     const navigate = useNavigate();
     const individualPetData = petData;
+    console.log(individualPetData);
+
 
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
@@ -94,7 +96,7 @@ function PetProfile({ petData }) {
             label: 'Fecha de nacimiento:',
             id: 'birthDate',
             type: 'date',
-            value: formData.documento,
+            value: formData.birthDate,
             icon: CakeIcon,
             disabled: false
         },
@@ -140,6 +142,8 @@ function PetProfile({ petData }) {
             options: ['SI', 'NO']
         },
     ];
+
+
 
     return (
         <div className="flex flex-col w-full justify-between ">
