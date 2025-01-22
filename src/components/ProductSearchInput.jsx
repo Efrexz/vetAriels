@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 
 
-function ProductSearchInput({ addProductToTable, mode }) {
+function ProductSearchInput({ addProductToTable, mode, stockMode }) {
 
     const { productsData, servicesData } = useContext(ProductsAndServicesContext);
     const { addProductToClient } = useContext(ClientsContext);
@@ -21,13 +21,21 @@ function ProductSearchInput({ addProductToTable, mode }) {
     const [isFilteredListVisible, setIsFilteredListVisible] = useState(false);
 
     function getFilteredServicesAndProducts() {
-        let productMatch = productsData.filter(product => {
-            return product?.productName?.toLowerCase().includes(searchTerm.toLowerCase());
-        });
-        let serviceMatch = servicesData.filter(service => {
-            return service?.serviceName?.toLowerCase().includes(searchTerm.toLowerCase());
-        });
-        return [...productMatch, ...serviceMatch];
+        if (!stockMode) {
+            let productMatch = productsData.filter(product => {
+                return product?.productName?.toLowerCase().includes(searchTerm.toLowerCase());
+            });
+            let serviceMatch = servicesData.filter(service => {
+                return service?.serviceName?.toLowerCase().includes(searchTerm.toLowerCase());
+            });
+            return [...productMatch, ...serviceMatch];
+        }
+        else {
+            let productMatch = productsData.filter(product => {
+                return product?.productName?.toLowerCase().includes(searchTerm.toLowerCase());
+            });
+            return productMatch;
+        }
     }
 
     function addProductByClient(productOrService) {
@@ -130,5 +138,6 @@ export { ProductSearchInput };
 
 ProductSearchInput.propTypes = {
     addProductToTable: PropTypes.func,
-    mode: PropTypes.string
+    mode: PropTypes.string,
+    stockMode: PropTypes.bool
 }

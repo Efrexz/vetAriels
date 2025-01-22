@@ -15,8 +15,6 @@ function PetProfile({ petData }) {
     const { updatePetData } = useContext(ClientsContext);
     const navigate = useNavigate();
     const individualPetData = petData;
-    console.log(individualPetData);
-
 
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({

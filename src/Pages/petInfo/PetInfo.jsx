@@ -6,6 +6,8 @@ import { PetProfile } from './PetProfile';
 import { ClinicalRecords } from './ClinicalRecords';
 import { NewRecord } from './NewRecord';
 import { AddClinicalNote } from './AddClinicalNote';
+import { EditRecord } from './EditRecord';
+import { EditClinicalNote } from './EditClinicalNote';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function PetInfo() {
@@ -87,8 +89,9 @@ function PetInfo() {
                 {section === 'update' && <PetProfile petData={individualPetData} />}
                 {section === 'clinical-records' && <ClinicalRecords />}
                 {section === 'new-record' && <NewRecord />}
+                {section === 'edit-record' && <EditRecord />}
                 {section === 'create-note' && <AddClinicalNote />}
-
+                {section === 'edit-note' && <EditClinicalNote />}
             </div>
         </main>
     );

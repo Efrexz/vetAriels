@@ -1,16 +1,22 @@
 import { useContext, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
 import { FinancialContext } from '@context/FinancialContext';
+import { GlobalContext } from '@context/GlobalContext';
 import DiskIcon from '@assets/diskIcon.svg?react';
 import PropTypes from "prop-types";
 
 function ConfirmActionModal({ elementData, onClose, typeOfOperation }) {
+
+    const { id } = useParams();
     const { removePetFromQueueMedical,
         removePetFromQueueGrooming,
         addPetInQueueGroomingHistory,
-        returnPetToQueueGrooming
+        returnPetToQueueGrooming,
+        removeRecord
     } = useContext(ClientsContext);
     const { removePayment } = useContext(FinancialContext);
+    const { removeUser } = useContext(GlobalContext);
 
     const [reasonToDelete, setReasonToDelete] = useState(null);
     const [errorMessage, setErrorMessage] = useState(false);
@@ -25,6 +31,10 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation }) {
             addPetInQueueGroomingHistory(elementData);
         } else if (typeOfOperation === "returnGrooming") {
             returnPetToQueueGrooming(elementData);
+        } else if (typeOfOperation === "deleteUser") {
+            removeUser(elementData.id);
+        } else if (typeOfOperation === "deleteRecordAndNote") {
+            removeRecord(id, elementData.id);
         } else if (typeOfOperation === "payments") {
             // Validamos si el motivo de la eliminación es válido y verificamos que no tenga espacios en blanco
             if (!reasonToDelete || reasonToDelete.trim().length === 0) {

@@ -18,7 +18,40 @@ function ClientsProvider({ children }) {
 
     //agregar nuevo record de consulta por mascota
     function addRecord(newRecord, id) {
-        setPetsData(petsData.map(pet => pet.id === id ? { ...pet, records: [newRecord, ...(pet.records || [])] } : pet));
+        setPetsData(petsData.map(pet =>
+            pet.id === id
+                ? {
+                    ...pet,
+                    records: [newRecord, ...(pet.records || [])]
+                }
+                : pet
+        ));
+    }
+
+    //editar record de consulta por mascota
+    function updateRecord(newRecord, id, recordId) {
+        setPetsData(petsData.map(pet =>
+            pet.id === id
+                ? {
+                    ...pet,
+                    records: pet.records.map(record =>
+                        record.id === recordId ? newRecord : record
+                    ),
+                }
+                : pet
+        ));
+    }
+
+    //Eliminar record de consulta por mascota
+    function removeRecord(id, recordId) {
+        setPetsData(petsData.map(pet => pet.id === id
+            ? {
+                ...pet,
+                records: pet.records.filter(record =>
+                    record.id !== recordId
+                )
+            }
+            : pet));
     }
 
     //Mascotas en cola de espera
@@ -183,7 +216,9 @@ function ClientsProvider({ children }) {
             addPetInQueueGroomingHistory,
             updatePetInQueueGroomingHistory,
             returnPetToQueueGrooming,
-            addRecord
+            addRecord,
+            updateRecord,
+            removeRecord
         }}>
             {children}
         </ClientsContext.Provider>

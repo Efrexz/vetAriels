@@ -129,30 +129,40 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
     ];
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg w-full max-w-2xl p-6 modal-appear">
-                <h2
-                    className="text-md font-medium mb-4 pb-4 border-b-2 text-gray-600">
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-start z-50 p-4">
+            <div className="bg-white rounded-lg w-full max-w-2xl max-h-screen overflow-y-auto p-6 modal-appear custom-scrollbar">
+                <h2 className="text-md font-medium mb-4 pb-4 border-b-2 text-gray-600">
                     Crear registro de
-                    <span className={`text-white ${typeOfOperation === 'ENTRADA' ? 'bg-green-600' : 'bg-red-600'} rounded-full px-2 ml-1`}>{typeOfOperation}
+                    <span
+                        className={`text-white ${typeOfOperation === 'ENTRADA' ? 'bg-green-600' : 'bg-red-600'} rounded-full px-2 ml-1`}
+                    >
+                        {typeOfOperation}
                     </span>
                 </h2>
-                <form className="grid grid-cols-2 gap-4">
+                <form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {fields.map((field, index) => (
-                        <div className={`${field.fullWidth ? 'col-span-2' : ''}`} key={index}>
-                            <label className="block text-sm font-medium text-gray-700 pb-1">{field.label}</label>
+                        <div
+                            className={`${field.fullWidth ? 'col-span-1 sm:col-span-2' : ''}`}
+                            key={index}
+                        >
+                            <label className="block text-sm font-medium text-gray-700 pb-1">
+                                {field.label}
+                            </label>
                             <div className="flex">
-                                {field.icon &&
+                                {field.icon && (
                                     <div className="flex items-center justify-center bg-gray-100 px-3">
                                         <field.icon className="w-5 h-5 text-gray-600" />
                                     </div>
-                                }
+                                )}
                                 {field.type === 'select' ? (
                                     <select
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className={`border border-gray-300 rounded-md p-2 w-full  text-gray-600 focus:outline-none ${errors[field.name] ? 'border-red-500' : 'hover:border-blue-300 focus-within:border-blue-300'}`}
+                                        className={`border border-gray-300 rounded-md p-2 w-full text-gray-600 focus:outline-none ${errors[field.name]
+                                            ? 'border-red-500'
+                                            : 'hover:border-blue-300 focus-within:border-blue-300'
+                                            }`}
                                     >
                                         {field.options.map((option, index) => (
                                             <option key={index} value={option}>
@@ -162,7 +172,11 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                     </select>
                                 ) : (
                                     <input
-                                        className={`border border-gray-300 ${field.icon ? 'rounded-r-md' : 'rounded-md'} p-2 w-full text-gray-600 ${errors[field.name] ? 'border-red-500' : 'hover:border-blue-300 focus-within:border-blue-300'}`}
+                                        className={`border border-gray-300 ${field.icon ? 'rounded-r-md' : 'rounded-md'
+                                            } p-2 w-full text-gray-600 ${errors[field.name]
+                                                ? 'border-red-500'
+                                                : 'hover:border-blue-300 focus-within:border-blue-300'
+                                            }`}
                                         type={field.type}
                                         name={field.name}
                                         value={formData[field.name]}
@@ -172,24 +186,25 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                     />
                                 )}
                             </div>
-                            {
-                                errors[field.name] && (
-                                    <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
-                                )
-                            }
+                            {errors[field.name] && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors[field.name]}
+                                </p>
+                            )}
                         </div>
                     ))}
 
-                    <div className="col-span-2 mt-4 border-t border-gray-300 pt-4">
+                    <div className="col-span-1 sm:col-span-2 mt-4 border-t border-gray-300 pt-4">
                         <ActionButtons
                             mode="modal"
                             onCancel={onClose}
                             submitText="GENERAR"
-                            onSubmit={handleSubmit} />
+                            onSubmit={handleSubmit}
+                        />
                     </div>
-                </form >
-            </div >
-        </div >
+                </form>
+            </div>
+        </div>
     );
 }
 

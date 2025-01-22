@@ -2,34 +2,27 @@ import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RecordForm } from '@components/RecordForm';
 import { ClientsContext } from '@context/ClientsContext';
-import { GlobalContext } from '@context/GlobalContext';
 import XIcon from '@assets/xIcon.svg?react';
 
 
-function NewRecord() {
-    const { addRecord } = useContext(ClientsContext);
-    const { activeUser } = useContext(GlobalContext);
+function EditRecord() {
+    const { updateRecord, petsData } = useContext(ClientsContext);
+    const { id, recordId } = useParams();
 
-    const { id } = useParams();
-
+    //buscamos la mascota por id y destructuramos los registros
+    const { records } = petsData.find(pet => pet.id === id);
+    //buscamos el registro por id
+    const record = records.find(record => record.id === Number(recordId));
 
     const navigate = useNavigate();
-    const now = new Date();
-    const currentDate = now.toLocaleDateString();
-    const currentTime = now.toLocaleTimeString();
 
     const [formData, setFormData] = useState({
-        dateTime: `${currentDate} ${currentTime}`,
-        reason: 'Consulta',
-        anamnesis: '',
-        physiologicalConstants: {
-            temperature: '-',
-            heartRate: '-',
-            weight: '-',
-            oxygenSaturation: '-',
-        },
-        clinicalExam: '',
-        createdBy: `${activeUser.name} ${activeUser.lastName}`,
+        dateTime: record.dateTime || "",
+        reason: record.reason || "",
+        anamnesis: record.anamnesis || "",
+        physiologicalConstants: record.physiologicalConstants || "",
+        clinicalExam: record.clinicalExam || "",
+        id: record.id,
     });
 
     function handleChange(e) {
@@ -52,19 +45,14 @@ function NewRecord() {
     }
 
     function saveRecord() {
-        const recordId = Date.now();
-        const newRecord = {
-            ...formData,
-            id: recordId,
-        }
-        addRecord(newRecord, id);
+        updateRecord(formData, id, Number(recordId));
         navigate('/pets/pet/' + id + '/clinical-records');
     }
 
     return (
         <div className="w-full max-w-[1300px] mx-auto border border-gray-200 rounded-lg">
             <div className="flex flex-row items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-bold text-gray-600">Nueva Ficha de Consulta</h2>
+                <h2 className="text-lg font-bold text-gray-600">Editar ficha de consulta</h2>
                 <button className="p-2 text-black hover:text-gray-700 bg-white rounded-lg" aria-label="Cerrar">
                     <XIcon className="w-4 h-4" />
                 </button>
@@ -79,4 +67,4 @@ function NewRecord() {
     );
 }
 
-export { NewRecord };
+export { EditRecord };

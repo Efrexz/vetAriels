@@ -41,11 +41,11 @@ function SideBarMenu() {
                     icon: BagShoppingIcon,
                     path: "/sales/active-orders"
                 },
-                {
-                    name: "Comprobantes",
-                    icon: FileInvoiceIcon,
-                    path: "/sales/invoices"
-                },
+                // {
+                //     name: "Comprobantes",
+                //     icon: FileInvoiceIcon,
+                //     path: "/sales/invoices"
+                // },
                 {
                     name: "Entradas / Salidas",
                     icon: MoneyTransferIcon,
@@ -63,11 +63,11 @@ function SideBarMenu() {
             icon: BookIcon,
             path: "/clinic-queue"
         },
-        {
-            name: "Internamientos",
-            icon: HospitalIcon,
-            path: "/internments"
-        },
+        // {
+        //     name: "Internamientos",
+        //     icon: HospitalIcon,
+        //     path: "/internments"
+        // },
         {
             name: "Peluqueria",
             icon: BathIcon,

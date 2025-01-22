@@ -44,13 +44,13 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     }
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg w-[750px] p-6 shadow-lg modal-appear mx-4">
-                <h2 className="text-lg font-semibold mb-4">Generar Consulta</h2>
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 p-4 sm:p-6">
+            <div className="bg-white rounded-lg w-full max-w-3xl p-6 shadow-lg modal-appear mx-auto space-y-6">
+                <h2 className="text-lg font-semibold">Generar Consulta</h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col">
-                        <label htmlFor="date" className="text-md font-semibold mb-1">
+                        <label htmlFor="date" className="text-sm font-medium mb-1">
                             Fecha de atención
                         </label>
                         <div className="relative">
@@ -65,7 +65,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </div>
 
                     <div className="flex flex-col">
-                        <label htmlFor="doctor" className="text-md font-semibold mb-1">
+                        <label htmlFor="doctor" className="text-sm font-medium mb-1">
                             Médico asignado
                         </label>
                         <select
@@ -79,7 +79,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </div>
 
                     <div className="flex flex-col">
-                        <label htmlFor="owner" className="text-md font-semibold mb-1">
+                        <label htmlFor="owner" className="text-sm font-medium mb-1">
                             Propietario
                         </label>
                         <div className="flex items-center bg-gray-100 p-2 rounded-md">
@@ -89,7 +89,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </div>
 
                     <div className="flex flex-col">
-                        <label htmlFor="pet" className="text-md font-semibold mb-1">
+                        <label htmlFor="pet" className="text-sm font-medium mb-1">
                             Mascota:
                         </label>
                         <select
@@ -97,16 +97,14 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                             className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                             onChange={(e) => setSelectedPet(e.target.value)}
                         >
-                            {
-                                petsByOwner?.map((pet, index) => (
-                                    <option key={index}>{pet.petName}</option>
-                                ))
-                            }
+                            {petsByOwner?.map((pet, index) => (
+                                <option key={index}>{pet.petName}</option>
+                            ))}
                         </select>
                     </div>
                 </div>
 
-                <div className="flex items-center mb-4">
+                <div className="flex items-center">
                     <input
                         type="checkbox"
                         id="emergency"
@@ -117,13 +115,13 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     </label>
                 </div>
 
-                <div className="flex flex-col mb-6">
-                    <label htmlFor="notes" className="text-sm font-semibold mb-1">
+                <div className="flex flex-col">
+                    <label htmlFor="notes" className="text-sm font-medium mb-1">
                         Notas
                     </label>
                     <textarea
                         id="notes"
-                        className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none "
+                        className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                         rows="4"
                         placeholder="Escribe las notas aquí..."
                         onChange={(e) => setNotes(e.target.value)}

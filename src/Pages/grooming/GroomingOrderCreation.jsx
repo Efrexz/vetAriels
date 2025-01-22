@@ -212,14 +212,12 @@ function GroomingOrderCreation() {
                             />
                         )}
                     </div>
-
-                    {/* Buscar y agregar productos y/o servicios */}
                     <div className="col-span-1 md:col-span-3">
                         <label className="block text-gray-700 mb-2">
                             Buscar y agregar productos y/o servicios:
                         </label>
                         {isClientSelected ? (
-                            <ProductSearchInput addProductToTable={addProductToTable} />
+                            <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                         ) : (
                             <input
                                 className="w-full border-gray-300 rounded py-2 px-4 bg-gray-200"

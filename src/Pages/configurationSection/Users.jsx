@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmActionModal } from '@components/ConfirmActionModal';
 import { GlobalContext } from '@context/GlobalContext';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
@@ -12,7 +13,9 @@ const tableHeaders = ["Fecha de creación", "Nombre y Apellidos", "Correo", "Rol
 
 function Users() {
     const navigate = useNavigate();
-    const { users, removeUser } = useContext(GlobalContext);
+    const { users } = useContext(GlobalContext);
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
 
     return (
         <section className="container mx-auto p-6">
@@ -22,16 +25,16 @@ function Users() {
             </h1>
             <div className="bg-white rounded-lg shadow p-3 mb-6">
                 <div className="overflow-x-auto border border-gray-300 rounded-lg p-3">
-                    <div className='flex gap-2'>
+                    <div className="flex items-center gap-2 mb-4">
                         <button
-                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 mb-4"
+                            className="flex items-center gap-2 py-2 px-4 border border-gray-300 text-white bg-green-500 rounded hover:bg-green-600"
                             onClick={() => navigate("/config/user-subsidiaries/create")}
                         >
                             <PlusIcon className="w-5 h-5" />
                             AGREGAR USUARIO
                         </button>
                         <button
-                            className="bg-transparent border border-gray-300 px-4 py-2 text-gray-700 rounded hover:bg-gray-200"
+                            className="flex items-center gap-2 py-2 px-4 border border-gray-300 text-gray-700 bg-transparent rounded hover:bg-gray-200"
                             onClick={() => window.location.reload()}
                         >
                             <RefreshIcon className="w-5 h-5" />
@@ -60,7 +63,7 @@ function Users() {
                                     <td className="py-2 px-4 text-center border">{user?.rol}</td>
                                     <td className="py-2 px-4 text-center border ">
                                         <span
-                                            className={`inline-block cursor-pointer py-0.5 px-4 text-white rounded-full ${user?.status === "ACTIVO" ? "bg-green-500" : "bg-red-500"}`}
+                                            className={`inline-block  py-0.5 px-4 text-white rounded-full ${user?.status === "ACTIVO" ? "bg-green-500" : "bg-red-500"}`}
                                         >
                                             {user?.status === "ACTIVO" ? "Activo" : "Inactivo"}
                                         </span>
@@ -73,7 +76,10 @@ function Users() {
                                             />
                                             <TrashIcon
                                                 className="w-5 h-5 text-red-400  hover:text-red-500 cursor-pointer"
-                                                onClick={() => removeUser(user.id)}
+                                                onClick={() => {
+                                                    setUserToDelete(user);
+                                                    setIsConfirmActionModalOpen(true);
+                                                }}
                                             />
                                         </div>
                                     </td>
@@ -82,6 +88,15 @@ function Users() {
                         </tbody>
                     </table>
                 </div>
+                {
+                    isConfirmActionModalOpen && (
+                        <ConfirmActionModal
+                            elementData={userToDelete}
+                            typeOfOperation={"deleteUser"}
+                            onClose={() => setIsConfirmActionModalOpen(false)}
+                        />
+                    )
+                }
                 <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
                     <p className="text-gray-600 text-center md:text-left">
                         Página: 1 de 1 | Registros del 1 al {users.length} | Total{" "}

@@ -16,15 +16,7 @@ const userFields = [
     { label: 'Teléfono Móvil', type: 'tel', id: 'phone', icon: PhoneIcon },
     { label: 'Estado', type: 'select', id: 'status', options: ['--Seleccionar--', 'ACTIVO', 'INACTIVO'] },
     {
-        label: 'Rol', type: 'select', id: 'rol', options: [
-            '--Seleccionar--',
-            'Administrador',
-            'Asistente Administrativo',
-            'Auxiliar Veterinario',
-            'Groomer',
-            'Médico',
-            'Recepcionista',
-        ]
+        label: 'Rol', type: 'select', id: 'rol', options: ["ADMINISTRADOR", "ASISTENTE ADMINISTRATIVO", "AUXILIAR VETERINARIO", "GROOMER", "MÉDICO", "RECEPCIONISTA"]
     },
 ];
 
@@ -35,7 +27,7 @@ function EditUser() {
     const navigate = useNavigate();
 
     const individualUserData = users.find(user => user.id === Number(id));
-
+    const [errors, setErrors] = useState({});
 
     const [formData, setFormData] = useState({
         email: individualUserData?.email,
@@ -46,6 +38,29 @@ function EditUser() {
         status: individualUserData?.status,
     });
 
+    // Validación de los campos
+    function validateForm() {
+        const newErrors = {};
+        //Validamos si todos los campos son válidos
+        if (!formData.name || formData.name.length < 4) {
+            newErrors.name = 'El nombre del cliente debe tener al menos 4 caracteres';
+        }
+        if (!formData.lastName || formData.lastName.length < 4) {
+            newErrors.lastName = 'El apellido del cliente debe tener al menos 4 caracteres';
+        }
+        if (!formData.email || formData.email.length < 4) {
+            newErrors.email = 'El correo electrónico del usuario debe tener al menos 4 caracteres';
+        }
+        if (!formData.phone || formData.phone.length < 9) {
+            newErrors.phone = 'El número de teléfono del usuario debe tener al menos 9 caracteres';
+        }
+        if (!formData.rol || formData.rol === "--Seleccionar--") {
+            newErrors.rol = 'Debe seleccionar un rol';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+    }
+
     function handleChange(e) {
         const { id, value } = e.target;
         setFormData({
@@ -55,6 +70,9 @@ function EditUser() {
     }
 
     function updateUserInfo() {
+        if (!validateForm()) {
+            return;
+        }
         const updateData = {
             email: formData.email,
             name: formData.name,
@@ -80,7 +98,7 @@ function EditUser() {
                 {userFields.map((field, index) => (
                     <div key={index}>
                         <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                        <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
+                        <div className={`flex w-full border-gray-200 border rounded-lg overflow-hidden ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}>
                             {field.icon &&
                                 <div className="flex items-center justify-center bg-gray-100 px-3">
                                     <field.icon className="w-4 h-4 text-gray-600" />
@@ -111,6 +129,9 @@ function EditUser() {
                                 />
                             )}
                         </div>
+                        {errors[field.id] && (
+                            <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                        )}
                         {field.helperText && (
                             <p className="text-sm text-gray-600 mt-1">{field.helperText}</p>
                         )}

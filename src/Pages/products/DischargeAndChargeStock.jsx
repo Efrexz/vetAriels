@@ -218,7 +218,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                         className="block text-gray-700 mb-2 pl-2">
                         Buscar y agregar productos a la lista:
                     </label>
-                    <ProductSearchInput addProductToTable={addProductToTable} mode={typeOfOperation} />
+                    <ProductSearchInput addProductToTable={addProductToTable} mode={typeOfOperation} stockMode={true} />
                     {errors.products && <p className="text-red-500 text-sm mt-1">{errors.products}</p>}
                 </div>
 
