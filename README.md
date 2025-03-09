@@ -50,7 +50,7 @@ Gestor Veterinario es una aplicación para la administración de clínicas veter
 ## Contacto
 
 📩 **Email**: zyzz_448@hotmail.com  
-💼 **Linkedin**: https://www.linkedin.com/in/efrain-andrade-b05142349/
+💼 **Linkedin**: https://www.linkedin.com/in/efrainandrade-dev/
 
 ---
 
