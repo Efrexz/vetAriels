@@ -11,8 +11,10 @@ function EditRecord() {
 
     //buscamos la mascota por id y destructuramos los registros
     const { records } = petsData.find(pet => pet.id === id);
+
     //buscamos el registro por id
     const record = records.find(record => record.id === Number(recordId));
+
 
     const navigate = useNavigate();
 
@@ -51,12 +53,9 @@ function EditRecord() {
 
     return (
         <div className="w-full max-w-[1300px] mx-auto border border-gray-200 rounded-lg">
-            <div className="flex flex-row items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-bold text-gray-600">Editar ficha de consulta</h2>
-                <button className="p-2 text-black hover:text-gray-700 bg-white rounded-lg" aria-label="Cerrar">
-                    <XIcon className="w-4 h-4" />
-                </button>
-            </div>
+            <h2 className="text-lg font-bold text-gray-600 p-4 border-b border-gray-200 bg-gray-50">
+                Editar ficha de consulta
+            </h2>
             <RecordForm
                 formData={formData}
                 handleChange={handleChange}

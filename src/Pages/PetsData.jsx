@@ -86,6 +86,7 @@ const tableHeaders = ["Fecha de Registro", "#H.C", "Nombre", "Especie", "Raza", 
 function PetsData() {
 
     const { petsData } = useContext(ClientsContext);
+
     const [petsDataToDelete, setPetsDataToDelete] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();

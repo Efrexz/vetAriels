@@ -146,7 +146,7 @@ function Sales() {
 
     return (
         <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 overflow-auto custom-scrollbar ">
-            <h1 className="text-xl sm:text-2xl font-bold text-[#4CAF50] flex items-center mb-4 border-b-2 border-gray-100 pb-5">
+            <h1 className="text-xl sm:text-2xl font-bold text-[#4CAF50] flex items-center mb-4 mt-4 border-b-2 border-gray-100 pb-5">
                 <ShoppingCartPlusIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Ventas
             </h1>

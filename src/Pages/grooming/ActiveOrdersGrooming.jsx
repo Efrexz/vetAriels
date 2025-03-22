@@ -45,7 +45,7 @@ function ActiveOrdersGrooming() {
                 Peluquería: <span className="text-green-600 font-light pl-1"> Turnos de hoy</span>
             </h1>
             <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <div className="p-4 rounded-lg mb-2">
+                <div className="p-4 rounded-lg mb-2 shadow">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4">
                         <div className="flex w-full md:w-[350px] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
                             <div className="flex items-center justify-center bg-gray-100 px-3">

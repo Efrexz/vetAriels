@@ -64,7 +64,7 @@ function GroomingHistory() {
                     <div className="flex flex-col md:flex-row md:items-center gap-4">
                         <input
                             type="date"
-                            className="w-full md:w-[30%] py-2 px-4 border-gray-200 border rounded-lg focus:outline-none focus:border-blue-300"
+                            className="w-full md:w-[30%] py-1 px-4 border-gray-200 border rounded-lg focus:outline-none focus:border-blue-300"
                         />
                         <select
                             name="status"

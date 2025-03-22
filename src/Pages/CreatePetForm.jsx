@@ -104,7 +104,7 @@ function CreatePetForm() {
             id: 'hc',
             icon: BookIcon,
             type: 'text',
-            disabled: id !== "no_client" ? false : true
+            disabled: true
         },
         {
             label: 'Número de microchip',
@@ -146,7 +146,7 @@ function CreatePetForm() {
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-xl md:text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+            <h1 className="text-xl md:text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <PawIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                 Mascotas
             </h1>

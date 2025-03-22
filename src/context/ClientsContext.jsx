@@ -15,11 +15,10 @@ function ClientsProvider({ children }) {
         localStorage.getItem('petsData') ? JSON.parse(localStorage.getItem('petsData')) : [
         ]
     );
-
     //agregar nuevo record de consulta por mascota
     function addRecord(newRecord, id) {
         setPetsData(petsData.map(pet =>
-            pet.id === id
+            Number(pet.id) === Number(id)
                 ? {
                     ...pet,
                     records: [newRecord, ...(pet.records || [])]
@@ -31,7 +30,7 @@ function ClientsProvider({ children }) {
     //editar record de consulta por mascota
     function updateRecord(newRecord, id, recordId) {
         setPetsData(petsData.map(pet =>
-            pet.id === id
+            Number(pet.id) === Number(id)
                 ? {
                     ...pet,
                     records: pet.records.map(record =>
@@ -126,7 +125,7 @@ function ClientsProvider({ children }) {
     }
 
     //pets data
-    let historyCounter = localStorage.getItem('historyCounter') || 100;
+    let historyCounter = localStorage.getItem('historyCounter') || "100";
 
     function addPet(newPet, ownerId, ownerName) {
         const petWithOwner = { ...newPet, ownerId, ownerName, hc: historyCounter, id: historyCounter };

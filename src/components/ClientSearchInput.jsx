@@ -25,19 +25,20 @@ function ClientSearchInput({ mode }) {
     //estado para saber cuando el input tiene el foco para mostrar la lista de clientes que coinciden con el buscador
     const [isFilteredListVisible, setIsFilteredListVisible] = useState(false);
 
-    //filtramos los clientes que coinciden con el buscador por nombre de cliente, numero de telefono y datos de la mascota
+    //filtramos los clientes que coinciden con el buscador por nombre de cliente, numero de telefono, dni y datos de la mascota
     let filteredClients = clients.filter(client => {
         const fullName = `${client?.firstName} ${client?.lastName}`.toLowerCase();
         const phoneMatch = client?.phone1.includes(searchTerm) || client?.phone2.includes(searchTerm);
+        const documentMatch = client?.dni.includes(searchTerm.toLowerCase());
 
         const clientPets = petsData.filter(pet => pet.ownerId === client.id);
+
         // revisamos si coincide el hc o nombre de la mascota
         const petMatch = clientPets.some(pet =>
-            pet.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            pet.hc.toLowerCase().includes(searchTerm.toLowerCase())
+            pet.petName.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-        return fullName.includes(searchTerm.toLowerCase()) || phoneMatch || petMatch;
+        return fullName.includes(searchTerm.toLowerCase()) || phoneMatch || petMatch || documentMatch;
     });
 
 
