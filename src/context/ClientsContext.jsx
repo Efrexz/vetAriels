@@ -91,7 +91,7 @@ function ClientsProvider({ children }) {
 
     //clients
     function addClient(newClient) {
-        setClients([...clients, newClient]);
+        setClients([newClient, ...clients]);
     }
 
     function updateClientData(id, newData) {
@@ -128,8 +128,8 @@ function ClientsProvider({ children }) {
     let historyCounter = localStorage.getItem('historyCounter') || "100";
 
     function addPet(newPet, ownerId, ownerName) {
-        const petWithOwner = { ...newPet, ownerId, ownerName, hc: historyCounter, id: historyCounter };
-        setPetsData([...petsData, petWithOwner]);
+        const newPetData = { ...newPet, ownerId, ownerName, hc: historyCounter, id: historyCounter };
+        setPetsData([newPetData, ...petsData]);
         historyCounter++;
         localStorage.setItem('historyCounter', historyCounter);
     }

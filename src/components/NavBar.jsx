@@ -58,19 +58,19 @@ function NavBar() {
     const { themeColor, activeUser } = useContext(GlobalContext);
 
     return (
-        <nav className={`flex justify-between items-center py-4 px-6 w-full bg-${themeColor}-400 text-white`}>
+        <nav className={`flex justify-between items-center py-4 px-2 md:px-6 w-full bg-${themeColor}-400 text-white`}>
             <Link
                 to="/"
                 className='w-[50%] items-center cursor-pointer'
             >
                 <h1 className="text-md md:text-xl font-medium cursor-pointer">{companyData?.clinicName || 'VETERINARIA ARIEL´S EIRL'}</h1>
             </Link>
-            <div className="flex justify-end items-center gap-5 w-full">
+            <div className="flex justify-end items-center gap-3 md:gap-5 w-full">
                 <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" onClick={toggleSearchInput} />
                 {showSearchInput && (
                     <ClientSearchInput mode={"sales"} />
                 )}
-                <ul className="flex gap-5 items-center">
+                <ul className="flex gap-3 md:gap-5 items-center">
                     {pageSections.map((section, index) => (
                         <li key={index} className="cursor-pointer relative group">
                             {section.icon === NewUserIcon ? (
@@ -100,7 +100,7 @@ function NavBar() {
                             </div>
                         </li>
                     ))}
-                    <span className="font-bold mx-3">|</span>
+                    <span className="font-bold mx-1 md:mx-3">|</span>
                     <li className={`flex items-center gap-2 cursor-pointer hover:text-[#206D5A] ${activeIcon === "user" ? "text-[#206D5A]" : ""}`} onClick={toggleUserOptions}>
                         <span className='hidden md:block'>{activeUser?.name}</span>
                         <UserIcon className="w-6 h-6" />
