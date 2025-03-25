@@ -126,7 +126,7 @@ function NavBar() {
                                     {section.countData}
                                 </span>
                             )}
-                            <div className="absolute bottom-[-100%] left-[-150%] transform translate-y-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-sm rounded py-1 px-2 whitespace-nowrap z-10">
+                            <div className="absolute bottom-[-135%] md:bottom-[-100%] left-[-150%] transform translate-y-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-sm rounded py-1 px-2 whitespace-nowrap z-10">
                                 {section.tooltip}
                             </div>
                         </li>
@@ -141,7 +141,7 @@ function NavBar() {
 
             {/*  el menú desplegable de pacientes */}
             {showBathList && (
-                <div className="absolute top-16 right-20 bg-white shadow-lg rounded-lg w-64 z-20 max-h-80 overflow-y-auto custom-scrollbar">
+                <div className="absolute top-20 md:top-14 right-6 md:right-20 bg-white shadow-lg rounded-lg w-64 z-20 max-h-80 overflow-y-auto custom-scrollbar">
                     <ul>
                         {
                             petsInQueueGrooming.map((pet, index) => (
@@ -177,7 +177,7 @@ function NavBar() {
 
             {/*  el menú desplegable de pacientes en cola medica */}
             {showPatientList && (
-                <div className="absolute top-16 right-24 bg-white shadow-lg rounded-lg w-64 z-20">
+                <div className="absolute top-20 md:top-14 right-6 md:right-20 bg-white shadow-lg rounded-lg w-64 z-20">
                     <ul>
                         {petsInQueueMedical.map((pet, index) => (
                             <li
@@ -211,7 +211,7 @@ function NavBar() {
 
             {/*  el menú desplegable de opciones de usuario */}
             {showUserOptions && (
-                <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg w-80 z-20">
+                <div className="absolute top-20 md:top-16 right-0 bg-white shadow-lg rounded-lg w-80 z-20">
                     <ul>
                         <li
                             className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
