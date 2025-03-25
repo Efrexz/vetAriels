@@ -127,7 +127,7 @@ function AddNewServiceModal({ onClose }) {
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
+                                    className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none'}`}
                                 >
                                     {field.options.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
@@ -146,7 +146,7 @@ function AddNewServiceModal({ onClose }) {
                                         placeholder={field.placeholder}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className={`border border-gray-300 rounded-r-lg py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
+                                        className={`border border-gray-300 rounded-r-lg py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none'}`}
                                     />
                                 </div>
                             )}

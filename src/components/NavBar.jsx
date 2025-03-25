@@ -1,8 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '@context/GlobalContext';
 import { ClientsContext } from '@context/ClientsContext';
 import { ClientSearchInput } from './ClientSearchInput';
+import { SearchModal } from './SearchModal';
 import UserIcon from '@assets/userIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import BathIcon from '@assets/bathIcon.svg?react';
@@ -15,6 +16,7 @@ import StoreIcon from '@assets/storeIcon.svg?react';
 function NavBar() {
     const { petsInQueueMedical, petsInQueueGrooming } = useContext(ClientsContext);
     const { logout, companyData } = useContext(GlobalContext);
+    const { themeColor, activeUser } = useContext(GlobalContext);
     const navigate = useNavigate();
 
     const [showPatientList, setShowPatientList] = useState(false);
@@ -22,11 +24,8 @@ function NavBar() {
     const [activeIcon, setActiveIcon] = useState(null); // Verificar cual icono está activo
     const [showSearchInput, setShowSearchInput] = useState(false);
     const [showUserOptions, setShowUserOptions] = useState(false);
-
-
-    const toggleSearchInput = () => {
-        setShowSearchInput(!showSearchInput);
-    };
+    const [showSearchModal, setShowSearchModal] = useState(false);
+    const [isMobileScreen, setIsMobileScreen] = useState(false);//verificar si estamos en una pantalla pequeña
 
     const pageSections = [
         { icon: NewUserIcon, tooltip: 'Crear nuevo Propietario', path: '/clients/create', count: false },
@@ -55,7 +54,34 @@ function NavBar() {
         setActiveIcon(showUserOptions ? null : 'user');
     };
 
-    const { themeColor, activeUser } = useContext(GlobalContext);
+    //Para detectar el tamaño de la pantalla 
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobileScreen(window.innerWidth < 769); // 768px es el breakpoint típico para dispositivos móviles
+        };
+
+        // Se ejecuta inmediatamente cuando el componente se monta.
+        checkScreenSize();
+
+        //  Agrega un listener para detectar cambios en el tamaño de la ventana.
+        window.addEventListener('resize', checkScreenSize);
+
+        // Elimina el listener cuando el componente se desmonta.
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
+
+    function toggleSearchInput() {
+        if (isMobileScreen) {
+            // En pantallas pequeñas, mostramos el modal de búsqueda
+            setShowSearchModal(true);
+            setShowSearchInput(false);
+        } else {
+            // En pantallas grandes, mostramos el input en el navbar
+            setShowSearchInput(!showSearchInput);
+            setShowSearchModal(false);
+        }
+    }
+
 
     return (
         <nav className={`flex justify-between items-center py-4 px-2 md:px-6 w-full bg-${themeColor}-400 text-white`}>
@@ -63,10 +89,15 @@ function NavBar() {
                 to="/"
                 className='w-[50%] items-center cursor-pointer'
             >
-                <h1 className="text-md md:text-xl font-medium cursor-pointer">{companyData?.clinicName || 'VETERINARIA ARIEL´S EIRL'}</h1>
+                <h1 className="text-md lg:text-xl font-medium cursor-pointer">
+                    {companyData?.clinicName || 'VETERINARIA ARIEL´S EIRL'}
+                </h1>
             </Link>
             <div className="flex justify-end items-center gap-3 md:gap-5 w-full">
-                <SearchIcon className="w-5 h-5 hover:text-[#206D5A] cursor-pointer" onClick={toggleSearchInput} />
+                <SearchIcon
+                    className="w-5 h-5 hover:text-[#206D5A] cursor-pointer"
+                    onClick={toggleSearchInput}
+                />
                 {showSearchInput && (
                     <ClientSearchInput mode={"sales"} />
                 )}
@@ -234,6 +265,11 @@ function NavBar() {
                     </ul>
                 </div>
             )}
+            {
+                showSearchModal && (
+                    <SearchModal onClose={() => setShowSearchModal(false)} />
+                )
+            }
         </nav>
     );
 }
