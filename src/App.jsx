@@ -105,7 +105,6 @@ function App() {
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </ProtectedRoute>
-
               </Layout>
             ) : (
               // Solo renderizar la página de Login sin el Layout

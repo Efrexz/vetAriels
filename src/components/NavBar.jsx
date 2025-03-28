@@ -95,7 +95,7 @@ function NavBar() {
             </Link>
             <div className="flex justify-end items-center gap-3 md:gap-5 w-full">
                 <SearchIcon
-                    className="w-5 h-5 hover:text-[#206D5A] cursor-pointer"
+                    className={`${showSearchInput ? "w-10 h-10" : "w-5 h-5"} hover:text-[#206D5A] cursor-pointer`}
                     onClick={toggleSearchInput}
                 />
                 {showSearchInput && (

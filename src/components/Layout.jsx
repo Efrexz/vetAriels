@@ -12,7 +12,7 @@ function Layout({ children }) {
     return (
         <>
             <NavBar />
-            <main className="flex h-[calc(100vh-64px)] w-full fixed">
+            <main className="flex h-[calc(100vh-62px)] w-full fixed">
                 {/* Botón para abrir/cerrar el sidebar en tamaños pequeños */}
                 <button
                     className="lg:hidden absolute top-4 left-4 z-50 bg-gray-100 p-2 rounded-lg shadow-md"
@@ -23,14 +23,14 @@ function Layout({ children }) {
 
                 {/* Sidebar */}
                 <section
-                    className={`bg-gray-100 lg:w-56 w-44 h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar transition-transform duration-300 z-40 fixed lg:relative ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    className={`bg-gray-100 md:w-56 w-full h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar transition-transform duration-300 z-40 absolute  lg:relative ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                         } lg:translate-x-0`}
                 >
                     <SideBarMenu />
                 </section>
 
                 {/* Contenido principal */}
-                <section className={`bg-white mx-2 w-full h-auto flex flex-col overflow-auto custom-scrollbar ${isSidebarOpen ? "pl-[22%]" : ""} lg:pl-0`}>
+                <section className={`bg-white mx-2 w-full h-auto flex flex-col overflow-auto custom-scrollbar  lg:pl-0`}>
                     {children}
                 </section>
             </main>

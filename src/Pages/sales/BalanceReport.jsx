@@ -61,7 +61,7 @@ const sections = [
 function BalanceReport() {
     return (
         <section className="container mx-auto p-6 ">
-            <h1 className="text-2xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
+            <h1 className="text-xl sm:text-2xl font-bold text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
                 <FileInvoiceIcon className="w-7 h-7 mr-2" />
                 Cuadre de caja
             </h1>

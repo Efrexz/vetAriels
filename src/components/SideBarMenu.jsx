@@ -163,21 +163,21 @@ function SideBarMenu() {
     ]
 
     return (
-        <ul className="space-y-1 w-full">
+        <ul className="space-y-1 w-full pt-10 lg:pt-0 pl-4 lg:pl-0 pb-6 md:pb-0">
             {categories.map((category, index) => (
                 !category.subCategories ? (
                     <li key={index}>
-                        <Link to={category.path} className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-md font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
-                            <category.icon className="w-5 h-5" />
+                        <Link to={category.path} className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                            <category.icon className="w-6 sm:w-5 h-6 sm:h-5" />
                             {category.name}
                         </Link>
                     </li>
                 ) : (
                     <li key={index}>
                         <details className="group [&_summary::-webkit-details-marker]:hidden">
-                            <summary className="flex cursor-pointer items-center rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#47C5A6]">
-                                <span className="flex gap-2 items-center text-sm font-medium">
-                                    <category.icon className="w-5 h-5" />
+                            <summary className="flex cursor-pointer items-center rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#47C5A6]  ">
+                                <span className="flex gap-2 items-center text-lg sm:text-[18px] font-medium">
+                                    <category.icon className="w-6 sm:w-5 h-6 sm:h-5 " />
                                     {category.name}
                                 </span>
                                 <span className="shrink-0 transition duration-300 group-open:-rotate-180">
@@ -190,8 +190,8 @@ function SideBarMenu() {
                             <ul className="mt-2 space-y-1 px-4">
                                 {category.subCategories?.map((subCategory, index) => (
                                     <li key={index}>
-                                        <Link to={subCategory.path} className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
-                                            {subCategory.icon ? <subCategory.icon className="w-4 h-4" /> : null}
+                                        <Link to={subCategory.path} className="flex items-center gap-2 rounded-lg px-2 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                                            {subCategory.icon ? <subCategory.icon className="w-5 sm:w-5 h-5 sm:h-5" /> : null}
                                             {subCategory.name}
                                         </Link>
                                     </li>
@@ -202,7 +202,6 @@ function SideBarMenu() {
                 )
             ))}
         </ul>
-
     )
 }
 

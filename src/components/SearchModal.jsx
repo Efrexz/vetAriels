@@ -1,5 +1,6 @@
 import { ClientSearchInput } from './ClientSearchInput';
 import SearchIcon from '@assets/searchIcon.svg?react';
+import XIcon from '@assets/xIcon.svg?react';
 import PropTypes from "prop-types";
 
 function SearchModal({ onClose }) {
@@ -19,9 +20,7 @@ function SearchModal({ onClose }) {
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-500 focus:outline-none"
                     >
-                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <XIcon className="w-5 h-5" />
                     </button>
                 </div>
                 <form className="p-4 pb-6">
