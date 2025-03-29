@@ -37,6 +37,72 @@ function GlobalProvider({ children }) {
         facebook: "https://www.facebook.com/vetariel/"
     };
 
+    //sideBarMenu
+    //estado para saber cuando esta abierto el menu y poder aplicar el responsive
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    //NavBar 
+    const [showPatientList, setShowPatientList] = useState(false);
+    const [showBathList, setShowBathList] = useState(false);
+    const [activeIcon, setActiveIcon] = useState(null); // Verificar cual icono está activo
+    const [showSearchInput, setShowSearchInput] = useState(false);
+    const [showUserOptions, setShowUserOptions] = useState(false);
+    const [showSearchModal, setShowSearchModal] = useState(false);
+    const [isMobileScreen, setIsMobileScreen] = useState(false);//verificar si estamos en una pantalla pequeña y cambiar el comportamiento de la barra de búsqueda
+
+    function toggleSearchInput() {
+        if (isMobileScreen) {
+            // En pantallas pequeñas, mostramos el modal de búsqueda
+            setShowSearchModal(true);
+            setShowSearchInput(false);
+        } else {
+            // En pantallas grandes, mostramos el input en el navbar
+            setShowSearchInput(!showSearchInput);
+            setShowSearchModal(false);
+        }
+    }
+    //cuando abrimos el menu de pacientes se desactivan las otras opciones
+    const togglePatientList = () => {
+        setShowPatientList(!showPatientList);
+        setShowBathList(false);
+        setShowUserOptions(false);
+        setActiveIcon(showPatientList ? null : 'patients');
+    };
+
+    //cuando abrimos el menu de baños se desactivan las otras opciones
+    const toggleBathList = () => {
+        setShowBathList(!showBathList);
+        setShowPatientList(false);
+        setShowUserOptions(false);
+        setActiveIcon(showBathList ? null : 'baths');
+    };
+    //cuando abrimos el menu de usuario se desactivan las otras opciones
+    const toggleUserOptions = () => {
+        setShowUserOptions(!showUserOptions);
+        setIsSidebarOpen(false);
+        setShowBathList(false);
+        setShowPatientList(false);
+        setActiveIcon(showUserOptions ? null : 'user');
+    };
+    //cuando abrimos el buscador se desactivan las otras opciones
+    const toggleSearchModal = () => {
+        toggleSearchInput();
+        setIsSidebarOpen(false);
+        setShowPatientList(false);
+        setShowUserOptions(false);
+        setShowBathList(false);
+        setActiveIcon(null)
+    }
+
+    const toggleSideMenu = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+        setShowPatientList(false);
+        setShowUserOptions(false);
+        setShowBathList(false);
+
+    }
+
+
 
     //Users Data
     const [users, setUsers] = useState(
@@ -120,6 +186,26 @@ function GlobalProvider({ children }) {
             companyData,
             setCompanyData,
             logout,
+            isSidebarOpen,
+            setIsSidebarOpen,
+            toggleSearchModal,
+            togglePatientList,
+            toggleBathList,
+            toggleUserOptions,
+            toggleSideMenu,
+            activeIcon,
+            setIsMobileScreen,
+            showSearchModal,
+            showSearchInput,
+            showUserOptions,
+            showPatientList,
+            showBathList,
+            setShowSearchModal,
+            setShowSearchInput,
+            setShowUserOptions,
+            setShowPatientList,
+            setShowBathList,
+            setActiveIcon,
         }}>
             {children}
         </GlobalContext.Provider>

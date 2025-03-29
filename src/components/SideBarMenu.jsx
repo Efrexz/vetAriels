@@ -18,8 +18,10 @@ import DocumentIcon from '@assets/documentIcon.svg?react';
 import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import AngleDownIcon from '@assets/angleDown.svg?react';
+import PropTypes from "prop-types";
 
-function SideBarMenu() {
+function SideBarMenu({ toggleSideMenu }) {
 
     const categories = [
         {
@@ -167,7 +169,11 @@ function SideBarMenu() {
             {categories.map((category, index) => (
                 !category.subCategories ? (
                     <li key={index}>
-                        <Link to={category.path} className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                        <Link
+                            to={category.path}
+                            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]"
+                            onClick={toggleSideMenu}
+                        >
                             <category.icon className="w-6 sm:w-5 h-6 sm:h-5" />
                             {category.name}
                         </Link>
@@ -181,16 +187,18 @@ function SideBarMenu() {
                                     {category.name}
                                 </span>
                                 <span className="shrink-0 transition duration-300 group-open:-rotate-180">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
+                                    <AngleDownIcon className="w-5 h-5" />
                                 </span>
                             </summary>
 
                             <ul className="mt-2 space-y-1 px-4">
                                 {category.subCategories?.map((subCategory, index) => (
                                     <li key={index}>
-                                        <Link to={subCategory.path} className="flex items-center gap-2 rounded-lg px-2 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]">
+                                        <Link
+                                            to={subCategory.path}
+                                            className="flex items-center gap-2 rounded-lg px-2 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]"
+                                            onClick={toggleSideMenu}
+                                        >
                                             {subCategory.icon ? <subCategory.icon className="w-5 sm:w-5 h-5 sm:h-5" /> : null}
                                             {subCategory.name}
                                         </Link>
@@ -206,3 +214,8 @@ function SideBarMenu() {
 }
 
 export { SideBarMenu }
+
+
+SideBarMenu.propTypes = {
+    toggleSideMenu: PropTypes.func.isRequired,
+}

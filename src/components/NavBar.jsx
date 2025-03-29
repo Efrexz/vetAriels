@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '@context/GlobalContext';
 import { ClientsContext } from '@context/ClientsContext';
@@ -15,17 +15,29 @@ import StoreIcon from '@assets/storeIcon.svg?react';
 
 function NavBar() {
     const { petsInQueueMedical, petsInQueueGrooming } = useContext(ClientsContext);
-    const { logout, companyData } = useContext(GlobalContext);
-    const { themeColor, activeUser } = useContext(GlobalContext);
+    const { logout,
+        companyData,
+        themeColor,
+        activeUser,
+        toggleSearchModal,
+        togglePatientList,
+        toggleBathList,
+        toggleUserOptions,
+        activeIcon,
+        setIsMobileScreen,
+        showSearchModal,
+        showSearchInput,
+        showUserOptions,
+        showPatientList,
+        showBathList,
+        setShowSearchModal,
+        setShowUserOptions,
+        setShowPatientList,
+        setActiveIcon,
+        setIsSidebarOpen
+    } = useContext(GlobalContext);
     const navigate = useNavigate();
 
-    const [showPatientList, setShowPatientList] = useState(false);
-    const [showBathList, setShowBathList] = useState(false);
-    const [activeIcon, setActiveIcon] = useState(null); // Verificar cual icono está activo
-    const [showSearchInput, setShowSearchInput] = useState(false);
-    const [showUserOptions, setShowUserOptions] = useState(false);
-    const [showSearchModal, setShowSearchModal] = useState(false);
-    const [isMobileScreen, setIsMobileScreen] = useState(false);//verificar si estamos en una pantalla pequeña
 
     const pageSections = [
         { icon: NewUserIcon, tooltip: 'Crear nuevo Propietario', path: '/clients/create', count: false },
@@ -33,28 +45,8 @@ function NavBar() {
         { icon: BathIcon, tooltip: 'Peluquería', path: '/peluqueria', count: true, countData: petsInQueueGrooming.length },
     ];
 
-    const togglePatientList = () => {
-        setShowPatientList(!showPatientList);
-        setShowBathList(false);
-        setShowUserOptions(false);
-        setActiveIcon(showPatientList ? null : 'patients');
-    };
 
-    const toggleBathList = () => {
-        setShowBathList(!showBathList);
-        setShowPatientList(false);
-        setShowUserOptions(false);
-        setActiveIcon(showBathList ? null : 'baths');
-    };
-
-    const toggleUserOptions = () => {
-        setShowUserOptions(!showUserOptions);
-        setShowBathList(false);
-        setShowPatientList(false);
-        setActiveIcon(showUserOptions ? null : 'user');
-    };
-
-    //Para detectar el tamaño de la pantalla 
+    //Para detectar el tamaño de la pantalla y cambiar el comportamiento de la barra de búsqueda
     useEffect(() => {
         const checkScreenSize = () => {
             setIsMobileScreen(window.innerWidth < 769); // 768px es el breakpoint típico para dispositivos móviles
@@ -70,17 +62,6 @@ function NavBar() {
         return () => window.removeEventListener('resize', checkScreenSize);
     }, []);
 
-    function toggleSearchInput() {
-        if (isMobileScreen) {
-            // En pantallas pequeñas, mostramos el modal de búsqueda
-            setShowSearchModal(true);
-            setShowSearchInput(false);
-        } else {
-            // En pantallas grandes, mostramos el input en el navbar
-            setShowSearchInput(!showSearchInput);
-            setShowSearchModal(false);
-        }
-    }
 
 
     return (
@@ -96,14 +77,18 @@ function NavBar() {
             <div className="flex justify-end items-center gap-3 md:gap-5 w-full">
                 <SearchIcon
                     className={`${showSearchInput ? "w-10 h-10" : "w-5 h-5"} hover:text-[#206D5A] cursor-pointer`}
-                    onClick={toggleSearchInput}
+                    onClick={toggleSearchModal}
                 />
                 {showSearchInput && (
                     <ClientSearchInput mode={"sales"} />
                 )}
                 <ul className="flex gap-3 md:gap-5 items-center">
                     {pageSections.map((section, index) => (
-                        <li key={index} className="cursor-pointer relative group">
+                        <li
+                            key={index}
+                            className="cursor-pointer relative group"
+                            onClick={() => setIsSidebarOpen(false)}
+                        >
                             {section.icon === NewUserIcon ? (
                                 <Link to={section.path} className="flex items-center">
                                     <section.icon className="w-5 h-5 hover:text-[#206D5A]" />
@@ -211,7 +196,7 @@ function NavBar() {
 
             {/*  el menú desplegable de opciones de usuario */}
             {showUserOptions && (
-                <div className="absolute top-20 md:top-16 right-0 bg-white shadow-lg rounded-lg w-80 z-20">
+                <div className="absolute top-20 md:top-14 right-0 bg-white shadow-lg rounded-lg w-80 z-20">
                     <ul>
                         <li
                             className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
