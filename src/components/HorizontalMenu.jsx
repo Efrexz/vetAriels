@@ -71,16 +71,15 @@ function HorizontalMenu({ mode }) {
     }[mode];
 
     const alternativeStyles = mode === 'restock' || mode === 'discharge' || mode === 'services' || mode === "products";
-
     return (
-        <div className={`${alternativeStyles ? 'border-b-2 border-gray-200 pb-4 mb-4' : ''}`}>
-            <nav className="flex gap-6" aria-label="Tabs">
+        <div className={`${alternativeStyles ? "border-b-2 border-gray-200 pb-4 mb-4" : ""}`}>
+            <nav className="flex flex-wrap gap-2 md:gap-6" aria-label="Tabs">
                 {tabsConfig[mode]?.map((tab, index) => (
                     <Link
                         key={index}
                         to={`${baseUrl}/${tab.url}`}
-                        className={`shrink-0 rounded-lg p-2 text-sm font-bold
-                        ${selectedTab === tab.name ? 'bg-sky-400 text-white ' : 'text-sky-500 hover:text-sky-600 hover:bg-gray-50'}`}
+                        className={`shrink-0 rounded-lg px-4 py-2 text-sm font-bold transition-all
+                        ${selectedTab === tab.name ? "bg-sky-400 text-white" : "text-sky-500 hover:text-sky-600 hover:bg-gray-50"}`}
                         onClick={() => handleTabClick(tab.name)}
                     >
                         {tab.name}

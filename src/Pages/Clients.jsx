@@ -28,7 +28,7 @@ function Clients() {
             </h1>
             <div className="bg-white rounded-lg shadow p-3 mb-6">
                 <div className="p-3 rounded-lg mb-1">
-                    <div className="flex flex-wrap items-center space-y-3 md:space-y-0 md:space-x-2 mb-3">
+                    <div className="flex flex-wrap items-center  mb-3 gap-3">
                         <div className="w-full md:w-auto flex flex-wrap md:flex-nowrap gap-2">
                             <div className="flex w-full md:w-auto border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300 ">
                                 <div className="flex items-center justify-center bg-gray-100 px-3">

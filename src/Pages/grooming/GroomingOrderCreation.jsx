@@ -363,7 +363,7 @@ function GroomingOrderCreation() {
             <div className="bg-gray-100 p-4 mb-4 mt-1 rounded shadow flex flex-col md:flex-row items-center gap-4">
 
                 <div className="w-full">
-                    <label htmlFor="date" className="block text-gray-700 ">Fecha de próximo servicio (recordatorio en agenda)</label>
+                    <label htmlFor="date" className="block text-gray-700 ">Fecha de próximo servicio</label>
                     <input
                         type="date"
                         id="date"

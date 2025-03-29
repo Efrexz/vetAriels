@@ -12,7 +12,7 @@ function UserInfo() {
     return (
         <div className="container mx-auto p-6">
             <div className="flex items-center mb-6 border-b-2 border-gray-100 pb-5 px-4">
-                <h1 className="text-xl md:text-3xl font-semibold flex items-center text-blue-400" >
+                <h1 className="text-xl md:text-2xl font-bold flex items-center text-blue-400" >
                     <RoleUserIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
                     Perfil
                 </h1>

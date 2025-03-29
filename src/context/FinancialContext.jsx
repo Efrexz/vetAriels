@@ -20,7 +20,7 @@ function FinancialProvider({ children }) {
 
     //agregar nuevo ingreso o egreso
     function addNewPayment(newPayment) {
-        setPaymentsData([...paymentsData, newPayment]);
+        setPaymentsData([newPayment, ...paymentsData]);
     }
 
     function removePayment(id) {
