@@ -171,7 +171,7 @@ function SideBarMenu({ toggleSideMenu }) {
                     <li key={index}>
                         <Link
                             to={category.path}
-                            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]"
+                            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#60A5FA]"
                             onClick={toggleSideMenu}
                         >
                             <category.icon className="w-6 sm:w-5 h-6 sm:h-5" />
@@ -181,7 +181,7 @@ function SideBarMenu({ toggleSideMenu }) {
                 ) : (
                     <li key={index}>
                         <details className="group [&_summary::-webkit-details-marker]:hidden">
-                            <summary className="flex cursor-pointer items-center rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#47C5A6]  ">
+                            <summary className="flex cursor-pointer items-center rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#60A5FA]  ">
                                 <span className="flex gap-2 items-center text-lg sm:text-[18px] font-medium">
                                     <category.icon className="w-6 sm:w-5 h-6 sm:h-5 " />
                                     {category.name}
@@ -196,7 +196,7 @@ function SideBarMenu({ toggleSideMenu }) {
                                     <li key={index}>
                                         <Link
                                             to={subCategory.path}
-                                            className="flex items-center gap-2 rounded-lg px-2 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#47C5A6]"
+                                            className="flex items-center gap-2 rounded-lg px-2 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#60A5FA]"
                                             onClick={toggleSideMenu}
                                         >
                                             {subCategory.icon ? <subCategory.icon className="w-5 sm:w-5 h-5 sm:h-5" /> : null}

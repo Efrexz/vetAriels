@@ -35,20 +35,19 @@ function Login() {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-teal-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <header className="relative h-48 bg-gradient-to-r from-teal-400 to-teal-500 flex items-center justify-center">
+                    <header className="relative h-48 bg-gradient-to-r from-blue-600 to-gray-500 flex items-center justify-center">
                         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581888227599-779811939961?q=80&w=1974')] bg-cover bg-center opacity-20"></div>
                         <div className="relative flex flex-col items-center">
                             <div className="bg-white p-3 rounded-full">
-                                <InclinedPaw className="w-10 h-10 text-teal-600" />
+                                <InclinedPaw className="w-10 h-10 text-blue-400" />
                             </div>
                             <h1 className="mt-4 text-2xl font-bold text-white">PetCare Plus</h1>
-                            <p className="text-teal-100">Portal Veterinario</p>
+                            <p className="text-gray-200">Portal Veterinario</p>
                         </div>
                     </header>
 
-                    {/* Login Form */}
                     <div className="p-8">
-                        <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Bienvenido de nuevo</h2>
+                        <h2 className="text-2xl font-semibold text-gray-600 text-center mb-6">Bienvenido de nuevo</h2>
                         <form>
                             <div className="space-y-5">
                                 <div>
@@ -62,7 +61,7 @@ function Login() {
                                             type="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-colors"
+                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg hover:border-blue-300 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 outline-none text-gray-500"
                                             placeholder="nombre@clinica.com"
                                             required
                                         />
@@ -80,7 +79,7 @@ function Login() {
                                             type="password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-colors"
+                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg hover:border-blue-300 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 outline-none text-gray-500"
                                             placeholder="••••••••"
                                             required
                                         />
@@ -92,20 +91,20 @@ function Login() {
                                         <input
                                             id="remember-me"
                                             type="checkbox"
-                                            className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
+                                            className="h-4 w-4  border-gray-300 rounded"
                                         />
                                         <label htmlFor="remember-me" className="ml-2 text-sm text-gray-700">
                                             Recordarme
                                         </label>
                                     </div>
-                                    <a href="#" className="text-sm font-medium text-teal-600 hover:text-teal-500">
+                                    <a href="#" className="text-sm font-medium text-[#60A5FA] hover:text-[#508cd6]">
                                         ¿Olvidaste tu contraseña?
                                     </a>
                                 </div>
                                 {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
                                 <button
                                     type='button'
-                                    className="w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50 transition-colors flex items-center justify-center gap-2 font-medium"
+                                    className="w-full bg-[#60A5FA] text-white py-2 px-4 rounded-lg hover:bg-[#508cd6] focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50 transition-colors flex items-center justify-center gap-2 font-medium"
                                     onClick={() => handleLogin(email, password)}
                                 >
                                     Iniciar Sesión
@@ -113,13 +112,6 @@ function Login() {
                                 </button>
                             </div>
                         </form>
-
-                        <p className="mt-6 text-center text-sm text-gray-600">
-                            ¿No tienes una cuenta?{' '}
-                            <a href="#" className="font-medium text-teal-600 hover:text-teal-500">
-                                Regístrate aquí
-                            </a>
-                        </p>
                     </div>
                 </div>
 
