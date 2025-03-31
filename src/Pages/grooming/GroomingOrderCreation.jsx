@@ -145,7 +145,7 @@ function GroomingOrderCreation() {
                         {
                             isClientSelected ? (
                                 <select
-                                    className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300"
+                                    className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300 outline-none"
                                     onChange={(e) => setPetSelected(e.target.value)}
                                 >
                                     {
@@ -185,7 +185,7 @@ function GroomingOrderCreation() {
 
                     <div className='col-span-2'>
                         <label className="block text-gray-700">Empresa</label>
-                        <select className="w-full mt-2 border border-gray-300 rounded p-2 bg-white hover:border-blue-300 focus-within:border-blue-300">
+                        <select className="w-full mt-2 border border-gray-300 rounded p-2 bg-white hover:border-blue-300 focus-within:border-blue-300 outline-none">
                             <option>VETERINARIA ARIEL`S E.I.R.L 0000 - 20608438719</option>
                         </select>
                         <span className="text-sm text-gray-500 mt-1">
@@ -201,7 +201,7 @@ function GroomingOrderCreation() {
                     <div className="col-span-1">
                         <label className="block text-gray-700 mb-2">Almacén de origen</label>
                         {isClientSelected ? (
-                            <select className="w-full border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300">
+                            <select className="w-full border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300 outline-none">
                                 <option>ALMACEN PRODUCTOS P/VENTAS</option>
                             </select>
                         ) : (
