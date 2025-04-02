@@ -137,11 +137,11 @@ function ClinicQueue() {
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border">
-                                        <Link to={`/pets/pet/${petInQueue?.petData.id}/update`}>
-                                            <div>{petInQueue.petData.petName}</div>
+                                        <Link to={`/pets/pet/${petInQueue?.petData?.id}/update`}>
+                                            <div>{petInQueue?.petData?.petName}</div>
                                             <div className="text-gray-500 text-sm">
-                                                {petInQueue?.petData.breed} - {petInQueue?.petData.species} -{" "}
-                                                {petInQueue?.petData.sex}
+                                                {petInQueue?.petData?.breed} - {petInQueue?.petData?.species} -{" "}
+                                                {petInQueue?.petData?.sex}
                                             </div>
                                             <div className="text-gray-500 text-sm italic">
                                                 Notas: {petInQueue?.notes}
@@ -151,9 +151,9 @@ function ClinicQueue() {
                                     <td className="py-2 px-4 text-center border">
                                         <Link
                                             className="text-blue-500 cursor-pointer hover:underline"
-                                            to={`/clients/client/${petInQueue?.petData.ownerId}/update`}
+                                            to={`/clients/client/${petInQueue?.petData?.ownerId}/update`}
                                         >
-                                            {petInQueue?.petData.ownerName}
+                                            {petInQueue?.petData?.ownerName}
                                         </Link>
                                     </td>
                                     <td className="py-2 px-4 text-center border">{petInQueue?.assignedDoctor}</td>

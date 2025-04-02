@@ -12,12 +12,10 @@ function ClientSearchInput({ mode }) {
     const { id } = useParams();
     const isClientSelected = clients.find(client => client.id === Number(id));
 
-    const isInProduction = import.meta.env.MODE === "production"//Verificamos si estamos en modo de producción o no
-
     const baseUrl = {
-        sales: isInProduction ? "/vetAriels/sales/client" : "/sales/client",
-        grooming: isInProduction ? `/vetAriels/grooming/order-creation` : `/grooming/order-creation`,
-        pets: isInProduction ? `/vetAriels/pets/create` : `/pets/create`
+        sales: "/sales/client",
+        grooming: `/grooming/order-creation`,
+        pets: `/pets/create`
     }
 
 

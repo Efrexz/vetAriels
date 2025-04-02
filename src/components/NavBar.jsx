@@ -33,6 +33,7 @@ function NavBar() {
         setShowSearchModal,
         setShowUserOptions,
         setShowPatientList,
+        setShowBathList,
         setActiveIcon,
         setIsSidebarOpen
     } = useContext(GlobalContext);
@@ -70,7 +71,16 @@ function NavBar() {
                 to="/"
                 className='w-[50%] items-center cursor-pointer'
             >
-                <h1 className="text-md lg:text-xl font-medium cursor-pointer">
+                <h1
+                    className="text-md lg:text-xl font-medium cursor-pointer"
+                    onClick={() => {
+                        setActiveIcon(null);
+                        setShowBathList(false);
+                        setShowPatientList(false);
+                        setShowUserOptions(false);
+                        setIsSidebarOpen(false);
+                    }}
+                >
                     {companyData?.clinicName || 'VETERINARIA ARIEL´S EIRL'}
                 </h1>
             </Link>
@@ -124,73 +134,81 @@ function NavBar() {
                 </ul>
             </div>
 
-            {/*  el menú desplegable de pacientes */}
+            {/* Menú desplegable de pacientes en cola para baño/peluquería */}
             {showBathList && (
-                <div className="absolute top-20 md:top-14 right-6 md:right-20 bg-white shadow-lg rounded-lg w-64 z-20 max-h-80 overflow-y-auto custom-scrollbar">
-                    <ul>
-                        {
-                            petsInQueueGrooming.map((pet, index) => (
+                <div className="absolute top-20 md:top-14 right-6 md:right-20 bg-white shadow-lg rounded-lg w-64 z-20 max-h-80">
+                    {/* Contenedor con scroll solo para los pacientes */}
+                    <div className="max-h-64 overflow-y-auto">
+                        <ul>
+                            {petsInQueueGrooming.map((pet, index) => (
                                 <li
                                     key={index}
-                                    className="p-3 border-b flex items-center"
+                                    className="p-3 border-b flex items-center hover:bg-gray-50"
                                     onClick={() => {
                                         window.location.href = `/pets/pet/${pet?.petData?.id}/update`;
                                     }}
                                 >
-                                    <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp" alt="PetImage" className="w-10 h-10" />
+                                    <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp"
+                                        alt="PetImage"
+                                        className="w-10 h-10 rounded-lg"
+                                    />
                                     <div className='ml-2 gap-2'>
-                                        <span className=" text-blue-500 cursor-pointer hover:underline">{pet.petData.petName}</span>
-                                        <span className="block text-gray-500 text-xs">{pet.timeOfAttention}</span>
+                                        <span className="text-blue-500 cursor-pointer hover:underline">{pet?.petData?.petName}</span>
+                                        <span className="block text-gray-500 text-xs">{pet?.timeOfAttention}</span>
                                     </div>
                                 </li>
-                            ))
-                        }
-                        <li className='p-3 hover:bg-gray-50'>
-                            <Link
-                                className="text-blue-500 cursor-pointer hover:underline"
-                                onClick={() => {
-                                    showBathList(false);
-                                    setActiveIcon(null);// Cerramos el menu y desactivamos el icono
-                                }}
-                                to="/grooming">
-                                Ir a la Peluquería
-                            </Link>
-                        </li>
-                    </ul>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Opción fija al final, sin afectar el scroll */}
+                    <li className='p-3 hover:bg-gray-50 border-t'>
+                        <Link
+                            className="text-blue-500 cursor-pointer hover:underline"
+                            onClick={() => {
+                                setShowBathList(false);
+                                setActiveIcon(null); // Cerramos el menú y desactivamos el icono
+                            }}
+                            to="/grooming">
+                            Ir a la Peluquería
+                        </Link>
+                    </li>
                 </div>
             )}
-
             {/*  el menú desplegable de pacientes en cola medica */}
             {showPatientList && (
-                <div className="absolute top-20 md:top-14 right-6 md:right-20 bg-white shadow-lg rounded-lg w-64 z-20">
-                    <ul>
-                        {petsInQueueMedical.map((pet, index) => (
-                            <li
-                                key={index}
-                                className="p-3 border-b flex items-center hover:bg-gray-50"
-                                onClick={() => {
-                                    window.location.href = `/pets/pet/${pet?.petData?.id}/update`;
-                                }}
-                            >
-                                <img src={pet.img || "https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp"} alt="PetImage" className="w-10 h-10 rounded-lg" />
-                                <div className='ml-3 gap-2'>
-                                    <span className=" text-blue-500 cursor-pointer hover:underline">{pet.petData.petName}</span>
-                                    <span className="block text-gray-500 text-xs">{pet.timeOfAttention}</span>
-                                </div>
-                            </li>
-                        ))}
-                        <li className='p-3 hover:bg-gray-50'>
-                            <Link
-                                className="text-blue-500 cursor-pointer hover:underline"
-                                onClick={() => {
-                                    setShowPatientList(false);
-                                    setActiveIcon(null);// Cerramos el menu y desactivamos el icono
-                                }}
-                                to="/clinic-queue">
-                                Ir a la sala de espera
-                            </Link>
-                        </li>
-                    </ul>
+                <div className="absolute top-20 md:top-14 right-6 md:right-20 bg-white shadow-lg rounded-lg w-64 z-20 max-h-80">
+                    <div className="max-h-64 overflow-y-auto">
+                        <ul>
+                            {petsInQueueMedical.map((pet, index) => (
+                                <li
+                                    key={index}
+                                    className="p-3 border-b flex items-center hover:bg-gray-50"
+                                    onClick={() => {
+                                        window.location.href = `/pets/pet/${pet?.petData?.id}/update`;
+                                    }}
+                                >
+                                    <img src={pet.img || "https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp"} alt="PetImage" className="w-10 h-10 rounded-lg" />
+                                    <div className='ml-3 gap-2'>
+                                        <span className=" text-blue-500 cursor-pointer hover:underline">{pet?.petData?.petName}</span>
+                                        <span className="block text-gray-500 text-xs">{pet?.timeOfAttention}</span>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <li className='p-3 hover:bg-gray-50 border-t'>
+                        <Link
+                            className="text-blue-500 cursor-pointer hover:underline"
+                            onClick={() => {
+                                setShowPatientList(false);
+                                setActiveIcon(null); // Cerramos el menú y desactivamos el icono
+                            }}
+                            to="/clinic-queue">
+                            Ir a la sala de espera
+                        </Link>
+                    </li>
                 </div>
             )}
 

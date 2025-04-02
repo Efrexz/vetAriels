@@ -8,6 +8,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     // Estado del formulario
     const [selectedDoctor, setSelectedDoctor] = useState("Medico 1");
     const [selectedPet, setSelectedPet] = useState(petsByOwner[0]?.petName);
+    const [isPetDataMissing, setIsPetDataMissing] = useState(false); // Estado para mostrar error si no se selecciona mascota
     const [notes, setNotes] = useState('');
 
     //obtenemos la fecha y la hora actuales a la cual se esta enviando a cola al paciente
@@ -20,6 +21,11 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     // Manejo del envío del formulario
     function sendPatientToQueue() {
         const petSelected = petsByOwner?.find(pet => pet.petName === selectedPet);
+        if (!petSelected) {// Si no se selecciona mascota, mostramos error
+            setIsPetDataMissing(true);
+            return;
+        }
+
         function generateId() {
             const part1 = Date.now().toString(35)
             const part2 = Math.random().toString(36).slice(2)
@@ -46,7 +52,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 p-4 sm:p-6">
             <div className="bg-white rounded-lg w-full max-w-3xl p-6 shadow-lg modal-appear mx-auto space-y-6">
-                <h2 className="text-lg font-semibold">Generar Consulta</h2>
+                <h2 className="text-lg font-semibold text-gray-700">Generar Consulta</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col">
@@ -94,13 +100,16 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         </label>
                         <select
                             id="pet"
-                            className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                            className={`border border-gray-300 rounded-md p-2 w-full ${isPetDataMissing ? "border-red-500 outline-none" : "hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"}`}
                             onChange={(e) => setSelectedPet(e.target.value)}
                         >
                             {petsByOwner?.map((pet, index) => (
                                 <option key={index}>{pet.petName}</option>
                             ))}
                         </select>
+                        {isPetDataMissing && (
+                            <p className="text-red-500 text-sm mt-1">Debe seleccionar una mascota</p>
+                        )}
                     </div>
                 </div>
 

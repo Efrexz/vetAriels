@@ -2,12 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import svgr from "vite-plugin-svgr";
 
-export default defineConfig(({ mode }) => {
-  const isProduction = mode === "production" || mode === "preview";
-
+export default defineConfig(() => {
   return {
     plugins: [react(), svgr()],
-    base: isProduction ? "/vetAriels/" : "/",
+    base: "/",
     resolve: {
       alias: {
         "@assets": "/src/assets",
