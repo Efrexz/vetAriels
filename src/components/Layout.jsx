@@ -30,7 +30,7 @@ function Layout({ children }) {
                 </section>
 
                 {/* Contenido principal */}
-                <section className={`bg-white mx-2 w-full h-auto flex flex-col overflow-auto custom-scrollbar  lg:pl-0`}>
+                <section className={`bg-white mx-2 w-full h-auto flex flex-col overflow-auto custom-scrollbar  lg:pl-0 mb-14 md:mb-4`}>
                     {children}
                 </section>
             </main>
