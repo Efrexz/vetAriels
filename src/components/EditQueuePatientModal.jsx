@@ -30,11 +30,11 @@ function EditQueuePatientModal({ onClose, queueData }) {
     }
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg w-2/3 p-6 shadow-lg modal-appear">
-                <h2 className="text-lg font-semibold mb-4">Generar Consulta</h2>
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center p-4 sm:p-6 z-50 overflow-y-auto">
+            <div className="bg-white rounded-lg w-full max-w-3xl p-6 shadow-lg modal-appear mx-auto space-y-6">
+                <h2 className="text-lg font-semibold text-gray-700 mb-4">Generar Consulta</h2>
 
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div className="flex flex-col">
                         <label htmlFor="date" className="text-md font-semibold mb-1">
                             Fecha de atención

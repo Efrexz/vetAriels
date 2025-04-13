@@ -44,19 +44,19 @@ function Roles() {
                             <tbody>
                                 {roles.map((role, index) => (
                                     <tr key={index} className="border hover:bg-gray-50">
-                                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900 border">{role}</td>
+                                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-700 border">{role}</td>
                                         <td className="py-3 text-sm font-medium border text-center">
                                             <button
                                                 className="text-yellow-500 hover:text-yellow-600 mx-2"
                                                 onClick={() => navigate(`/config/role/permissions/${role}`)}
                                             >
-                                                <KeyIcon className="w-5 h-5" />
+                                                <KeyIcon className="w-4 h-4" />
                                             </button>
                                             <button className="text-green-500 hover:text-green-600 mx-2">
-                                                <EditIcon className="w-5 h-5" />
+                                                <EditIcon className="w-4 h-4" />
                                             </button>
                                             <button className="text-red-500 hover:text-red-600 mx-2">
-                                                <TrashIcon className="w-5 h-5" />
+                                                <TrashIcon className="w-4 h-4" />
                                             </button>
                                         </td>
                                     </tr>

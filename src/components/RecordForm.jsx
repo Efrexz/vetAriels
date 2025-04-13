@@ -7,7 +7,7 @@ function RecordForm({ formData, handleChange, onSubmit, submitText }) {
     const navigate = useNavigate();
     return (
         <>
-            <div className="space-y-8 p-4">
+            <div className="space-y-8 p-4 text-gray-700">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-lg">
                     <div>
                         <label className="block text-sm font-medium mb-2" htmlFor="dateTime">

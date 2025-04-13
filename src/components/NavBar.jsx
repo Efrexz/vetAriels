@@ -233,6 +233,7 @@ function NavBar() {
                             className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
                             onClick={() => {
                                 navigate("/login")
+                                setShowUserOptions(false);
                                 logout();
                             }}
                         >
@@ -245,6 +246,7 @@ function NavBar() {
                             className="p-3 border-b flex flex-col hover:bg-gray-100 cursor-pointer"
                             onClick={() => {
                                 navigate("/login")
+                                setShowUserOptions(false);
                                 logout();
                             }}
                         >

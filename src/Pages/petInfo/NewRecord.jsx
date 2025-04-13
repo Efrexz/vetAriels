@@ -63,11 +63,8 @@ function NewRecord() {
 
     return (
         <div className="w-full max-w-[1300px] mx-auto border border-gray-200 rounded-lg">
-            <div className="flex flex-row items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex tems-center justify-start p-4 border-b border-gray-200 bg-gray-50">
                 <h2 className="text-lg font-bold text-gray-600">Nueva Ficha de Consulta</h2>
-                <button className="p-2 text-black hover:text-gray-700 bg-white rounded-lg" aria-label="Cerrar">
-                    <XIcon className="w-4 h-4" />
-                </button>
             </div>
             <RecordForm
                 formData={formData}

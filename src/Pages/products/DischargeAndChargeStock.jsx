@@ -22,8 +22,14 @@ function DischargeAndChargeStock({ typeOfOperation }) {
     const [errors, setErrors] = useState({});
     const [isOpenErrorModal, setIsOpenErrorModal] = useState(false);
 
+    const { addDischarge, addRestock } = useContext(ProductsAndServicesContext);
+    const { users, activeUser } = useContext(GlobalContext);
+    // obtenemos los nombres de los usuarios registrados
+    const userOptions = users.map(user => `${user?.name} ${user?.lastName}`);
+
+
     const [formData, setFormData] = useState({
-        requestor: "",
+        requestor: userOptions[0],
         reason: "",
         store: "",
         operationType: "",
@@ -37,8 +43,6 @@ function DischargeAndChargeStock({ typeOfOperation }) {
         }));
     }
 
-
-    const { addDischarge, addRestock } = useContext(ProductsAndServicesContext);
 
     const tableHeaders = ["Código de Barras", "Producto", "Precio Unitario de Compra", "Precio Unitario de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
 
@@ -111,7 +115,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
             time: currentTime,
             reason: formData.reason,
             responsible: formData.requestor,
-            registeredBy: 'Juan Pérez',
+            registeredBy: `${activeUser.name} ${activeUser.lastName}` || "Juan Perez",
             operationType: formData.operationType,
             store: formData.store,
             products: selectedProducts,
@@ -130,9 +134,6 @@ function DischargeAndChargeStock({ typeOfOperation }) {
 
     const navigate = useNavigate();
 
-    const { users } = useContext(GlobalContext);
-    // obtenemos los nombres de los usuarios registrados
-    const userOptions = users.map(user => `${user.name} ${user.lastName}`);
 
     const formFields = [
         {

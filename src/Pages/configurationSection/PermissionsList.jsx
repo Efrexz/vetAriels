@@ -138,7 +138,7 @@ function PermissionsList() {
 
     return (
         <div className="p-6 bg-gray-100 ">
-            <h1 className="text-3xl font-medium text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+            <h1 className="text-2xl sm:text-3xl font-medium items-center text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <KeyIcon className="w-9 h-9 mr-2" />
                 Permisos
             </h1>

@@ -50,7 +50,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     }
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 p-4 sm:p-6">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50 p-4 sm:p-6 overflow-y-auto">
             <div className="bg-white rounded-lg w-full max-w-3xl p-6 shadow-lg modal-appear mx-auto space-y-6">
                 <h2 className="text-lg font-semibold text-gray-700">Generar Consulta</h2>
 

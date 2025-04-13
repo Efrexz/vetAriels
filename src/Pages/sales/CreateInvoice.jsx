@@ -131,7 +131,7 @@ function CreateInvoice() {
                                 <label className="text-sm font-medium text-gray-700">{data.label}</label>
                                 <div className="flex items-center mt-1">
                                     {data.type === "select" ? (
-                                        <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300">
+                                        <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300 outline-none">
                                             {data.options.map((option, idx) => (
                                                 <option key={idx} value={option}>
                                                     {option}
@@ -164,7 +164,7 @@ function CreateInvoice() {
                                 <label className="text-sm font-medium text-gray-700">{data.label}</label>
                                 <div className={`flex items-center mt-1`}>
                                     {data.type === "select" ? (
-                                        <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300">
+                                        <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300 outline-none">
                                             {data.options.map((option, idx) => (
                                                 <option key={idx} value={option}>
                                                     {option}
@@ -176,7 +176,7 @@ function CreateInvoice() {
                                             type={data.type}
                                             value={data.value}
                                             readOnly
-                                            className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300"
+                                            className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300 outline-none"
                                         />
                                     )}
                                 </div>
@@ -251,7 +251,7 @@ function CreateInvoice() {
                 <div className="p-4">
                     <label className="block text-gray-700">Observaciones o comentarios para este comprobante</label>
                     <textarea
-                        className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-14 hover:border-blue-300 focus:border-blue-300"
+                        className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-14 hover:border-blue-300 focus:border-blue-300 outline-none"
                         rows="2"
                         placeholder="Añadir observaciones..."
                         value={notes}
@@ -269,7 +269,7 @@ function CreateInvoice() {
                             <div className="flex items-center mt-1">
                                 {data.type === "select" ? (
                                     <select
-                                        className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300"
+                                        className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300 outline-none"
                                         defaultValue=""
                                         onChange={data.onChange}
                                     >
@@ -284,7 +284,7 @@ function CreateInvoice() {
                                         value={data.value}
                                         onChange={data.onChange}
                                         placeholder={data.placeholder}
-                                        className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300"
+                                        className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300 outline-none"
                                     />
                                 )}
                             </div>

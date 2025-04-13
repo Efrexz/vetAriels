@@ -139,7 +139,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                         {typeOfOperation}
                     </span>
                 </h2>
-                <form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <form className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 sm:mb-0">
                     {fields.map((field, index) => (
                         <div
                             className={`${field.fullWidth ? 'col-span-1 sm:col-span-2' : ''}`}
@@ -173,7 +173,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                 ) : (
                                     <input
                                         className={`border border-gray-300 ${field.icon ? 'rounded-r-md' : 'rounded-md'
-                                            } p-2 w-full text-gray-600 ${errors[field.name]
+                                            } p-2 w-full outline-none text-gray-600 ${errors[field.name]
                                                 ? 'border-red-500'
                                                 : 'hover:border-blue-300 focus-within:border-blue-300'
                                             }`}

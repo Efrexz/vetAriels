@@ -54,11 +54,6 @@ function GroomingHistory() {
                                 className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                             />
                         </div>
-
-                        <button className="border border-gray-300 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 flex items-center gap-2 w-full md:w-auto">
-                            <PlusIcon className="w-5 h-5" />
-                            CREAR ORDEN DE SERVICIO
-                        </button>
                     </div>
 
                     <div className="flex flex-col md:flex-row md:items-center gap-4">

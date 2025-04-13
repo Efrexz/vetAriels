@@ -21,8 +21,8 @@ function ActiveOrders() {
     const activeAccounts = clients.filter(client => client?.products?.length > 0);
     const navigate = useNavigate();
     return (
-        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8  overflow-auto pt-6">
-            <h1 className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+        <section className="container mx-auto p-6">
+            <h1 className="text-xl sm:text-3xl font-medium text-orange-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <ShoppingCart className="w-6 sm:w-9 h-6 sm:h-9  mr-2" />
                 Cuentas activas
             </h1>
@@ -47,10 +47,10 @@ function ActiveOrders() {
                 </div>
                 <div className="overflow-x-auto border border-gray-300 rounded-lg">
                     <table className="min-w-full bg-white">
-                        <thead>
+                        <thead className='bg-gray-100'>
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 text-center border text-gray-700">
+                                    <th key={header} className="py-2 text-center border text-gray-700 px-4">
                                         {header}
                                     </th>
                                 ))}

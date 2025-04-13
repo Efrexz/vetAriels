@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { ActionButtons } from '@components/ActionButtons';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
@@ -112,14 +113,14 @@ function AddNewServiceModal({ onClose }) {
     ];
 
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-md w-full h-auto max-w-5xl mt-8 modal-appear">
+        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50 overflow-y-scroll custom-scrollbar">
+            <div className="bg-white p-8 rounded-md w-full h-auto max-w-5xl mt-8 mx-4  modal-appear">
                 <h2 className="text-xl font-bold text-blue-500 mb-4">Agregar nuevo servicio</h2>
-                <form className="grid grid-cols-4 gap-4 border-b border-gray-300 pb-8">
+                <form className="grid  gird-cols-1 sm:grid-cols-4 gap-4 border-b border-gray-300 pb-6 mb-4">
                     {formFields.map((field, index) => (
                         <div
                             key={index}
-                            className={`items - center ${field.fullWidth ? 'col-span-4' : field.smallWidth ? 'col-span-1' : 'col-span-2'}`}
+                            className={`${field.fullWidth ? 'sm:col-span-4' : field.smallWidth ? 'sm:col-span-1' : 'sm:col-span-2'}`}
                         >
                             <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
                             {field.type === 'select' ? (
@@ -157,22 +158,12 @@ function AddNewServiceModal({ onClose }) {
                     ))}
                 </form>
 
-                <div className="flex justify-end mt-6 gap-4">
-                    <button
-                        className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3"
-                        onClick={() => onClose()}
-                    >
-                        <ReturnIcon className="w-5 h-5 text-gray-700" />
-                        CANCELAR
-                    </button>
-                    <button
-                        className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                        onClick={() => createService()}
-                    >
-                        <PlusIcon className="w-5 h-5 text-white" />
-                        CREAR NUEVO SERVICIO
-                    </button>
-                </div>
+                <ActionButtons
+                    onCancel={onClose}
+                    onSubmit={() => createService()}
+                    submitText="CREAR NUEVO SERVICIO"
+                    mode="modal"
+                />
             </div>
         </div >
     )

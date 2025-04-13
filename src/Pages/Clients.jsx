@@ -22,7 +22,7 @@ function Clients() {
 
     return (
         <section className="container mx-auto p-6">
-            <h1 className="text-xl md:text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
+            <h1 className="text-xl sm:text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
                 <UserGroupIcon className="w-6 md:w-9 h-6 md:h-9 text-blue-500 mr-2" />
                 Clientes
             </h1>
