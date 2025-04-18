@@ -37,6 +37,7 @@ function GlobalProvider({ children }) {
         facebook: "https://www.facebook.com/vetariel/"
     };
 
+
     //sideBarMenu
     //estado para saber cuando esta abierto el menu y poder aplicar el responsive
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);

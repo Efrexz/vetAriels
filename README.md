@@ -40,6 +40,47 @@ Gestor Veterinario es una aplicación para la administración de clínicas veter
    npm run dev
    ```
 
+## Cómo probar la aplicación
+Estos serian los pasos recomendados para que cualquier usuario nuevo pueda probar correctamente el sistema de gestión veterinaria:
+
+### 🔐 Acceso inicial
+Para acceder por primera vez, puedes usar el siguiente usuario por defecto:
+
+Correo: zyzz_448@hotmail.com
+
+Contraseña: 123123
+
+Luego de ingresar, puedes crear tu propia cuenta personalizada si lo deseas.
+
+### 👥 Crear un nuevo usuario
+Dirígete al menú principal y selecciona la opción Configuración.
+
+Se desplegarán varias opciones. Haz clic en Usuarios.
+
+En la lista de usuarios, haz clic en Agregar usuario.
+
+Completa el formulario para crear tu nuevo usuario.
+
+A partir de ese momento, puedes iniciar sesión con tu propia cuenta.
+
+### 🐶 Agregar clientes y mascotas
+Crea un nuevo cliente desde la sección correspondiente.
+
+Luego de registrar un cliente, puedes agregarle una o varias mascotas.
+
+Esto simula el flujo real de atención en una veterinaria, donde se crea un historial para cada nueva mascota.
+
+### 🛍️ Crear productos y servicios
+Para realizar ventas o simular atenciones, primero debes registrar productos y servicios.
+
+Importante: cuando se crea un producto, su stock inicial es 0. Para poder venderlo o usarlo, es necesario realizar una carga de stock.
+
+En el caso del grooming, puedes agregar servicios como baño o corte, y luego añadir mascotas a la cola de grooming.
+
+## ✅ Recomendación final
+Una vez que hayas creado usuarios, clientes, mascotas, productos y servicios, podrás explorar el resto del sistema de forma intuitiva. Te recomendamos probar las distintas secciones para conocer su funcionalidad completa.
+
+
 ## Mejoras futuras
 
 - 📅 **Agenda de citas veterinarias.**

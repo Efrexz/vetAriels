@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ActionButtons } from "@components/ActionButtons";
+import { GlobalContext } from '@context/GlobalContext';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function CreateRol() {
+    const { addRole, roles } = useContext(GlobalContext);
     const fields = [
         { label: "Nombre", name: "name", type: "text" },
         { label: "Acceso a cuadre de caja", name: "access", type: "select", options: ["SI", "NO"] },
@@ -21,10 +23,12 @@ function CreateRol() {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form Data:", formData);
-    };
+    function addNewRole() {
+        addRole(formData);
+        console.log(roles);
+        console.log("hola");
+
+    }
 
     const navigate = useNavigate();
 
@@ -35,7 +39,7 @@ function CreateRol() {
                 Crear Rol
             </h2>
             <section >
-                <form onSubmit={handleSubmit} className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md ">
+                <form className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md ">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                         {fields.map((field, index) => (
                             <div key={index} className={`mb-4 ${field.name === 'nombreServicio' ? 'col-span-4' : 'col-span-2'} `}>
@@ -47,7 +51,7 @@ function CreateRol() {
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border rounded-md hover:border-blue-300 focus-within:border-blue-300"
+                                        className="w-full px-4 py-2 border rounded-md hover:border-blue-300 focus-within:border-blue-300 outline-none"
                                     >
                                         {field.options?.map((option, i) => (
                                             <option key={i} value={option}>
@@ -62,7 +66,7 @@ function CreateRol() {
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2 border rounded-md hover:border-blue-300 focus-within:border-blue-300"
+                                        className="w-full px-4 py-2 border rounded-md hover:border-blue-300 focus-within:border-blue-300 outline-none"
                                     />
                                 )}
                             </div>
@@ -71,7 +75,7 @@ function CreateRol() {
                 </form>
                 <ActionButtons
                     onCancel={() => navigate(-1)}
-                    // onConfirm={createNewRol}
+                    onConfirm={() => addNewRole()}
                     submitText="CREAR NUEVO ROL"
                 />
             </section>
