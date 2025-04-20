@@ -26,6 +26,13 @@ function GlobalProvider({ children }) {
         status: "ACTIVO"
     }];
 
+    const defaultRols = [
+        { id: 1, name: "Administrador", access: "SI" },
+        { id: 2, name: "Groomer", access: "NO" },
+        { id: 3, name: "Médico", access: "NO" },
+        { id: 4, name: "Recepcionista", access: "SI" },
+    ];
+
     const defaultCompanyData = {
         clinicName: "VETERINARIA ARIEL´S EIRL",
         email: "vetariel@gmail.com",
@@ -100,7 +107,6 @@ function GlobalProvider({ children }) {
         setShowPatientList(false);
         setShowUserOptions(false);
         setShowBathList(false);
-
     }
 
 
@@ -111,8 +117,7 @@ function GlobalProvider({ children }) {
 
     //Roles Data
     const [roles, setRoles] = useState(
-        localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [
-        ]);
+        localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : defaultRols);
 
     // Guardar en localStorage cada vez que cambien los estados
     useEffect(() => {

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GlobalContext } from '../../context/GlobalContext';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -8,14 +9,7 @@ import EditIcon from '@assets/editIcon.svg?react';
 
 function Roles() {
 
-    const [roles, setRoles] = useState([
-        'Administrador',
-        'Asistente Administrativo',
-        'Auxiliar Veterinario',
-        'Groomer',
-        'Médico',
-        'Recepcionista',
-    ]);
+    const { roles, removeRole } = useContext(GlobalContext);
 
     const navigate = useNavigate();
     return (
@@ -44,18 +38,21 @@ function Roles() {
                             <tbody>
                                 {roles.map((role, index) => (
                                     <tr key={index} className="border hover:bg-gray-50">
-                                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-700 border">{role}</td>
+                                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-700 border">{role.name}</td>
                                         <td className="py-3 text-sm font-medium border text-center">
                                             <button
                                                 className="text-yellow-500 hover:text-yellow-600 mx-2"
-                                                onClick={() => navigate(`/config/role/permissions/${role}`)}
+                                                onClick={() => navigate(`/config/role/permissions/${role.name}`)}
                                             >
                                                 <KeyIcon className="w-4 h-4" />
                                             </button>
                                             <button className="text-green-500 hover:text-green-600 mx-2">
                                                 <EditIcon className="w-4 h-4" />
                                             </button>
-                                            <button className="text-red-500 hover:text-red-600 mx-2">
+                                            <button
+                                                className="text-red-500 hover:text-red-600 mx-2"
+                                                onClick={() => removeRole(role.id)}
+                                            >
                                                 <TrashIcon className="w-4 h-4" />
                                             </button>
                                         </td>

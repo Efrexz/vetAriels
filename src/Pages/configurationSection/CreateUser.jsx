@@ -6,14 +6,16 @@ import PlusIcon from "@assets/plusIcon.svg?react";
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function CreateUser() {
-    const { addUser } = useContext(GlobalContext);
+    const { addUser, roles } = useContext(GlobalContext);
+    const roleNames = roles.map((role) => role.name);
+
     const fields = [
         { label: "Correo Electrónico:", name: "email", type: "email" },
         { label: "Contraseña", name: "password", type: "password" },
         { label: "Nombre", name: "name", type: "text" },
         { label: "Apellido", name: "lastName", type: "text" },
         { label: "Teléfono Móvil", name: "phone", type: "text" },
-        { label: "Rol", name: "rol", type: "select", options: ["ADMINISTRADOR", "ASISTENTE ADMINISTRATIVO", "AUXILIAR VETERINARIO", "GROOMER", "MÉDICO", "RECEPCIONISTA"] },
+        { label: "Rol", name: "rol", type: "select", options: roleNames },
     ];
     const [errors, setErrors] = useState({});
 
@@ -74,7 +76,7 @@ function CreateUser() {
             lastName: formData.lastName,
             userName: `${formData.lastName.toUpperCase()} ${formData.name.toUpperCase()}`,
             phone: formData.phone,
-            rol: formData.rol || "ADMINISTRADOR",
+            rol: formData.rol || roleNames[0],
             registrationDate: currentDate,
             registrationTime: currentTime,
             status: "ACTIVO",

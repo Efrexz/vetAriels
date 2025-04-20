@@ -9,20 +9,21 @@ import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 
 
-const userFields = [
-    { label: 'Correo Electrónico', type: 'email', id: 'email', icon: EmailIcon },
-    { label: 'Nombre', type: 'text', id: 'name', icon: RoleUserIcon },
-    { label: 'Apellido', type: 'text', id: 'lastName', icon: RoleUserIcon },
-    { label: 'Teléfono Móvil', type: 'tel', id: 'phone', icon: PhoneIcon },
-    { label: 'Estado', type: 'select', id: 'status', options: ['--Seleccionar--', 'ACTIVO', 'INACTIVO'] },
-    {
-        label: 'Rol', type: 'select', id: 'rol', options: ["ADMINISTRADOR", "ASISTENTE ADMINISTRATIVO", "AUXILIAR VETERINARIO", "GROOMER", "MÉDICO", "RECEPCIONISTA"]
-    },
-];
-
 function EditUser() {
+    const { users, updateUserData, roles } = useContext(GlobalContext);
+    const rolNames = roles.map((role) => role.name);
 
-    const { users, updateUserData } = useContext(GlobalContext);
+    const userFields = [
+        { label: 'Correo Electrónico', type: 'email', id: 'email', icon: EmailIcon },
+        { label: 'Nombre', type: 'text', id: 'name', icon: RoleUserIcon },
+        { label: 'Apellido', type: 'text', id: 'lastName', icon: RoleUserIcon },
+        { label: 'Teléfono Móvil', type: 'tel', id: 'phone', icon: PhoneIcon },
+        { label: 'Estado', type: 'select', id: 'status', options: ['--Seleccionar--', 'ACTIVO', 'INACTIVO'] },
+        {
+            label: 'Rol', type: 'select', id: 'rol', options: rolNames
+        },
+    ];
+
     const { id } = useParams();
     const navigate = useNavigate();
 
