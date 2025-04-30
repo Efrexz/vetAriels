@@ -180,7 +180,7 @@ function SideBarMenu({ toggleSideMenu }) {
                     </li>
                 ) : (
                     <li key={index}>
-                        <details className="group [&_summary::-webkit-details-marker]:hidden">
+                        <details className="group [&_summary::-webkit-details-marker]:hidden" name="details">
                             <summary className="flex cursor-pointer items-center rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#60A5FA]  ">
                                 <span className="flex gap-2 items-center text-lg sm:text-[18px] font-medium">
                                     <category.icon className="w-6 sm:w-5 h-6 sm:h-5 " />
