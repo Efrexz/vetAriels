@@ -1,6 +1,14 @@
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
-import PropTypes from 'prop-types';
+
+interface ActionButtonsProps {
+    onCancel: () => void;
+    onSubmit: () => void;
+    cancelText?: string;
+    submitText?: string;
+    mode?: string;
+    customIcon?: React.ReactNode;
+}
 
 function ActionButtons({
     onCancel,
@@ -9,7 +17,7 @@ function ActionButtons({
     submitText,
     mode,
     customIcon,
-}) {
+} : ActionButtonsProps)  {
     return (
         <div className={`flex flex-col md:flex-row ${mode === "modal" ? "justify-end gap-4" : "justify-between items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg gap-4"}`}>
             <button
@@ -30,14 +38,6 @@ function ActionButtons({
             </button>
         </div>
     );
-}
-
-ActionButtons.propTypes = {
-    mode: PropTypes.string,
-    onCancel: PropTypes.func,
-    onSubmit: PropTypes.func,
-    cancelText: PropTypes.string,
-    submitText: PropTypes.string,
 }
 
 export { ActionButtons };

@@ -44,7 +44,7 @@ import { CreateUser } from './Pages/configurationSection/CreateUser.jsx';
 import { EditUser } from './Pages/configurationSection/EditUser.jsx';
 import { UserInfo } from './Pages/configurationSection/UserInfo/index.jsx';
 import { NotFound } from './Pages/NotFound.jsx';
-import { Layout } from './components/Layout.jsx';
+import { Layout } from './components/layout/Layout.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import './index.css';
 

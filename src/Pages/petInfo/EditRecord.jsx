@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RecordForm } from '@components/RecordForm';
+import { RecordForm } from '@components/forms/RecordForm';
 import { ClientsContext } from '@context/ClientsContext';
 import XIcon from '@assets/xIcon.svg?react';
 

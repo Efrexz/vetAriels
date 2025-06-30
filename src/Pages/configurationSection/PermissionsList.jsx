@@ -1,4 +1,4 @@
-import { ToggleSwitchButton } from "@components/ToggleSwitchButton";
+import { ToggleSwitchButton } from "@components/ui/ToggleSwitchButton";
 import KeyIcon from '@assets/keyIcon.svg?react';
 
 function PermissionsList() {

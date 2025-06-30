@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
 import { OperationDetail } from "./OperationDetail";
 import { EditOperation } from "./EditOperation";
-import { HorizontalMenu } from "@components/HorizontalMenu";
+import { HorizontalMenu } from "@components/ui/HorizontalMenu";
 import DocumentJoinIcon from "@assets/documentJoinIcon.svg?react";
 import DocumentOutIcon from "@assets/documentOutIcon.svg?react"
 import ReturnIcon from "@assets/returnIcon.svg?react";

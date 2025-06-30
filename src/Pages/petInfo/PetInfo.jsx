@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link, useParams } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
-import { HorizontalMenu } from '@components/HorizontalMenu';
+import { HorizontalMenu } from '@components/ui/HorizontalMenu';
 import { PetProfile } from './PetProfile';
 import { ClinicalRecords } from './ClinicalRecords';
 import { NewRecord } from './NewRecord';

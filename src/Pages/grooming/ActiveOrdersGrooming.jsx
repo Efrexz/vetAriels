@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
-import { ConfirmActionModal } from '@components/ConfirmActionModal';
-import { UpdateStateModal } from '@components/UpdateStateModal';
+import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
+import { UpdateStateModal } from '@components/modals/UpdateStateModal';
 import BathIcon from '@assets/bathIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';

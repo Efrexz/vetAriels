@@ -3,7 +3,7 @@ import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext.
 import { useParams } from "react-router-dom";
 import { UpdateService } from "./UpdateService.jsx";
 import { EditServicePrice } from "./EditServicePrice.jsx";
-import { HorizontalMenu } from "@components/HorizontalMenu.jsx";
+import { HorizontalMenu } from "@components/ui/HorizontalMenu.jsx";
 import PillsIcon from "@assets/pillsIcon.svg?react";
 
 

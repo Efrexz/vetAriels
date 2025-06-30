@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { ClientsContext } from '@context/ClientsContext';
-import { ActionButtons } from '@components/ActionButtons';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { ClientsContext } from '@context/ClientsContext';
-import { ConfirmActionModal } from '@components/ConfirmActionModal';
+import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import ScaleBalanced from '@assets/scaleBalanced.svg?react';
 import HeartPulse from '@assets/heartPulse.svg?react';
 import Temperature from '@assets/temperature.svg?react';

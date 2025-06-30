@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ActionButtons } from "@components/ActionButtons";
+import { ActionButtons } from "@components/ui/ActionButtons";
 import { GlobalContext } from '@context/GlobalContext';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 

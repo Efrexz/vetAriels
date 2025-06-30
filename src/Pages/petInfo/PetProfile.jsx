@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
-import { ActionButtons } from '@components/ActionButtons';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import CakeIcon from '@assets/cakeIcon.svg?react';
 import PawIcon from '@assets/pawIcon.svg?react';
 import BookIcon from '@assets/bookIcon.svg?react';

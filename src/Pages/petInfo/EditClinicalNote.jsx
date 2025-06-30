@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
-import { NoteForm } from '@components/NoteForm';
+import { NoteForm } from '@components/forms/NoteForm';
 
 function EditClinicalNote() {
 

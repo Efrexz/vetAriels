@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { HorizontalMenu } from '@components/HorizontalMenu';
+import { HorizontalMenu } from '@components/ui/HorizontalMenu';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import { UserProfile } from './UserProfile';
 import { UserPassword } from './UserPassword';

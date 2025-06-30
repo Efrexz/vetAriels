@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
-import { ActionButtons } from '@components/ActionButtons';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import FileIcon from '@assets/file-invoice.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import LightbulbIcon from '@assets/lightbulb.svg?react';

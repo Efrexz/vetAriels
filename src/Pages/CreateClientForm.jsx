@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
-import { ActionButtons } from '@components/ActionButtons';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import UserGroupIcon from '@assets/userGroupIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import DocumentIcon from '@assets/documentIcon.svg?react';

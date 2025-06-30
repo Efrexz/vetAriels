@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
-import { ActionButtons } from '@components/ActionButtons';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import ArrowDown from '@assets/arrowDown.svg?react';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
 import PillsIcon from '@assets/pillsIcon.svg?react';

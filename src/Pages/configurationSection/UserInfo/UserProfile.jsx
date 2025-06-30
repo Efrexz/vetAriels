@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { GlobalContext } from '@context/GlobalContext';
 import { useParams } from 'react-router-dom';
-import { SuccessModal } from '@components/SuccessModal';
+import { SuccessModal } from '@components/modals/SuccessModal';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import phoneIcon from '@assets/phoneIcon.svg?react';

@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
-import { ErrorModal } from "@components/ErrorModal";
+import { ErrorModal } from "@components/modals/ErrorModal";
 import PillsIcon from "@assets/pillsIcon.svg?react";
 import ArrowDown from "@assets/arrowDown.svg?react";
 import ArrowUp from "@assets/arrowUp.svg?react";
 import BarCodeIcon from "@assets/barCodeIcon.svg?react";
-import { ActionButtons } from "@components/ActionButtons";
+import { ActionButtons } from "@components/ui/ActionButtons";
 import PropTypes from "prop-types";
 
 function UpdateProduct({ productData }) {

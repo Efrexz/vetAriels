@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { FinancialContext } from '@context/FinancialContext';
-import { PaymentAndDepositModal } from '@components/PaymentAndDepositModal';
-import { ConfirmActionModal } from '@components/ConfirmActionModal';
+import { PaymentAndDepositModal } from '@components/modals/PaymentAndDepositModal';
+import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import FileInvoiceIcon from '@assets/file-invoice.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
