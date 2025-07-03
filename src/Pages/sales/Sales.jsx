@@ -1,12 +1,12 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
-import { AddPatientToQueueModal } from '@components/AddPatientToQueueModal';
-import { ClientSearchInput } from '@components/ClientSearchInput';
-import { ProductSearchInput } from '@components/ProductSearchInput';
-import { QuantityCounter } from '@components/QuantityCounter';
-import { PriceModificationModal } from '@components/PriceModificationModal';
-import { QuantityModificationModal } from '@components/QuantityModificationModal';
+import { AddPatientToQueueModal } from '@components/modals/AddPatientToQueueModal';
+import { ClientSearchInput } from '@components/search/ClientSearchInput';
+import { ProductSearchInput } from '@components/search/ProductSearchInput';
+import { QuantityCounter } from '@components/ui/QuantityCounter';
+import { PriceModificationModal } from '@components/modals/PriceModificationModal';
+import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
 import ShoppingCartPlusIcon from '@assets/shoppingCartPlus.svg?react';
 import NewUserIcon from '@assets/newUserIcon.svg?react';
 import UserPenIcon from '@assets/userPenIcon.svg?react';

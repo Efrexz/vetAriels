@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { FinancialContext } from '@context/FinancialContext';
 import { GlobalContext } from '@context/GlobalContext';
-import { ActionButtons } from '@components/ActionButtons';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import Fileinvoice from '@assets/file-invoice.svg?react';
 import MoneyIcon from '@assets/moneyIcon.svg?react';

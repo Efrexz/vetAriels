@@ -4,7 +4,7 @@ import { ClientsContext } from '@context/ClientsContext';
 import { ClientProfile } from './ClientProfile';
 import { ClientPets } from './ClientPets';
 import { PurchaseHistory } from './PurchaseHistory';
-import { HorizontalMenu } from '@components/HorizontalMenu';
+import { HorizontalMenu } from '@components/ui/HorizontalMenu';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 function ClientInfo() {

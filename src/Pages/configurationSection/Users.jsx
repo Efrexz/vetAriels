@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ConfirmActionModal } from '@components/ConfirmActionModal';
+import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import { GlobalContext } from '@context/GlobalContext';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';

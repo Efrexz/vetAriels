@@ -1,9 +1,12 @@
-import { ClientSearchInput } from './ClientSearchInput';
+import { ClientSearchInput } from '@components/search/ClientSearchInput';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import XIcon from '@assets/xIcon.svg?react';
-import PropTypes from "prop-types";
 
-function SearchModal({ onClose }) {
+interface SearchModalProps {
+  onClose: () => void;
+}
+
+function SearchModal ({ onClose }: SearchModalProps)  {
 
     return (
         <div
@@ -38,7 +41,3 @@ function SearchModal({ onClose }) {
 }
 
 export { SearchModal };
-
-SearchModal.propTypes = {
-    onClose: PropTypes.func
-}

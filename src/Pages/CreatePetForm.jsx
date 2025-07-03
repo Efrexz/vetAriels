@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
-import { ActionButtons } from '@components/ActionButtons';
-import { ClientSearchInput } from '@components/ClientSearchInput';
+import { ActionButtons } from '@components/ui/ActionButtons';
+import { ClientSearchInput } from '@components/search/ClientSearchInput';
 import PawIcon from '@assets/pawIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import CakeIcon from '@assets/cakeIcon.svg?react';

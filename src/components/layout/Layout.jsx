@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavBar } from "./NavBar";
+import { NavBar } from "@components/layout/NavBar";
 import { SideBarMenu } from "./SideBarMenu";
 import { GlobalContext } from "@context/GlobalContext";
 import BurguerMenuIcon from '@assets/burguerMenuIcon.svg?react';

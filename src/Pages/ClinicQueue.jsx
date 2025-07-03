@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
-import { EditQueuePatientModal } from '@components/EditQueuePatientModal';
-import { ConfirmActionModal } from '@components/ConfirmActionModal';
+import { EditQueuePatientModal } from '@components/modals/EditQueuePatientModal';
+import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import BookIcon from '@assets/bookIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';

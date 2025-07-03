@@ -1,4 +1,4 @@
-import { ActionButtons } from '@components/ActionButtons';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import { useNavigate } from 'react-router-dom';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import PropTypes from "prop-types";

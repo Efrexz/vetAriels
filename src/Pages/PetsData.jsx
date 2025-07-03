@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
-import { DeleteModal } from '@components/DeleteModal';
+import { DeleteModal } from '@components/modals/DeleteModal';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';

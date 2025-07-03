@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ClientsContext } from "@context/ClientsContext";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
-import { ErrorModal } from "./ErrorModal";
+import { ErrorModal } from "../modals/ErrorModal";
 import PropTypes from "prop-types";
 
 

@@ -2,15 +2,15 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from '@context/GlobalContext';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
-import { QuantityCounter } from '@components/QuantityCounter';
-import { ProductSearchInput } from '@components/ProductSearchInput';
-import { QuantityModificationModal } from '@components/QuantityModificationModal';
-import { ErrorModal } from '@components/ErrorModal';
+import { QuantityCounter } from '@components/ui/QuantityCounter';
+import { ProductSearchInput } from '@components/search/ProductSearchInput';
+import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
+import { ErrorModal } from '@components/modals/ErrorModal';
 import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import PropTypes from "prop-types";
-import { ActionButtons } from '../../components/ActionButtons';
+import { ActionButtons } from '../../components/ui/ActionButtons';
 
 
 

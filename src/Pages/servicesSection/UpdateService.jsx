@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
-import { SuccessModal } from "@components/SuccessModal";
-import { ErrorModal } from "@components/ErrorModal";
-import { ActionButtons } from "@components/ActionButtons";
+import { SuccessModal } from "@components/modals/SuccessModal";
+import { ErrorModal } from "@components/modals/ErrorModal";
+import { ActionButtons } from "@components/ui/ActionButtons";
 import PropTypes from "prop-types";
 
 function UpdateService({ serviceData }) {
@@ -79,8 +79,8 @@ function UpdateService({ serviceData }) {
                     <div
                         key={index}
                         className={`mb-4 ${field.name === 'serviceName'
-                                ? 'col-span-1 sm:col-span-2 md:col-span-4'
-                                : 'col-span-1 sm:col-span-1 md:col-span-2'
+                            ? 'col-span-1 sm:col-span-2 md:col-span-4'
+                            : 'col-span-1 sm:col-span-1 md:col-span-2'
                             }`}
                     >
                         <label className="block text-gray-500 font-medium mb-2" htmlFor={field.name}>
@@ -93,8 +93,8 @@ function UpdateService({ serviceData }) {
                                 value={formData[field.name]}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
-                                        ? 'border-red-500'
-                                        : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'
+                                    ? 'border-red-500'
+                                    : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'
                                     }`}
                             />
                         ) : (
@@ -103,8 +103,8 @@ function UpdateService({ serviceData }) {
                                 value={formData[field.name]}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
-                                        ? 'border-red-500'
-                                        : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'
+                                    ? 'border-red-500'
+                                    : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'
                                     }`}
                             >
                                 {field?.options?.map((option, i) => (

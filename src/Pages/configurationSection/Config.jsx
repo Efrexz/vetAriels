@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { GlobalContext } from '@context/GlobalContext';
-import { HorizontalMenu } from '@components/HorizontalMenu';
-import { SuccessModal } from "@components/SuccessModal";
+import { HorizontalMenu } from '@components/ui/HorizontalMenu';
+import { SuccessModal } from "@components/modals/SuccessModal";
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
 import PhoneIcon from '@assets/phoneIcon.svg?react';

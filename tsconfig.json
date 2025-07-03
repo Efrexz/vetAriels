@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@context/*": ["src/context/*"],
+    },
+    "target": "es5", // Compila a una versión de JS compatible con navegadores antiguos
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true, // ¡CRÍTICO! Permite que archivos JS y TS convivan en el mismo proyecto.
+    "skipLibCheck": true, // Evita revisar los tipos de las librerías en node_modules
+    "esModuleInterop": true, // Mejora la compatibilidad con módulos CommonJS
+    "allowSyntheticDefaultImports": true,
+    "strict": true, // Activa todas las revisiones estrictas de tipos
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext", // Usa el sistema de módulos moderno
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx", // Le dice a TS cómo manejar el JSX
+    "types": ["vite/client"] // Necesario para que Vite reconozca variables como import.meta.env
+  },
+  "include": [
+    "src" // Le dice a TS que solo revise los archivos dentro de la carpeta 'src'
+  ]
+}

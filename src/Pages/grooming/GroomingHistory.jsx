@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { ClientsContext } from '@context/ClientsContext';
-import { UpdateStateModal } from '@components/UpdateStateModal';
-import { ConfirmActionModal } from '@components/ConfirmActionModal';
+import { UpdateStateModal } from '@components/modals/UpdateStateModal';
+import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import BathIcon from '@assets/bathIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
