@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext.jsx";
 import { UpdateProduct } from "./UpdateProduct.jsx";
 import { EditProductPrice } from "./EditProductPrice.jsx";
-import { HorizontalMenu } from "@components/ui/HorizontalMenu.jsx";
+import { HorizontalMenu } from "@components/ui/HorizontalMenu";
 
 function ProductInfo() {
 

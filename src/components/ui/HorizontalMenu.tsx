@@ -1,9 +1,19 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import PropTypes from "prop-types";
 
-function HorizontalMenu({ mode }) {
-    const [selectedTab, setSelectedTab] = useState(() => {
+type Mode = 'clients' | 'pets' | 'services' | 'products' | 'user' | 'restock' | 'discharge';
+
+interface HorizontalMenuProps {
+    mode: Mode;
+}
+
+interface Tab {
+    name: string;
+    url: string;
+}
+
+function HorizontalMenu({ mode }: HorizontalMenuProps) {
+    const [selectedTab, setSelectedTab] = useState<string>(() => {
         switch (mode) {
             case 'user':
                 return 'Datos personales';
@@ -15,12 +25,11 @@ function HorizontalMenu({ mode }) {
         }
     });
 
-    const handleTabClick = (tabName) => {
+    function handleTabClick (tabName : string) {
         setSelectedTab(tabName);
     };
 
-    // Configuración de pestañas según el modo
-    const tabsConfig = {
+    const tabsConfig: Record<Mode, Tab[]> = {
         clients: [
             { name: 'Editar', url: "update" },
             { name: 'Mascotas', url: "pets" },
@@ -57,10 +66,10 @@ function HorizontalMenu({ mode }) {
         ],
     };
 
-    const { id } = useParams();
+     const { id } = useParams<{ id: string }>();
 
     // Determina la URL base según el modo
-    const baseUrl = {
+    const baseUrl: Record<Mode, string>  = {
         clients: `/clients/client/${id}`,
         pets: `/pets/pet/${id}`,
         services: `/service/${id}`,
@@ -68,16 +77,16 @@ function HorizontalMenu({ mode }) {
         user: `/config/profile/${id}`,
         restock: `/charges/charge/${id}`,
         discharge: `/discharges/discharge/${id}`,
-    }[mode];
+    };
 
-    const alternativeStyles = mode === 'restock' || mode === 'discharge' || mode === 'services' || mode === "products";
+    const hasAlternativeStyles = ['restock', 'discharge', 'services', 'products'].includes(mode);
     return (
-        <div className={`${alternativeStyles ? "border-b-2 border-gray-200 pb-4 mb-4" : ""}`}>
+        <div className={`${hasAlternativeStyles  ? "border-b-2 border-gray-200 pb-4 mb-4" : ""}`}>
             <nav className="flex flex-wrap gap-2 md:gap-6" aria-label="Tabs">
-                {tabsConfig[mode]?.map((tab, index) => (
+                {tabsConfig[mode]?.map((tab) => (
                     <Link
-                        key={index}
-                        to={`${baseUrl}/${tab.url}`}
+                        key={tab.name}
+                        to={`${baseUrl[mode]}/${tab.url}`}
                         className={`shrink-0 rounded-lg px-4 py-2 text-sm font-bold transition-all
                         ${selectedTab === tab.name ? "bg-sky-400 text-white" : "text-sky-500 hover:text-sky-600 hover:bg-gray-50"}`}
                         onClick={() => handleTabClick(tab.name)}
@@ -91,7 +100,3 @@ function HorizontalMenu({ mode }) {
 }
 
 export { HorizontalMenu };
-
-HorizontalMenu.propTypes = {
-    mode: PropTypes.string
-}
