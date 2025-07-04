@@ -12,6 +12,7 @@ export default defineConfig(() => {
         "@components": "/src/components",
         "@pages": "/src/pages",
         "@context": "/src/context",
+        "@t": "/src/types",
       },
     },
   };
