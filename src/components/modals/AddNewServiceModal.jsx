@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
-import ReturnIcon from '@assets/returnIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
 import PillsIcon from '@assets/pillsIcon.svg?react';
 import PropTypes from "prop-types";
 
@@ -19,7 +17,7 @@ function AddNewServiceModal({ onClose }) {
         line: '',
         category: '',
         cost: 0,
-        price: 0,
+        salePrice: 0,
     });
 
     // Validación de los campos
@@ -35,8 +33,8 @@ function AddNewServiceModal({ onClose }) {
         if (!formData.category || formData.category === "Seleccione") {
             newErrors.category = 'Este campo es obligatorio';
         }
-        if (!formData.price || formData.price <= 0) {
-            newErrors.price = 'El precio del servicio no puede ser menor a 0';
+        if (!formData.salePrice || formData.salePrice <= 0) {
+            newErrors.salePrice = 'El precio del servicio no puede ser menor a 0';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
@@ -64,7 +62,7 @@ function AddNewServiceModal({ onClose }) {
             line: formData.line,
             category: formData.category,
             cost: Number(formData.cost),
-            salePrice: Number(formData.price),
+            salePrice: Number(formData.salePrice),
             registrationDate: currentDate,
             registrationTime: currentTime,
             status: true,
@@ -105,7 +103,7 @@ function AddNewServiceModal({ onClose }) {
         },
         {
             label: 'Precio del servicio (incluido impuestos)',
-            name: 'price',
+            name: 'salePrice',
             type: 'number',
             icon: MoneyIcon,
             smallWidth: true,

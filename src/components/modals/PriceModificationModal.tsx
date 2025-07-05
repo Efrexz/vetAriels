@@ -1,22 +1,29 @@
 import { useState } from 'react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
-import PropTypes from "prop-types";
 
+import type { Product, Service } from '@t/inventory.types';
 
+type EditableItem = Product | Service;
 
-function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) {
-    const [itemPrice, setItemPrice] = useState(productToEdit?.salePrice)
+interface PriceModificationModalProps {
+    onClose: () => void;
+    productToEdit: EditableItem;
+    updateProductPrice: (updatedProduct: EditableItem) => void;
+}
 
-    function handleChange(e) {
-        setItemPrice(e.target.value)
+function PriceModificationModal({ onClose, productToEdit, updateProductPrice }: PriceModificationModalProps) {
+    const [itemPrice, setItemPrice] = useState<number>(productToEdit?.salePrice || 0);
+
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const valueAsNumber = parseFloat(e.target.value);
+        setItemPrice(isNaN(valueAsNumber) ? 0 : valueAsNumber) 
     }
-
 
     function editPrice() {
         const updatedProduct = {
             ...productToEdit,
-            salePrice: Number(itemPrice),
+            salePrice: itemPrice,
         };
         updateProductPrice(updatedProduct);
         onClose();
@@ -36,9 +43,10 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
                             name="price"
                             type="number"
                             placeholder="Precio de venta"
-                            value={itemPrice}
+                            value={itemPrice === 0 && '' || itemPrice}
                             onChange={handleChange}
-                            className="border border-gray-300 rounded-lg py-2 px-4 w-full hover:border-blue-300 focus-within:border-blue-300"
+                            className="border border-gray-300 rounded-lg py-2 px-4 w-full hover:border-blue-300 focus-within:border-blue-300 outline-none"
+                            autoFocus
                         />
                     </div>
 
@@ -47,7 +55,8 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
                 <div className="flex flex-col xs:flex-row justify-end mt-6 gap-4">
                     <button
                         className="border bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 flex items-center gap-3"
-                        onClick={() => onClose()}
+                        onClick={onClose}
+                        type='button'
                     >
                         <ReturnIcon className="w-5 h-5 text-white" />
                         CANCELAR
@@ -55,6 +64,7 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
                     <button
                         className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
                         onClick={editPrice}
+                        type='button'
                     >
                         <PlusIcon className="w-5 h-5 text-white" />
                         CAMBIAR PRECIO
@@ -66,9 +76,3 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }) 
 }
 
 export { PriceModificationModal };
-
-PriceModificationModal.propTypes = {
-    onClose: PropTypes.func,
-    productToEdit: PropTypes.object,
-    updateProductPrice: PropTypes.func
-}

@@ -2,7 +2,7 @@ import { ActionButtons } from '@components/ui/ActionButtons';
 import { useNavigate } from 'react-router-dom';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 
-import { RecordFormData } from '@t/clinical.types';
+import type { RecordFormData } from '@t/clinical.types';
 
 interface RecordFormProps {
     formData: RecordFormData

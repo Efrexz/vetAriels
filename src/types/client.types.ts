@@ -1,4 +1,5 @@
 import type { ClinicalRecord } from './clinical.types';
+import type { Product } from './inventory.types';
 
 export interface Pet {
   id: string;
@@ -30,6 +31,7 @@ export interface Client {
   reference: string;
   observations: string;
   pets: any[];
+  products: Product[];
 }
 
 export interface PetInQueue {
