@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
-
 import type { Product, Service } from '@t/inventory.types';
 
 type EditableItem = Product | Service;
