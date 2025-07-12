@@ -1,24 +1,23 @@
-export interface PhysiologicalConstants {
-  temperature: string;
-  heartRate: string;
-  weight: string;
-  oxygenSaturation: string;
+import type { Pet } from './client.types';
+import type { PurchasedItem } from './inventory.types';
+
+// tipo base para los pacientes de la cola
+interface QueueItem {
+    id: number | string;
+    petData: Pet;
+    ownerName: string;
+    notes: string;
+    dateOfAttention: string;
+    timeOfAttention: string;
+    state: 'Pendiente' | 'Terminado' | 'En espera' | 'En Atención' | 'Suspendido';
 }
 
-export interface ClinicalRecord {
-  id: number;
-  dateTime: string;
-  reason: string;
-  anamnesis: string;
-  physiologicalConstants: PhysiologicalConstants;
-  clinicalExam: string;
-  createdBy: string;
+export interface GroomingQueueItem extends QueueItem {
+    turn: number;
+    systemCode: string;
+    productsAndServices: PurchasedItem[];
 }
 
-export interface RecordFormData {
-  dateTime: string;
-  reason: string;
-  anamnesis: string;
-  physiologicalConstants: PhysiologicalConstants;
-  clinicalExam: string;
+export interface MedicalQueueItem extends QueueItem {
+    assignedDoctor: string;
 }

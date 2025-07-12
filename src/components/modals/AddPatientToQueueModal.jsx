@@ -36,6 +36,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
             id: generateId(),
             assignedDoctor: selectedDoctor,
             petData: petSelected,
+            ownerName: petSelected.ownerName,
             notes,
             dateOfAttention: currentDate,
             timeOfAttention: currentTime,
