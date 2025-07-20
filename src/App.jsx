@@ -1,7 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { GlobalProvider } from './context/GlobalContext.jsx';
 import { ClientsProvider } from './context/ClientsContext';
-import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext.jsx';
+import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext';
 import { FinancialProvider } from './context/FinancialContext';
 import { ProtectedRoute } from './components/ProtectedRoute.jsx';
 import { DashBoard } from './Pages/DashBoard.jsx';

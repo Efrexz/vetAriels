@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext.jsx";
+import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
 import { UpdateProduct } from "./UpdateProduct.jsx";
 import { EditProductPrice } from "./EditProductPrice.jsx";
 import { HorizontalMenu } from "@components/ui/HorizontalMenu";

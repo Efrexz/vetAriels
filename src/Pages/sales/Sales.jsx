@@ -40,7 +40,7 @@ function Sales() {
     const isClientSelected = clients.find(client => client.id === Number(clientId));
 
     //obtenemos las mascotas que pertenecen al cliente seleccionado
-    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(clientId));
+    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(clientId)).sort((a, b) => Number(a.hc) - Number(b.hc));
 
     //estado para el evento de hover sobre el nombre de las mascotas que aparecen al seleccionar un cliente
     const [hoveredPetId, setHoveredPetId] = useState(null);
