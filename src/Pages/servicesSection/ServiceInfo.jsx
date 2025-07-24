@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext.jsx";
+import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
 import { useParams } from "react-router-dom";
 import { UpdateService } from "./UpdateService.jsx";
 import { EditServicePrice } from "./EditServicePrice.jsx";

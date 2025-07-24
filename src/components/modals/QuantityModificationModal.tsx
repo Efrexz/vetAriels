@@ -1,28 +1,39 @@
 import { useState } from 'react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
-import PropTypes from "prop-types";
+
+type ModalMode = 'sales' | 'discharge' | 'restock';
+
+interface QuantityModificationModalProps {
+    onClose: () => void;
+    quantity: number;
+    changeQuantity: (quantity: number) => void;
+    maxQuantity?: number;
+    mode: ModalMode;
+}
 
 
+function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuantity, mode }: QuantityModificationModalProps) {
 
-function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuantity, mode }) {
+    const [itemQuantity, setItemQuantity] = useState<number>(quantity);
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const [itemQuantity, setItemQuantity] = useState(quantity);
-    const [errorMessage, setErrorMessage] = useState(null);
-
-    function handleChange(e) {
-        setItemQuantity(e.target.value);
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const valueAsNumber = parseInt(e.target.value, 10);
+        // Si el valor no es un número válido (está vacío), lo tratamos como 0
+        setItemQuantity(isNaN(valueAsNumber) ? 0 : valueAsNumber);
     }
 
     function editQuantity() {
-        if (mode === "discharge" || mode === "sales") {
+        //Para solucinar el error que muestra vsCode de maxQuantity puede ser undefined
+        if ((mode === "discharge" || mode === "sales") && maxQuantity !== undefined) {
             // En descarga o venta, no permitimos que la cantidad supere el stock disponible
             if (itemQuantity > maxQuantity) {
                 setErrorMessage('La cantidad seleccionada excede el stock disponible.');
                 return;
             }
         }
-        changeQuantity(parseInt(itemQuantity));//nos aseguramos de que el valor sea un numero para evitar el error que ocurre al enviarlo y lo toma como un string. Luego al modificar la cantidad con los botones genera el bug que lo suma como string
+        changeQuantity(itemQuantity);
         onClose();
     }
 
@@ -39,6 +50,7 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
                             value={itemQuantity}
                             onChange={handleChange}
                             className={`border ${errorMessage ? "border-red-400 hover:border-red-400" : "border-gray-300 hover:border-blue-300 focus-within:border-blue-300"} rounded-lg py-2 px-4 w-full   focus:outline-none text-center`}
+                            autoFocus
                         />
                         {
                             errorMessage && (
@@ -51,14 +63,16 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
                 <div className="flex flex-col xs:flex-row justify-end mt-4 gap-4 text-sm">
                     <button
                         className="border bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 flex items-center gap-3"
-                        onClick={() => onClose()}
+                        onClick={onClose}
+                        type='button'
                     >
                         <ReturnIcon className="w-4 h-4 text-white" />
                         CANCELAR
                     </button>
                     <button
                         className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                        onClick={() => editQuantity()}
+                        onClick={editQuantity}
+                        type='button'
                     >
                         <PlusIcon className="w-4 h-4 text-white" />
                         CONFIRMAR
@@ -71,11 +85,3 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
 }
 
 export { QuantityModificationModal };
-
-QuantityModificationModal.propTypes = {
-    onClose: PropTypes.func,
-    quantity: PropTypes.number,
-    changeQuantity: PropTypes.func,
-    maxQuantity: PropTypes.number,
-    mode: PropTypes.string
-}

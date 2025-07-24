@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext.jsx';
+import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
 import { AddNewServiceModal } from '@components/modals/AddNewServiceModal.jsx';
 import { DeleteModal } from '@components/modals/DeleteModal.jsx';
 import PlusIcon from '@assets/plusIcon.svg?react';

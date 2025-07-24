@@ -1,7 +1,10 @@
-import PropTypes from "prop-types";
 import AlertIcon from '@assets/alertIcon.svg?react';
 
-function SuccessModal({ onClose }) {
+interface SuccessModalProps {
+    onClose: () => void;
+}
+
+function SuccessModal({ onClose }: SuccessModalProps) {
 
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50">
@@ -31,8 +34,3 @@ function SuccessModal({ onClose }) {
 }
 
 export { SuccessModal };
-
-SuccessModal.propTypes = {
-    onClose: PropTypes.func,
-    typeOfError: PropTypes.string
-}

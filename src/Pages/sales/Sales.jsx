@@ -40,7 +40,7 @@ function Sales() {
     const isClientSelected = clients.find(client => client.id === Number(clientId));
 
     //obtenemos las mascotas que pertenecen al cliente seleccionado
-    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(clientId));
+    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(clientId)).sort((a, b) => Number(a.hc) - Number(b.hc));
 
     //estado para el evento de hover sobre el nombre de las mascotas que aparecen al seleccionar un cliente
     const [hoveredPetId, setHoveredPetId] = useState(null);
@@ -126,7 +126,7 @@ function Sales() {
 
     const totalPrice = selectedProducts.reduce(
         //coloco salePrice o price porque en los servicio el precio esta como price y en los productos salePrice
-        (acc, product) => acc + (product.salePrice || product.price) * product.quantity,
+        (acc, product) => acc + (product.salePrice) * product.quantity,
         0
     );
 
@@ -337,7 +337,7 @@ function Sales() {
                                                 setIsQuantityModalOpen(false)
                                             }}
                                         >
-                                            {product.salePrice || product.price}
+                                            {product.salePrice}
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
@@ -355,7 +355,7 @@ function Sales() {
                                             }} />
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {(product.salePrice || product.price) * product.quantity}
+                                        {(product.salePrice) * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
@@ -363,7 +363,7 @@ function Sales() {
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {(product.salePrice || product.price) * product.quantity}
+                                        {(product.salePrice) * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <select className="border rounded p-1">

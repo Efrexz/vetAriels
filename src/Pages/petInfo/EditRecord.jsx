@@ -2,8 +2,6 @@ import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RecordForm } from '@components/forms/RecordForm';
 import { ClientsContext } from '@context/ClientsContext';
-import XIcon from '@assets/xIcon.svg?react';
-
 
 function EditRecord() {
     const { updateRecord, petsData } = useContext(ClientsContext);
@@ -26,6 +24,7 @@ function EditRecord() {
         clinicalExam: record.clinicalExam || "",
         id: record.id,
     });
+
 
     function handleChange(e) {
         const { id, value } = e.target;

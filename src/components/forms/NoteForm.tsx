@@ -1,9 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
-import PropTypes from "prop-types";
 
-function NoteForm({ notes, handleChange, onSubmit, dateTime }) {
+interface NoteFormProps {
+  notes: string;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSubmit: () => void;
+  dateTime: string;
+}
+
+function NoteForm({ notes, handleChange, onSubmit, dateTime }: NoteFormProps) {
     const navigate = useNavigate();
     return (
         <div className="w-full max-w-[1200px] mx-auto bg-white shadow-md rounded-lg  flex flex-col min-h-[400px]">
@@ -55,10 +61,3 @@ function NoteForm({ notes, handleChange, onSubmit, dateTime }) {
 }
 
 export { NoteForm };
-
-NoteForm.propTypes = {
-    notes: PropTypes.string,
-    handleChange: PropTypes.func,
-    onSubmit: PropTypes.func,
-    dateTime: PropTypes.string,
-}
