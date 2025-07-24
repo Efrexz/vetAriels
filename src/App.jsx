@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { GlobalProvider } from './context/GlobalContext.jsx';
+import { GlobalProvider } from './context/GlobalContext';
 import { ClientsProvider } from './context/ClientsContext';
 import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext';
 import { FinancialProvider } from './context/FinancialContext';
