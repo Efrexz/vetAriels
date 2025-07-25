@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useEffect, useState, ReactNode, useContext} from 'react';
 import { User, Role, CompanyData } from '@t/user.types';
 
 type ActiveIconType = 'patients' | 'baths' | 'user' | null;
@@ -252,5 +252,13 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         </GlobalContext.Provider>
     );
 }
+
+  export function useGlobal(): GlobalContextType {
+    const context = useContext(GlobalContext);
+    if (context === undefined) {
+        throw new Error('useGlobal debe ser usado dentro de un GlobalProvider');
+    }
+    return context;
+    };
 
 export { GlobalContext, GlobalProvider };
