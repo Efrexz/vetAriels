@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, ReactNode, useRef  } from 'react';
+import { createContext, useEffect, useState, ReactNode, useRef, useContext  } from 'react';
 import { Client, Pet, PetRecord } from '@t/client.types';
 import { MedicalQueueItem, GroomingQueueItem } from '@t/clinical.types';
 import { PurchasedItem } from '@t/inventory.types';
@@ -236,5 +236,13 @@ function ClientsProvider({ children }: ClientsProviderProps) {
         </ClientsContext.Provider>
     );
 }
+
+  export function useClients(): ClientsContextType {
+    const context = useContext(ClientsContext);
+    if (context === undefined) {
+        throw new Error('useClients debe ser usado dentro de un ClientsProvider');
+    }
+    return context;
+    };
 
 export { ClientsContext, ClientsProvider };
