@@ -7,7 +7,7 @@ type PhysiologicalConstants = {
     oxygenSaturation: string;
 };
 
-interface ConsultationRecord {
+export interface ConsultationRecord {
     id: number;
     dateTime: string;
     reason: string;
@@ -41,6 +41,7 @@ export interface Pet {
     species: 'CANINO' | 'FELINO';
     breed: string;
     sex: 'MACHO' | 'HEMBRA';
+    esterilized: "SI" | "NO";
     active: boolean;
     records?: PetRecord[];
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 
@@ -18,7 +18,7 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
     const [itemQuantity, setItemQuantity] = useState<number>(quantity);
     const [errorMessage, setErrorMessage] = useState<string>("");
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
         const valueAsNumber = parseInt(e.target.value, 10);
         // Si el valor no es un número válido (está vacío), lo tratamos como 0
         setItemQuantity(isNaN(valueAsNumber) ? 0 : valueAsNumber);

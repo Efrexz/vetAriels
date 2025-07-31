@@ -1,21 +1,21 @@
+import { ChangeEvent } from 'react';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { useNavigate } from 'react-router-dom';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
-
-import type { RecordFormData } from '@t/clinical.types';
+import { ConsultationRecord } from '@t/client.types';
 
 interface RecordFormProps {
-    formData: RecordFormData
-    handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    formData: ConsultationRecord
+    handleChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onSubmit: () => void;
     submitText?: string;
 }
 
-function RecordForm({ 
-  formData, 
-  handleChange, 
-  onSubmit, 
-  submitText 
+function RecordForm({
+  formData,
+  handleChange,
+  onSubmit,
+  submitText
 }: RecordFormProps) {
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ function RecordForm({
   };
 
   return (
-    <form> 
+    <form>
       <div className="space-y-8 p-4 text-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-lg">
           <div>

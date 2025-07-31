@@ -29,6 +29,7 @@ function CreatePetForm() {
         species: '',
         breed: '',
         sex: '',
+        esterilized: '',
     });
 
     // Validación de los campos
@@ -76,6 +77,7 @@ function CreatePetForm() {
             breed: formData.breed || "CRUCE",
             sex: formData.sex || "MACHO",
             active: true,
+            esterilized: formData.esterilized || "NO",
         };
 
         addPet(newPet, Number(id), formData.owner);

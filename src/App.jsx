@@ -23,7 +23,7 @@ import { CreateClientForm } from './Pages/CreateClientForm.jsx';
 import { ClientInfo } from './Pages/clientData.jsx/ClientInfo.jsx';
 import { PetsData } from './Pages/PetsData.jsx';
 import { CreatePetForm } from './Pages/CreatePetForm.jsx';
-import { PetInfo } from './Pages/petInfo/PetInfo.jsx';
+import { PetInfo } from './Pages/petInfo/PetInfo';
 import { Products } from './Pages/products/Products.jsx';
 import { ProductInfo } from './Pages/products/ProductInfo.jsx';
 import { Discharges } from './Pages/products/Discharges.jsx';
