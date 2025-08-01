@@ -5,7 +5,7 @@ import { ProductsAndServicesProvider } from './context/ProductsAndServicesContex
 import { FinancialProvider } from './context/FinancialContext';
 import { ProtectedRoute } from './components/ProtectedRoute.jsx';
 import { DashBoard } from './Pages/DashBoard.jsx';
-import { Login } from './Pages/Login.jsx';
+import { Login } from './Pages/Login';
 import { Sales } from './Pages/sales/Sales.jsx';
 import { ActiveOrders } from './Pages/sales/ActiveOrders.jsx';
 import { Invoices } from './Pages/sales/Invoices.jsx';
@@ -43,7 +43,7 @@ import { Users } from './Pages/configurationSection/Users.jsx';
 import { CreateUser } from './Pages/configurationSection/CreateUser.jsx';
 import { EditUser } from './Pages/configurationSection/EditUser.jsx';
 import { UserInfo } from './Pages/configurationSection/UserInfo/index.jsx';
-import { NotFound } from './Pages/NotFound.jsx';
+import { NotFound } from './Pages/NotFound';
 import { Layout } from './components/layout/Layout';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import './index.css';
