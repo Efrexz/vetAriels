@@ -237,12 +237,12 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     );
 }
 
-  export function useClients(): ClientsContextType {
-    const context = useContext(ClientsContext);
-    if (context === undefined) {
-        throw new Error('useClients debe ser usado dentro de un ClientsProvider');
-    }
-    return context;
+    export function useClients(): ClientsContextType {
+        const context = useContext(ClientsContext);
+        if (context === undefined) {
+            throw new Error('useClients debe ser usado dentro de un ClientsProvider');
+        }
+        return context;
     };
 
 export { ClientsContext, ClientsProvider };

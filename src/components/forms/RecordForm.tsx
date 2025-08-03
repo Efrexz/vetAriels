@@ -19,7 +19,7 @@ function RecordForm({
 }: RecordFormProps) {
   const navigate = useNavigate();
 
-  const physiologicalConstantsPlaceholders: Record<string, string> = {
+  const physiologicalConstantsPlaceholders = {
     temperature: "Temperatura (°C)",
     heartRate: "Frec. Cardíaca (lpm)",
     weight: "Peso (kg)",
@@ -84,7 +84,7 @@ function RecordForm({
                   name={`physiologicalConstants.${key}`}
                   type='text' // Usar 'text' con pattern es más flexible que 'number' para decimales y símbolos
                   pattern="[0-9.,]*"
-                  placeholder={physiologicalConstantsPlaceholders[key]}
+                  placeholder={physiologicalConstantsPlaceholders[key as keyof typeof physiologicalConstantsPlaceholders]}
                   value={formData.physiologicalConstants[key as keyof typeof formData.physiologicalConstants]}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none hover:border-blue-300 focus-within:border-blue-300"

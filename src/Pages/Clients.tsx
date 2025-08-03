@@ -1,7 +1,8 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
 import { DeleteModal } from '@components/modals/DeleteModal';
+import { Client } from '@t/client.types';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -9,14 +10,11 @@ import UserGroupIcon from '@assets/userGroupIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import PawIcon from '@assets/pawIcon.svg?react';
 
-
-
 const tableHeaders = ["Fecha de registro", "Nombres y Apellidos", "Teléfono", "Email", "Direccion", "Opciones"];
 
 function Clients() {
-
-    const { clients } = useContext(ClientsContext);
-    const [clientDataToDelete, setClientDataToDelete] = useState(null);
+    const { clients } = useClients();
+    const [clientDataToDelete, setClientDataToDelete] = useState<Client | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -70,31 +68,31 @@ function Clients() {
                             </tr>
                         </thead>
                         <tbody>
-                            {clients.map((userData, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                            {clients.map((clientData) => (
+                                <tr key={clientData.id} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
                                     <td className="py-2 px-4 text-center border">
-                                        <div>{userData.date}</div>
-                                        <div>{userData.hour}</div>
+                                        <div>{clientData.date}</div>
+                                        <div>{clientData.hour}</div>
                                     </td>
-                                    <td className="py-2 px-4 text-center border">{userData.firstName + ", " + userData.lastName}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.phone1}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.email}</td>
-                                    <td className="py-2 px-4 text-center border">{userData.address}</td>
+                                    <td className="py-2 px-4 text-center border">{clientData.firstName + ", " + clientData.lastName}</td>
+                                    <td className="py-2 px-4 text-center border">{clientData.phone1}</td>
+                                    <td className="py-2 px-4 text-center border">{clientData.email}</td>
+                                    <td className="py-2 px-4 text-center border">{clientData.address}</td>
                                     <td className="py-8 px-4 text-center border">
                                         <div className="flex justify-center items-center h-full space-x-2">
                                             <PenIcon
                                                 className="w-4 h-4 text-green-500 cursor-pointer"
-                                                onClick={() => navigate(`/clients/client/${userData.id}/update`)} />
+                                                onClick={() => navigate(`/clients/client/${clientData.id}/update`)} />
                                             <PawIcon
                                                 className="w-4 h-4 text-[#7266BA] cursor-pointer"
-                                                onClick={() => navigate(`/clients/client/${userData.id}/pets`)} />
+                                                onClick={() => navigate(`/clients/client/${clientData.id}/pets`)} />
                                             <TrashIcon
                                                 className="w-4 h-4 text-red-500 cursor-pointer"
                                                 onClick={() => {
-                                                    setClientDataToDelete(userData)
+                                                    setClientDataToDelete(clientData)
                                                     setIsDeleteModalOpen(true)
                                                 }}
                                             />

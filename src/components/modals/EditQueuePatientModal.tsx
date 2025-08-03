@@ -1,24 +1,36 @@
-import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
-import { ClientsContext } from '@context/ClientsContext';
+import {  useState, ChangeEvent } from 'react';
+import { useClients } from '@context/ClientsContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
+import { MedicalQueueItem , QueueState } from '@t/clinical.types';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
-function EditQueuePatientModal({ onClose, queueData }) {
-    const { petsData } = useContext(ClientsContext);
-    const { updatePetInQueueMedical } = useContext(ClientsContext);
+interface EditQueuePatientModalProps {
+    onClose: () => void;
+    queueData: MedicalQueueItem;
+}
+
+function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProps) {
+    const { petsData, updatePetInQueueMedical } = useClients();
+
     const petsByOwner = petsData.filter(pet => pet.ownerId === queueData?.petData?.ownerId);
+
     // Estado del formulario
     const [selectedDoctor, setSelectedDoctor] = useState(queueData?.assignedDoctor);
-    const [selectedPet, setSelectedPet] = useState(queueData?.petData?.petName);
+    const [selectedPetId, setSelectedPetId] = useState(queueData?.petData?.id);
+
     const [notes, setNotes] = useState(queueData?.notes || '');
-    const [status, setStatus] = useState(queueData?.state);
+    const [status, setStatus] = useState<QueueState>(queueData?.state as QueueState);
 
     //De las mascotas filtradas por dueño, buscamos la que seleccionamos para poderle enviar de nuevo la nueva data
-    const newPetDataSelected = petsByOwner.find(pet => pet.petName === selectedPet);
+    const newPetDataSelected = petsByOwner.find(pet => pet.id === selectedPetId);
 
     function updateQueueData() {
-        const dataToUpdate = {
+        if (!newPetDataSelected) {
+            console.error("No se pudo encontrar la mascota seleccionada.");
+            return;
+        }
+
+        const dataToUpdate : Partial<MedicalQueueItem> = {
             ...queueData,
             assignedDoctor: selectedDoctor,
             petData: newPetDataSelected,
@@ -28,6 +40,21 @@ function EditQueuePatientModal({ onClose, queueData }) {
         updatePetInQueueMedical(queueData.id, dataToUpdate);
         onClose();
     }
+
+    function handleSelectChange (e: ChangeEvent<HTMLSelectElement>) {
+        const { id, value } = e.target;
+        switch (id) {
+            case 'doctor':
+                setSelectedDoctor(value);
+                break;
+            case 'pet':
+                setSelectedPetId(value);
+                break;
+            case 'status':
+                setStatus(value as QueueState);
+                break;
+        }
+    };
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center p-4 sm:p-6 z-50 overflow-y-auto">
@@ -58,7 +85,7 @@ function EditQueuePatientModal({ onClose, queueData }) {
                             id="doctor"
                             className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                             value={selectedDoctor}
-                            onChange={(e) => setSelectedDoctor(e.target.value)}
+                            onChange={handleSelectChange}
                         >
                             <option>Médico 1</option>
                             <option>Médico 2</option>
@@ -82,12 +109,15 @@ function EditQueuePatientModal({ onClose, queueData }) {
                         <select
                             id="pet"
                             className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
-                            value={selectedPet}
-                            onChange={(e) => { setSelectedPet(e.target.value) }}
+                            value={selectedPetId || ''}
+                            onChange={handleSelectChange}
                         >
                             {
-                                petsByOwner?.map((pet, index) => (
-                                    <option key={index}>{pet.petName}</option>
+                                petsByOwner?.map((pet) => (
+                                    // agregamos el id al value para solucionar el error que no encontraba a la mascota seleccionad porque tomaba el nombre como valor y necesitaba era el id para el find
+                                    <option key={pet.id} value={pet.id}>
+                                        {pet.petName}
+                                    </option>
                                 ))
                             }
                         </select>
@@ -112,7 +142,7 @@ function EditQueuePatientModal({ onClose, queueData }) {
                     <textarea
                         id="notes"
                         className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none "
-                        rows="4"
+                        rows={4}
                         placeholder="Escribe las notas aquí..."
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
@@ -127,7 +157,7 @@ function EditQueuePatientModal({ onClose, queueData }) {
                         id="status"
                         className="border border-gray-300 rounded-md p-2 w-full hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                         value={status}
-                        onChange={(e) => setStatus(e.target.value)}
+                        onChange={handleSelectChange}
                     >
                         <option>Atendido</option>
                         <option>En espera</option>
@@ -149,10 +179,5 @@ function EditQueuePatientModal({ onClose, queueData }) {
     );
 }
 
-
-EditQueuePatientModal.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    queueData: PropTypes.object.isRequired,
-};
 
 export { EditQueuePatientModal };

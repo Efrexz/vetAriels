@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState , ReactNode } from 'react';
+import { createContext, useEffect, useState , ReactNode, useContext } from 'react';
 
 import { Payment } from '@t/financial.types';
 
@@ -49,5 +49,13 @@ function FinancialProvider({ children }: FinancialProviderProps) {
         </FinancialContext.Provider>
     );
 }
+
+    export function useFinancial(): FinancialContextType {
+        const context = useContext(FinancialContext);
+        if (context === undefined) {
+            throw new Error('useFinancial debe ser usado dentro de un FinancialProvider');
+        }
+        return context;
+    };
 
 export { FinancialContext, FinancialProvider };

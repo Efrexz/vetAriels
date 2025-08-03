@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { MedicalQueueItem } from '@t/clinical.types';
 import { EditQueuePatientModal } from '@components/modals/EditQueuePatientModal';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import BookIcon from '@assets/bookIcon.svg?react';
@@ -9,7 +10,13 @@ import Stethoscope from '@assets/stethoscope.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 
-const headlinesOptions = [
+
+interface HeadlineOption {
+    type: string;
+    options: { value: string; label: string }[];
+}
+
+const headlinesOptions: HeadlineOption[] = [
     {
         type: "Cualquier-Usuario",
         options: [
@@ -31,31 +38,41 @@ const headlinesOptions = [
 
 const tableHeaders = ["N°", "Fecha de Atención", "Mascota", "Propietario", "Médico Asignado", "Estado", "Alerta", "Opciones"];
 
+// determinar el color de fondo según el estado
+function getStateColor(state: string) {
+    switch (state) {
+        case "En espera":
+            return "bg-red-500";
+        case "En atención":
+            return "bg-orange-500";
+        case "Atendido":
+            return "bg-green-500";
+        case "Suspendido":
+            return "bg-red-500";
+        default:
+            return "bg-gray-500";
+    }
+}
+
 function ClinicQueue() {
 
-    const { petsInQueueMedical } = useContext(ClientsContext);
+    const { petsInQueueMedical } = useClients();
     const [isEditQueueModalOpen, setIsEditQueueModalOpen] = useState(false);
     const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
-    const [patientToDelete, setPatientToDelete] = useState(null);
-    const [queueDataToEdit, setQueueDataToEdit] = useState(null);
+    const [patientToDelete, setPatientToDelete] = useState<MedicalQueueItem | null>(null);
+    const [queueDataToEdit, setQueueDataToEdit] = useState<MedicalQueueItem | null>(null);
 
     const navigate = useNavigate();
 
-    // determinar el color de fondo según el estado
-    function getStateColor(state) {
-        switch (state) {
-            case "En espera":
-                return "bg-red-500";
-            case "En atención":
-                return "bg-orange-500";
-            case "Atendido":
-                return "bg-green-500";
-            case "Suspendido":
-                return "bg-red-500";
-            default:
-                return "bg-gray-500";
-        }
-    }
+    function openEditModal (queueItem: MedicalQueueItem){
+        setQueueDataToEdit(queueItem);
+        setIsEditQueueModalOpen(true);
+    };
+
+    function openDeleteModal (queueItem: MedicalQueueItem){
+        setPatientToDelete(queueItem);
+        setIsConfirmActionModalOpen(true);
+    };
 
     return (
         <section className="container mx-auto p-4 sm:p-6">
@@ -125,7 +142,7 @@ function ClinicQueue() {
                         </thead>
                         <tbody>
                             {petsInQueueMedical.map((petInQueue, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                                <tr key={petInQueue.id} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
@@ -162,10 +179,7 @@ function ClinicQueue() {
                                             className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(
                                                 petInQueue?.state
                                             )} rounded-full cursor-pointer`}
-                                            onClick={() => {
-                                                setQueueDataToEdit(petInQueue);
-                                                setIsEditQueueModalOpen(true);
-                                            }}
+                                            onClick={() => openEditModal(petInQueue)}
                                         >
                                             {petInQueue?.state}
                                         </span>
@@ -177,17 +191,11 @@ function ClinicQueue() {
                                         <div className="flex justify-center items-center h-full space-x-2">
                                             <PenIcon
                                                 className="w-5 h-5 text-orange-500 cursor-pointer"
-                                                onClick={() => {
-                                                    setQueueDataToEdit(petInQueue);
-                                                    setIsEditQueueModalOpen(true);
-                                                }}
+                                                onClick={() => openEditModal(petInQueue)}
                                             />
                                             <TrashIcon
                                                 className="w-5 h-5 text-red-500 cursor-pointer"
-                                                onClick={() => {
-                                                    setPatientToDelete(petInQueue);
-                                                    setIsConfirmActionModalOpen(true);
-                                                }}
+                                                onClick={() => openDeleteModal(petInQueue)}
                                             />
                                         </div>
                                     </td>
