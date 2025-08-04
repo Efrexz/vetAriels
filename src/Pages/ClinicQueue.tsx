@@ -153,14 +153,14 @@ function ClinicQueue() {
                                             {petInQueue?.timeOfAttention}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-4 border">
+                                    <td className="py-2 px-2 border">
                                         <Link to={`/pets/pet/${petInQueue?.petData?.id}/update`}>
                                             <div>{petInQueue?.petData?.petName}</div>
                                             <div className="text-gray-500 text-sm">
                                                 {petInQueue?.petData?.breed} - {petInQueue?.petData?.species} -{" "}
                                                 {petInQueue?.petData?.sex}
                                             </div>
-                                            <div className="text-gray-500 text-sm italic">
+                                            <div className="text-gray-500 text-sm italic max-w-[200px] truncate whitespace-nowrap overflow-hidden">
                                                 Notas: {petInQueue?.notes}
                                             </div>
                                         </Link>

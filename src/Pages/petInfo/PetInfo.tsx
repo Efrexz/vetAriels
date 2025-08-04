@@ -43,7 +43,7 @@ function PetInfo() {
     const { petsData } = useClients();
     const { id, section = 'update' } = useParams<{ id: string; section?: string }>();
 
-    const individualPetData: Pet | undefined = petsData.find(pet => pet.hc === id);
+    const individualPetData: Pet | undefined = petsData.find(pet => pet.id === id);
 
     const petAge = calculateAge(individualPetData?.birthDate);
 

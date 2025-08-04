@@ -15,7 +15,7 @@ function ClientProfile() {
     const navigate = useNavigate();
 
 
-    const individualClientData = clients.find(client => client.id === Number(id));
+    const individualClientData = clients.find(client => client.id === id);
     const [errors, setErrors] = useState({});
 
 

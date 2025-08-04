@@ -8,6 +8,7 @@ import { QuantityModificationModal } from '@components/modals/QuantityModificati
 import { ClientSearchInput } from '@components/search/ClientSearchInput';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { ErrorModal } from '@components/modals/ErrorModal';
+import { generateUniqueId } from '@utils/idGenerator';
 import BathIcon from '@assets/bathIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import TagIcon from '@assets/tagIcon.svg?react';
@@ -35,7 +36,7 @@ function GroomingOrderCreation() {
 
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
     function addProductToTable(product) {
-        const provisionalId = Date.now();
+        const provisionalId = generateUniqueId();
         const newProduct = {
             ...product,
             petSelected,
@@ -77,10 +78,10 @@ function GroomingOrderCreation() {
 
     const navigate = useNavigate();
     const { id } = useParams();
-    const isClientSelected = clients.find(client => client.id === Number(id));
+    const isClientSelected = clients.find(client => client.id === id);
 
     //obtenemos las mascotas del propietario para poder mostrarlos en la lista del select
-    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(id));
+    const petsByOwner = petsData.filter(pet => pet.ownerId === id);
 
     const [petSelected, setPetSelected] = useState(petsByOwner[0]?.petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
 
@@ -111,13 +112,13 @@ function GroomingOrderCreation() {
         }
 
         const dataToSend = {
-            id: Date.now(),
+            id: generateUniqueId(),
             petData: petSelectedData,
             turn: petsInQueueGrooming.length > 0
                 ? petsInQueueGrooming[petsInQueueGrooming.length - 1].turn + 1
                 : 1, // Si la cola está vacía, el turno será 1
             systemCode: petSelectedData.hc,
-            ownerName: ` ${isClientSelected.firstName} ${isClientSelected.lastName}`,
+            ownerName: `${isClientSelected.firstName} ${isClientSelected.lastName}`,
             notes,
             dateOfAttention: currentDate,
             timeOfAttention: currentTime,

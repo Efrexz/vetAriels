@@ -115,7 +115,7 @@ function Products() {
                         <tbody>
                             {productsData.map((product, index) => (
                                 <tr key={index} className="hover:bg-gray-100 text-sm">
-                                    <td className="py-2 px-4 text-center border">{product?.systemCode.slice(0, 9).toUpperCase()}</td>
+                                    <td className="py-2 px-4 text-center border">{product?.systemCode.slice(0, 8).toUpperCase()}</td>
                                     <td className="py-2 px-4 text-left border">{product?.productName}</td>
                                     <td className="py-2 px-4 text-center border">{product?.brand}</td>
                                     <td className="py-2 px-4 text-center border">{product?.provider}</td>

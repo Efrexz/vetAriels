@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ClientsContext } from '@context/ClientsContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
+import { generateUniqueId } from '@utils/idGenerator';
 import UserGroupIcon from '@assets/userGroupIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import DocumentIcon from '@assets/documentIcon.svg?react';
@@ -70,7 +71,7 @@ function CreateClientForm() {
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newClient = {
-            id: Date.now(),
+            id: generateUniqueId(),
             firstName: formData.name,
             lastName: formData.lastName,
             email: formData.email,

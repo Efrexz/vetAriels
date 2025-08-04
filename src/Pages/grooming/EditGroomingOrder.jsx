@@ -8,6 +8,7 @@ import { QuantityModificationModal } from '@components/modals/QuantityModificati
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { SuccessModal } from '@components/modals/SuccessModal';
 import { ErrorModal } from '@components/modals/ErrorModal';
+import { generateUniqueId } from '@utils/idGenerator';
 import BathIcon from '@assets/bathIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import TagIcon from '@assets/tagIcon.svg?react';
@@ -30,9 +31,9 @@ function EditGroomingOrder() {
     const navigate = useNavigate();
 
     //obtenemos los datos del paciente en cola de la cola de grooming
-    const petInQueueGrommingData = petsInQueueGrooming.find((pet) => pet.id === Number(id));
+    const petInQueueGrommingData = petsInQueueGrooming.find((pet) => pet.id === id);
     //de acuerdo a los datos del paciente, accedemos a la propiedad ownerId para obtener los datos del propietario del paciente
-    const clientData = clients.find((client) => client.id === Number(petInQueueGrommingData?.petData?.ownerId));
+    const clientData = clients.find((client) => client.id === petInQueueGrommingData?.petData?.ownerId);
 
     //productos y servicios seleccionados
     const [selectedProducts, setSelectedProducts] = useState(petInQueueGrommingData?.productsAndServices || []);
@@ -59,7 +60,7 @@ function EditGroomingOrder() {
 
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
     function addProductToTable(product) {
-        const provisionalId = Date.now();
+        const provisionalId = generateUniqueId();
         const newProduct = {
             ...product,
             provisionalId,
@@ -140,7 +141,7 @@ function EditGroomingOrder() {
             notes,
             healthObservations: selectedObservations,
         };
-        updatePetInQueueGrooming(Number(id), dataToSend);
+        updatePetInQueueGrooming(id, dataToSend);
         setIsSuccessModalOpen(true);
     }
 

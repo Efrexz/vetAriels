@@ -64,7 +64,7 @@ function Charges() {
                         <tbody>
                             {restockData.map((restock, index) => (
                                 <tr key={index} className="hover:bg-gray-100 text-sm">
-                                    <td className="text-center border">{restock.id}</td>
+                                    <td className="text-center border">{restock.id.slice(0, 8).toUpperCase()}</td>
                                     <td className="text-center border">{restock.date} {restock.time}</td>
                                     <td className="px-4 text-start border">{restock.reason}</td>
                                     <td className="text-center border">{restock.responsible}</td>

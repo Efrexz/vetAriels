@@ -12,7 +12,7 @@ function ClientInfo() {
     const { clients } = useContext(ClientsContext);
     const { id, section } = useParams();
 
-    const individualClientData = clients.find(client => client.id === Number(id));
+    const individualClientData = clients.find(client => client.id === id);
 
     return (
         <div className="w-full max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto custom-scrollbar mt-3">

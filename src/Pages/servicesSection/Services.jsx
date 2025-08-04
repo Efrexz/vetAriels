@@ -99,7 +99,7 @@ function Services() {
                         <tbody>
                             {servicesData.map((service, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 text-center border-2">{service?.id}</td>
+                                    <td className="py-2 px-4 text-center border-2">{service?.id.slice(0, 8).toUpperCase()}</td>
                                     <td className="py-2 px-4 text-center border-2">
                                         <span className="block">{service?.registrationDate}</span>
                                         <span className="block text-sm text-gray-600">{service?.registrationTime}</span>

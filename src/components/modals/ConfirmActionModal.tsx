@@ -11,7 +11,7 @@ import DiskIcon from '@assets/diskIcon.svg?react';
 
 type OperationType = "medical" | "deleteGrooming" | "finishGrooming" | "returnGrooming" | "deleteUser" | "deleteRecordAndNote" | "payments";
 
-// type ElementDataType = MedicalQueueItem | GroomingQueueItem | User | PetRecord | Payment;
+type ElementDataType = MedicalQueueItem | GroomingQueueItem | User | PetRecord | Payment;
 
 type OperationConfig = {
     title: string;
@@ -60,7 +60,7 @@ const operationConfig: Record<OperationType, OperationConfig> = {
 };
 
 interface ConfirmActionModalProps {
-    elementData: any; // Usamos 'any' por ahora, pero lo ideal sería una unión de todos los tipos posibles
+    elementData: ElementDataType; // Usamos 'any' por ahora, pero lo ideal sería una unión de todos los tipos posibles
     onClose: () => void;
     typeOfOperation: OperationType;
 }

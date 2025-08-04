@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "@context/GlobalContext";
+import { generateUniqueId } from '@utils/idGenerator';
 import ReturnIcon from "@assets/returnIcon.svg?react";
 import PlusIcon from "@assets/plusIcon.svg?react";
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
@@ -69,7 +70,7 @@ function CreateUser() {
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newUser = {
-            id: Date.now(),
+            id: generateUniqueId(),
             email: formData.email,
             password: formData.password,
             name: formData.name,

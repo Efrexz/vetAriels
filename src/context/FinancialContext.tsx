@@ -3,15 +3,15 @@ import { createContext, useEffect, useState , ReactNode, useContext } from 'reac
 import { Payment } from '@t/financial.types';
 
 interface FinancialContextType {
-  paymentsData: Payment[];
-  addNewPayment: (newPayment: Payment) => void;
-  removePayment: (id: string) => void;
+    paymentsData: Payment[];
+    addNewPayment: (newPayment: Payment) => void;
+    removePayment: (id: string) => void;
 }
 
 const FinancialContext = createContext<FinancialContextType | undefined>(undefined);
 
 interface FinancialProviderProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 function FinancialProvider({ children }: FinancialProviderProps) {
@@ -24,9 +24,9 @@ function FinancialProvider({ children }: FinancialProviderProps) {
 
 
     const [paymentsData, setPaymentsData] = useState<Payment[]>(() => {
-    const savedData = localStorage.getItem('paymentsData');
-    return savedData ? JSON.parse(savedData) : initialPaymentsData;
-});
+        const savedData = localStorage.getItem('paymentsData');
+        return savedData ? JSON.parse(savedData) : initialPaymentsData;
+    });
 
     // Guardar en localStorage cada vez que cambien los estados
     useEffect(() => {

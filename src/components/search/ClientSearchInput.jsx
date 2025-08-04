@@ -10,7 +10,7 @@ function ClientSearchInput({ mode }) {
 
 
     const { id } = useParams();
-    const isClientSelected = clients.find(client => client.id === Number(id));
+    const isClientSelected = clients.find(client => client.id === id);
 
     const baseUrl = {
         sales: "/sales/client",
