@@ -1,13 +1,25 @@
-import { useContext, useState } from 'react';
-import { ClientsContext } from '@context/ClientsContext';
+import {  useState, ChangeEvent  } from 'react';
+import { useClients } from '@context/ClientsContext';
+import { GroomingQueueItem } from '@t/clinical.types';
 import DiskIcon from '@assets/diskIcon.svg?react';
-import PropTypes from "prop-types";
 
-function UpdateStateModal({ dataToUpdate, onClose, mode }) {
+type ModalMode = "history" | "grooming";
 
-    const { updatePetInQueueGroomingHistory, updatePetInQueueGrooming } = useContext(ClientsContext);
+type QueueItemState = "Pendiente" | "Terminado" | "En espera" | "En Atención" | "Suspendido";
 
-    const [state, setState] = useState(dataToUpdate?.state);
+
+interface UpdateStateModalProps {
+    dataToUpdate: GroomingQueueItem;
+    mode: ModalMode;
+    onClose: () => void;
+}
+
+
+function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps) {
+
+    const { updatePetInQueueGroomingHistory, updatePetInQueueGrooming } = useClients();
+
+    const [state, setState] = useState<QueueItemState>(dataToUpdate?.state);
 
     function updateState() {
         const updatedData = {
@@ -40,7 +52,7 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }) {
                         name="orderStatus"
                         className="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 p-2"
                         value={state}
-                        onChange={(e) => setState(e.target.value)}
+                        onChange={(e) => setState(e.target.value as QueueItemState)}
                     >
                         <option value="Pendiente">Pendiente</option>
                         <option value="En atención">En atención</option>
@@ -77,9 +89,3 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }) {
 }
 
 export { UpdateStateModal };
-
-UpdateStateModal.propTypes = {
-    dataToUpdate: PropTypes.object,
-    mode: PropTypes.string,
-    onClose: PropTypes.func
-}

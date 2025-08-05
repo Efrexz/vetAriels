@@ -60,7 +60,7 @@ const operationConfig: Record<OperationType, OperationConfig> = {
 };
 
 interface ConfirmActionModalProps {
-    elementData: ElementDataType; // Usamos 'any' por ahora, pero lo ideal sería una unión de todos los tipos posibles
+    elementData: ElementDataType;
     onClose: () => void;
     typeOfOperation: OperationType;
 }
@@ -98,11 +98,15 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                 removePetFromQueueGrooming(elementData.id);
                 break;
             case "finishGrooming":
-                removePetFromQueueGrooming(elementData.id);
-                addPetInQueueGroomingHistory(elementData);
+                if ('turn' in elementData) {
+                    removePetFromQueueGrooming(elementData.id);
+                    addPetInQueueGroomingHistory(elementData);
+                }
                 break;
             case "returnGrooming":
-                returnPetToQueueGrooming(elementData);
+                if ('turn' in elementData) {
+                    returnPetToQueueGrooming(elementData);
+                }
                 break;
             case "deleteUser":
                 removeUser(elementData.id);

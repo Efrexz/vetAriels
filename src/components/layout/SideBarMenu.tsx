@@ -22,9 +22,9 @@ import AngleDownIcon from '@assets/angleDown.svg?react';
 type IconComponent = React.FC<React.SVGProps<SVGSVGElement>>;
 
 interface SubCategory {
-  name: string;
-  path: string;
-  icon?: IconComponent;
+    name: string;
+    path: string;
+    icon?: IconComponent;
 }
 
 type Category = {
@@ -44,9 +44,7 @@ interface SideBarMenuProps {
     toggleSideMenu: () => void;
 }
 
-function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
-
-    const categories : Category[] = [
+const categories : Category[] = [
         {
             name: "Inicio",
             icon: HomeIcon,
@@ -185,6 +183,8 @@ function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
             ],
         },
     ]
+
+function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
 
     return (
         <ul className="space-y-1 w-full pt-10 lg:pt-0 pl-4 lg:pl-0 pb-6 md:pb-0">
