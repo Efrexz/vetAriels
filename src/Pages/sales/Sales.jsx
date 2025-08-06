@@ -7,6 +7,7 @@ import { ProductSearchInput } from '@components/search/ProductSearchInput';
 import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { PriceModificationModal } from '@components/modals/PriceModificationModal';
 import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
+import { generateUniqueId } from '@utils/idGenerator';
 import ShoppingCartPlusIcon from '@assets/shoppingCartPlus.svg?react';
 import NewUserIcon from '@assets/newUserIcon.svg?react';
 import UserPenIcon from '@assets/userPenIcon.svg?react';
@@ -37,10 +38,10 @@ function Sales() {
 
     const navigate = useNavigate();
     const { id: clientId } = useParams();
-    const isClientSelected = clients.find(client => client.id === Number(clientId));
+    const isClientSelected = clients.find(client => client.id === clientId);
 
     //obtenemos las mascotas que pertenecen al cliente seleccionado
-    const petsByOwner = petsData.filter(pet => pet.ownerId === Number(clientId)).sort((a, b) => Number(a.hc) - Number(b.hc));
+    const petsByOwner = petsData.filter(pet => pet.ownerId === clientId).sort((a, b) => Number(a.hc) - Number(b.hc));
 
     //estado para el evento de hover sobre el nombre de las mascotas que aparecen al seleccionar un cliente
     const [hoveredPetId, setHoveredPetId] = useState(null);
@@ -88,7 +89,7 @@ function Sales() {
 
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
     function addProductToTable(product) {
-        const provisionalId = Date.now();
+        const provisionalId = generateUniqueId();
         const newProduct = {
             ...product,
             provisionalId,
@@ -382,7 +383,7 @@ function Sales() {
                                             <button
                                                 className="text-red-500 hover:text-red-700"
                                                 onClick={() => {
-                                                    removeProductFromClient(Number(clientId), product.provisionalId);
+                                                    removeProductFromClient(clientId, product.provisionalId);
                                                     removeProduct(product.provisionalId)
                                                 }}
                                             >

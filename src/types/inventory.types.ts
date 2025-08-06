@@ -17,11 +17,11 @@ export interface Product {
     registrationDate: string;
     registrationTime: string;
     status: boolean;
-    id?: number | string;
+    id: string;
 }
 
 export interface Service {
-    id: number | string;
+    id: string;
     serviceName?: string;
     line: string;
     category: string;
@@ -34,7 +34,7 @@ export interface Service {
 }
 
 export interface PurchasedItem extends Partial<Product>, Partial<Service> {
-    provisionalId: number;
+    provisionalId: string;
     additionTime: string;
     additionDate: string;
     quantity: number;
@@ -43,7 +43,7 @@ export interface PurchasedItem extends Partial<Product>, Partial<Service> {
 
 // Operaciones de inventario restock discharges
 export interface InventoryOperation {
-    id: number | string;
+    id: string;
     date: string;
     time: string;
     reason: string;

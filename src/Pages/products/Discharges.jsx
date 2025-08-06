@@ -67,7 +67,7 @@ function Discharges() {
                         <tbody>
                             {dischargesData.map((discharge, index) => (
                                 <tr key={index} className="hover:bg-gray-100 text-sm">
-                                    <td className="text-center border">{discharge.id}</td>
+                                    <td className="text-center border">{discharge.id.slice(0, 8).toUpperCase()}</td>
                                     <td className="text-center border">{discharge.date} {discharge.time}</td>
                                     <td className="px-4 text-start border">{discharge.reason}</td>
                                     <td className="text-center border">{discharge.responsible}</td>

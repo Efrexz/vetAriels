@@ -1,12 +1,13 @@
+import { ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 
 interface NoteFormProps {
-  notes: string;
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: () => void;
-  dateTime: string;
+    notes: string;
+    handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+    onSubmit: () => void;
+    dateTime: string;
 }
 
 function NoteForm({ notes, handleChange, onSubmit, dateTime }: NoteFormProps) {

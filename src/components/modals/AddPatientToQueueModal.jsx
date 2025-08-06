@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { ClientsContext } from '@context/ClientsContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
+import { generateUniqueId } from '@utils/idGenerator';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+
 
 function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     // Estado del formulario
@@ -26,14 +28,8 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
             return;
         }
 
-        function generateId() {
-            const part1 = Date.now().toString(35)
-            const part2 = Math.random().toString(36).slice(2)
-            return part1 + part2
-        }
-
         const dataToSend = {
-            id: generateId(),
+            id: generateUniqueId(),
             assignedDoctor: selectedDoctor,
             petData: petSelected,
             ownerName: petSelected.ownerName,

@@ -6,17 +6,19 @@ import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { ProductSearchInput } from '@components/search/ProductSearchInput';
 import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
 import { ErrorModal } from '@components/modals/ErrorModal';
+import { generateUniqueId } from '@utils/idGenerator';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import PropTypes from "prop-types";
-import { ActionButtons } from '../../components/ui/ActionButtons';
 
 
 
 function DischargeAndChargeStock({ typeOfOperation }) {
 
     const [selectedProducts, setSelectedProducts] = useState([]);
+
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
     const [productToEdit, setProductToEdit] = useState(null);
     const [errors, setErrors] = useState({});
@@ -48,7 +50,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
 
     //agregar productos a la tabla para descargar o cargar
     function addProductToTable(product) {
-        const provisionalId = Date.now();
+        const provisionalId = generateUniqueId();
         const newProduct = {
             ...product,
             provisionalId,
@@ -96,21 +98,12 @@ function DischargeAndChargeStock({ typeOfOperation }) {
             return; // detener el envío si hay errores
         }
 
-        // buscamos el último ID guardado en localStorage, o inicializarlo si no existe
-        const typeOfId = typeOfOperation === 'discharge' ? 'lastDischargeId' : 'lastRestockId';
-        const lastId = localStorage.getItem(typeOfId)
-            ? parseInt(localStorage.getItem(typeOfId), 10)
-            : 0;
-
-        const newId = lastId + 1;
-        localStorage.setItem(typeOfId, newId);
-
         const now = new Date();
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newOrder = {
-            id: newId,
+            id: generateUniqueId(),
             date: currentDate,
             time: currentTime,
             reason: formData.reason,
@@ -240,7 +233,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                             {
                                 selectedProducts.map((product, index) => (
                                     <tr key={index} className="hover:bg-gray-100">
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.systemCode.slice(0, 9).toUpperCase()}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.systemCode.slice(0, 8).toUpperCase()}</td>
                                         <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.productName}</td>
                                         <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.salePrice}</td>
                                         <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.salePrice}</td>

@@ -23,6 +23,7 @@ function EditRecord() {
         physiologicalConstants: record.physiologicalConstants || "",
         clinicalExam: record.clinicalExam || "",
         id: record.id,
+        createdBy: record.createdBy,
     });
 
 

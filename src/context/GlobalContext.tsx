@@ -1,56 +1,56 @@
-import { createContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useEffect, useState, ReactNode, useContext} from 'react';
 import { User, Role, CompanyData } from '@t/user.types';
 
 type ActiveIconType = 'patients' | 'baths' | 'user' | null;
 
 interface GlobalContextType {
-  // Estado de la UI
-  isSidebarOpen: boolean;
-  setIsSidebarOpen: (isOpen: boolean) => void;
-  showPatientList: boolean;
-  setShowPatientList: (show: boolean) => void;
-  showBathList: boolean;
-  setShowBathList: (show: boolean) => void;
-  showUserOptions: boolean;
-  setShowUserOptions: (show: boolean) => void;
-  showSearchInput: boolean;
-  setShowSearchInput: (show: boolean) => void;
-  showSearchModal: boolean;
-  setShowSearchModal: (show: boolean) => void;
-  isMobileScreen: boolean;
-  setIsMobileScreen: (isMobile: boolean) => void;
-  activeIcon: ActiveIconType;
-  setActiveIcon: (icon: ActiveIconType) => void;
-  
-  // Funciones de control de UI
-  toggleSearchModal: () => void;
-  togglePatientList: () => void;
-  toggleBathList: () => void;
-  toggleUserOptions: () => void;
-  toggleSideMenu: () => void;
+    // Estado de la UI
+    isSidebarOpen: boolean;
+    setIsSidebarOpen: (isOpen: boolean) => void;
+    showPatientList: boolean;
+    setShowPatientList: (show: boolean) => void;
+    showBathList: boolean;
+    setShowBathList: (show: boolean) => void;
+    showUserOptions: boolean;
+    setShowUserOptions: (show: boolean) => void;
+    showSearchInput: boolean;
+    setShowSearchInput: (show: boolean) => void;
+    showSearchModal: boolean;
+    setShowSearchModal: (show: boolean) => void;
+    isMobileScreen: boolean;
+    setIsMobileScreen: (isMobile: boolean) => void;
+    activeIcon: ActiveIconType;
+    setActiveIcon: (icon: ActiveIconType) => void;
+    
+    // Funciones de control de UI
+    toggleSearchModal: () => void;
+    togglePatientList: () => void;
+    toggleBathList: () => void;
+    toggleUserOptions: () => void;
+    toggleSideMenu: () => void;
 
-  // Autenticacion
-  activeUser: User | null;
-  setActiveUser: (user: User | null) => void;
-  logout: () => void;
+    // Autenticacion
+    activeUser: User | null;
+    setActiveUser: (user: User | null) => void;
+    logout: () => void;
 
-  // Datos
-  users: User[];
-  addUser: (newUser: User) => void;
-  updateUserData: (id: number, newData: Partial<User>) => void;
-  removeUser: (id: number) => void;
+    // Datos
+    users: User[];
+    addUser: (newUser: User) => void;
+    updateUserData: (id: string, newData: Partial<User>) => void;
+    removeUser: (id: string) => void;
 
-  roles: Role[];
-  addRole: (newRole: Role) => void;
-  updateRoleData: (id: string, newData: Partial<Role>) => void;
-  removeRole: (id: string) => void;
+    roles: Role[];
+    addRole: (newRole: Role) => void;
+    updateRoleData: (id: string, newData: Partial<Role>) => void;
+    removeRole: (id: string) => void;
 
-  companyData: CompanyData;
-  setCompanyData: (data: CompanyData) => void;
-  
-  // Tema
-  themeColor: string;
-  setThemeColor: (color: string) => void;
+    companyData: CompanyData;
+    setCompanyData: (data: CompanyData) => void;
+    
+    // Tema
+    themeColor: string;
+    setThemeColor: (color: string) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -142,7 +142,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         const saved = localStorage.getItem('users');
         const defaultUser: User[] = [{
             email: "Zyzz_448@hotmail.com",
-            id: 1729374687071,
+            id: "gfdgsdfgsfdgdfgfdg",
             lastName: "quintero",
             name: "efrainn",
             password: "123123",
@@ -154,6 +154,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         }];
         return saved ? (JSON.parse(saved) as User[]) : defaultUser;
     });
+
 
     //Roles Data
     const [roles, setRoles] = useState<Role[]>(() => {
@@ -181,7 +182,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         setUsers(prev => [...prev, newUser]);
     };
 
-    function updateUserData(id: number, newData: Partial<User>) {
+    function updateUserData(id: string, newData: Partial<User>) {
         setUsers(prev => prev.map(user => user.id === id ? { ...user, ...newData } : user));
         //si el usuario actual es el que se está actualizando, actualizamos la informacion del active user para que se refleje en la interfaz
         if (activeUser && activeUser.id === id) {
@@ -190,7 +191,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
     }
 
     // Eliminar usuario y si el usuario actual es el que se está eliminando, se cierra sesion
-    function removeUser(id: number) {
+    function removeUser(id: string) {
         setUsers(prev => prev.filter(user => user.id !== id));
         if (activeUser && activeUser.id === id) {
             setActiveUser(null);
@@ -216,19 +217,19 @@ function GlobalProvider({ children }: GlobalProviderProps) {
 
     // Company Data
     const [companyData, setCompanyData] = useState<CompanyData>(() => {
-    const saved = localStorage.getItem('companyData');
-    const defaultCompanyData: CompanyData = {
-        clinicName: "VETERINARIA ARIEL´S EIRL",
-        email: "vetariel@gmail.com",
-        department: "LIMA",
-        province: "LIMA",
-        district: "LIMA",
-        address: "Av. de la Constitución, No. 100, Lima",
-        phone: "917104426",
-        facebook: "https://www.facebook.com/vetariel/"
-    };
-    return saved ? (JSON.parse(saved) as CompanyData) : defaultCompanyData;
-  });
+        const saved = localStorage.getItem('companyData');
+        const defaultCompanyData: CompanyData = {
+            clinicName: "VETERINARIA ARIEL´S EIRL",
+            email: "vetariel@gmail.com",
+            department: "LIMA",
+            province: "LIMA",
+            district: "LIMA",
+            address: "Av. de la Constitución, No. 100, Lima",
+            phone: "917104426",
+            facebook: "https://www.facebook.com/vetariel/"
+        };
+        return saved ? (JSON.parse(saved) as CompanyData) : defaultCompanyData;
+    });
 
     useEffect(() => {
         localStorage.setItem('activeUser', JSON.stringify(activeUser));
@@ -252,5 +253,13 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         </GlobalContext.Provider>
     );
 }
+
+  export function useGlobal(): GlobalContextType {
+    const context = useContext(GlobalContext);
+    if (context === undefined) {
+        throw new Error('useGlobal debe ser usado dentro de un GlobalProvider');
+    }
+    return context;
+    };
 
 export { GlobalContext, GlobalProvider };

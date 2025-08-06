@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
+import { generateUniqueId } from '@utils/idGenerator';
 import ArrowDown from '@assets/arrowDown.svg?react';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
 import PillsIcon from '@assets/pillsIcon.svg?react';
@@ -66,17 +67,13 @@ function AddNewProductModal({ onClose }) {
         if (!validateForm()) {
             return;
         }
-        function generateId() {
-            const part1 = Date.now().toString(35)
-            const part2 = Math.random().toString(36).slice(2)
-            return part1 + part2
-        }
+
         const now = new Date();
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newService = {
-            systemCode: generateId(),
+            systemCode: generateUniqueId(),
             productName: formData.productName,
             brand: formData.brand,
             unitOfMeasurement: formData.unitOfMeasurement,

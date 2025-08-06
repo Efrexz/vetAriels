@@ -13,6 +13,7 @@ export default defineConfig(() => {
         "@pages": "/src/pages",
         "@context": "/src/context",
         "@t": "/src/types",
+        "@utils": "/src/utils",
       },
     },
   };

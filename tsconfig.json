@@ -6,7 +6,8 @@
       "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
       "@context/*": ["src/context/*"],
-      "@t/*": ["src/types/*"]
+      "@t/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"]
     },
     "target": "es5", // Compila a una versión de JS compatible con navegadores antiguos
     "lib": [

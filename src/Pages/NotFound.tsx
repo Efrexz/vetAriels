@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
 function NotFound() {
-
     const navigate = useNavigate();
     return (
-
         <div className="grid h-screen place-content-center bg-white px-4">
             <div className="text-center">
                 <svg
@@ -58,7 +56,6 @@ function NotFound() {
                         ></path>
                     </svg>
                 </button>
-
             </div>
         </div>
     );

@@ -13,29 +13,30 @@ import MicrochipIcon from '@assets/microChip.svg?react';
 function CreatePetForm() {
     const navigate = useNavigate();
     const { clients, addPet, historyCounter } = useContext(ClientsContext);
-    const { id } = useParams();
+    const { id: ownerId } = useParams();
 
 
-    const individualClientData = clients.find(client => client.id === Number(id));
+    const individualClientData = clients.find(client => client.id === ownerId);
     const [errors, setErrors] = useState({});
 
 
     const [formData, setFormData] = useState({
-        owner: id !== "no_client" ? individualClientData?.firstName + " " + individualClientData?.lastName : "", //si nuestra url dice que no es un cliente, entonces no se debe mostrar por defecto el propietario
+        owner: ownerId !== "no_client" ? individualClientData?.firstName + " " + individualClientData?.lastName : "", //si nuestra url dice que no es un cliente, entonces no se debe mostrar por defecto el propietario
         petName: '',
         birthDate: '',
-        hc: historyCounter, //TODO - Generar por los momentos un hc segun el largo de la lista de mascotas
+        hc: historyCounter.current, //TODO - Generar por los momentos un hc segun el largo de la lista de mascotas
         microchip: '',
         species: '',
         breed: '',
         sex: '',
+        esterilized: '',
     });
 
     // Validación de los campos
     function validateForm() {
         const newErrors = {};
         //Validamos si todos los campos son válidos
-        if (id === 'no_client') {
+        if (ownerId === 'no_client') {
             newErrors.owner = 'Debe seleccionar un propietario';
         }
         if (!formData.petName || formData.petName.length < 3) {
@@ -65,20 +66,19 @@ function CreatePetForm() {
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newPet = {
-            owner: formData.owner,
             registrationDate: currentDate,
             registrationTime: currentTime,
             petName: formData.petName,
             birthDate: formData.birthDate,
-            hc: formData.hc,
             microchip: formData.microchip,
             species: formData.species || "CANINO",
             breed: formData.breed || "CRUCE",
             sex: formData.sex || "MACHO",
             active: true,
+            esterilized: formData.esterilized || "NO",
         };
 
-        addPet(newPet, Number(id), formData.owner);
+        addPet(newPet, ownerId, formData.owner);
         navigate(`/pets`);
     }
 
@@ -90,14 +90,14 @@ function CreatePetForm() {
             type: 'text',
             icon: PawIcon,
             required: true,
-            disabled: id !== "no_client" ? false : true,
+            disabled: ownerId !== "no_client" ? false : true,
         },
         {
             label: 'Fecha de nacimiento',
             id: 'birthDate',
             icon: CakeIcon,
             type: 'date',
-            disabled: id !== "no_client" ? false : true,
+            disabled: ownerId !== "no_client" ? false : true,
         },
         {
             label: 'N° de historia',
@@ -111,35 +111,35 @@ function CreatePetForm() {
             id: 'microchip',
             icon: MicrochipIcon,
             type: 'text',
-            disabled: id !== "no_client" ? false : true
+            disabled: ownerId !== "no_client" ? false : true
         },
         {
             label: 'Especie',
             id: 'species',
             type: 'select',
             options: ['CANINO', 'FELINO', 'CONEJO', 'HAMSTER', 'ERIZO', 'EXOTICO'],
-            disabled: id !== "no_client" ? false : true
+            disabled: ownerId !== "no_client" ? false : true
         },
         {
             label: 'Raza',
             id: 'breed',
             type: 'select',
             options: ['CRUCE', 'BULLDOG INGLES', 'CHIHUAHUA', 'COCKER SPANIEL', 'COLLIE', 'BOXER'],
-            disabled: id !== "no_client" ? false : true
+            disabled: ownerId !== "no_client" ? false : true
         },
         {
             label: 'Sexo',
             id: 'sex',
             type: 'select',
             options: ['MACHO', 'HEMBRA'],
-            disabled: id !== "no_client" ? false : true
+            disabled: ownerId !== "no_client" ? false : true
         },
         {
             label: '¿Ha sido esterilizado?',
             id: 'esterilized',
             type: 'select',
             options: ['SI', 'NO'],
-            disabled: id !== "no_client" ? false : true
+            disabled: ownerId !== "no_client" ? false : true
         },
 
     ];

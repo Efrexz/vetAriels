@@ -1,13 +1,17 @@
-import { useContext } from "react";
+import { ReactNode } from "react";
 import { NavBar } from "@components/layout/NavBar";
 import { SideBarMenu } from "./SideBarMenu";
-import { GlobalContext } from "@context/GlobalContext";
+import { useGlobal } from "@context/GlobalContext";
 import BurguerMenuIcon from '@assets/burguerMenuIcon.svg?react';
 import XIcon from '@assets/xIcon.svg?react';
-import PropTypes from "prop-types";
 
-function Layout({ children }) {
-    const { isSidebarOpen, toggleSideMenu } = useContext(GlobalContext);
+interface LayoutProps {
+    children: ReactNode;
+}
+
+
+function Layout({ children }: LayoutProps) {
+    const { isSidebarOpen, toggleSideMenu } = useGlobal();
 
     return (
         <>
@@ -39,7 +43,3 @@ function Layout({ children }) {
 }
 
 export { Layout }
-
-Layout.propTypes = {
-    children: PropTypes.node
-}

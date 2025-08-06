@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { ClientsContext } from "@context/ClientsContext";
 import { ProductsAndServicesContext } from "@context/ProductsAndServicesContext";
 import { ErrorModal } from "../modals/ErrorModal";
+import { generateUniqueId } from "@utils/idGenerator";
 import PropTypes from "prop-types";
 
 
@@ -44,14 +45,14 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }) {
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
         const newProduct = {
             ...productOrService,
-            provisionalId: Date.now(),
+            provisionalId: generateUniqueId(),
             additionTime: currentTime,
             additionDate: currentDate,
             quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
         };
         if (mode === "sales") {
             // agregamos el producto al cliente
-            addProductToClient(Number(id), newProduct);
+            addProductToClient(id, newProduct);
         }
         // también lo agregamos a la tabla local 
         addProductToTable(newProduct);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , ChangeEvent} from 'react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import type { Product, Service } from '@t/inventory.types';
@@ -14,7 +14,7 @@ interface PriceModificationModalProps {
 function PriceModificationModal({ onClose, productToEdit, updateProductPrice }: PriceModificationModalProps) {
     const [itemPrice, setItemPrice] = useState<number>(productToEdit?.salePrice || 0);
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
         const valueAsNumber = parseFloat(e.target.value);
         setItemPrice(isNaN(valueAsNumber) ? 0 : valueAsNumber) 
     }

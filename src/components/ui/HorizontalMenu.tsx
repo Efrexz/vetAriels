@@ -66,7 +66,7 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
         ],
     };
 
-     const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string }>();
 
     // Determina la URL base según el modo
     const baseUrl: Record<Mode, string>  = {

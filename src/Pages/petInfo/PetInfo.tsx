@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { Link, useParams } from "react-router-dom";
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
 import { HorizontalMenu } from '@components/ui/HorizontalMenu';
 import { PetProfile } from './PetProfile';
 import { ClinicalRecords } from './ClinicalRecords';
@@ -8,16 +7,15 @@ import { NewRecord } from './NewRecord';
 import { AddClinicalNote } from './AddClinicalNote';
 import { EditRecord } from './EditRecord';
 import { EditClinicalNote } from './EditClinicalNote';
+import { Pet } from '@t/client.types';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+import AlertIcon from '@assets/alertIcon.svg?react';
+import SearchIcon from '@assets/searchIcon.svg?react';
 
-function PetInfo() {
 
-    const { petsData } = useContext(ClientsContext);
-    const { id, section } = useParams();
+function calculateAge(birthDate: string | undefined) {
+    if (!birthDate) return { years: 0, months: 0, days: 0 };//Por si acaso no tiene fecha de nacimiento
 
-    const individualPetData = petsData.find(pet => pet.hc === id);
-
-    function calculateAge(birthDate) {
         const today = new Date();
         const birth = new Date(birthDate);
 
@@ -39,7 +37,41 @@ function PetInfo() {
         }
         return { years: ageYears, months: ageMonths, days: ageDays };
     }
+
+function PetInfo() {
+
+    const { petsData } = useClients();
+    const { id, section = 'update' } = useParams<{ id: string; section?: string }>();
+
+    const individualPetData: Pet | undefined = petsData.find(pet => pet.id === id);
+
     const petAge = calculateAge(individualPetData?.birthDate);
+
+    // Si no se encuentra la mascota, mostrar un mensaje de error
+    if (!individualPetData) {
+        return (
+            <div className="container mx-auto p-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
+                <div className="bg-white rounded-xl shadow-lg p-12 max-w-xl w-full text-center border-t-4 border-blue-500">
+                    <AlertIcon className="text-blue-500 w-16  mx-auto mb-6 opacity-80" />
+                    <h1 className="text-4xl font-extrabold text-gray-700 mb-4">
+                        Mascota no Registrada
+                    </h1>
+                    <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                        No hemos encontrado ninguna mascota asociada al ID "<strong className="text-blue-600">#{id}</strong>" en nuestros registros. Por favor, verifica el identificador.
+                    </p>
+                    {/*Separador*/}
+                    <div className="border-t border-gray-200 pt-6 mt-6">
+                        <Link
+                            to="/pets"
+                            className="inline-flex items-center px-8 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ease-in-out text-lg"
+                        >
+                            <SearchIcon className="w-10 mr-3 text-xl" /> Ver listado de pacientes
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <main className="container mx-auto p-6">
@@ -70,7 +102,7 @@ function PetInfo() {
                             <strong>Sexo: </strong>{individualPetData?.sex}
                         </p>
                         <p className="text-gray-600">
-                            <strong>¿Esterilizado?: </strong>{individualPetData?.isSterilized ? 'SÍ' : 'NO'}
+                            <strong>¿Esterilizado?: </strong>{individualPetData?.esterilized ? 'SÍ' : 'NO'}
                         </p>
                         <p className="text-gray-600">
                             <strong>Fecha de Nacimiento: </strong>{individualPetData?.birthDate}

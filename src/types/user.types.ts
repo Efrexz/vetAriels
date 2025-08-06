@@ -5,7 +5,7 @@ export interface Account {
 }
 
 export interface User extends Account {
-    id: number;
+    id: string;
     lastName: string;
     phone: string;
     registrationDate: string;

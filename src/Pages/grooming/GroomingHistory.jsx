@@ -3,8 +3,7 @@ import { ClientsContext } from '@context/ClientsContext';
 import { UpdateStateModal } from '@components/modals/UpdateStateModal';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import BathIcon from '@assets/bathIcon.svg?react';
-import PlusIcon from '@assets/plusIcon.svg?react';
-import PenIcon from '@assets/penIcon.svg?react';
+// import PenIcon from '@assets/penIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 
@@ -126,7 +125,7 @@ function GroomingHistory() {
                                         </span>
                                     </td>
                                     <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-300">
-                                        <PenIcon className="w-5 h-5 text-blue-500 cursor-pointer" />
+                                        {/* <PenIcon className="w-5 h-5 text-blue-500 cursor-pointer" /> */}
                                         <ReturnIcon
                                             className="w-5 h-5 text-orange-400 cursor-pointer"
                                             onClick={() => {

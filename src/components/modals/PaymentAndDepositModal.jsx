@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { FinancialContext } from '@context/FinancialContext';
 import { GlobalContext } from '@context/GlobalContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
+import { generateUniqueId } from '@utils/idGenerator';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import Fileinvoice from '@assets/file-invoice.svg?react';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
@@ -50,13 +51,8 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
         if (!validateForm()) {
             return;
         }
-        function generateId() {
-            const part1 = Date.now().toString(35)
-            const part2 = Math.random().toString(36).slice(2)
-            return part1 + part2
-        }
         const newPayment = {
-            id: generateId(),
+            id: generateUniqueId(),
             date: formData.date,
             description: formData.reason,
             paymentMethod: formData.methodOfPayment,

@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { ChangeEvent , useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GlobalContext } from '@context/GlobalContext';
+import { useGlobal } from '@context/GlobalContext';
 import EnvelopeIcon from '@assets/envelope.svg?react';
 import PadLockIcon from '@assets/padLockIcon.svg?react';
 import ArrowRightIcon from '@assets/arrowRight.svg?react';
@@ -14,20 +14,25 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const { setActiveUser, users } = useContext(GlobalContext);
+    const { setActiveUser, users } = useGlobal();
 
-    const handleLogin = (email, password) => {
+    function handleLogin (email: string, password: string) {
         const foundUser = users.find(user => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
         if (foundUser) {
             setActiveUser(foundUser);
+            setError('');
             navigate("/")
-            localStorage.setItem('activeUser', JSON.stringify(foundUser));
-
-            return true;
         } else {
             setError('Email o contraseña incorrectos');
-            return false; // Login fallido
         }
+    };
+
+    function handleEmailChange (e: ChangeEvent<HTMLInputElement>) {
+        setEmail(e.target.value);
+    };
+
+    function handlePasswordChange (e: ChangeEvent<HTMLInputElement>) {
+        setPassword(e.target.value);
     };
 
 
@@ -60,7 +65,7 @@ function Login() {
                                             id="email"
                                             type="email"
                                             value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            onChange={handleEmailChange}
                                             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg hover:border-blue-300 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 outline-none text-gray-500"
                                             placeholder="nombre@clinica.com"
                                             required
@@ -78,7 +83,7 @@ function Login() {
                                             id="password"
                                             type="password"
                                             value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
+                                            onChange={handlePasswordChange}
                                             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg hover:border-blue-300 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 outline-none text-gray-500"
                                             placeholder="••••••••"
                                             required

@@ -1,31 +1,32 @@
-import { createContext, useEffect, useState, ReactNode, useRef } from 'react';
+import { createContext, useEffect, useState, ReactNode, useContext  } from 'react';
 import { Product, Service, InventoryOperation } from '@t/inventory.types';
+import { generateUniqueId } from '@utils/idGenerator';
 
 
 interface ProductsAndServicesContextType {
   // Productos
-  productsData: Product[];
-  addProduct: (product: Product) => void;
-  updateProductData: (id: string, newData: Partial<Product>) => void;//usamos el partial porque no actualizamos todos los campos
-  removeProduct: (id: string) => void;
-  
-  // Servicios
-  servicesData: Service[];
-  addNewService: (newService: Omit<Service, 'id'>) => void;
-  updateServiceData: (id: string | number, newData: Partial<Service>) => void;
-  removeService: (id: string | number) => void;
-  
-  // Operaciones de Inventario
-  dischargesData: InventoryOperation[];
-  addDischarge: (discharge: InventoryOperation) => void;
-  restockData: InventoryOperation[];
-  addRestock: (restock: InventoryOperation) => void;
+    productsData: Product[];
+    addProduct: (product: Product) => void;
+    updateProductData: (id: string, newData: Partial<Product>) => void;//usamos el partial porque no actualizamos todos los campos
+    removeProduct: (id: string) => void;
+
+    // Servicios
+    servicesData: Service[];
+    addNewService: (newService: Omit<Service, 'id'>) => void;
+    updateServiceData: (id: string , newData: Partial<Service>) => void;
+    removeService: (id: string ) => void;
+
+    // Operaciones de Inventario
+    dischargesData: InventoryOperation[];
+    addDischarge: (discharge: InventoryOperation) => void;
+    restockData: InventoryOperation[];
+    addRestock: (restock: InventoryOperation) => void;
 }
 
 const ProductsAndServicesContext = createContext<ProductsAndServicesContextType | undefined>(undefined);
 
 interface ProductsAndServicesProviderProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderProps) {
 
@@ -35,9 +36,9 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
     }
 
     const [productsData, setProductsData] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('productsData');
-    return saved ? (JSON.parse(saved) as Product[]) : [];
-});
+        const saved = localStorage.getItem('productsData');
+        return saved ? (JSON.parse(saved) as Product[]) : [];
+    });
 
     function addProduct(product: Product) {
         setProductsData([...productsData, product]);
@@ -64,25 +65,25 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
     }
 
     const [restockData, setRestockData] = useState<InventoryOperation[]>(() => {
-    const saved = localStorage.getItem('restockData');
-    return saved ? (JSON.parse(saved) as InventoryOperation[]) : [];
-});
+        const saved = localStorage.getItem('restockData');
+        return saved ? (JSON.parse(saved) as InventoryOperation[]) : [];
+    });
 
     function addRestock(restock: InventoryOperation) {
-    setProductsData(prevProducts =>
-        prevProducts.map(product => {
-            const restockProduct = restock.products.find(p => p.systemCode === product.systemCode);
-            if (restockProduct && product.availableStock !== undefined) {
-                return {
-                    ...product,
-                    availableStock: product.availableStock + restockProduct.quantity,
-                };
-            }
-            return product;
-        })
-    );
-    setRestockData(prevRestocks => [restock, ...prevRestocks]);
-}
+        setProductsData(prevProducts =>
+            prevProducts.map(product => {
+                const restockProduct = restock.products.find(p => p.systemCode === product.systemCode);
+                if (restockProduct && product.availableStock !== undefined) {
+                    return {
+                        ...product,
+                        availableStock: product.availableStock + restockProduct.quantity,
+                    };
+                }
+                return product;
+            })
+        );
+        setRestockData(prevRestocks => [restock, ...prevRestocks]);
+    }
 
     useEffect(() => {
         localStorage.setItem('restockData', JSON.stringify(restockData));
@@ -91,15 +92,14 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
 
     //Descargas de Productos
     const isDischargesData = localStorage.getItem('dischargesData');
-    if (!isDischargesData) {
-        localStorage.setItem('dischargesData', JSON.stringify([]));
+        if (!isDischargesData) {
+            localStorage.setItem('dischargesData', JSON.stringify([]));
     }
 
     const [dischargesData, setDischargesData] = useState<InventoryOperation[]>(() => {
-    const saved = localStorage.getItem('dischargesData');
-    return saved ? (JSON.parse(saved) as InventoryOperation[]) : [];
-});
-
+        const saved = localStorage.getItem('dischargesData');
+        return saved ? (JSON.parse(saved) as InventoryOperation[]) : [];
+    });
 
     function addDischarge(discharge: InventoryOperation) {
     setProductsData(prevProducts =>
@@ -131,28 +131,20 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
     }
 
     const [servicesData, setServicesData] = useState<Service[]>(() => {
-    const saved = localStorage.getItem('servicesData');
-    return saved ? (JSON.parse(saved) as Service[]) : [];
-});
-
-    const serviceIdCounter = useRef<number>(
-    parseInt(localStorage.getItem('serviceId') || '100', 10)
-);
+        const saved = localStorage.getItem('servicesData');
+        return saved ? (JSON.parse(saved) as Service[]) : [];
+    });
 
     function addNewService(newService: Omit<Service, 'id'>) {
-    const newServiceData = { ...newService, id: serviceIdCounter.current.toString() };
-    setServicesData(prevServices => [...prevServices, newServiceData]);
-    serviceIdCounter.current++;
-    localStorage.setItem('serviceId', serviceIdCounter.current.toString());
-}
+        const newServiceData = { ...newService, id: generateUniqueId() };
+        setServicesData(prevServices => [...prevServices, newServiceData]);
+    }
 
-
-    function updateServiceData(id: string | number, newData: Partial<Service>) {
+    function updateServiceData(id: string, newData: Partial<Service>) {
         setServicesData(servicesData.map(service => service.id === id ? { ...service, ...newData } : service));
     }
 
-
-    function removeService(id: string | number) {
+    function removeService(id: string) {
         setServicesData(servicesData.filter((newService) => newService.id !== id));
     }
 
@@ -182,5 +174,13 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
         </ProductsAndServicesContext.Provider>
     );
 }
+
+export function useProductsAndServices (): ProductsAndServicesContextType {
+    const context = useContext(ProductsAndServicesContext);
+    if (context === undefined) {
+        throw new Error('useProductsAndServices debe ser usado dentro de un ProductsAndServicesProvider');
+    }
+    return context;
+};
 
 export { ProductsAndServicesContext, ProductsAndServicesProvider };

@@ -1,17 +1,17 @@
-import { createContext, useEffect, useState , ReactNode } from 'react';
+import { createContext, useEffect, useState , ReactNode, useContext } from 'react';
 
 import { Payment } from '@t/financial.types';
 
 interface FinancialContextType {
-  paymentsData: Payment[];
-  addNewPayment: (newPayment: Payment) => void;
-  removePayment: (id: string) => void;
+    paymentsData: Payment[];
+    addNewPayment: (newPayment: Payment) => void;
+    removePayment: (id: string) => void;
 }
 
 const FinancialContext = createContext<FinancialContextType | undefined>(undefined);
 
 interface FinancialProviderProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 function FinancialProvider({ children }: FinancialProviderProps) {
@@ -24,9 +24,9 @@ function FinancialProvider({ children }: FinancialProviderProps) {
 
 
     const [paymentsData, setPaymentsData] = useState<Payment[]>(() => {
-    const savedData = localStorage.getItem('paymentsData');
-    return savedData ? JSON.parse(savedData) : initialPaymentsData;
-});
+        const savedData = localStorage.getItem('paymentsData');
+        return savedData ? JSON.parse(savedData) : initialPaymentsData;
+    });
 
     // Guardar en localStorage cada vez que cambien los estados
     useEffect(() => {
@@ -49,5 +49,13 @@ function FinancialProvider({ children }: FinancialProviderProps) {
         </FinancialContext.Provider>
     );
 }
+
+    export function useFinancial(): FinancialContextType {
+        const context = useContext(FinancialContext);
+        if (context === undefined) {
+            throw new Error('useFinancial debe ser usado dentro de un FinancialProvider');
+        }
+        return context;
+    };
 
 export { FinancialContext, FinancialProvider };
