@@ -10,7 +10,7 @@ function EditClinicalNote() {
     //buscamos la mascota por id y destructuramos los registros
     const { records } = petsData.find(pet => pet.id === id);
     //filtramos los registros de tipo note y buscamos el registro por id
-    const noteData = records.filter(record => record.type === "note").find(record => record.id === Number(recordId));
+    const noteData = records.filter(record => record.type === "note").find(record => record.id === recordId);
     const [notes, setNotes] = useState(noteData?.content || "");
 
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ function EditClinicalNote() {
             ...noteData,
             content: notes,
         };
-        updateRecord(newNote, id, Number(recordId));
+        updateRecord(id, recordId, newNote);
         navigate(-1);
     }
 

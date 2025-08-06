@@ -18,7 +18,7 @@ function ClinicalRecords() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const individualPetData = petsData.find(pet => Number(pet.hc) === Number(id));
+    const individualPetData = petsData.find(pet => pet.id === id);
     const { records } = individualPetData;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,7 +53,7 @@ function ClinicalRecords() {
             {records && records?.length > 0 ? (
                 records.map((record, index) => (
                     <div
-                        key={index}
+                        key={record.id}
                         className="mb-6 border-b-2 border-gray-200"
                     >
                         {record.type === 'note' ? (

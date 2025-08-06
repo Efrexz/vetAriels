@@ -11,7 +11,7 @@ function EditRecord() {
     const { records } = petsData.find(pet => pet.id === id);
 
     //buscamos el registro por id
-    const record = records.find(record => record.id === Number(recordId));
+    const record = records.find(record => record.id === recordId);
 
 
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ function EditRecord() {
     }
 
     function saveRecord() {
-        updateRecord(formData, id, Number(recordId));
+        updateRecord(id, recordId, formData);
         navigate('/pets/pet/' + id + '/clinical-records');
     }
 

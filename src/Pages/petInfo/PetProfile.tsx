@@ -22,11 +22,11 @@ function PetProfile({ petData }: PetProfileProps) {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<FormDataType>({
-        petName: petData.petName || '',
-        owner: petData.ownerName || '',
-        hc: petData.hc || '',
-        birthDate: petData.birthDate || '',
-        microchip: petData.microchip || '',
+        petName: '',
+        owner: '',
+        hc: '',
+        birthDate: '',
+        microchip:  '',
         species: petData.species || 'CANINO',
         breed: petData.breed || 'CRUCE',
         sex: petData.sex || 'MACHO',
@@ -37,18 +37,20 @@ function PetProfile({ petData }: PetProfileProps) {
 
     //Para solucionar el problema de que no se actualiza el formulario al cambiar de mascota
     useEffect(() => {
-        setFormData({
-            petName: petData.petName || '',
-            owner: petData.ownerName || '',
-            hc: petData.hc || '',
-            birthDate: petData.birthDate || '',
-            microchip: petData.microchip || '',
-            species: petData.species || 'CANINO',
-            breed: petData.breed || 'CRUCE',
-            sex: petData.sex || 'MACHO',
-            esterilized: petData.esterilized ? 'SI' : 'NO',
-        });
-        setErrors({});
+        if (petData) {
+            setFormData({
+                petName: petData.petName || '',
+                owner: petData.ownerName || '',
+                hc: petData.hc || '',
+                birthDate: petData.birthDate || '',
+                microchip: petData.microchip || '',
+                species: petData.species || 'CANINO',
+                breed: petData.breed || 'CRUCE',
+                sex: petData.sex || 'MACHO',
+                esterilized: petData.esterilized ? 'SI' : 'NO',
+            });
+            setErrors({});
+        }
     }, [petData]);
 
     function handleChange (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {

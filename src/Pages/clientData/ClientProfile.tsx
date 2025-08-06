@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { Client } from '@t/client.types';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import DocumentIcon from '@assets/documentIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
@@ -8,45 +9,85 @@ import PhoneIcon from '@assets/phoneIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import LocationIcon from '@assets/locationIcon.svg?react';
 
+interface FormDataState {
+    firstName: string;
+    lastName: string;
+    dni: string;
+    email: string;
+    phone1: string;
+    phone2: string;
+    district: string;
+    address: string;
+    reference: string;
+    observations: string;
+}
+
 function ClientProfile() {
 
-    const { updateClientData, clients } = useContext(ClientsContext);
-    const { id } = useParams();
+    const { updateClientData, clients } = useClients();
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
 
     const individualClientData = clients.find(client => client.id === id);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
 
-    const [formData, setFormData] = useState({
-        name: individualClientData?.firstName || '',
-        lastName: individualClientData?.lastName || '',
-        document: individualClientData?.dni || '',
-        email: individualClientData?.email || '',
-        mobile: individualClientData?.phone1 || '',
-        phone: individualClientData?.phone2 || '',
-        district: individualClientData?.district || '',
-        address: individualClientData?.address || '',
-        reference: individualClientData?.reference || '',
-        observations: individualClientData?.observations || ''
+    const [formData, setFormData] = useState<FormDataState>({
+        firstName: '',
+        lastName: '',
+        dni: '',
+        email: '',
+        phone1: '',
+        phone2: '',
+        district: '',
+        address: '',
+        reference: '',
+        observations: ''
     });
 
-    function validateForm() {
-        const newErrors = {};
-        if (!formData.name || formData.name.length < 4) {
-            newErrors.name = 'El nombre del cliente debe tener al menos 4 caracteres';
+    //Aplicamos la misma solución que en PetProfile para que se actualice el formulario al cambiar de cliente
+    useEffect(() => {
+        if (individualClientData) {
+            setFormData({
+                firstName: individualClientData.firstName || '',
+                lastName: individualClientData.lastName || '',
+                dni: individualClientData.dni || '',
+                email: individualClientData.email || '',
+                phone1: individualClientData.phone1 || '',
+                phone2: individualClientData.phone2 || '',
+                district: individualClientData.district || '',
+                address: individualClientData.address || '',
+                reference: individualClientData.reference || '',
+                observations: individualClientData.observations || ''
+            });
+            setErrors({});
+        }
+    }, [individualClientData]);
+
+    function handleChange (e: ChangeEvent<HTMLInputElement>) {
+        const { id, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [id]: value,
+        }));
+    };
+
+    function validateForm(): boolean {
+        const newErrors: Record<string, string> = {};
+        if (!formData.firstName || formData.firstName.length < 4) {
+            newErrors.firstName = 'El nombre del cliente debe tener al menos 4 caracteres';
         }
         if (!formData.lastName || formData.lastName.length < 4) {
             newErrors.lastName = 'El apellido del cliente debe tener al menos 4 caracteres';
         }
-        if (!formData.document || formData.document.length < 8) {
+        if (!formData.dni || formData.dni.length < 8) {
             newErrors.document = 'El número de documento de identidad debe tener al menos 8 caracteres';
         }
         if (!formData.email || formData.email.length < 6) {
             newErrors.email = 'El correo electrónico del cliente debe tener al menos 6 caracteres';
         }
-        if (!formData.mobile || formData.mobile.length < 9) {
+        if (!formData.phone1 || formData.phone1.length < 9) {
             newErrors.mobile = 'El número de teléfono móvil del cliente debe tener al menos 9 caracteres';
         }
         if (!formData.address || formData.address.length < 4) {
@@ -56,26 +97,19 @@ function ClientProfile() {
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
     }
 
-    function handleChange(e) {
-        const { id, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [id]: value
-        }));
-    }
 
     function updateData() {
-        if (!validateForm()) {
+        if (!validateForm() || !individualClientData) {
             return;
         }
-        const updatedClient = {
+        const updatedClient: Partial<Client> = {
             ...individualClientData, //Mantenemos el id y las mascotas existentes
-            firstName: formData.name,
+            firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,
-            dni: formData.document,
-            phone1: formData.mobile,
-            phone2: formData.phone,
+            dni: formData.dni,
+            phone1: formData.phone1,
+            phone2: formData.phone2,
             address: formData.address,
             district: formData.district,
             reference: formData.reference,
@@ -86,74 +120,20 @@ function ClientProfile() {
         navigate(`/clients`);
     }
 
+    if (!individualClientData) {
+        return <div className="p-6 text-center text-gray-500">Cargando datos del cliente...</div>;
+    }
+
     const formFields = [
-        {
-            label: 'Nombre',
-            id: 'name',
-            type: 'text',
-            value: formData.name,
-            icon: RoleUserIcon,
-            required: true
-        },
-        {
-            label: 'Apellido',
-            id: 'lastName',
-            type: 'text',
-            value: formData.lastName,
-            icon: RoleUserIcon,
-            required: true
-        },
-        {
-            label: 'Número de documento de identidad',
-            id: 'document',
-            type: 'text',
-            value: formData.document,
-            icon: DocumentIcon,
-        },
-        {
-            label: 'Correo electrónico',
-            id: 'email',
-            type: 'email',
-            value: formData.email,
-            icon: EmailIcon,
-            helperText: 'Para enviar notificaciones o correos masivos, el cliente debe confirmar su correo electrónico'
-        },
-        {
-            label: 'Teléfono móvil',
-            id: 'mobile',
-            type: 'text',
-            value: formData.mobile,
-            icon: PhoneIcon,
-            required: true
-        },
-        {
-            label: 'Teléfono de trabajo',
-            id: 'phone',
-            type: 'text',
-            value: formData.phone,
-            icon: PhoneIcon,
-        },
-        {
-            label: 'Dirección',
-            id: 'address',
-            type: 'text',
-            value: formData.address,
-            icon: LocationIcon,
-        },
-        {
-            label: 'Referencias de la dirección',
-            id: 'reference',
-            type: 'text',
-            value: formData.reference,
-            icon: LocationIcon,
-        },
-        {
-            label: 'Observaciones del cliente',
-            id: 'observations',
-            type: 'text',
-            value: formData.observation,
-            icon: LocationIcon,
-        },
+    { label: 'Nombre', id: 'firstName', type: 'text', icon: RoleUserIcon, required: true },
+    { label: 'Apellido', id: 'lastName', type: 'text', icon: RoleUserIcon, required: true },
+    { label: 'Número de documento de identidad', id: 'dni', type: 'text', icon: DocumentIcon },
+    { label: 'Correo electrónico', id: 'email', type: 'email', icon: EmailIcon },
+    { label: 'Teléfono móvil', id: 'phone1', type: 'text', icon: PhoneIcon, required: true },
+    { label: 'Teléfono de trabajo', id: 'phone2', type: 'text', icon: PhoneIcon },
+    { label: 'Dirección', id: 'address', type: 'text', icon: LocationIcon },
+    { label: 'Referencias de la dirección', id: 'reference', type: 'text', icon: LocationIcon },
+    { label: 'Observaciones del cliente', id: 'observations', type: 'text', icon: LocationIcon },
     ];
 
     return (
@@ -171,7 +151,7 @@ function ClientProfile() {
                                     className={`border rounded-r-lg p-3 bg-gray-50 w-full focus:outline-none ${errors[field.id] ? "border-red-500" : "hover:border-blue-300 focus-within:border-blue-300"} `}
                                     type={field.type}
                                     id={field.id}
-                                    value={formData[field.id]}
+                                    value={formData[field.id as keyof FormDataState]}
                                     required={field.required}
                                     onChange={handleChange}
                                 />

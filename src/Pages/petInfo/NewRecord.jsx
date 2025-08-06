@@ -3,8 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { RecordForm } from '@components/forms/RecordForm';
 import { ClientsContext } from '@context/ClientsContext';
 import { GlobalContext } from '@context/GlobalContext';
-import XIcon from '@assets/xIcon.svg?react';
-
+import { generateUniqueId } from '@utils/idGenerator';
 
 function NewRecord() {
     const { addRecord } = useContext(ClientsContext);
@@ -23,10 +22,10 @@ function NewRecord() {
         reason: 'Consulta',
         anamnesis: '',
         physiologicalConstants: {
-            temperature: '-',
-            heartRate: '-',
-            weight: '-',
-            oxygenSaturation: '-',
+            temperature: '',
+            heartRate: '',
+            weight: '',
+            oxygenSaturation: '',
         },
         clinicalExam: '',
         createdBy: `${activeUser.name} ${activeUser.lastName}`,
@@ -52,12 +51,12 @@ function NewRecord() {
     }
 
     function saveRecord() {
-        const recordId = Date.now();
+        const recordId = generateUniqueId();
         const newRecord = {
             ...formData,
             id: recordId,
         }
-        addRecord(newRecord, id);
+        addRecord(id, newRecord);
         navigate('/pets/pet/' + id + '/clinical-records');
     }
 

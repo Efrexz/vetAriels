@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ClientsContext } from '@context/ClientsContext';
 import { GlobalContext } from '@context/GlobalContext';
 import { NoteForm } from '@components/forms/NoteForm';
+import { generateUniqueId } from '@utils/idGenerator';
 
 function AddClinicalNote() {
     const now = new Date();
@@ -19,7 +20,7 @@ function AddClinicalNote() {
     const [notes, setNotes] = useState("");
 
     function addNote() {
-        const recordId = Date.now();
+        const recordId = generateUniqueId();
         const newNote = {
             dateTime: `${currentDate} ${currentTime}`,
             type: 'note',
@@ -27,7 +28,7 @@ function AddClinicalNote() {
             id: recordId,
             createdBy: `${activeUser.name} ${activeUser.lastName}`,
         };
-        addRecord(newNote, id);
+        addRecord(id, newNote);
         navigate(-1);
     }
 
