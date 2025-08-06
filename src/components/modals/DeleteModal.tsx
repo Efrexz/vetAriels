@@ -1,53 +1,79 @@
-import { useContext, useState } from 'react';
-import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
-import { ClientsContext } from '@context/ClientsContext';
+import { useState } from 'react';
+import { useClients } from '@context/ClientsContext';
+import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { Product, Service } from '@t/inventory.types';
+import { Pet, Client } from '@t/client.types';
 import DiskIcon from '@assets/diskIcon.svg?react';
-import PropTypes from "prop-types";
 
-function DeleteModal({ elementToDelete, onClose, mode }) {
-    const { removeProduct, removeService } = useContext(ProductsAndServicesContext);
-    const { removePet, removeClient } = useContext(ClientsContext);
+type DeleteModalMode = 'products' | 'services' | 'pets' | 'clients';
+
+type ElementToDelete = Product | Service | Pet | Client;
+
+interface DeleteModalProps {
+    elementToDelete: ElementToDelete;
+    onClose: () => void;
+    mode: DeleteModalMode;
+}
+
+function DeleteModal({ elementToDelete, onClose, mode }: DeleteModalProps) {
+    const { removeProduct, removeService } = useProductsAndServices();
+    const { removePet, removeClient } = useClients();
     const [itemValue, setItemValue] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    function getElementName() {
+    function getElementDetails() {
         switch (mode) {
             case "products":
-                return "Producto";
+                return {
+                    typeName: "Producto",
+                    operationName: (elementToDelete as Product).productName || '',
+                    deleteFn: () => removeProduct((elementToDelete as Product).systemCode!),
+                };
             case "services":
-                return "Servicio";
+                return {
+                    typeName: "Servicio",
+                    operationName: (elementToDelete as Service).serviceName || '',
+                    deleteFn: () => removeService(elementToDelete.id),
+                };
             case "pets":
-                return "Mascota";
+                return {
+                    typeName: "Mascota",
+                    operationName: (elementToDelete as Pet).petName,
+                    deleteFn: () => removePet(elementToDelete.id),
+                };
+            case "clients":
+                return {
+                    typeName: "Cliente",
+                    operationName: `${(elementToDelete as Client).firstName} ${(elementToDelete as Client).lastName}`,
+                    deleteFn: () => removeClient(elementToDelete.id),
+                };
             default:
-                return "";
+                // Esto ayuda a TypeScript a detectar si falta un caso.
+                // Si 'mode' tuviera más opciones y no las cubrimos, TypeScript daría un error.
+                const exhaustiveCheck: never = mode;
+                return exhaustiveCheck;
         }
-    }
+    };
 
-    const operationName = elementToDelete?.productName || elementToDelete?.serviceName || elementToDelete?.petName || elementToDelete?.firstName + " " + elementToDelete?.lastName;
+    const { typeName, operationName, deleteFn } = getElementDetails();
+
 
     function deleteElement() {
-        // Validamos si el valor que escribimos coincide con el nombre del producto o servicio
-        const isValid = itemValue.toLowerCase() === operationName.toLowerCase();
-
-        if (isValid && mode === "products") {
-            removeProduct(elementToDelete.systemCode);
-        } else if (isValid && mode === "services") {
-            removeService(elementToDelete.id);
-        } else if (isValid && mode === "pets") {
-            removePet(elementToDelete.id);
-        } else if (isValid && mode === "clients") {
-            removeClient(elementToDelete.id);
-        } else {
-            setErrorMessage('Por favor confirma el nombre del registro!');
+        if (itemValue.toLowerCase() !== operationName.toLowerCase()) {
+            setErrorMessage('El nombre ingresado no coincide. Por favor, verifica.');
             return;
         }
+
+        deleteFn();
         onClose();
     }
+
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg modal-appear mx-4">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-medium text-gray-600">Eliminar {getElementName()}</h2>
+                    <h2 className="text-xl font-medium text-gray-600">Eliminar {typeName}</h2>
                 </div>
                 <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-4 rounded">
                     <p>
@@ -64,6 +90,7 @@ function DeleteModal({ elementToDelete, onClose, mode }) {
                         <input
                             type="text"
                             name="confirmation"
+                            autoFocus
                             value={itemValue}
                             onChange={(e) => setItemValue(e.target.value)}
                             placeholder="Escribe el nombre aquí"
@@ -101,9 +128,3 @@ function DeleteModal({ elementToDelete, onClose, mode }) {
 }
 
 export { DeleteModal };
-
-DeleteModal.propTypes = {
-    elementToDelete: PropTypes.object,
-    onClose: PropTypes.func,
-    mode: PropTypes.string
-}

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, ReactNode, useRef } from 'react';
+import { createContext, useEffect, useState, ReactNode, useContext  } from 'react';
 import { Product, Service, InventoryOperation } from '@t/inventory.types';
 import { generateUniqueId } from '@utils/idGenerator';
 
@@ -174,5 +174,13 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
         </ProductsAndServicesContext.Provider>
     );
 }
+
+export function useProductsAndServices (): ProductsAndServicesContextType {
+    const context = useContext(ProductsAndServicesContext);
+    if (context === undefined) {
+        throw new Error('useProductsAndServices debe ser usado dentro de un ProductsAndServicesProvider');
+    }
+    return context;
+};
 
 export { ProductsAndServicesContext, ProductsAndServicesProvider };
