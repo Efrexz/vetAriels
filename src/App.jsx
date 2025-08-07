@@ -4,7 +4,7 @@ import { ClientsProvider } from './context/ClientsContext';
 import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext';
 import { FinancialProvider } from './context/FinancialContext';
 import { ProtectedRoute } from './components/ProtectedRoute.jsx';
-import { DashBoard } from './Pages/DashBoard.jsx';
+import { DashBoard } from './Pages/DashBoard';
 import { Login } from './Pages/Login';
 import { Sales } from './Pages/sales/Sales.jsx';
 import { ActiveOrders } from './Pages/sales/ActiveOrders.jsx';

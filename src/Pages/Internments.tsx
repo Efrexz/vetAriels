@@ -6,9 +6,18 @@ import HospitalIcon from '@assets/hospitalIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 
 
+interface InternmentEntry {
+    id: string;
+    date: string;
+    patient: string;
+    owner: string;
+    note: string;
+    status: 'Internado' | 'De Alta';
+}
 
-const userInfo = [
+const userInfo : InternmentEntry[] = [
     {
+        id: 'intern-1',
         date: '29-07-2024 07:33 PM',
         patient: 'Toffe',
         owner: 'GLORIA CAROLINA ESPINOZA BORJA',
@@ -16,25 +25,27 @@ const userInfo = [
         status: 'Internado'
     },
     {
+        id: 'intern-2',
         date: '29-07-2024 07:33 PM',
-        patient: 'Toffe',
-        owner: 'GLORIA CAROLINA ESPINOZA BORJA',
-        note: "Vomitos/ Abdomen Agudo",
+        patient: 'Bobby',
+        owner: 'JUAN PÉREZ GONZÁLEZ',
+        note: "Cirugía programada",
         status: 'Internado'
     },
     {
-        date: '29-07-2024 07:33 PM',
-        patient: 'Toffe',
-        owner: 'GLORIA CAROLINA ESPINOZA BORJA',
-        note: "Vomitos/ Abdomen Agudo",
-        status: 'Internado'
+        id: 'intern-3',
+        date: '28-07-2024 10:15 AM',
+        patient: 'Luna',
+        owner: 'MARÍA LÓPEZ',
+        note: "Observación post-tratamiento",
+        status: 'De Alta'
     }
 ];
 
-const tableHeaders = [
+const tableHeaders: string[] = [
     "Fecha y hora de ingreso",
-    "Paciente",
-    "Propietario",
+    "Paciente / Propietario / Notas",
+    "Contacto Propietario",
     "Estado",
 ];
 
@@ -116,8 +127,8 @@ function Internments() {
                             </tr>
                         </thead>
                         <tbody>
-                            {userInfo.map((userData, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                            {userInfo.map((userData) => (
+                                <tr key={userData.id} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 border-b text-center border ">{userData.date}</td>
                                     <td className="py-2 px-4 border">
                                         <div>
