@@ -12,7 +12,7 @@ interface ProductsAndServicesContextType {
 
     // Servicios
     servicesData: Service[];
-    addNewService: (newService: Omit<Service, 'id'>) => void;
+    addNewService: (newService: Service) => void;
     updateServiceData: (id: string , newData: Partial<Service>) => void;
     removeService: (id: string ) => void;
 
@@ -135,9 +135,8 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
         return saved ? (JSON.parse(saved) as Service[]) : [];
     });
 
-    function addNewService(newService: Omit<Service, 'id'>) {
-        const newServiceData = { ...newService, id: generateUniqueId() };
-        setServicesData(prevServices => [...prevServices, newServiceData]);
+    function addNewService(newService: Service) {
+        setServicesData(prevServices => [...prevServices, newService]);
     }
 
     function updateServiceData(id: string, newData: Partial<Service>) {

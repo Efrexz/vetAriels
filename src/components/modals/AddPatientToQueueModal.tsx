@@ -1,4 +1,4 @@
-import { useContext, useState, ChangeEvent  } from 'react';
+import { useState } from 'react';
 import { useClients } from '@context/ClientsContext';
 import { Pet, Client } from '@t/client.types';
 import { MedicalQueueItem } from '@t/clinical.types';
@@ -148,6 +148,5 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatient
         </div>
     );
 }
-
 
 export { AddPatientToQueueModal };

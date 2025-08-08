@@ -1,28 +1,70 @@
-import { useContext, useState } from 'react';
+import { useState, ChangeEvent, ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { generateUniqueId } from '@utils/idGenerator';
+import { Service } from '@t/inventory.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
 import PillsIcon from '@assets/pillsIcon.svg?react';
-import PropTypes from "prop-types";
 
+interface AddNewServiceModalProps {
+    onClose: () => void;
+}
 
-function AddNewServiceModal({ onClose }) {
+interface FormDataState {
+    serviceName: string;
+    line: string;
+    category: string;
+    cost: string;
+    salePrice: string;
+}
+
+interface FormFieldConfig {
+    label: string;
+    name: keyof FormDataState;
+    type: 'text' | 'number' | 'select';
+    placeholder?: string;
+    options?: string[];
+    icon?: ComponentType<React.SVGProps<SVGSVGElement>>;
+    fullWidth?: boolean;
+    smallWidth?: boolean;
+}
+
+const formFields : FormFieldConfig[] = [
+    { label: 'Nombre del servicio', name: 'serviceName', type: 'text', placeholder: 'Ingrese nombre del servicio', icon: PillsIcon, fullWidth: true },
+    { label: 'Línea *', name: 'line', type: 'select', options: ['Seleccione', 'Línea 1', 'Línea 2', 'Línea 3'] },
+    { label: 'Categoría *', name: 'category', type: 'select', options: ['Seleccione', 'Categoría 1', 'Categoría 2', 'Categoría 3'] },
+    { label: 'Costo del servicio (incluido impuestos)', name: 'cost', type: 'number', icon: MoneyIcon, smallWidth: true },
+    { label: 'Precio del servicio (incluido impuestos)', name: 'salePrice', type: 'number', icon: MoneyIcon, smallWidth: true },
+];
+
+function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
     const navigate = useNavigate();
+    const { addNewService } = useProductsAndServices();
 
-    const { addNewService } = useContext(ProductsAndServicesContext);
-    const [errors, setErrors] = useState({});
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormDataState>({
         serviceName: '',
-        line: '',
-        category: '',
-        cost: 0,
-        salePrice: 0,
+        line: 'Seleccione',
+        category: 'Seleccione',
+        cost: "0",
+        salePrice: "0",
     });
+    console.log(formData);
+
+
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    function handleChange (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
 
     // Validación de los campos
-    function validateForm() {
-        const newErrors = {};
+    function validateForm(): boolean {
+        const newErrors: Record<string, string> = {};
         //Validamos si todos los campos son válidos
         if (!formData.serviceName || formData.serviceName.length < 4) {
             newErrors.serviceName = 'El nombre del servicio debe tener al menos 4 caracteres';
@@ -33,21 +75,13 @@ function AddNewServiceModal({ onClose }) {
         if (!formData.category || formData.category === "Seleccione") {
             newErrors.category = 'Este campo es obligatorio';
         }
-        if (!formData.salePrice || formData.salePrice <= 0) {
+        if (Number(formData.salePrice) <= 0) {
             newErrors.salePrice = 'El precio del servicio no puede ser menor a 0';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
     }
 
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
 
     function createService() {
         if (!validateForm()) {
@@ -57,7 +91,8 @@ function AddNewServiceModal({ onClose }) {
         const currentDate = now.toLocaleDateString(); //  "22/05/2023"
         const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
-        const newService = {
+        const newService: Service = {
+            id: generateUniqueId(),
             serviceName: formData.serviceName,
             line: formData.line,
             category: formData.category,
@@ -73,43 +108,6 @@ function AddNewServiceModal({ onClose }) {
         navigate(`/services`);
     }
 
-    const formFields = [
-        {
-            label: 'Nombre del servicio',
-            name: 'serviceName',
-            type: 'text',
-            placeholder: 'Ingrese nombre del servicio',
-            icon: PillsIcon,
-            fullWidth: true,  // Para que ocupe toda la fila
-        },
-        {
-            label: 'Línea *',
-            name: 'line',
-            type: 'select',
-            options: ['Seleccione', 'Línea 1', 'Línea 2', 'Línea 3'],
-        },
-        {
-            label: 'Categoría *',
-            name: 'category',
-            type: 'select',
-            options: ['Seleccione', 'Categoría 1', 'Categoría 2', 'Categoría 3'],
-        },
-        {
-            label: 'Costo del servicio (incluido impuestos)',
-            name: 'cost',
-            type: 'number',
-            icon: MoneyIcon,
-            smallWidth: true,
-        },
-        {
-            label: 'Precio del servicio (incluido impuestos)',
-            name: 'salePrice',
-            type: 'number',
-            icon: MoneyIcon,
-            smallWidth: true,
-        },
-    ];
-
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50 overflow-y-scroll custom-scrollbar">
             <div className="bg-white p-8 rounded-md w-full h-auto max-w-5xl mt-8 mx-4  modal-appear">
@@ -121,10 +119,10 @@ function AddNewServiceModal({ onClose }) {
                             className={`${field.fullWidth ? 'sm:col-span-4' : field.smallWidth ? 'sm:col-span-1' : 'sm:col-span-2'}`}
                         >
                             <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
-                            {field.type === 'select' ? (
+                            {field.type === 'select' && field.options  ? (
                                 <select
                                     name={field.name}
-                                    value={formData[field.name]}
+                                    value={formData[field.name as keyof FormDataState]}
                                     onChange={handleChange}
                                     className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none'}`}
                                 >
@@ -143,7 +141,7 @@ function AddNewServiceModal({ onClose }) {
                                         name={field.name}
                                         type={field.type}
                                         placeholder={field.placeholder}
-                                        value={formData[field.name]}
+                                        value={formData[field.name as keyof FormDataState]}
                                         onChange={handleChange}
                                         className={`border border-gray-300 rounded-r-lg py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none'}`}
                                     />
@@ -168,7 +166,3 @@ function AddNewServiceModal({ onClose }) {
 }
 
 export { AddNewServiceModal };
-
-AddNewServiceModal.propTypes = {
-    onClose: PropTypes.func
-}
