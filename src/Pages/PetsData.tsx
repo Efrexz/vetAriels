@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { Pet } from '@t/client.types';
 import { DeleteModal } from '@components/modals/DeleteModal';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';
@@ -8,16 +9,22 @@ import TrashIcon from '@assets/trashIcon.svg?react';
 import PawIcon from '@assets/pawIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 
+interface FilterOption {
+    value: string;
+    label: string;
+}
 
-const headlinesOptions = [
+interface HeadlineOptionConfig {
+    type: string;
+    options: FilterOption[];
+}
+
+const headlinesOptions : HeadlineOptionConfig[] = [
     {
         type: "Especie",
         options: [
             { value: "perro", label: "Perro" },
             { value: "gato", label: "Gato" },
-            { value: "ave", label: "Ave" },
-            { value: "roedor", label: "Roedor" },
-            { value: "reptil", label: "Reptil" },
         ]
     },
     {
@@ -81,14 +88,13 @@ const headlinesOptions = [
     },
 ];
 
-const tableHeaders = ["Fecha de Registro", "#H.C", "Nombre", "Especie", "Raza", "Genero", "Fecha de Nacimiento", "Cliente", "Estado", "Opciones"];
+const tableHeaders: string[] = ["Fecha de Registro", "#H.C", "Nombre", "Especie", "Raza", "Genero", "Fecha de Nacimiento", "Cliente", "Estado", "Opciones"];
 
 function PetsData() {
 
-    const { petsData } = useContext(ClientsContext);
+    const { petsData } = useClients();
 
-    const [petsDataToDelete, setPetsDataToDelete] = useState(null);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [petsDataToDelete, setPetsDataToDelete] = useState<Pet | null>(null);
     const navigate = useNavigate();
     return (
         <section className="container mx-auto p-6">
@@ -148,8 +154,8 @@ function PetsData() {
                             </tr>
                         </thead>
                         <tbody>
-                            {petsData.map((petData, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                            {petsData.map((petData) => (
+                                <tr key={petData.id} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
@@ -176,10 +182,7 @@ function PetsData() {
                                         <Stethoscope className="w-4 h-4 text-blue-500 cursor-pointer" />
                                         <TrashIcon
                                             className="w-4 h-4 text-red-500 cursor-pointer"
-                                            onClick={() => {
-                                                setPetsDataToDelete(petData)
-                                                setIsDeleteModalOpen(true)
-                                            }}
+                                            onClick={() => {setPetsDataToDelete(petData)}}
                                         />
                                     </td>
                                 </tr>
@@ -187,12 +190,11 @@ function PetsData() {
                         </tbody>
                     </table>
                 </div>
-
                 {
-                    isDeleteModalOpen && (
+                    petsDataToDelete && (
                         <DeleteModal
                             elementToDelete={petsDataToDelete}
-                            onClose={() => setIsDeleteModalOpen(false)}
+                            onClose={() => setPetsDataToDelete(null)}
                             mode="pets"
                         />
                     )

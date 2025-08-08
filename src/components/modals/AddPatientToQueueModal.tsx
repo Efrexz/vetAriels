@@ -1,34 +1,40 @@
-import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
-import { ClientsContext } from '@context/ClientsContext';
+import { useContext, useState, ChangeEvent  } from 'react';
+import { useClients } from '@context/ClientsContext';
+import { Pet, Client } from '@t/client.types';
+import { MedicalQueueItem } from '@t/clinical.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { generateUniqueId } from '@utils/idGenerator';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
+interface AddPatientToQueueModalProps {
+    onClose: () => void;
+    petsByOwner: Pet[];
+    clientData: Client;
+}
 
-function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
+function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatientToQueueModalProps) {
+
+    const { addPetToQueueMedical } = useClients();
     // Estado del formulario
-    const [selectedDoctor, setSelectedDoctor] = useState("Medico 1");
-    const [selectedPet, setSelectedPet] = useState(petsByOwner[0]?.petName);
+    const [selectedDoctor, setSelectedDoctor] = useState<string>("Médico 1");
+    const [selectedPetId, setSelectedPetId] = useState<string | undefined>(petsByOwner[0]?.id);
     const [isPetDataMissing, setIsPetDataMissing] = useState(false); // Estado para mostrar error si no se selecciona mascota
-    const [notes, setNotes] = useState('');
+    const [notes, setNotes] = useState<string>('');
 
     //obtenemos la fecha y la hora actuales a la cual se esta enviando a cola al paciente
     const now = new Date();
     const currentDate = now.toLocaleDateString(); //  "22/05/2023"
     const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
 
-    const { addPetToQueueMedical } = useContext(ClientsContext);
-
     // Manejo del envío del formulario
     function sendPatientToQueue() {
-        const petSelected = petsByOwner?.find(pet => pet.petName === selectedPet);
+        const petSelected = petsByOwner?.find(pet => pet.id === selectedPetId);
         if (!petSelected) {// Si no se selecciona mascota, mostramos error
             setIsPetDataMissing(true);
             return;
         }
 
-        const dataToSend = {
+        const dataToSend: MedicalQueueItem = {
             id: generateUniqueId(),
             assignedDoctor: selectedDoctor,
             petData: petSelected,
@@ -41,8 +47,6 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
 
         // agregamos el paciente a la cola médica
         addPetToQueueMedical(dataToSend);
-
-        // cerramos el modal después de enviar los datos
         onClose();
     }
 
@@ -98,10 +102,10 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                         <select
                             id="pet"
                             className={`border border-gray-300 rounded-md p-2 w-full ${isPetDataMissing ? "border-red-500 outline-none" : "hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"}`}
-                            onChange={(e) => setSelectedPet(e.target.value)}
+                            onChange={(e) => setSelectedPetId(e.target.value)}
                         >
-                            {petsByOwner?.map((pet, index) => (
-                                <option key={index}>{pet.petName}</option>
+                            {petsByOwner?.map((pet) => (
+                                <option key={pet.id} value={pet.id}>{pet.petName}</option>
                             ))}
                         </select>
                         {isPetDataMissing && (
@@ -128,7 +132,7 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
                     <textarea
                         id="notes"
                         className="border border-gray-300 rounded-md p-2 w-full max-h-60 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
-                        rows="4"
+                        rows={4}
                         placeholder="Escribe las notas aquí..."
                         onChange={(e) => setNotes(e.target.value)}
                     ></textarea>
@@ -145,11 +149,5 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }) {
     );
 }
 
-
-AddPatientToQueueModal.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    petsByOwner: PropTypes.array.isRequired,
-    clientData: PropTypes.object.isRequired,
-};
 
 export { AddPatientToQueueModal };

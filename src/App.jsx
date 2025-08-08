@@ -21,7 +21,7 @@ import { EditGroomingOrder } from './Pages/grooming/EditGroomingOrder.jsx';
 import { Clients } from './Pages/Clients';
 import { CreateClientForm } from './Pages/CreateClientForm.jsx';
 import { ClientInfo } from './Pages/clientData/ClientInfo';
-import { PetsData } from './Pages/PetsData.jsx';
+import { PetsData } from './Pages/PetsData';
 import { CreatePetForm } from './Pages/CreatePetForm.jsx';
 import { PetInfo } from './Pages/petInfo/PetInfo';
 import { Products } from './Pages/products/Products.jsx';
