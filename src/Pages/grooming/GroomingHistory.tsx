@@ -1,5 +1,6 @@
-import { useContext, useState } from 'react';
-import { ClientsContext } from '@context/ClientsContext';
+import { useState } from 'react';
+import { useClients } from '@context/ClientsContext';
+import { GroomingQueueItem } from '@t/clinical.types';
 import { UpdateStateModal } from '@components/modals/UpdateStateModal';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import BathIcon from '@assets/bathIcon.svg?react';
@@ -7,30 +8,29 @@ import BathIcon from '@assets/bathIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 
+type GroomingState = GroomingQueueItem['state'];
 
 const tableHeaders = ["Cod. de Sistema", "Fecha", "Entrada", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
 
 function GroomingHistory() {
 
-    const { petsInQueueGroomingHistory } = useContext(ClientsContext);
+    const { petsInQueueGroomingHistory } = useClients();
+    console.log(petsInQueueGroomingHistory);
+    
 
-    const [isUpdateStateModalOpen, setIsUpdateStateModalOpen] = useState(false);
-    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
-    const [groomingDataToUpdate, setGroomingDataToUpdate] = useState(null);
+    const [isUpdateStateModalOpen, setIsUpdateStateModalOpen] = useState<boolean>(false);
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState<boolean>(false);
+    const [groomingDataToUpdate, setGroomingDataToUpdate] = useState<GroomingQueueItem | null>(null);
 
     // determinar el color de fondo según el estado
-    function getStateColor(state) {
+    function getStateColor(state: GroomingState): string {
         switch (state) {
-            case "En atención":
-                return "bg-blue-400";
-            case "Pendiente":
-                return "bg-orange-500";
-            case "Terminado":
-                return "bg-green-500";
-            case "Entregado":
-                return "bg-blue-400";
-            default:
-                return "bg-orange-500";
+            case "En Atención": return "bg-red-500";
+            case "Pendiente": return "bg-orange-500";
+            case "Terminado": return "bg-green-500";
+            case "Entregado": return "bg-blue-500";
+            case "En espera": return "bg-yellow-500";
+            default: return "bg-gray-400";
         }
     }
 
@@ -85,8 +85,8 @@ function GroomingHistory() {
                             </tr>
                         </thead>
                         <tbody>
-                            {petsInQueueGroomingHistory.map((groomingData, index) => (
-                                <tr key={index} className="hover:bg-gray-100 border-b">
+                            {petsInQueueGroomingHistory.map((groomingData) => (
+                                <tr key={groomingData.id} className="hover:bg-gray-100 border-b">
                                     <td className="py-2 px-4 text-center border align-top pt-4">
                                         {groomingData.systemCode.slice(0, 9).toUpperCase()}
                                     </td>
@@ -108,7 +108,7 @@ function GroomingHistory() {
                                         <ul className='list-disc pl-4'>
                                             {groomingData.productsAndServices.map((item) => (
                                                 <li key={item.provisionalId} >
-                                                    {item.serviceName}
+                                                    {item.serviceName || item.productName}
                                                 </li>
                                             ))}
                                         </ul>
@@ -126,13 +126,15 @@ function GroomingHistory() {
                                     </td>
                                     <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-300">
                                         {/* <PenIcon className="w-5 h-5 text-blue-500 cursor-pointer" /> */}
-                                        <ReturnIcon
-                                            className="w-5 h-5 text-orange-400 cursor-pointer"
+                                        <button
+                                            aria-label="Regresar a la cola"
                                             onClick={() => {
-                                                setIsConfirmActionModalOpen(true)
-                                                setGroomingDataToUpdate(groomingData)
+                                                setIsConfirmActionModalOpen(true);
+                                                setGroomingDataToUpdate(groomingData);
                                             }}
-                                        />
+                                            >
+                                            <ReturnIcon className="w-5 h-5 text-orange-400 cursor-pointer" />
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -140,7 +142,7 @@ function GroomingHistory() {
                     </table>
                 </div>
                 {
-                    isUpdateStateModalOpen && (
+                    isUpdateStateModalOpen && groomingDataToUpdate && (
                         <UpdateStateModal
                             dataToUpdate={groomingDataToUpdate}
                             mode="history"
@@ -149,7 +151,7 @@ function GroomingHistory() {
                     )
                 }
                 {
-                    isConfirmActionModalOpen && (
+                    isConfirmActionModalOpen && groomingDataToUpdate && (
                         <ConfirmActionModal
                             elementData={groomingDataToUpdate}
                             typeOfOperation="returnGrooming"

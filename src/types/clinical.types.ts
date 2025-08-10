@@ -1,7 +1,7 @@
 import type { Pet } from './client.types';
 import type { PurchasedItem } from './inventory.types';
 
-export type QueueState = 'Pendiente' | 'Terminado' | 'En espera' | 'En Atención' | 'Suspendido';
+export type QueueState = 'Pendiente' | 'Terminado' | 'En espera' | 'En Atención' | 'Suspendido' | 'Entregado';
 
 // tipo base para los pacientes de la cola
 interface QueueItem {

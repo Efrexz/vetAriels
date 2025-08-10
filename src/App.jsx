@@ -15,7 +15,7 @@ import { Payments } from './Pages/sales/Payments.jsx';
 import { ClinicQueue } from './Pages/ClinicQueue';
 import { Internments } from './Pages/Internments.jsx';
 import { ActiveOrdersGrooming } from './Pages/grooming/ActiveOrdersGrooming.jsx';
-import { GroomingHistory } from './Pages/grooming/GroomingHistory.jsx';
+import { GroomingHistory } from './Pages/grooming/GroomingHistory';
 import { GroomingOrderCreation } from './Pages/grooming/GroomingOrderCreation.jsx';
 import { EditGroomingOrder } from './Pages/grooming/EditGroomingOrder.jsx';
 import { Clients } from './Pages/Clients';

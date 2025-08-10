@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { GroomingQueueItem } from '@t/clinical.types';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import { UpdateStateModal } from '@components/modals/UpdateStateModal';
 import BathIcon from '@assets/bathIcon.svg?react';
@@ -10,33 +11,33 @@ import CheckIcon from '@assets/checkIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import BanIcon from '@assets/banIcon.svg?react';
 
+type OperationType = "finishGrooming" | "deleteGrooming";
+
+type GroomingState = GroomingQueueItem['state']
 
 const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
 
 function ActiveOrdersGrooming() {
 
-    const { petsInQueueGrooming } = useContext(ClientsContext);
-
-    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
-    const [isUpdateStateModalOpen, setIsUpdateStateModalOpen] = useState(false);
-    const [groomingDataToEdit, setGroomingDataToEdit] = useState(null);
-    const [typeOfOperation, setTypeOfOperation] = useState('');
+    const { petsInQueueGrooming } = useClients();
     const navigate = useNavigate();
 
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState<boolean>(false);
+    const [isUpdateStateModalOpen, setIsUpdateStateModalOpen] = useState<boolean>(false);
+    const [groomingDataToEdit, setGroomingDataToEdit] = useState<GroomingQueueItem | null>(null);
+    const [typeOfOperation, setTypeOfOperation] = useState<OperationType>("finishGrooming");
+
     // determinar el color de fondo según el estado
-    function getStateColor(state) {
+    function getStateColor(state: GroomingState): string {
         switch (state) {
-            case "En atención":
-                return "bg-blue-400";
-            case "Pendiente":
-                return "bg-orange-500";
-            case "Terminado":
-                return "bg-green-500";
-            default:
-                return "bg-orange-500";
+            case "En Atención": return "bg-red-500";
+            case "Pendiente": return "bg-orange-500";
+            case "Terminado": return "bg-green-500";
+            case "Entregado": return "bg-blue-500";
+            case "En espera": return "bg-yellow-500";
+            default: return "bg-gray-400";
         }
     }
-
 
     return (
         <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8  overflow-auto custom-scrollbar mt-6">
@@ -53,7 +54,7 @@ function ActiveOrdersGrooming() {
                             </div>
                             <input
                                 type="text"
-                                placeholder="Buscar..."
+                                placeholder="Buscar por cliente o mascota......"
                                 className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                             />
                         </div>
@@ -71,10 +72,10 @@ function ActiveOrdersGrooming() {
                             className="w-full md:w-[30%] rounded-lg border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300 focus:border-blue-300"
                         >
                             <option value="">--Seleccionar estado--</option>
-                            <option value="pendiente">Pendiente</option>
-                            <option value="en-atencion">En Atención</option>
-                            <option value="finalizado">Finalizado</option>
-                            <option value="entregado">Entregado</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En Atención">En Atención</option>
+                            <option value="Terminado">Terminado</option>
+                            <option value="Entregado">Entregado</option>
                         </select>
                     </div>
                 </div>
@@ -93,8 +94,8 @@ function ActiveOrdersGrooming() {
                             </tr>
                         </thead>
                         <tbody>
-                            {petsInQueueGrooming.map((groomingData, index) => (
-                                <tr key={index} className="hover:bg-gray-100 border-b">
+                            {petsInQueueGrooming.map((groomingData) => (
+                                <tr key={groomingData.id} className="hover:bg-gray-100 border-b">
                                     <td className="py-2 px-4 text-center border-2 align-top pt-4">
                                         <input type="checkbox" className="form-checkbox" />
                                     </td>
@@ -166,7 +167,7 @@ function ActiveOrdersGrooming() {
                 </div>
 
                 {
-                    isConfirmActionModalOpen && (
+                    isConfirmActionModalOpen && groomingDataToEdit && (
                         <ConfirmActionModal
                             elementData={groomingDataToEdit}
                             typeOfOperation={typeOfOperation}
@@ -175,7 +176,7 @@ function ActiveOrdersGrooming() {
                     )
                 }
                 {
-                    isUpdateStateModalOpen && (
+                    isUpdateStateModalOpen && groomingDataToEdit &&(
                         <UpdateStateModal
                             dataToUpdate={groomingDataToEdit}
                             mode="grooming"
