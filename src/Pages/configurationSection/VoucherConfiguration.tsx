@@ -7,9 +7,7 @@ import SearchIcon from '@assets/searchIcon.svg?react';
 
 const tableHeaders = ["Fecha de registro", "Empresa", "	Nombre de comprobante", "Serie (actual)", "Ultimo número emitido", "Predeterminado", "Opciones"];
 
-function VoucherConfiguration() {
-
-    const paymentsData = [{
+const paymentsData = [{
         date: '29-07-2024 07:33 PM',
         companie: 'Gloria Carolina Espinoza Borja',
         voucherName: 'BOLETA DE VENTA ELECTRÓNICA',
@@ -18,6 +16,8 @@ function VoucherConfiguration() {
         default: false,
     }]
 
+
+function VoucherConfiguration() {
 
     return (
         <section className="container mx-auto p-6">

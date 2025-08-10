@@ -5,17 +5,16 @@ import EraserIcon from '@assets/eraserIcon.svg?react';
 import EditIcon from '@assets/editIcon.svg?react';
 import UserIcon from '@assets/userIcon.svg?react';
 
-
 const tableHeaders = ["Nombre", "Tipo de pago", "Observaciones", "Estado", "Opciones"];
 
-function PaymentMethods() {
-
-    const paymentsData = [{
+const paymentsData = [{
         name: 'AMERICAN EXPRESS',
         paymentType: 'TARJETA DE CRÉDITO',
         observations: '',
         state: true,
     }]
+
+function PaymentMethods() {
 
     return (
         <section className="container mx-auto p-6">

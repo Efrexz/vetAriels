@@ -18,7 +18,7 @@ export interface User extends Account {
 export interface Role {
     id: string;
     name: string;
-    access: 'SI' | 'NO' | '';
+    access: 'SI' | 'NO' ;
 }
 
 export interface CompanyData {

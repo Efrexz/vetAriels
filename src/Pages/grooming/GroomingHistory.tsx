@@ -15,8 +15,6 @@ const tableHeaders = ["Cod. de Sistema", "Fecha", "Entrada", "Salida", "Cliente"
 function GroomingHistory() {
 
     const { petsInQueueGroomingHistory } = useClients();
-    console.log(petsInQueueGroomingHistory);
-    
 
     const [isUpdateStateModalOpen, setIsUpdateStateModalOpen] = useState<boolean>(false);
     const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState<boolean>(false);

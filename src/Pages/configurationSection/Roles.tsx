@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../../context/GlobalContext';
+import { useGlobal } from '@context/GlobalContext';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -9,9 +8,9 @@ import EditIcon from '@assets/editIcon.svg?react';
 
 function Roles() {
 
-    const { roles, removeRole } = useContext(GlobalContext);
-
+    const { roles, removeRole } = useGlobal();
     const navigate = useNavigate();
+
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-2xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
@@ -36,8 +35,8 @@ function Roles() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {roles.map((role, index) => (
-                                    <tr key={index} className="border hover:bg-gray-50">
+                                {roles.map((role) => (
+                                    <tr key={role.id} className="border hover:bg-gray-50">
                                         <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-700 border">{role.name}</td>
                                         <td className="py-3 text-sm font-medium border text-center">
                                             <button

@@ -1,39 +1,40 @@
-import { useContext, useState } from "react";
+import {  useState, ChangeEvent, } from "react";
+import { useGlobal } from '@context/GlobalContext';
+import { Role } from '@t/user.types';
 import { useNavigate } from "react-router-dom";
 import { ActionButtons } from "@components/ui/ActionButtons";
-import { GlobalContext } from '@context/GlobalContext';
+import { generateUniqueId } from '@utils/idGenerator';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
-function CreateRol() {
-    const { addRole } = useContext(GlobalContext);
-    const [formData, setFormData] = useState({
-        name: "",
-        access: "",
-    });
-    const [error, setError] = useState(false);
+type FormDataState = Omit<Role, 'id'>;
 
-    const handleChange = (e) => {
+function CreateRol() {
+    const { addRole } = useGlobal()
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState<FormDataState>({
+        name: "",
+        access: "NO",
+    });
+    const [error, setError] = useState<boolean>(false);
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value,
+            [e.target.name as keyof FormDataState]: e.target.value,
         });
     };
 
-    const navigate = useNavigate();
 
     function addNewRole() {
-        if (formData.name.length < 4) {
+        if (formData.name.trim().length < 4) {
             setError(true);
             return;
         }
-        function generateId() {
-            const part1 = Date.now().toString(35)
-            const part2 = Math.random().toString(36).slice(2)
-            return part1 + part2
-        }
+
         const newRoleWithId = {
             ...formData,
-            id: generateId(),
+            id: generateUniqueId(),
         };
         addRole(newRoleWithId);
         navigate("/config/roles")
@@ -55,6 +56,7 @@ function CreateRol() {
                             <input
                                 type="text"
                                 name="name"
+                                id="name"
                                 value={formData.name}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-2 border rounded-md ${error ? "border-red-500" : "border-gray-300"} hover:border-blue-300 focus-within:border-blue-300 outline-none`}
@@ -72,6 +74,7 @@ function CreateRol() {
                             </label>
                             <select
                                 name="access"
+                                id="access"
                                 value={formData.access}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border rounded-md hover:border-blue-300 focus-within:border-blue-300 outline-none"

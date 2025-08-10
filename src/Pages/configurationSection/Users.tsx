@@ -1,7 +1,8 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGlobal } from '@context/GlobalContext';
+import { User } from '@t/user.types';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
-import { GlobalContext } from '@context/GlobalContext';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import RefreshIcon from '@assets/refreshIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
@@ -12,10 +13,10 @@ import KeyIcon from '@assets/keyIcon.svg?react';
 const tableHeaders = ["Fecha de creación", "Nombre y Apellidos", "Correo", "Rol", "Estado", "Opciones"];
 
 function Users() {
+    const { users } = useGlobal();
     const navigate = useNavigate();
-    const { users } = useContext(GlobalContext);
-    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
-    const [userToDelete, setUserToDelete] = useState(null);
+    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState<boolean>(false);
+    const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
     return (
         <section className="container mx-auto p-6">
@@ -51,8 +52,8 @@ function Users() {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                            {users.map((user) => (
+                                <tr key={user.id} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 text-center border">
                                         {user?.registrationDate} {user?.registrationTime}
                                     </td>
@@ -89,7 +90,7 @@ function Users() {
                     </table>
                 </div>
                 {
-                    isConfirmActionModalOpen && (
+                    isConfirmActionModalOpen && userToDelete && (
                         <ConfirmActionModal
                             elementData={userToDelete}
                             typeOfOperation={"deleteUser"}
