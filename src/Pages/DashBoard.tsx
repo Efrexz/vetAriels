@@ -1,3 +1,4 @@
+import {ComponentType} from 'react';
 import { Link } from 'react-router-dom';
 import ShoppingCart from '@assets/shoppingCart.svg?react';
 import BagShoppingIcon from '@assets/bagShopping.svg?react';
@@ -12,7 +13,7 @@ import ConfigurationIcon from '@assets/configurationIcon.svg?react';
 
 interface DashboardCategory {
     name: string;
-    icon: React.ComponentType<any>;
+    icon: ComponentType<React.SVGProps<SVGSVGElement>>
     color: string;
     link: string;
 }

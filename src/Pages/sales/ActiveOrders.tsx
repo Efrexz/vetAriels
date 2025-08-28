@@ -1,25 +1,27 @@
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { Client } from '@t/client.types';
+import { PurchasedItem } from '@t/inventory.types';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import WhatsAppIcon from '@assets/whatsAppIcon.svg?react';
 import ShoppingCart from '@assets/shoppingCart.svg?react';
 
-const tableHeaders = [
-    "Cliente",
-    "Último movimiento",
-    "Items en lista",
-    "Monto",
-    "Opciones"
-];
+const tableHeaders: string[] = ["Cliente", "Último movimiento", "Items en lista", "Monto", "Opciones"];
 
 function ActiveOrders() {
 
-    const { clients } = useContext(ClientsContext);
+    const { clients } = useClients();
+    const navigate = useNavigate();
 
     //filtramos los clientes que tengan por lo menos un producto en la cola de ventas
-    const activeAccounts = clients.filter(client => client?.products?.length > 0);
-    const navigate = useNavigate();
+    const activeAccounts: Client[] = clients.filter(client => client.products && client.products.length > 0);
+
+    const calculateTotal = (products: PurchasedItem[]): string => {
+        const total = products.reduce((accumulator, product) => {
+            return accumulator + (product.salePrice || 0);
+        }, 0);
+        return total.toFixed(2); // 2 decimales para mostrarlo como moneda.
+    };
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-xl sm:text-3xl font-medium text-orange-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -57,30 +59,30 @@ function ActiveOrders() {
                             </tr>
                         </thead>
                         <tbody>
-                            {activeAccounts?.map((account, index) => (
+                            {activeAccounts?.map((account) => (
                                 <tr
-                                    key={index}
+                                    key={account.id}
                                     className='hover:bg-gray-100 hover:cursor-pointer'
-                                    onClick={() => navigate(`/sales/client/${account?.id}`)}
+                                    onClick={() => navigate(`/sales/client/${account.id}`)}
                                 >
                                     <td className="py-2 text-center border">
-                                        {account?.firstName} {account?.lastName}
+                                        {account.firstName} {account.lastName}
                                     </td>
                                     <td className="py-2 text-center border">
-                                        {account?.products[0]?.additionDate} {account?.products[0]?.additionTime}
+                                        {account?.products[0].additionDate} {account.products[0].additionTime}
                                     </td>
                                     <td className="py-2 text-center border">
-                                        {account?.products?.length}
+                                        {account.products.length}
                                     </td>
                                     <td className="py-2 text-center border">
                                         <span>
-                                            {account?.products?.reduce((acc, product) => acc + product?.salePrice, 0)}
+                                            S/{calculateTotal(account.products)}
                                         </span>
                                     </td>
                                     <td className="py-2 text-center border">
                                         <button
                                             className="text-green-500 hover:text-green-700"
-                                            onClick={() => navigate(`/sales/client/${account?.id}`)}
+                                            onClick={() => navigate(`/sales/client/${account.id}`)}
                                         >
                                             <SearchIcon className="w-5 h-5" />
                                         </button>

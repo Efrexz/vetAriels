@@ -4,14 +4,14 @@ import { useClients } from '@context/ClientsContext';
 import { useProductsAndServices } from '@context/ProductsAndServicesContext';
 import { ErrorModal } from "../modals/ErrorModal";
 import { generateUniqueId } from "@utils/idGenerator";
-import { Product, Service, PurchasedItem } from '@t/inventory.types';
+import { Product, Service } from '@t/inventory.types';
 
 type SearchMode = 'sales' | 'discharge' | 'restock' | 'grooming';
 
 type SearchResultItem = Product | Service;
 
 interface ProductSearchInputProps {
-    addProductToTable: (item: PurchasedItem) => void;
+    addProductToTable: (item: Product | Service) => void;
     mode: SearchMode;
     stockMode?: boolean;
 }
@@ -61,26 +61,14 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
             setSearchTerm('');
             return;
         }
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
-        const newItemForTable: PurchasedItem  = {
-            ...selectedItem,
-            provisionalId: generateUniqueId(),
-            additionTime: currentTime,
-            additionDate: currentDate,
-            quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
-        };
-
-        // Si estamos en modo ventas y hay un ID de cliente, lo añadimos al cliente.
-        if (mode === "sales" && id) {
-            addProductToClient(id, newItemForTable);
-        }
-
-        // también lo agregamos a la tabla local
-        addProductToTable(newItemForTable);
+        addProductToTable(selectedItem);
         setSearchTerm('');
+
+        // // Si estamos en modo ventas y hay un ID de cliente, lo añadimos al cliente.
+        // if (mode === "sales" && id) {
+        //     addProductToClient(id, newItemForTable);
+        // }
     }
 
     return (

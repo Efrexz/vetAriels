@@ -1,31 +1,43 @@
-import { useContext, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { GlobalContext } from '@context/GlobalContext';
+import { useState, ComponentType } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGlobal } from '@context/GlobalContext';
+import { User } from '@t/user.types';
 import { ErrorModal } from '@components/modals/ErrorModal';
 import { SuccessModal } from '@components/modals/SuccessModal';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import KeyIcon from '@assets/keyIcon.svg?react';
 import InfoIcon from '@assets/infoIcon.svg?react';
 
+interface PasswordFormData {
+    oldPassword: string;
+    newPassword: string;
+}
+
+type FormErrors = Partial<Record<keyof PasswordFormData, string>>;
+
+interface FormFieldConfig {
+    label: string;
+    id: keyof PasswordFormData;
+    type: 'password';
+    icon: ComponentType<React.SVGProps<SVGSVGElement>>;
+}
+
+const formFields: FormFieldConfig[] = [
+    { label: "Contraseña Actual", id: 'oldPassword', type: 'password', icon: KeyIcon },
+    { label: "Contraseña Nueva", id: 'newPassword', type: 'password', icon: KeyIcon },
+];
 
 function UserPassword() {
 
-    const { activeUser, updateUserData } = useContext(GlobalContext);
-    const { id } = useParams();
-
-
+    const { activeUser, updateUserData } = useGlobal();
+    const [formData, setFormData] = useState<PasswordFormData>({ oldPassword: '', newPassword: '' });
+    const [errors, setErrors] = useState<FormErrors>({});
+    const navigate = useNavigate();
     //Modales
-    const [isErrorModalOpen, setErrorModalOpen] = useState(false);
-    const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
+    const [isErrorModalOpen, setErrorModalOpen] = useState<boolean>(false);
+    const [isSuccessModalOpen, setSuccessModalOpen] = useState<boolean>(false);
 
-    const [formData, setFormData] = useState({
-        oldPassword: '',
-        newPassword: '',
-    });
-
-    const [errors, setErrors] = useState({});
-
-    function handleChange(e) {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { id, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
@@ -35,7 +47,7 @@ function UserPassword() {
 
     // Validación de los campos
     function validateForm() {
-        const newErrors = {};
+        const newErrors: FormErrors = {};
         //Validamos si todos los campos son válidos
         if (!formData.oldPassword || formData.oldPassword.length < 6) {
             newErrors.oldPassword = 'La contraseña debe tener al menos 6 caracteres';
@@ -49,43 +61,24 @@ function UserPassword() {
 
 
     function updatePassword() {
+        if (!activeUser) return;
         //Si el formulario no es válido, no actualizamos nada y mostramos los errores
         if (!validateForm()) {
             return;
         }
-        const updatedUserData = {
-            ...activeUser,
+
+        if (formData.oldPassword !== activeUser.password) {
+            setErrorModalOpen(true);
+            return;
+        }
+
+        const updatedData: Partial<User> = {
             password: formData.newPassword,
         };
-        if (formData.oldPassword === activeUser.password) {
-            updateUserData(Number(id), updatedUserData);
-            setSuccessModalOpen(true);
-            formData.oldPassword = '';
-            formData.newPassword = '';
-        }
-        else {
-            setErrorModalOpen(true);
-        }
-    }
 
-    const formFields = [
-        {
-            label: "Contraseña Actual",
-            id: 'oldPassword',
-            type: 'password',
-            value: formData.oldPassword,
-            icon: KeyIcon,
-            required: true,
-        },
-        {
-            label: "Contraseña Nueva",
-            id: 'newPassword',
-            type: 'password',
-            value: formData.newPassword,
-            icon: KeyIcon,
-            required: true,
-        },
-    ];
+        updateUserData(activeUser.id, updatedData);
+        setSuccessModalOpen(true);
+    }
 
     return (
         <div className="flex flex-col w-full">
@@ -111,7 +104,6 @@ function UserPassword() {
                                     id={field.id}
                                     value={formData[field.id]}
                                     onChange={handleChange}
-                                    disabled={field.disabled}
                                     className={`border rounded-r-lg p-3 w-full hover:border-blue-300 focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-300'}`}
                                 />
                             </div>

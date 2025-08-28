@@ -1,5 +1,6 @@
-import { useContext, useState } from 'react';
-import { GlobalContext } from '@context/GlobalContext';
+import { ChangeEvent,useState, useEffect } from 'react';
+import { useGlobal } from '@context/GlobalContext';
+import { User } from '@t/user.types';
 import { useParams } from 'react-router-dom';
 import { SuccessModal } from '@components/modals/SuccessModal';
 import PlusIcon from '@assets/plusIcon.svg?react';
@@ -7,16 +8,24 @@ import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import phoneIcon from '@assets/phoneIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
 
+interface FormDataState {
+    email: string;
+    mobile: string;
+    name: string;
+    lastName: string;
+    role: string;
+}
+
+type FormErrors = Partial<Record<keyof Omit<FormDataState, 'email' | 'role'>, string>>;
 
 function UserProfile() {
-    const { activeUser, updateUserData } = useContext(GlobalContext);
-    const [errors, setErrors] = useState({});
-    const { id } = useParams();
+    const { activeUser, updateUserData } = useGlobal();
+    const { id } = useParams<{ id: string }>();
 
     //Modal
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormDataState>({
         email: activeUser?.email || '',
         mobile: activeUser?.phone || '',
         name: activeUser?.name || '',
@@ -24,16 +33,30 @@ function UserProfile() {
         role: activeUser?.rol || '',
     });
 
+    const [errors, setErrors] = useState<FormErrors>({});
+
+    useEffect(() => {
+        if (activeUser) {
+        setFormData({
+            email: activeUser.email || '',
+            mobile: activeUser.phone || '',
+            name: activeUser.name || '',
+            lastName: activeUser.lastName || '',
+            role: activeUser.rol || '',
+        });
+        }
+    }, [activeUser]);
+
     // Validación de los campos
     function validateForm() {
-        const newErrors = {};
+        const newErrors: FormErrors = {};
         //Validamos si todos los campos son válidos
-        if (!formData.mobile || formData.mobile.length < 9) {
-            newErrors.mobile = 'El número de teléfono debe tener al menos 9 caracteres';
-        } if (!formData.name || formData.name.length < 4) {
-            newErrors.name = 'El nombre debe tener al menos 4 caracteres';
-        } if (!formData.lastName || formData.lastName.length < 4) {
-            newErrors.lastName = 'El apellido debe tener al menos 4 caracteres';
+        if (!/^\d{9}$/.test(formData.mobile)) {
+            newErrors.mobile = 'El número de teléfono debe tener 9 caracteres';
+        } if (formData.name.trim().length < 3) {
+            newErrors.name = 'El nombre debe tener al menos 3 caracteres';
+        } if (formData.lastName.trim().length < 3) {
+            newErrors.lastName = 'El apellido debe tener al menos 3 caracteres';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
@@ -41,20 +64,19 @@ function UserProfile() {
 
 
     function updateData() {
-        if (!validateForm()) {
+        if (!validateForm() || !id) {
             return;
         }
-        const updatedUserData = {
-            ...activeUser,
+        const updatedUserData: Partial<User> = {
             phone: formData.mobile,
-            name: formData.name,
-            lastName: formData.lastName,
+            name: formData.name.trim(),
+            lastName: formData.lastName.trim(),
         };
-        updateUserData(Number(id), updatedUserData);
+        updateUserData(id, updatedUserData);
         setIsModalOpen(true)
     }
 
-    function handleChange(e) {
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
         const { id, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
@@ -62,6 +84,13 @@ function UserProfile() {
         }));
     }
 
+    if (!activeUser) {
+        return (
+        <div className="p-6 text-center text-gray-500">
+            No hay un usuario activo para mostrar el perfil.
+        </div>
+        );
+    }
 
     const formFields = [
         {
@@ -123,15 +152,15 @@ function UserProfile() {
                                 <input
                                     type={field.type}
                                     id={field.id}
-                                    value={formData[field.id]}
+                                    value={formData[field.id as keyof FormDataState]}
                                     onChange={handleChange}
                                     disabled={field.disabled}
-                                    className={`border rounded-r-lg p-3 w-full focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus-within:border-blue-300'} `}
+                                    className={`border rounded-r-lg p-3 w-full focus:outline-none ${errors[field.id as keyof FormErrors] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus-within:border-blue-300'} `}
                                 />
                             </div>
                             {
-                                errors[field.id] && (
-                                    <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                                errors[field.id as keyof FormErrors] && (
+                                    <p className="text-red-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
                                 )
                             }
                         </div>

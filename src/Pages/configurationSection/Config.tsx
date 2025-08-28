@@ -77,7 +77,7 @@ function Config() {
     return (
         <div className="container mx-auto p-6">
             <div className="flex justify-between items-center mb-6">
-                <HorizontalMenu mode="user" />
+                <HorizontalMenu mode="clinics" />
             </div>
             <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-t-lg overflow-hidden">
                 <div className="w-full md:w-1/3 p-6 bg-gray-100 flex flex-col items-center justify-center">

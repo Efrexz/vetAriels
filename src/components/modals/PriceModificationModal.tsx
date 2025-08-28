@@ -1,14 +1,13 @@
 import { useState , ChangeEvent} from 'react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
-import type { Product, Service } from '@t/inventory.types';
+import type { PurchasedItem,  } from '@t/inventory.types';
 
-type EditableItem = Product | Service;
 
 interface PriceModificationModalProps {
     onClose: () => void;
-    productToEdit: EditableItem;
-    updateProductPrice: (updatedProduct: EditableItem) => void;
+    productToEdit: PurchasedItem;
+    updateProductPrice: (updatedProduct: PurchasedItem) => void;
 }
 
 function PriceModificationModal({ onClose, productToEdit, updateProductPrice }: PriceModificationModalProps) {
@@ -16,7 +15,7 @@ function PriceModificationModal({ onClose, productToEdit, updateProductPrice }: 
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         const valueAsNumber = parseFloat(e.target.value);
-        setItemPrice(isNaN(valueAsNumber) ? 0 : valueAsNumber) 
+        setItemPrice(isNaN(valueAsNumber) ? 0 : valueAsNumber)
     }
 
     function editPrice() {

@@ -1,61 +1,81 @@
-import { useContext, useState } from 'react';
+import { useState, useMemo , ChangeEvent} from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { PurchasedItem } from '@t/inventory.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
+import {generateUniqueId } from '@utils/idGenerator';
 import FileIcon from '@assets/file-invoice.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import LightbulbIcon from '@assets/lightbulb.svg?react';
 
+// Tipo base con propiedades comunes a todos los campos
+interface BaseField {
+    label: string;
+    fullWidth?: boolean;
+}
+
+// Tipo específico para campos de texto, número, email, etc.
+interface InputField extends BaseField {
+    type: 'text' | 'number' | 'email';
+    value?: string | number; // El valor puede ser string o number
+    disabled?: boolean;
+    placeholder?: string;
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+//  Tipo específico para campos de selección
+interface SelectField extends BaseField {
+    type: 'select';
+    value?: string;
+    options: string[]; //  options para los select
+    onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;
+}
+
+// Unimos todo en un solo tipo. TypeScript sabrá cuál es cuál gracias a la propiedad 'type'.
+type FormField = InputField | SelectField;
+
+interface PaymentMethod {
+    id: string;
+    label: string;
+    description: string;
+    amortization: number;
+    amount: number;
+}
+
+interface LocationState {
+    selectedProducts: PurchasedItem[];
+}
+
+const tableCategories: string[] = ["Concepto", "Valor Unitario", "Cantidad", "SubTotal", "Descuento", "Impuestos", "Total"];
+
+const invoiceData: FormField[] = [
+    { label: 'Fecha de emisión', value: new Date().toLocaleString(), type: "text", disabled: true },
+    { label: 'Emisor', value: 'VETERINARIA ARIEL S E.I.R.L', type: "text", disabled: true },
+    { label: 'Tipo de comprobante', type: "select", options: ["BOLETA DE VENTA ELECTRÓNICA", "RECIBO", "FACTURA ELECTRONICA"] },
+    { label: 'Fecha de vencimiento', value: new Date().toLocaleDateString(), type: "text", disabled: true },
+    { label: 'Serie de comprobante', value: 'BV01', type: "text", disabled: true },
+    { label: 'Número de comprobante', value: '0004246', type: "text", disabled: true },
+]
+
+
 function CreateInvoice() {
-    const { id } = useParams();
 
-    const { clients } = useContext(ClientsContext);
-    const clientData = clients.find(client => client.id === Number(id));
+    const { clients } = useClients();
+    const { id: clientId } = useParams<{ id: string }>();
     const navigate = useNavigate();
-
-    const invoiceData = [
-        { label: 'Fecha de emisión', value: '29-10-2024 12:21 PM', type: "text", disabled: true },
-        { label: 'Emisor', value: 'VETERINARIA ARIEL S E.I.R.L', type: "text", disabled: true },
-        { label: 'Tipo de comprobante', type: "select", options: ["BOLETA DE VENTA ELECTRÓNICA", "RECIBO", "FACTURA ELECTRONICA"] },
-        { label: 'Fecha de vencimiento', value: '29-10-2024 12:21 PM', type: "text", disabled: true },
-        { label: 'Serie de comprobante', value: 'BV01', type: "text", disabled: true },
-        { label: 'Número de comprobante', value: '0004246', type: "text", disabled: true },
-    ]
-
-    const clientInfo = [
-        {
-            label: 'Tipo de documento de identidad',
-            type: "select",
-            options: ["DOCUMENTO NACIONAL DE IDENTIDAD (DNI)",
-                "VARIOS - VENTAS MENORES A 700",
-                "NÚMERO TRIBUTARIO (RUC)",
-                "CARNET DE EXTRANJERIA",
-                "PASAPORTE",
-            ]
-        },
-        { label: 'Número de documento', value: clientData?.dni, type: "number" },
-        { label: 'Cliente', value: `${clientData?.firstName} ${clientData?.lastName}`, type: "text" },
-        { label: 'Email', value: clientData?.email, type: "email" },
-        { label: 'Dirección', value: clientData?.address, type: "text", fullWidth: true },
-    ]
-
-    const tableCategories = [
-        "Concepto",
-        "Valor Unitario",
-        "Cantidad",
-        "SubTotal",
-        "Descuento Unitario",
-        "Impuestos",
-        "Total",
-    ];
-
     const location = useLocation();
-    const { selectedProducts } = location.state || [];
+    const clientData = useMemo(() => clients.find(client => client.id === clientId), [clients, clientId]);
 
-    const totalPrice = selectedProducts.reduce(
-        (acc, product) => acc + (product.price || product.salePrice) * product.quantity,
-        0
-    );
+    const { selectedProducts = [] } = (location.state as LocationState) || {};
+    //observaciones del comprobante
+    const [notes, setNotes] = useState<string>('');
+    const [paymentNote, setPaymentNote] = useState<string>('');
+    const [paymentAmount, setPaymentAmount] = useState<string>("");
+    const [methodOfPayment, setMethodOfPayment] = useState<string>("");
+    const [methodsOfPaymentList, setMethodsOfPaymentList] = useState<PaymentMethod[]>([]);
+
+    //suma del total de los productos seleccionados
+    const totalPrice = selectedProducts.reduce((acc, product) => acc + (product.salePrice || 0) * product.quantity, 0);
 
     const taxesData = [
         { label: 'SubTotal', value: totalPrice },
@@ -66,13 +86,21 @@ function CreateInvoice() {
         { label: 'TOTAL', value: totalPrice, bold: true },
     ];
 
-    //observaciones del comprobante
-    const [notes, setNotes] = useState('');
-    const [paymentNote, setPaymentNote] = useState('');
-    const [paymentAmount, setPaymentAmount] = useState("");
-    const [methodOfPayment, setMethodOfPayment] = useState("");
+    const amountReceived = methodsOfPaymentList.reduce(
+        (acc, payment) => acc + payment.amount,
+        0
+    );
 
-    const paymentData = [
+    const amountDue = Math.max(0, totalPrice - amountReceived);
+    const change = Math.max(0, amountReceived - totalPrice)
+
+    const paymentMethods = [
+        { label: 'Dinero Recibido', value: amountReceived.toFixed(2) },
+        { label: 'Saldo por pagar', value: amountDue.toFixed(2) },
+        { label: 'Cambio / Vuelto', value: change.toFixed(2) },
+    ];
+
+    const paymentData : FormField[]= [
         {
             label: 'Forma de pago',
             type: "select",
@@ -95,25 +123,35 @@ function CreateInvoice() {
         },
     ]
 
-    const [methodsOfPaymentList, setMethodsOfPaymentList] = useState([]);
+    const clientInfo: FormField[] = [
+        { label: 'Tipo de documento de identidad',type: "select", options: ["(DNI)","NÚMERO TRIBUTARIO (RUC)","CARNET DE EXTRANJERIA","PASAPORTE",]},
+        { label: 'Número de documento', value: clientData?.dni, type: "number" },
+        { label: 'Cliente', value: clientData ? `${clientData.firstName} ${clientData.lastName}` : 'N/A', type: "text" },
+        { label: 'Email', value: clientData?.email || 'N/A', type: "email" },
+        { label: 'Dirección', value: clientData?.address, type: "text", fullWidth: true },
+    ]
 
-    const amountReceived = methodsOfPaymentList.reduce(
-        (acc, payment) => acc + payment.amount,
-        0
-    );
+    function handleAddPayment () {
+        if (!methodOfPayment || !paymentAmount || parseFloat(paymentAmount) <= 0) {
+            alert("Por favor, seleccione una forma de pago y un monto válido.");
+            return;
+        }
+        const newPayment: PaymentMethod = {
+            id: generateUniqueId(),
+            label: methodOfPayment,
+            description: paymentNote,
+            amortization: parseFloat(paymentAmount),
+            amount: parseFloat(paymentAmount),
+        };
+        setMethodsOfPaymentList(prev => [...prev, newPayment]);
+        setPaymentAmount("");
+        setPaymentNote("");
+    };
 
-    const amountDue = (totalPrice - amountReceived) < 0 ? "0.00" : (totalPrice - amountReceived).toFixed(2);
-
-    const change = (amountReceived - totalPrice) < 0 ? "0.00" : (amountReceived - totalPrice).toFixed(2);
-
-    const paymentMethods = [
-        { label: 'Dinero Recibido', value: amountReceived.toFixed(2) },
-        {
-            label: 'Saldo por pagar',
-            value: amountDue
-        },
-        { label: 'Cambio / Vuelto', value: change },
-    ];
+    if (!clientData) {
+        return <div className="p-6">Error: Cliente no encontrado. Por favor, vuelva a la página de ventas.</div>;
+    }
+    
 
     return (
         <div className="p-6 bg-white">
@@ -126,14 +164,14 @@ function CreateInvoice() {
                 {/* Primera Sección: Datos del Comprobante */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {invoiceData.map((data, index) => (
-                            <div key={index} className="flex flex-col">
+                        {invoiceData.map((data) => (
+                            <div key={data.label} className="flex flex-col">
                                 <label className="text-sm font-medium text-gray-700">{data.label}</label>
                                 <div className="flex items-center mt-1">
                                     {data.type === "select" ? (
                                         <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300 outline-none">
-                                            {data.options.map((option, idx) => (
-                                                <option key={idx} value={option}>
+                                            {data.options.map((option, index) => (
+                                                <option key={index} value={option}>
                                                     {option}
                                                 </option>
                                             ))}
@@ -156,13 +194,13 @@ function CreateInvoice() {
                 {/* Segunda Sección: Datos del Cliente */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {clientInfo.map((data, index) => (
+                        {clientInfo.map((data) => (
                             <div
-                                key={index}
+                                key={data.label}
                                 className={`flex flex-col ${data.fullWidth ? "sm:col-span-2" : ""}`}
                             >
                                 <label className="text-sm font-medium text-gray-700">{data.label}</label>
-                                <div className={`flex items-center mt-1`}>
+                                <div className="flex items-center mt-1">
                                     {data.type === "select" ? (
                                         <select className="w-full border rounded-md px-3 py-2 bg-white text-sm hover:border-blue-300 focus:border-blue-300 outline-none">
                                             {data.options.map((option, idx) => (
@@ -191,9 +229,9 @@ function CreateInvoice() {
                     <table className="min-w-full bg-white shadow-md overflow-hidden">
                         <thead>
                             <tr>
-                                {tableCategories.map((category, index) => (
+                                {tableCategories.map((category) => (
                                     <th
-                                        key={index}
+                                        key={category}
                                         className="py-2 px-4 bg-gray-200 text-gray-600 font-bold uppercase text-xs border-gray-300 border-2"
                                     >
                                         {category}
@@ -202,19 +240,19 @@ function CreateInvoice() {
                             </tr>
                         </thead>
                         <tbody>
-                            {selectedProducts.map((product, index) => (
-                                <tr key={index} className="border-b text-gray-600">
+                            {selectedProducts.map((product) => (
+                                <tr key={product.provisionalId} className="border-b text-gray-600">
                                     <td className="py-2 px-4 border-gray-300 border-2 text-left">
                                         {product.productName || product.serviceName}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.price || product.salePrice}
+                                        {product.salePrice}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         {product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.price || product.salePrice}
+                                        {product.salePrice}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         0.00
@@ -223,7 +261,7 @@ function CreateInvoice() {
                                         0.00
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {(product.price || product.salePrice) * product.quantity}
+                                        {(product.salePrice || 0) * product.quantity}
                                     </td>
                                 </tr>
                             ))}
@@ -236,8 +274,8 @@ function CreateInvoice() {
                     <div className="w-full lg:w-1/2 ml-auto">
                         <table className="min-w-full">
                             <tbody>
-                                {taxesData.map((row, index) => (
-                                    <tr key={index} className={`border-t border-gray-300 ${row.bold ? "font-bold" : ""}`}>
+                                {taxesData.map((row) => (
+                                    <tr key={row.label} className={`border-t border-gray-300 ${row.bold ? "font-bold" : ""}`}>
                                         <td className="py-2 text-gray-600">{row.label}</td>
                                         <td className="py-2 text-right text-gray-600">{row.value}</td>
                                     </tr>
@@ -252,7 +290,7 @@ function CreateInvoice() {
                     <label className="block text-gray-700">Observaciones o comentarios para este comprobante</label>
                     <textarea
                         className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-14 hover:border-blue-300 focus:border-blue-300 outline-none"
-                        rows="2"
+                        rows={2}
                         placeholder="Añadir observaciones..."
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
@@ -263,8 +301,8 @@ function CreateInvoice() {
             <div className="bg-gray-50 p-6 rounded-lg shadow-md mt-4">
                 {/* Controles de entrada */}
                 <div className="flex flex-wrap gap-4 justify-end mb-4">
-                    {paymentData.map((data, index) => (
-                        <div key={index} className="flex flex-col w-full sm:w-auto">
+                    {paymentData.map((data) => (
+                        <div key={data.label} className="flex flex-col w-full sm:w-auto">
                             <label className="text-sm font-medium text-gray-700">{data.label}</label>
                             <div className="flex items-center mt-1">
                                 {data.type === "select" ? (
@@ -293,18 +331,7 @@ function CreateInvoice() {
                     <div className="self-end w-full sm:w-auto">
                         <button
                             className="w-full sm:w-auto bg-orange-500 text-white font-medium px-4 py-2 rounded-md hover:bg-orange-600"
-                            onClick={() => {
-                                let paymentData = {
-                                    id: Date.now(),
-                                    label: methodOfPayment,
-                                    description: paymentNote,
-                                    amortization: Number(paymentAmount),
-                                    amount: Number(paymentAmount),
-                                };
-                                setMethodsOfPaymentList([...methodsOfPaymentList, paymentData]);
-                                setPaymentAmount("");
-                                setPaymentNote("");
-                            }}
+                            onClick={handleAddPayment}
                         >
                             + AGREGAR
                         </button>
@@ -324,8 +351,8 @@ function CreateInvoice() {
                             </tr>
                         </thead>
                         <tbody>
-                            {methodsOfPaymentList.map((method, index) => (
-                                <tr key={index} className="border-b">
+                            {methodsOfPaymentList.map((method) => (
+                                <tr key={method.id} className="border-b">
                                     <td className="border border-gray-200 px-4 py-2">{method.label}</td>
                                     <td className="border border-gray-200 px-4 py-2">{method.description}</td>
                                     <td className="border border-gray-200 px-4 py-2 text-right">{method.amortization.toFixed(2)}</td>
@@ -353,10 +380,10 @@ function CreateInvoice() {
                     <div className="w-full lg:w-1/2 ml-auto">
                         <table className="min-w-full">
                             <tbody>
-                                {paymentMethods.map((row, index) => (
+                                {paymentMethods.map((row) => (
                                     <tr
-                                        key={index}
-                                        className={`border-y border-gray-300 ${row.bold ? "font-bold" : ""}`}
+                                        key={row.label}
+                                        className="border-y border-gray-300"
                                     >
                                         <td className="py-2 text-gray-600">{row.label}</td>
                                         <td className="py-2 text-right text-gray-600">{row.value}</td>
@@ -371,6 +398,7 @@ function CreateInvoice() {
             <ActionButtons
                 onCancel={() => navigate(-1)}
                 submitText="GENERAR COMPROBANTE"
+                onSubmit= {() => console.log('Generando comprobante')}
             />
 
             <div className="mt-6 p-4 bg-blue-500 text-white rounded-lg m-3 flex gap-2">

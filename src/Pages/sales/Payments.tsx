@@ -1,5 +1,6 @@
-import { useContext, useState } from 'react';
-import { FinancialContext } from '@context/FinancialContext';
+import { useState } from 'react';
+import { useFinancial } from '@context/FinancialContext';
+import { Payment } from '@t/financial.types';
 import { PaymentAndDepositModal } from '@components/modals/PaymentAndDepositModal';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -7,16 +8,18 @@ import FileInvoiceIcon from '@assets/file-invoice.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import ImageIcon from '@assets/imageIcon.svg?react';
 
+const tableHeaders: string[] = ["ID", "Fecha", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Movimiento", "Opciones"];
 
-const tableHeaders = ["ID", "Fecha", "Descripción", "Medio de Pago", "Entrada", "Salida", "Doc. Ref.", "Movimiento", "Opciones"];
+type OperationType = 'ENTRADA' | 'SALIDA';
 
 function Payments() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { paymentsData } = useContext(FinancialContext);
-    const [paymentsDataToEdit, setPaymentsDataToEdit] = useState(null);
-    const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] = useState(false);
-    const [typeOfOperation, setTypeOfOperation] = useState('');
+    const { paymentsData } = useFinancial();
+
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isConfirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
+    const [paymentToEdit, setPaymentToEdit] = useState<Payment | null>(null);
+    const [operationType, setOperationType] = useState<OperationType>('ENTRADA');
     return (
         <section className="container mx-auto p-6">
             <h1 className="text-xl md:text-2xl font-bold text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -61,19 +64,19 @@ function Payments() {
                                 className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 w-full sm:w-auto"
                                 onClick={() => {
                                     setIsModalOpen(true);
-                                    setTypeOfOperation("ENTRADA");
+                                    setOperationType("ENTRADA");
                                 }}
                             >
-                                ENTRADA
+                                + ENTRADA
                             </button>
                             <button
                                 className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 w-full sm:w-auto"
                                 onClick={() => {
                                     setIsModalOpen(true);
-                                    setTypeOfOperation("SALIDA");
+                                    setOperationType("SALIDA");
                                 }}
                             >
-                                SALIDA
+                                - SALIDA
                             </button>
                         </div>
                     </div>
@@ -81,7 +84,7 @@ function Payments() {
 
                 {
                     isModalOpen && (
-                        <PaymentAndDepositModal onClose={() => setIsModalOpen(false)} typeOfOperation={typeOfOperation} />
+                        <PaymentAndDepositModal onClose={() => setIsModalOpen(false)} typeOfOperation={operationType} />
                     )
                 }
                 <div className="overflow-x-auto border border-gray-300 rounded-lg">
@@ -96,8 +99,8 @@ function Payments() {
                             </tr>
                         </thead>
                         <tbody>
-                            {paymentsData.map((payment, index) => (
-                                <tr key={index} className="hover:bg-gray-100 text-xs">
+                            {paymentsData.map((payment) => (
+                                <tr key={payment.id} className="hover:bg-gray-100 text-xs">
                                     <td className="py-2 px-2 border-b text-center border">{payment.id.slice(0, 9).toUpperCase()}</td>
                                     <td className="py-2 px-2 border-b text-center border">{payment.date}</td>
                                     <td className="py-2 px-2 border-b text-left border">{payment.description}</td>
@@ -114,8 +117,8 @@ function Payments() {
                                             <button
                                                 className="text-red-500 hover:text-red-600"
                                                 onClick={() => {
-                                                    setPaymentsDataToEdit(payment)
-                                                    setIsConfirmActionModalOpen(true)
+                                                    setPaymentToEdit(payment)
+                                                    setConfirmModalOpen(true)
                                                 }}
                                             >
                                                 <TrashIcon className="w-4 h-4" />
@@ -133,11 +136,11 @@ function Payments() {
                 </div>
 
                 {
-                    isConfirmActionModalOpen && (
+                    isConfirmModalOpen &&  paymentToEdit && (
                         <ConfirmActionModal
-                            elementData={paymentsDataToEdit}
+                            elementData={paymentToEdit}
                             typeOfOperation="payments"
-                            onClose={() => setIsConfirmActionModalOpen(false)}
+                            onClose={() => setConfirmModalOpen(false)}
                         />
                     )
                 }

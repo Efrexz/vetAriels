@@ -1,10 +1,22 @@
 import SearchIcon from '@assets/searchIcon.svg?react';
 import FileInvoiceIcon from '@assets/file-invoice.svg?react';
 
+type InvoiceStatus = 'PAGADO' | 'PENDIENTE' | 'ANULADO';
+
+interface Invoice {
+    id: string;
+    date: string;
+    comprobante: string;
+    client: string;
+    amount: string;
+    payment: string;
+    status: InvoiceStatus;
+}
 
 
-const comprobantes = [
+const invoicesData: Invoice[] = [
     {
+        id: 'prueba1',
         date: '29-07-2024 07:33 PM',
         comprobante: 'BOLETA DE VENTA ELECTRÓNICA: BV01 - 0003560',
         client: 'GLORIA CAROLINA ESPINOZA BORJA',
@@ -13,6 +25,7 @@ const comprobantes = [
         status: 'PAGADO'
     },
     {
+        id: 'prueba2',
         date: '29-07-2024 06:16 PM',
         comprobante: 'RECIBO: S01 - 0010773',
         client: 'LUCIA ALVARADO',
@@ -21,6 +34,7 @@ const comprobantes = [
         status: 'PAGADO'
     },
     {
+        id: 'prueba3',
         date: '29-07-2024 06:16 PM',
         comprobante: 'RECIBO: S01 - 0010773',
         client: 'LUCIA ALVARADO',
@@ -29,6 +43,7 @@ const comprobantes = [
         status: 'PAGADO'
     },
     {
+        id: 'prueba4',
         date: '29-07-2024 06:16 PM',
         comprobante: 'RECIBO: S01 - 0010773',
         client: 'LUCIA ALVARADO',
@@ -37,6 +52,7 @@ const comprobantes = [
         status: 'PAGADO'
     },
     {
+        id: 'prueba5',
         date: '29-07-2024 07:33 PM',
         comprobante: 'BOLETA DE VENTA ELECTRÓNICA: BV01 - 0003560',
         client: 'GLORIA CAROLINA ESPINOZA BORJA',
@@ -45,6 +61,7 @@ const comprobantes = [
         status: 'PAGADO'
     },
     {
+        id: 'prueba6',
         date: '29-07-2024 06:16 PM',
         comprobante: 'RECIBO: S01 - 0010773',
         client: 'LUCIA ALVARADO',
@@ -54,15 +71,8 @@ const comprobantes = [
     },
 ];
 
-const tableHeaders = [
-    "Fecha de emisión",
-    "Comprobante",
-    "Cliente",
-    "Monto",
-    "Forma de pago",
-    "Estado",
-    "Opciones"
-];
+
+const tableHeaders: string[] = ["Fecha de emisión", "Comprobante", "Cliente", "Monto", "Forma de pago", "Estado", "Opciones"];
 
 const headlinesOptions = [
     {
@@ -84,6 +94,14 @@ const headlinesOptions = [
 ];
 
 function Invoices() {
+    const getStatusColor = (status: InvoiceStatus) => {
+        switch (status) {
+            case 'PAGADO': return 'bg-green-500';
+            case 'PENDIENTE': return 'bg-yellow-500';
+            case 'ANULADO': return 'bg-red-500';
+            default: return 'bg-gray-500';
+        }
+    };
     return (
         <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 overflow-auto">
             <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
@@ -145,14 +163,18 @@ function Invoices() {
                             </tr>
                         </thead>
                         <tbody>
-                            {comprobantes.map((comprobante, index) => (
-                                <tr key={index} className="hover:bg-gray-100 cursor-pointer">
-                                    <td className="py-2 px-4 border-b text-center border ">{comprobante.date}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{comprobante.comprobante}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{comprobante.client}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{comprobante.amount}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{comprobante.payment}</td>
-                                    <td className="py-2 px-4 border-b text-center border text-white bg-green-500 rounded">{comprobante.status}</td>
+                            {invoicesData.map((invoice) => (
+                                <tr key={invoice.id} className="hover:bg-gray-100 cursor-pointer">
+                                    <td className="py-2 px-4 border-b text-center border ">{invoice.date}</td>
+                                    <td className="py-2 px-4 border-b text-center border">{invoice.comprobante}</td>
+                                    <td className="py-2 px-4 border-b text-center border">{invoice.client}</td>
+                                    <td className="py-2 px-4 border-b text-center border">{invoice.amount}</td>
+                                    <td className="py-2 px-4 border-b text-center border">{invoice.payment}</td>
+                                    <td className="py-2 px-4 text-center">
+                                        <span className={`px-3 py-1 text-sm font-medium rounded-full text-white ${getStatusColor(invoice.status)}`}>
+                                            {invoice.status}
+                                        </span>
+                                    </td>
                                     <td className="py-2 px-4 border-b text-center">
                                         <button className="text-green-500 hover:text-green-700">
                                             <SearchIcon className="w-5 h-5" />

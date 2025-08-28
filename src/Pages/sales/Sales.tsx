@@ -1,6 +1,8 @@
-import { useContext, useState } from 'react';
+import { useState, useEffect, useMemo} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { Client, Pet} from '@t/client.types';
+import { PurchasedItem, Product, Service } from '@t/inventory.types';
 import { AddPatientToQueueModal } from '@components/modals/AddPatientToQueueModal';
 import { ClientSearchInput } from '@components/search/ClientSearchInput';
 import { ProductSearchInput } from '@components/search/ProductSearchInput';
@@ -20,37 +22,55 @@ import PenIcon from '@assets/penIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import GiftIcon from '@assets/giftIcon.svg?react';
 
+interface PetAge { years: number; months: number; days: number;}
+
+const tableCategories: string[] = ["Concepto", "Valor Unitario", "Cantidad", "Sub Total", "Impuestos", "Total", "Mascota", "Opciones"];
+
+//opciones para el menú desplegable de la mascota
+const menuOptions = [
+    { icon: Stethoscope, iconColor: "text-red-500", tooltip: 'Enviar a la cola médica' },
+    // { icon: ClockIcon, iconColor: "text-gray-400", tooltip: 'Ver historíal de compras', path: '/sales/invoices' },
+    { icon: PenIcon, iconColor: "text-gray-700", tooltip: 'Actualizar datos', path: '/pets/pet/id/update' },
+    { icon: Stethoscope, iconColor: "text-blue-400", tooltip: 'Ir a la historia clínica', path: '/pets/pet/id/clinical-records' },
+];
+
 
 function Sales() {
 
-    const { clients, petsData, removeProductFromClient } = useContext(ClientsContext);
-
-    const tableCategories = [
-        "Concepto",
-        "Valor Unitario",
-        "Cantidad",
-        "Sub Total",
-        "Impuestos",
-        "Total",
-        "Mascota",
-        "Opciones"
-    ];
-
+    const { clients, petsData, removeProductFromClient, addProductToClient } = useClients();
     const navigate = useNavigate();
-    const { id: clientId } = useParams();
-    const isClientSelected = clients.find(client => client.id === clientId);
+    const { id: clientId } = useParams<{ id: string }>();
+
+    const clientData: Client | undefined = useMemo(() => clients.find(client => client.id === clientId), [clients, clientId]);
 
     //obtenemos las mascotas que pertenecen al cliente seleccionado
-    const petsByOwner = petsData.filter(pet => pet.ownerId === clientId).sort((a, b) => Number(a.hc) - Number(b.hc));
+    const petsByOwner: Pet[] = useMemo(() =>
+        clientData  ? petsData.filter(pet => pet.ownerId === clientData.id).sort((a, b) => Number(a.hc) - Number(b.hc)) : [],
+    [petsData, clientData]);
 
+    //estado de productos seleccionados al escribir en nuestro input de busqueda
+    const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
+    //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
+    const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
     //estado para el evento de hover sobre el nombre de las mascotas que aparecen al seleccionar un cliente
-    const [hoveredPetId, setHoveredPetId] = useState(null);
-
+    const [hoveredPetId, setHoveredPetId] = useState<string | null>(null);
     // estado para saber cual menu de mascota está visible
-    const [activePetMenu, setActivePetMenu] = useState(null);
+    const [activePetMenu, setActivePetMenu] = useState<string | null>(null);
+
+    //Modales
+    const [isQueueModalOpen, setQueueModalOpen] = useState(false);
+    const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
+    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
+
+    // sincroniza el estado local selectedProducts con los datos del cliente cuando el clientId cambia.
+    useEffect(() => {
+        setSelectedProducts(clientData?.products || []);
+    }, [clientData]);
+
 
     //calcular la edad de la mascotas
-    function calculateAge(birthDate) {
+    function calculateAge(birthDate: string): PetAge {
+        if (!birthDate) return { years: 0, months: 0, days: 0 };
         const today = new Date();
         const birth = new Date(birthDate);
 
@@ -73,77 +93,61 @@ function Sales() {
         return { years: ageYears, months: ageMonths, days: ageDays };
     }
 
-    //opciones para el menú desplegable de la mascota
-    const menuOptions = [
-        { icon: Stethoscope, iconColor: "text-red-500", tooltip: 'Enviar a la cola médica' },
-        // { icon: ClockIcon, iconColor: "text-gray-400", tooltip: 'Ver historíal de compras', path: '/sales/invoices' },
-        { icon: PenIcon, iconColor: "text-gray-700", tooltip: 'Actualizar datos', path: '/pets/pet/id/update' },
-        { icon: Stethoscope, iconColor: "text-blue-400", tooltip: 'Ir a la historia clínica', path: '/pets/pet/id/clinical-records' },
-    ];
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-    //estado de productos seleccionados al escribir en nuestro input de busqueda
-    const [selectedProducts, setSelectedProducts] = useState(isClientSelected?.products || []);
-
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
-    function addProductToTable(product) {
-        const provisionalId = generateUniqueId();
-        const newProduct = {
-            ...product,
-            provisionalId,
-            quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
+    function handleAddProduct(item: Product | Service) {
+        const newProduct: PurchasedItem = {
+            ...item,
+            provisionalId: generateUniqueId(),
+            quantity: 1, // por defecto siempre sera un producto al agregarlo a la lista
+            additionDate: new Date().toLocaleDateString(),
+            additionTime: new Date().toLocaleTimeString(),
         };
-        setSelectedProducts([...selectedProducts, newProduct]);
+        // Actualizamos tanto el estado local como el contexto global
+        setSelectedProducts(prev => [...prev, newProduct]);
+        if (clientData) {
+            addProductToClient(clientData.id, newProduct);
+        }
     }
-
-    //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
-    const [productToEdit, setProductToEdit] = useState(null);
-
 
     // funcion para modificar el precio de un item por el modal de editar el precio
-    function handleUpdateProductPrice(updatedProduct) {
-        const updatedProducts = selectedProducts.map(product =>
-            product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product
-        );
-        setSelectedProducts(updatedProducts);
-    }
+    function updateProductPriceInTable (updatedProduct: PurchasedItem){
+        const updatedList = selectedProducts.map(product => product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product);
+        setSelectedProducts(updatedList);
+    };
 
-    function removeProduct(productId) {
-        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== productId);
-        setSelectedProducts(updatedProducts);
-    }
+    function updateProductQuantity (id: string, newQuantity: number) {
+        const updatedList = selectedProducts.map(product => product.provisionalId === id ? { ...product, quantity: newQuantity } : product);
+        setSelectedProducts(updatedList);
+    };
 
-    //funcion para actualizar cantidad de productos en la lista de forma individual
-    function updateProductQuantity(id, newQuantity) {
-        const updatedProducts = selectedProducts.map((product) =>
-            product.provisionalId === id
-                ? { ...product, quantity: newQuantity }
-                : product
-        );
-        setSelectedProducts(updatedProducts);
-    }
+    function removeProductFromTable (provisionalId: string) {
+        setSelectedProducts(prev => prev.filter(product => product.provisionalId !== provisionalId));
+        if (clientData) {
+            removeProductFromClient(clientData.id, provisionalId);
+        }
+    };
 
-    const totalPrice = selectedProducts.reduce(
-        //coloco salePrice o price porque en los servicio el precio esta como price y en los productos salePrice
-        (acc, product) => acc + (product.salePrice) * product.quantity,
-        0
-    );
+    const totalPrice = useMemo(() =>
+        selectedProducts.reduce((acc, product) => acc + (product.salePrice || 0) * product.quantity, 0),
+    [selectedProducts]);
 
     const taxesData = [
-        { label: 'Valor de venta bruto (sin descuentos)', value: totalPrice },
+        { label: 'Valor de venta bruto', value: totalPrice.toFixed(2) },
         { label: 'Total descuentos', value: '- 0.00' },
-        { label: 'Valor de venta incluyendo descuentos', value: '0.00' },
         { label: 'Impuestos', value: '0.00' },
-        { label: 'TOTAL', value: totalPrice, bold: true },
+        { label: 'TOTAL', value: totalPrice.toFixed(2), bold: true },
     ];
     // const [petSelected, setPetSelected] = useState(petsByOwner[0]?.petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
 
-
-    //Modales
-    const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
-    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
+    if (!clientData && clientId !== 'no_client') {
+        return (
+            <section className="w-full text-center mt-10">
+                <h2 className="text-2xl font-semibold text-gray-700">Cliente no encontrado</h2>
+                <p className="text-gray-500 mt-2">El cliente con el ID especificado no existe. Por favor, seleccione uno nuevo.</p>
+                <div className='max-w-md mx-auto mt-4'><ClientSearchInput mode={"sales"} /></div>
+            </section>
+        );
+    }
 
     return (
         <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 overflow-auto custom-scrollbar ">
@@ -160,11 +164,11 @@ function Sales() {
                 <div className="flex flex-col md:flex-row items-center gap-4">
                     <ClientSearchInput mode={"sales"} />
                     <button
-                        className={`${isClientSelected ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"
+                        className={`${clientData ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"
                             } flex justify-center items-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-[200px] `}
                         type="button"
-                        disabled={!isClientSelected}
-                        onClick={() => navigate(`/clients/client/${isClientSelected.id}/update`)}
+                        disabled={!clientData}
+                        onClick={() => navigate(`/clients/client/${clientData?.id}/update`)}
                     >
                         <UserPenIcon className="w-5 h-5" />
                     </button>
@@ -178,13 +182,13 @@ function Sales() {
                 </div>
 
                 {/* Mascotas del cliente seleccionado */}
-                {isClientSelected && (
+                {clientData && (
                     <div className="flex flex-wrap gap-4 mt-6">
-                        {petsByOwner.map((pet, index) => {
+                        {petsByOwner.map((pet) => {
                             const petAge = calculateAge(pet.birthDate); // Calcula la edad de cada mascota
 
                             return (
-                                <div key={index} className="relative">
+                                <div key={pet.id} className="relative">
                                     <button
                                         onMouseEnter={() => setHoveredPetId(pet.id)}
                                         onMouseLeave={() => setHoveredPetId(null)}
@@ -204,12 +208,13 @@ function Sales() {
                                                         key={index}
                                                         className="flex gap-1 px-2 py-2 hover:bg-gray-100 cursor-pointer border-b-2 text-sm"
                                                         onClick={() => {
+                                                            //si tiene ruta navegamos a ese lado y si no es que esta queriendo abrir el modal de enviar a cola
                                                             if (option.path) {
                                                                 const updatedPath = option.path.replace('/id', `/${pet.id}`);
                                                                 navigate(updatedPath);
                                                             }
                                                             else {
-                                                                setIsModalOpen(true);
+                                                                setQueueModalOpen(true);
                                                                 setActivePetMenu(null)
                                                             }
                                                         }}
@@ -253,33 +258,38 @@ function Sales() {
 
             <div className="bg-gray-100 rounded-lg px-6 py-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <button
-                    className={`${isClientSelected ? "bg-blue-500 hover:bg-blue-700" : "bg-[#70D0EE]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
-                    disabled={!isClientSelected}
-                    onClick={() => setIsModalOpen(true)}
+                    className={`${clientData ? "bg-blue-500 hover:bg-blue-700" : "bg-[#70D0EE]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
+                    disabled={!clientData}
+                    onClick={() => setQueueModalOpen(true)}
                 >
                     Enviar a la cola médica
                 </button>
                 <button
-                    className={`${isClientSelected ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
-                    disabled={!isClientSelected}
-                    onClick={() => navigate(`/grooming/order-creation/${isClientSelected.id}`)}
+                    className={`${clientData ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
+                    disabled={!clientData}
+                    onClick={() => {
+                        //esto para evitar el error que lanza vscode de que clientData puede ser undefined
+                        if(clientData) {
+                            navigate(`/grooming/order-creation/${clientData.id}`)
+                        }
+                    }}
                 >
                     Enviar a cola de grooming
                 </button>
             </div>
             {
-                isModalOpen && (
+                isQueueModalOpen && clientData && (
                     <AddPatientToQueueModal
-                        onClose={() => setIsModalOpen(false)}
+                        onClose={() => setQueueModalOpen(false)}
                         petsByOwner={petsByOwner}
-                        clientData={isClientSelected}
+                        clientData={clientData}
                     />
                 )
             }
 
             <div className="bg-white shadow-md rounded-lg p-6">
                 {
-                    isClientSelected && (
+                    clientData && (
                         <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-6'>
                             <div className=' col-span-1'>
                                 <label htmlFor="store" className="block text-gray-700 mb-2 pl-2">Almacén de origen</label>
@@ -298,7 +308,7 @@ function Sales() {
                                     className="block text-gray-700 mb-2 pl-2">
                                     Buscar y agregar productos y servicios a la cuenta del cliente:
                                 </label>
-                                <ProductSearchInput addProductToTable={addProductToTable} mode={"sales"} />
+                                <ProductSearchInput addProductToTable={handleAddProduct} mode={"sales"} />
                             </div>
                         </div>
                     )
@@ -356,7 +366,7 @@ function Sales() {
                                             }} />
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {(product.salePrice) * product.quantity}
+                                        {(product.salePrice || 0) * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
@@ -364,7 +374,7 @@ function Sales() {
                                         </span>
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {(product.salePrice) * product.quantity}
+                                        {(product.salePrice || 0) * product.quantity}
                                     </td>
                                     <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                         <select className="border rounded p-1">
@@ -383,8 +393,9 @@ function Sales() {
                                             <button
                                                 className="text-red-500 hover:text-red-700"
                                                 onClick={() => {
-                                                    removeProductFromClient(clientId, product.provisionalId);
-                                                    removeProduct(product.provisionalId)
+                                                    if(clientId) {
+                                                        removeProductFromClient(clientId, product.provisionalId);
+                                                    }
                                                 }}
                                             >
                                                 <TrashIcon className="w-4 h-4" />
@@ -398,19 +409,20 @@ function Sales() {
                 </div>
 
                 {
-                    isPriceModalOpen && (
+                    isPriceModalOpen && productToEdit && (
                         <PriceModificationModal
                             onClose={() => setIsPriceModalOpen(false)}
                             productToEdit={productToEdit}
-                            updateProductPrice={handleUpdateProductPrice}
+                            updateProductPrice={updateProductPriceInTable}
                         />
                     )
                 }
                 {
                     isQuantityModalOpen && (
                         <QuantityModificationModal
-                            quantity={productToEdit?.quantity}
+                            quantity={Number(productToEdit?.quantity)}
                             changeQuantity={(newQuantity) => {
+                                if(productToEdit)
                                 updateProductQuantity(productToEdit.provisionalId, newQuantity)
                             }}
                             maxQuantity={productToEdit?.availableStock}
@@ -438,10 +450,14 @@ function Sales() {
 
             <div className="bg-gray-100 rounded-lg px-6 py-4 mt-6 flex justify-center md:justify-end">
                 <button
-                    className={`${!isClientSelected || selectedProducts.length < 1 ? "bg-green-400" : "bg-green-500 hover:bg-green-600"} text-white font-bold py-2 px-4 rounded`}
+                    className={`${!clientData || selectedProducts.length < 1 ? "bg-green-400" : "bg-green-500 hover:bg-green-600"} text-white font-bold py-2 px-4 rounded`}
                     type="button"
-                    onClick={() => navigate(`/sales/invoices/create/${isClientSelected.id}`, { state: { selectedProducts } })}
-                    disabled={!isClientSelected || selectedProducts.length < 1}>
+                    onClick={() => {
+                        if(clientData){
+                            navigate(`/sales/invoices/create/${clientData.id}`, { state: { selectedProducts } })
+                        }
+                    }}
+                    disabled={!clientData || selectedProducts.length < 1}>
                     Ir a caja y generar comprobante
                 </button>
             </div>

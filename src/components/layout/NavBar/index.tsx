@@ -15,12 +15,12 @@ import NewUserIcon from '@assets/newUserIcon.svg?react';
 
 
 interface PageSection {
-  icon: ComponentType<any>; // Tipo para componentes de íconos SVG
-  tooltip: string;
-  path?: string;
-  count: boolean;
-  countData?: number;
-  action?: () => void; // Un action opcional para los iconos que no navegan
+    icon: ComponentType<React.SVGProps<SVGSVGElement>> // Tipo para componentes de íconos SVG
+    tooltip: string;
+    path?: string;
+    count: boolean;
+    countData?: number;
+    action?: () => void; // Un action opcional para los iconos que no navegan
 }
 
 function NavBar() {

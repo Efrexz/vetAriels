@@ -3,7 +3,44 @@ import CalendarIcon from '@assets/calendarIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
 import ExcelIcon from '@assets/fileExcelIcon.svg?react';
 
-const sections = [
+interface ReportDataItem {
+    label: string;
+    value: number;
+    highlight?: boolean;
+}
+
+// Tipo para los items dentro de la sección de pagos (Entradas/Salidas)
+interface PaymentItem {
+    label: string;
+    value: number;
+}
+
+// Tipo para el grupo de datos en la sección de pagos
+interface PaymentSectionData {
+    type: 'Entradas' | 'Salidas';
+    items: PaymentItem[];
+}
+
+// Usamos una UNIÓN DISCRIMINADA para modelar los dos tipos de secciones
+
+// Forma de una sección de reporte estándar
+interface StandardReportSection {
+    title: string;
+    data: ReportDataItem[];
+    payments?: false;
+}
+
+// Forma de la sección especial de pagos
+interface PaymentsReportSection {
+    title: string;
+    data: PaymentSectionData[];
+    payments: true;
+}
+
+type ReportSection = StandardReportSection | PaymentsReportSection;
+
+
+const sections: ReportSection[] = [
     {
         title: 'Resumen de comprobantes generados en el periodo',
         data: [
