@@ -1,5 +1,12 @@
+import { Service } from "@t/inventory.types";
 
-function EditServicePrice() {
+interface EditServicePriceProps {
+    serviceData: Service;
+}
+
+function EditServicePrice({ serviceData }: EditServicePriceProps) {
+    console.log(serviceData);
+    
     const formFields = [
         {
             label: "Valor de venta (no incluye impuestos)",
