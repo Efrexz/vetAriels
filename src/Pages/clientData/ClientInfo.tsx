@@ -4,9 +4,8 @@ import { ClientProfile } from './ClientProfile';
 import { ClientPets } from './ClientPets';
 import { PurchaseHistory } from './PurchaseHistory';
 import { HorizontalMenu } from '@components/ui/HorizontalMenu';
+import { NotFound } from "@components/ui/NotFound";
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
-import AlertIcon from '@assets/alertIcon.svg?react';
-import SearchIcon from '@assets/searchIcon.svg?react';
 
 type ClientInfoSection = 'update' | 'pets' | 'purchase-history';
 
@@ -26,26 +25,11 @@ function ClientInfo() {
 
     if (!individualClientData) {
         return (
-            <div className="container mx-auto p-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
-                <div className="bg-white rounded-xl shadow-lg p-12 max-w-xl w-full text-center border-t-4 border-blue-500">
-                    <AlertIcon className="text-blue-500 w-16  mx-auto mb-6 opacity-80" />
-                    <h1 className="text-4xl font-extrabold text-gray-700 mb-4">
-                        CLiente no encontrado
-                    </h1>
-                    <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                        No hemos encontrado ningun cliente asociado al ID "<strong className="text-blue-600">#{id}</strong>" en nuestros registros. Por favor, verifica el identificador.
-                    </p>
-                    {/*Separador*/}
-                    <div className="border-t border-gray-200 pt-6 mt-6">
-                        <Link
-                            to="/clients"
-                            className="inline-flex items-center px-8 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ease-in-out text-lg"
-                        >
-                            <SearchIcon className="w-10 mr-3 text-xl" /> Ver listado de clientes
-                        </Link>
-                    </div>
-                </div>
-            </div>
+            <NotFound
+                entityName="Cliente"
+                searchId={id!}
+                returnPath="/clients"
+            />
         );
     }
 

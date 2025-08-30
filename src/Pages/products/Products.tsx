@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { Product } from '@t/inventory.types';
 import { AddNewProductModal } from '@components/modals/AddNewProductModal';
 import { DeleteModal } from '@components/modals/DeleteModal.jsx';
 import PlusIcon from '@assets/plusIcon.svg?react';
@@ -8,51 +9,51 @@ import TrashIcon from '@assets/trashIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import PenIcon from '@assets/penIcon.svg?react';
 
-
 const filterOptions = [
-    {
-        type: "Proveedor",
-        options: [
-            { value: "durand", label: "REPRESENTACIONES DURAND SAC" },
-            { value: "imagen-total", label: "Imagen Total SAC" },
-        ]
-    },
-    {
-        type: "Línea...",
-        options: [
-            { value: "alimentos", label: "ALIMENTOS" },
-            { value: "farmacia", label: "FARMACIA" },
-            { value: "laboratorio", label: "LABORATORIO" },
-            { value: "medica", label: "MEDICA" },
-            { value: "pet-shop", label: "PET SHOP" },
-            { value: "spa", label: "SPA" },
-        ]
-    },
-    {
-        type: "Categorías",
-        options: [
-            { value: "categoria1", label: "Categoría 1" },
-            { value: "categoria2", label: "Categoría 2" },
-        ]
-    },
-    {
-        type: "Stock...",
-        options: [
-            { value: "stock-agotado", label: "Stock Agotado" },
-            { value: "stock-bajo", label: "Stock Bajo" },
-        ]
-    },
+    { type: 'provider', label: "Proveedor...", options: ["REPRESENTACIONES DURAND SAC", "Imagen Total SAC", "CENTRO"] },
+    { type: 'line', label: "Línea...", options: ["ALIMENTOS", "FARMACIA", "LABORATORIO", "MEDICA", "PET SHOP", "SPA", "OTRA"] },
+    { type: 'category', label: "Categorías...", options: ["Categoría 1", "Categoría 2", "OTRA"] },
+    { type: 'stock', label: "Stock...", options: ["Stock Agotado", "Stock Bajo"] },
 ];
 
 const tableHeaders = ["Cod. de sistema", "Producto", "Marca", "Proveedor", "Línea", "Precio de venta", "Stock Contable", "Stock Disponible", "Estado", "Opciones"];
 
 function Products() {
-    const { productsData } = useContext(ProductsAndServicesContext);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [productToDelete, setProductToDelete] = useState(null);
+    const { productsData } = useProductsAndServices();
 
     const navigate = useNavigate();
+
+    const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+    const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filters, setFilters] = useState<Record<string, string>>({
+        provider: '',
+        line: '',
+        category: '',
+        stock: '',
+    });
+
+    const filteredProducts = useMemo(() => {
+        return productsData.filter(product => {
+            const matchesSearch = product.productName?.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesProvider = filters.provider ? product.provider === filters.provider : true;
+            const matchesLine = filters.line ? product.line === filters.line : true;
+            const matchesCategory = filters.category ? product.category === filters.category : true;
+            const matchesStock = filters.stock
+                ? (filters.stock === 'Stock Agotado' && (product.availableStock ?? 0) === 0) ||
+                  (filters.stock === 'Stock Bajo' && (product.availableStock ?? 0) > 0 && (product.availableStock ?? 0) <= (product.minStock ?? 5))
+                : true;
+
+            return matchesSearch && matchesProvider && matchesLine && matchesCategory && matchesStock;
+        });
+    }, [productsData, searchTerm, filters]);
+
+    function handleFilterChange (e: ChangeEvent<HTMLSelectElement>) {
+        const { name, value } = e.target;
+        setFilters(prev => ({ ...prev, [name]: value }));
+    };
 
     return (
         <section className="container mx-auto p-6 overflow-auto custom-scrollbar">
@@ -68,14 +69,16 @@ function Products() {
                             </div>
                             <input
                                 type="text"
-                                placeholder="Buscar..."
+                                placeholder="Buscar por nombre..."
                                 className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
+                                value={searchTerm}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                             />
                         </div>
 
                         <button
                             className="w-full sm:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 justify-center"
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => setIsAddModalOpen(true)}
                         >
                             <PlusIcon className="w-5 h-5" />
                             CREAR NUEVO PRODUCTO
@@ -83,17 +86,16 @@ function Products() {
                     </div>
 
                     <div className="flex flex-wrap gap-4">
-                        {filterOptions.map((option, index) => (
-                            <div key={index} className="w-full sm:w-[250px]">
+                        {filterOptions.map((filter) => (
+                            <div key={filter.type} className="w-full sm:w-[250px]">
                                 <select
-                                    name={option.type}
+                                    name={filter.type}
+                                    onChange={handleFilterChange}
                                     className="w-full rounded-lg hover:border-blue-300 focus-within:border-blue-300 border-2 text-gray-700 sm:text-sm p-2"
                                 >
-                                    <option value="">{option.type}</option>
-                                    {option.options.map((subOption, subIndex) => (
-                                        <option key={subIndex} value={subOption.value}>
-                                            {subOption.label}
-                                        </option>
+                                    <option value="">{filter.label}</option>
+                                    {filter.options.map((option) => (
+                                        <option key={option} value={option}>{option}</option>
                                     ))}
                                 </select>
                             </div>
@@ -113,9 +115,9 @@ function Products() {
                             </tr>
                         </thead>
                         <tbody>
-                            {productsData.map((product, index) => (
-                                <tr key={index} className="hover:bg-gray-100 text-sm">
-                                    <td className="py-2 px-4 text-center border">{product?.systemCode.slice(0, 8).toUpperCase()}</td>
+                            {filteredProducts.map((product: Product) => (
+                                <tr key={product.systemCode || product.id} className="hover:bg-gray-100 text-sm">
+                                    <td className="py-2 px-4 text-center border">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
                                     <td className="py-2 px-4 text-left border">{product?.productName}</td>
                                     <td className="py-2 px-4 text-center border">{product?.brand}</td>
                                     <td className="py-2 px-4 text-center border">{product?.provider}</td>
@@ -138,20 +140,17 @@ function Products() {
                                     </td>
                                     <td className="py-8 px-4 text-center border">
                                         <div className="flex justify-center items-center h-full space-x-2">
-                                            <PenIcon
-                                                className="w-4 h-4 text-green-500 cursor-pointer"
-                                                onClick={() => {
-                                                    navigate(`/products/product/${product?.systemCode}/update`)
-                                                }}
-                                            />
-                                            <TrashIcon
-                                                className="w-4 h-4 text-red-500 cursor-pointer"
-                                                onClick={() => {
-                                                    setIsDeleteModalOpen(true)
-                                                    setProductToDelete(product)
-                                                }
-                                                }
-                                            />
+                                            <div className="flex justify-center items-center h-full space-x-2">
+                                                <button aria-label={`Editar ${product.productName}`} onClick={() => navigate(`/products/product/${product.systemCode}/update`)}>
+                                                    <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
+                                                </button>
+                                                <button aria-label={`Eliminar ${product.productName}`} onClick={() => {
+                                                    setIsDeleteModalOpen(true);
+                                                    setProductToDelete(product);
+                                                }}>
+                                                    <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -160,17 +159,16 @@ function Products() {
                     </table>
                 </div>
 
-
                 {
-                    isModalOpen && (
+                    isAddModalOpen && (
                         <AddNewProductModal
-                            onClose={() => setIsModalOpen(false)}
+                            onClose={() => setIsAddModalOpen(false)}
                         />
                     )
                 }
 
                 {
-                    isDeleteModalOpen && (
+                    isDeleteModalOpen && productToDelete && (
                         <DeleteModal
                             onClose={() => setIsDeleteModalOpen(false)}
                             // onConfirm={deleteProduct}

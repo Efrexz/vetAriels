@@ -2,6 +2,7 @@ import { useState, useEffect, ChangeEvent, } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useGlobal } from '@context/GlobalContext';
 import { User } from '@t/user.types';
+import { NotFound } from "@components/ui/NotFound";
 import UserGroupIcon from '@assets/userGroupIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
 import PhoneIcon from '@assets/phoneIcon.svg?react';
@@ -115,21 +116,11 @@ function EditUser() {
     // Si no se encuentra el usuario, mostramos un mensaje de error
     if (!individualUserData) {
         return (
-        <div className="container mx-auto p-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
-            <div className="bg-white rounded-xl shadow-lg p-12 max-w-xl w-full text-center border-t-4 border-red-500">
-                <AlertIcon className="text-red-500 w-16 mx-auto mb-6 opacity-80" />
-                <h1 className="text-4xl font-extrabold text-gray-700 mb-4">Usuario no Encontrado</h1>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                    No se encontró ningún usuario con el ID "<strong className="text-red-600">#{id}</strong>".
-                </p>
-                <Link
-                    to="/config/user-subsidiaries"
-                    className="inline-flex items-center px-8 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
-                >
-                    Volver a la lista de usuarios
-                </Link>
-            </div>
-        </div>
+            <NotFound
+                entityName="Usuario"
+                searchId={id!}
+                returnPath="/config/user-subsidiaries"
+            />
         );
     }
 

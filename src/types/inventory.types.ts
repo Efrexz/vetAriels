@@ -11,7 +11,7 @@ export interface Product {
     category: string;
     subcategory?: string;
     minStock?: number;
-    availableStock?: number;
+    availableStock: number;
     cost: number;
     salePrice: number;
     registrationDate: string;

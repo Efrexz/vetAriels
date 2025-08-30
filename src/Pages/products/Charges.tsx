@@ -1,6 +1,7 @@
-import { useContext } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { InventoryOperation } from '@t/inventory.types';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
@@ -8,9 +9,24 @@ import SearchIcon from '@assets/searchIcon.svg?react';
 const tableHeaders = ["N°", "Fecha de creación", "Razon", "Responsable", "Registrado por ", "Opciones"];
 
 function Charges() {
-    const { restockData } = useContext(ProductsAndServicesContext);
-
+    const { restockData } = useProductsAndServices();
     const navigate = useNavigate();
+
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filterDate, setFilterDate] = useState<string>('');
+
+    const filteredRestocks = useMemo(() => {
+        return restockData.filter(restock => {
+            const lowerCaseSearch = searchTerm.toLowerCase();
+
+            const matchesSearch =
+                restock.reason.toLowerCase().includes(lowerCaseSearch) ||
+                restock.responsible.toLowerCase().includes(lowerCaseSearch) ||
+                restock.registeredBy.toLowerCase().includes(lowerCaseSearch);
+
+            return matchesSearch;
+        });
+    }, [restockData, searchTerm, filterDate]);
 
     return (
         <section className="container mx-auto p-6">
@@ -33,13 +49,17 @@ function Charges() {
                             </div>
                             <input
                                 type="text"
-                                placeholder="Buscar..."
+                                placeholder="Buscar por razón, responsable..."
                                 className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
+                                value={searchTerm}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                             />
                         </div>
                         <input
                             type="date"
                             className="w-full md:w-[250px] py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                            value={filterDate}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setFilterDate(e.target.value)}
                         />
                         <button
                             className="w-full md:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-2"
@@ -62,8 +82,8 @@ function Charges() {
                             </tr>
                         </thead>
                         <tbody>
-                            {restockData.map((restock, index) => (
-                                <tr key={index} className="hover:bg-gray-100 text-sm">
+                            {filteredRestocks.map((restock: InventoryOperation) => (
+                                <tr key={restock.id} className="hover:bg-gray-100 text-sm">
                                     <td className="text-center border">{restock.id.slice(0, 8).toUpperCase()}</td>
                                     <td className="text-center border">{restock.date} {restock.time}</td>
                                     <td className="px-4 text-start border">{restock.reason}</td>
@@ -71,10 +91,9 @@ function Charges() {
                                     <td className="text-center border">{restock.registeredBy}</td>
                                     <td className="py-4 px-4 text-center border">
                                         <div className="flex justify-center items-center h-full">
-                                            <SearchIcon
-                                                className="w-5 h-5 text-green-500 hover:text-green-600 cursor-pointer"
-                                                onClick={() => { navigate(`/charges/charge/${restock.id}/detail`) }}
-                                            />
+                                            <button aria-label={`Ver detalle de carga ${restock.id}`} onClick={() => navigate(`/charges/charge/${restock.id}/detail`)}>
+                                                <SearchIcon className="w-5 h-5 text-green-500 hover:text-green-600 cursor-pointer" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -84,8 +103,8 @@ function Charges() {
                 </div>
                 <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
                     <p className="text-gray-600 text-center md:text-left">
-                        Página: 1 de 1 | Registros del 1 al {restockData.length} | Total{" "}
-                        {restockData.length} | Total{" "}
+                        Página: 1 de 1 | Registros del 1 al {filteredRestocks.length} | Total{" "}
+                        {filteredRestocks.length} | Total{" "}
                     </p>
                     <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
                         <button className="py-2 px-4 border rounded">Primera</button>
