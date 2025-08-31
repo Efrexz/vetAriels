@@ -1,5 +1,5 @@
 export interface Product {
-    systemCode?: string;
+    systemCode: string;
     productName?: string;
     brand: string;
     unitOfMeasurement?: string;

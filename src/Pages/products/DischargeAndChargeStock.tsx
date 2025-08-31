@@ -1,7 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState, ChangeEvent } from "react";
 import { useNavigate } from 'react-router-dom';
-import { GlobalContext } from '@context/GlobalContext';
-import { ProductsAndServicesContext } from '@context/ProductsAndServicesContext';
+import { useGlobal } from "@context/GlobalContext";
+import { useProductsAndServices } from "@context/ProductsAndServicesContext";
+import { Product, Service, PurchasedItem, InventoryOperation } from "@t/inventory.types";
+import { User } from "@t/user.types";
 import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { ProductSearchInput } from '@components/search/ProductSearchInput';
 import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
@@ -11,33 +13,46 @@ import { ActionButtons } from '@components/ui/ActionButtons';
 import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
-import PropTypes from "prop-types";
+
+type OperationMode = 'discharge' | 'restock';
+
+interface DischargeAndChargeStockProps {
+    typeOfOperation: OperationMode;
+}
+
+type FormDataState = {
+    requestor: string;
+    reason: string;
+    store: string;
+    operationType: string;
+};
+
+type FormErrors = Partial<Record<keyof FormDataState | 'products', string>>;
+
+function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockProps) {
+
+    const { addDischarge, addRestock } = useProductsAndServices();
+    const { users, activeUser } = useGlobal();
+    const navigate = useNavigate();
 
 
+    const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
+    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState<boolean>(false);
+    const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [isOpenErrorModal, setIsOpenErrorModal] = useState<boolean>(false);
 
-function DischargeAndChargeStock({ typeOfOperation }) {
-
-    const [selectedProducts, setSelectedProducts] = useState([]);
-
-    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
-    const [productToEdit, setProductToEdit] = useState(null);
-    const [errors, setErrors] = useState({});
-    const [isOpenErrorModal, setIsOpenErrorModal] = useState(false);
-
-    const { addDischarge, addRestock } = useContext(ProductsAndServicesContext);
-    const { users, activeUser } = useContext(GlobalContext);
     // obtenemos los nombres de los usuarios registrados
-    const userOptions = users.map(user => `${user?.name} ${user?.lastName}`);
+    const userOptions = users.map((user: User) => `${user.name} ${user.lastName}`);
 
-
-    const [formData, setFormData] = useState({
-        requestor: userOptions[0],
+    const [formData, setFormData] = useState<FormDataState>({
+        requestor: userOptions[0] || "",
         reason: "",
-        store: "",
-        operationType: "",
+        store: "ALMACEN CENTRAL",
+        operationType: "Seleccione",
     });
 
-    function handleChange(e) {
+    function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const { id, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
@@ -45,41 +60,38 @@ function DischargeAndChargeStock({ typeOfOperation }) {
         }));
     }
 
-
-    const tableHeaders = ["Código de Barras", "Producto", "Precio Unitario de Compra", "Precio Unitario de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
-
     //agregar productos a la tabla para descargar o cargar
-    function addProductToTable(product) {
-        const provisionalId = generateUniqueId();
-        const newProduct = {
-            ...product,
-            provisionalId,
+    function addProductToTable(item: Product | Service) {
+        const newProduct: PurchasedItem = {
+            ...item,
+            provisionalId: generateUniqueId(),
             quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
+            additionDate: new Date().toLocaleDateString(),
+            additionTime: new Date().toLocaleTimeString(),
         };
-        setSelectedProducts([...selectedProducts, newProduct]);
+        setSelectedProducts(prev => [...prev, newProduct]);
     }
 
     //funcion para actualizar cantidad de productos en la lista de forma individual
-    function updateProductQuantity(id, newQuantity) {
+    function updateProductQuantity(provisionalId: string, newQuantity: number) {
         const updatedProducts = selectedProducts.map((product) =>
-            product.provisionalId === id
+            product.provisionalId === provisionalId
                 ? { ...product, quantity: newQuantity }
                 : product
         );
         setSelectedProducts(updatedProducts);
     }
 
-    function removeProduct(productData) {
-        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== productData.provisionalId);
-        setSelectedProducts(updatedProducts);
+    function removeProduct(provisionalId: string) {
+        setSelectedProducts(prev => prev.filter(p => p.provisionalId !== provisionalId));
     }
 
     //Validación de los campos
     function validateForm() {
-        const newErrors = {};
+        const newErrors: FormErrors = {};
 
         // Validamos si todos los campos son válidos
-        if (!formData.reason || formData.reason.length < 4) {
+        if (formData.reason.trim().length < 4) {
             newErrors.reason = 'El motivo debe tener al menos 4 letras.';
         }
         if (!formData.operationType || formData.operationType === 'Seleccione') {
@@ -99,16 +111,13 @@ function DischargeAndChargeStock({ typeOfOperation }) {
         }
 
         const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
-
         const newOrder = {
             id: generateUniqueId(),
-            date: currentDate,
-            time: currentTime,
-            reason: formData.reason,
+            date: now.toLocaleDateString(),
+            time: now.toLocaleTimeString(),
+            reason: formData.reason.trim(),
             responsible: formData.requestor,
-            registeredBy: `${activeUser.name} ${activeUser.lastName}` || "Juan Perez",
+            registeredBy: `${activeUser?.name} ${activeUser?.lastName}` || "Usuario Desconocido",
             operationType: formData.operationType,
             store: formData.store,
             products: selectedProducts,
@@ -124,9 +133,6 @@ function DischargeAndChargeStock({ typeOfOperation }) {
             }
         }
     }
-
-    const navigate = useNavigate();
-
 
     const formFields = [
         {
@@ -158,6 +164,8 @@ function DischargeAndChargeStock({ typeOfOperation }) {
         },
     ]
 
+    const tableHeaders = ["Código de Barras", "Producto", "Precio Unitario de Compra", "Precio Unitario de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
+
     return (
         <section className="container mx-auto p-6 border-b-2 border-gray-100">
             <header className="flex items-center mb-6 border-b-2 border-gray-100 pb-4">
@@ -172,14 +180,14 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                     {formFields.map((field, index) => (
                         <div key={index}>
                             <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full  border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300 ${errors[field.id] ? 'border-red-500' : 'border-gray-200'}`}>
+                            <div className={`flex w-full  border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300 ${errors[field.id as keyof FormErrors] ? 'border-red-500' : 'border-gray-200'}`}>
                                 {field.type === 'select' ? (
                                     <select
                                         id={field.id}
                                         className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0"
                                         onChange={handleChange}
                                     >
-                                        {field.options.map((option, i) => (
+                                        {field.options?.map((option, i) => (
                                             <option key={i} value={option}>
                                                 {option}
                                             </option>
@@ -189,14 +197,14 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                                     <input
                                         type={field.type}
                                         id={field.id}
-                                        value={formData[field.id]}
+                                        value={formData[field.id as keyof FormDataState]}
                                         onChange={handleChange}
                                         className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                                     />
                                 )}
                             </div>
-                            {errors[field.id] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                            {errors[field.id as keyof FormErrors] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
                             )}
                         </div>
                     ))}
@@ -231,9 +239,9 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                         </thead>
                         <tbody>
                             {
-                                selectedProducts.map((product, index) => (
-                                    <tr key={index} className="hover:bg-gray-100">
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.systemCode.slice(0, 8).toUpperCase()}</td>
+                                selectedProducts.map((product) => (
+                                    <tr key={product.provisionalId} className="hover:bg-gray-100">
+                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
                                         <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.productName}</td>
                                         <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.salePrice}</td>
                                         <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.salePrice}</td>
@@ -256,7 +264,7 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                                                 <TrashIcon
                                                     className="w-4 h-4 text-red-500 hover:text-red-600 cursor-pointer"
                                                     onClick={() => {
-                                                        removeProduct(product)
+                                                        removeProduct(product.provisionalId)
                                                     }}
                                                 />
                                             </div>
@@ -268,13 +276,13 @@ function DischargeAndChargeStock({ typeOfOperation }) {
                     </table>
                 </div>
 
-                {isQuantityModalOpen && (
+                {isQuantityModalOpen && productToEdit && (
                     <QuantityModificationModal
-                        quantity={productToEdit?.quantity}
+                        quantity={productToEdit.quantity}
                         changeQuantity={(newQuantity) => {
                             updateProductQuantity(productToEdit.provisionalId, newQuantity)
                         }}
-                        maxQuantity={productToEdit?.availableStock}
+                        maxQuantity={productToEdit.availableStock}
                         mode={typeOfOperation}
                         onClose={() => setIsQuantityModalOpen(false)}
                     />
@@ -299,7 +307,3 @@ function DischargeAndChargeStock({ typeOfOperation }) {
 }
 
 export { DischargeAndChargeStock };
-
-DischargeAndChargeStock.propTypes = {
-    typeOfOperation: PropTypes.string
-}

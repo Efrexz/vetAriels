@@ -28,7 +28,7 @@ import { Products } from './Pages/products/Products';
 import { ProductInfo } from './Pages/products/ProductInfo';
 import { Discharges } from './Pages/products/Discharges';
 import { Charges } from './Pages/products/Charges';
-import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStock.jsx';
+import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStock';
 import { OperationInfo } from './Pages/products/operationInfo.jsx/OperationInfo.jsx';
 import { Services } from './Pages/servicesSection/Services';
 import { ServiceInfo } from './Pages/servicesSection/ServiceInfo';
