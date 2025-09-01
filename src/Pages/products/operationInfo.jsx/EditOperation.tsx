@@ -1,9 +1,45 @@
-import PropTypes from "prop-types";
+import { useState, useEffect, ChangeEvent } from 'react';
+import { InventoryOperation, PurchasedItem } from "@t/inventory.types";
+import {useGlobal} from '@context/GlobalContext';
 import FileContract from '@assets/fileContract.svg?react';
 
-function EditOperation({ typeOfOperation, operationData, tableCategories }) {
+type OperationMode = 'restock' | 'discharge';
 
-    const selectedProducts = operationData?.products || [];
+interface EditOperationProps {
+    typeOfOperation: OperationMode;
+    operationData: InventoryOperation;
+    tableCategories: string[];
+}
+
+type FormDataState = {
+    responsible: string;
+    reason: string;
+};
+
+
+function EditOperation({ typeOfOperation, operationData, tableCategories }: EditOperationProps) {
+    const { users } = useGlobal();
+
+    const [formData, setFormData] = useState<FormDataState>({
+        responsible: '',
+        reason: '',
+    });
+
+    useEffect(() => {
+        if (operationData) {
+        setFormData({
+            responsible: operationData.responsible || '',
+            reason: operationData.reason || '',
+        });
+        }
+    }, [operationData]);
+
+    function handleChange (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>)  {
+        const { id, value } = e.target;
+        setFormData(prev => ({ ...prev, [id]: value }));
+    };
+
+    const selectedProducts: PurchasedItem[] = operationData.products;
 
     return (
         <main className="w-full mx-auto p-6 bg-white shadow-md ">
@@ -18,11 +54,14 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
                     <select
                         name="responsible"
                         id="responsible"
+                        value={formData.responsible}
+                        onChange={handleChange}
                         className="w-full py-2 px-4 border-gray-200 border rounded-lg focus:outline-none hover:border-blue-300 focus-within:border-blue-300"
                     >
                         <option value="">Seleccionar Responsable</option>
-                        <option value="1">Juan Perez</option>
-                        <option value="2">Carlos Perez</option>
+                        {users.map((user) => (
+                            <option key={user.id} value={user.name}>{user.name}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="w-full md:w-[50%]">
@@ -39,7 +78,8 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
                         <input
                             type="text"
                             id="reason"
-                            defaultValue={operationData?.operationType}
+                            value={formData.reason}
+                            onChange={handleChange}
                             placeholder="Motivo..."
                             className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
                         />
@@ -52,9 +92,9 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
                 <table className="min-w-full bg-white overflow-hidden">
                     <thead>
                         <tr>
-                            {tableCategories.map((category, index) => (
+                            {tableCategories.map((category) => (
                                 <th
-                                    key={index}
+                                    key={category}
                                     className="py-2 px-4 bg-gray-100 text-gray-600 font-bold uppercase text-xs border-gray-300 border-2"
                                 >
                                     {category}
@@ -63,10 +103,10 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {selectedProducts.map((product) => (
+                        {selectedProducts.map((product: PurchasedItem) => (
                             <tr key={product.provisionalId} className="border-b">
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.systemCode.slice(0, 9).toUpperCase()}
+                                    {product.systemCode?.slice(0, 9).toUpperCase()}
                                 </td>
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                     {product.productName}
@@ -86,7 +126,7 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
                                     {product.quantity}
                                 </td>
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.cost * product.quantity}
+                                    {product.cost || 0 * product.quantity}
                                 </td>
                             </tr>
                         ))}
@@ -100,9 +140,3 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }) {
 
 export { EditOperation };
 
-
-EditOperation.propTypes = {
-    typeOfOperation: PropTypes.string,
-    operationData: PropTypes.object,
-    tableCategories: PropTypes.array
-}

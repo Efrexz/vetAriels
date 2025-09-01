@@ -29,7 +29,7 @@ import { ProductInfo } from './Pages/products/ProductInfo';
 import { Discharges } from './Pages/products/Discharges';
 import { Charges } from './Pages/products/Charges';
 import { DischargeAndChargeStock } from './Pages/products/DischargeAndChargeStock';
-import { OperationInfo } from './Pages/products/operationInfo.jsx/OperationInfo.jsx';
+import { OperationInfo } from './Pages/products/operationInfo.jsx/OperationInfo';
 import { Services } from './Pages/servicesSection/Services';
 import { ServiceInfo } from './Pages/servicesSection/ServiceInfo';
 import { Config } from './Pages/configurationSection/Config';

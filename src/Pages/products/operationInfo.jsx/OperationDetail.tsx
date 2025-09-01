@@ -1,17 +1,24 @@
+import { InventoryOperation, PurchasedItem } from "@t/inventory.types";
 import RoleUserIcon from "@assets/roleUserIcon.svg?react";
 import BookIcon from '@assets/bookIcon.svg?react';
-import PropTypes from "prop-types";
-
-function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
-
-    const selectedProducts = operationData?.products || [];
 
 
-    const subtotal = operationData.products.reduce(
-        (acc, product) => acc + product.cost * product.quantity,
+type OperationMode = 'restock' | 'discharge';
+
+interface OperationDetailProps {
+    typeOfOperation: OperationMode;
+    operationData: InventoryOperation;
+    tableCategories: string[];
+}
+
+function OperationDetail({ typeOfOperation, operationData, tableCategories }: OperationDetailProps) {
+
+    const selectedProducts: PurchasedItem[] = operationData.products;
+
+    const subtotal = selectedProducts.reduce(
+        (acc, product) => acc + (product.cost || 0) * (product.quantity || 0),
         0
     );
-
 
     return (
         <main className="w-full mx-auto p-6 bg-white shadow-md ">
@@ -60,10 +67,10 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {selectedProducts.map((product) => (
+                        {selectedProducts.map((product: PurchasedItem) => (
                             <tr key={product.provisionalId} className="border-b">
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.systemCode.slice(0, 9).toUpperCase()}
+                                    {product.systemCode?.slice(0, 9).toUpperCase()}
                                 </td>
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
                                     {product.productName}
@@ -83,7 +90,7 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
                                     {product.quantity}
                                 </td>
                                 <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                    {product.cost * product.quantity}
+                                    {product.cost ?? 0 * product.quantity}
                                 </td>
                             </tr>
                         ))}
@@ -110,10 +117,3 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }) {
 }
 
 export { OperationDetail };
-
-OperationDetail.propTypes = {
-    typeOfOperation: PropTypes.string,
-    operationData: PropTypes.object,
-    tableCategories: PropTypes.array
-
-}
