@@ -1,24 +1,21 @@
-import { useContext, useState } from 'react';
+import { useState, ChangeEvent, } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useClients } from '@context/ClientsContext'; // PASO 1: Usar hooks personalizados
+import { useGlobal } from '@context/GlobalContext';
+import { ConsultationRecord } from '@t/client.types';
 import { RecordForm } from '@components/forms/RecordForm';
-import { ClientsContext } from '@context/ClientsContext';
-import { GlobalContext } from '@context/GlobalContext';
 import { generateUniqueId } from '@utils/idGenerator';
 
 function NewRecord() {
-    const { addRecord } = useContext(ClientsContext);
-    const { activeUser } = useContext(GlobalContext);
-
-    const { id } = useParams();
-
-
+    const { addRecord } = useClients();
+    const { activeUser } = useGlobal();
+    const { id: petId } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const now = new Date();
-    const currentDate = now.toLocaleDateString();
-    const currentTime = now.toLocaleTimeString();
 
-    const [formData, setFormData] = useState({
-        dateTime: `${currentDate} ${currentTime}`,
+    const now = new Date();
+
+    const [formData, setFormData] = useState<Omit<ConsultationRecord, "id" | "type" | "createdBy">>({
+        dateTime: now.toLocaleString(),
         reason: 'Consulta',
         anamnesis: '',
         physiologicalConstants: {
@@ -28,13 +25,12 @@ function NewRecord() {
             oxygenSaturation: '',
         },
         clinicalExam: '',
-        createdBy: `${activeUser.name} ${activeUser.lastName}`,
     });
 
-    function handleChange(e) {
+    function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { id, value } = e.target;
         // Si el input pertenece a las constantes fisiológicas
-        if (Object.keys(formData.physiologicalConstants).includes(id)) {
+        if (id in formData.physiologicalConstants) {
             setFormData((prev) => ({
                 ...prev,
                 physiologicalConstants: {
@@ -51,13 +47,22 @@ function NewRecord() {
     }
 
     function saveRecord() {
-        const recordId = generateUniqueId();
-        const newRecord = {
+        const newRecord: ConsultationRecord = {
+            id: generateUniqueId(),
+            //deberia estar siempre activeUser porque si no lo redirige al login
+            createdBy: `${activeUser?.name} ${activeUser?.lastName}`,
+            type : 'consultation',
             ...formData,
-            id: recordId,
         }
-        addRecord(id, newRecord);
-        navigate('/pets/pet/' + id + '/clinical-records');
+        if (petId) {
+            addRecord(petId, newRecord);
+            navigate(`/pets/pet/${petId}/clinical-records`);
+        }
+    }
+
+        if (!petId) {
+        console.error("No se encontró el ID de la mascota para crear el registro.");
+        return;
     }
 
     return (

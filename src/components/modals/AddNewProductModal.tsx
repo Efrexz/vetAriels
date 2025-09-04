@@ -55,8 +55,6 @@ const formFields: FormFieldConfig[] = [
     {label: 'Precio del servicio (incluido impuestos)',name: 'salePrice',type: 'number',placeholder: 'Ingrese precio del servicio',icon: MoneyIcon},
 ];
 
-
-
 function AddNewProductModal({ onClose }: AddNewProductModalProps) {
     const navigate = useNavigate();
 

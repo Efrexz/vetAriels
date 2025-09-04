@@ -4,20 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import { ConsultationRecord } from '@t/client.types';
 
+
 interface RecordFormProps {
-    formData: ConsultationRecord
+    formData: Omit<ConsultationRecord, "id" | "type" | "createdBy">;
     handleChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onSubmit: () => void;
     submitText?: string;
 }
 
 function RecordForm({
-  formData,
-  handleChange,
-  onSubmit,
-  submitText
+    formData,
+    handleChange,
+    onSubmit,
+    submitText
 }: RecordFormProps) {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
   const physiologicalConstantsPlaceholders = {
     temperature: "Temperatura (°C)",

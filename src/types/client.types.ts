@@ -9,6 +9,7 @@ type PhysiologicalConstants = {
 
 export interface ConsultationRecord {
     id: string;
+    type: 'consultation';
     dateTime: string;
     reason: string;
     anamnesis: string;
@@ -17,7 +18,7 @@ export interface ConsultationRecord {
     createdBy: string;
 }
 
-interface NoteRecord {
+export interface NoteRecord {
     id: string;
     type: 'note';
     dateTime: string;

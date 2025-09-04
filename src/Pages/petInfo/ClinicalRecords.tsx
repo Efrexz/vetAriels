@@ -1,7 +1,9 @@
+import { useState, ComponentType, } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
+import { PetRecord } from '@t/client.types';
+import { NotFound } from '@components/ui/NotFound';
 import ScaleBalanced from '@assets/scaleBalanced.svg?react';
 import HeartPulse from '@assets/heartPulse.svg?react';
 import Temperature from '@assets/temperature.svg?react';
@@ -12,24 +14,30 @@ import PlusIcon from '@assets/plusIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';
 import FileContract from '@assets/fileContract.svg?react';
 
+type Icons = Record<string, ComponentType<React.SVGProps<SVGSVGElement>>>;
+
+const physiologicalIcons: Icons = {
+    temperature: Temperature,
+    heartRate: HeartPulse,
+    weight: ScaleBalanced,
+    oxygenSaturation: HeartPulse,
+};
 
 function ClinicalRecords() {
-    const { petsData } = useContext(ClientsContext);
-    const { id } = useParams();
+    const { petsData } = useClients();
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const individualPetData = petsData.find(pet => pet.id === id);
-    const { records } = individualPetData;
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [elementToDelete, setElementToDelete] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [elementToDelete, setElementToDelete] = useState<PetRecord | null>(null);
 
-    const physiologicalIcons = {
-        temperature: Temperature,
-        heartRate: HeartPulse,
-        weight: ScaleBalanced,
-        oxygenSaturation: HeartPulse,
-    };
+    if (!individualPetData) {
+        return <NotFound entityName="Mascota" searchId={id!} returnPath="/pets" />;
+    }
+
+    const records: PetRecord[] = individualPetData.records || [];
 
     return (
         <section className="w-full mx-auto bg-white p-6 shadow-md rounded-lg">
@@ -50,7 +58,7 @@ function ClinicalRecords() {
                 </button>
             </div>
 
-            {records && records?.length > 0 ? (
+            {records?.length > 0 ? (
                 records.map((record, index) => (
                     <div
                         key={record.id}
@@ -183,7 +191,7 @@ function ClinicalRecords() {
             )}
 
             {
-                isModalOpen && (
+                isModalOpen && elementToDelete && (
                     <ConfirmActionModal
                         elementData={elementToDelete}
                         typeOfOperation="deleteRecordAndNote"

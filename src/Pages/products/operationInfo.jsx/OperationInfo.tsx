@@ -44,7 +44,6 @@ function OperationInfo({ typeOfOperation }: OperationInfoProps) {
         );
     }
 
-
     //determinamos las categorías de las tablas dependiendo del tipo de operación y la pasamos al componente
     const restockTableCategories = ["Código de sistema", "Producto", "Precio Compra", "Precio Venta", "Cantidad", "Total Compra"];
     const dischargeTableCategories = ["Código de sistema", "Producto", "Precio Unitario", "Cantidad", "Total"];
