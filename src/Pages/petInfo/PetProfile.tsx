@@ -172,14 +172,14 @@ function PetProfile({ petData }: PetProfileProps) {
                                     </div>
                                 }
 
-                                {field.type === 'select' && field.options? (
+                                {field.type === 'select' ? (
                                     <select
                                         id={field.id}
                                         onChange={handleChange}
                                         value={formData[field.id as keyof FormDataType]}
                                         className={`w-full px-3 py-2 border rounded-lg focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'} `}
                                     >
-                                        {field.options.map((option, i) => (
+                                        {field.options?.map((option, i) => (
                                             <option key={i} value={option}>
                                                 {option}
                                             </option>

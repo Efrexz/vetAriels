@@ -119,14 +119,14 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
                             className={`${field.fullWidth ? 'sm:col-span-4' : field.smallWidth ? 'sm:col-span-1' : 'sm:col-span-2'}`}
                         >
                             <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
-                            {field.type === 'select' && field.options  ? (
+                            {field.type === 'select' ? (
                                 <select
                                     name={field.name}
                                     value={formData[field.name as keyof FormDataState]}
                                     onChange={handleChange}
                                     className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none'}`}
                                 >
-                                    {field.options.map((option, i) => (
+                                    {field.options?.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
                                     ))}
                                 </select>

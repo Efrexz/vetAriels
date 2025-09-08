@@ -1,7 +1,18 @@
+import { useState } from 'react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 
+interface Receipt {
+    date: string;
+    comprobante: string;
+    concept: string;
+    pet: string;
+    price: string;
+    quantity: string;
+    total: string;
+    status: 'PAGADO' | 'PENDIENTE' | 'ANULADO';
+}
 
-const comprobantes = [
+const receipts : Receipt[] = [
     {
         date: '29-07-2024 07:33 PM',
         comprobante: 'BOLETA DE VENTA ELECTRÓNICA: BV01 - 0003560',
@@ -34,7 +45,7 @@ const comprobantes = [
     },
 ];
 
-const tableHeaders = [
+const tableHeaders: string[] = [
     "Fecha de emisión",
     "Comprobante",
     "Concepto",
@@ -124,17 +135,17 @@ function PurchaseHistory() {
                         </tr>
                     </thead>
                     <tbody>
-                        {comprobantes.map((comprobante, index) => (
+                        {receipts.map((receipt, index) => (
                             <tr key={index} className="hover:bg-gray-100 cursor-pointer">
-                                <td className="py-2 px-4 border-b text-center">{comprobante.date}</td>
-                                <td className="py-2 px-4 border-b text-center">{comprobante.comprobante}</td>
-                                <td className="py-2 px-4 border-b text-center">{comprobante.concept}</td>
-                                <td className="py-2 px-4 border-b text-center">{comprobante.pet}</td>
-                                <td className="py-2 px-4 border-b text-center">{comprobante.price}</td>
-                                <td className="py-2 px-4 border-b text-center">{comprobante.quantity}</td>
-                                <td className="py-2 px-4 border-b text-center">{comprobante.total}</td>
+                                <td className="py-2 px-4 border-b text-center">{receipt.date}</td>
+                                <td className="py-2 px-4 border-b text-center">{receipt.comprobante}</td>
+                                <td className="py-2 px-4 border-b text-center">{receipt.concept}</td>
+                                <td className="py-2 px-4 border-b text-center">{receipt.pet}</td>
+                                <td className="py-2 px-4 border-b text-center">{receipt.price}</td>
+                                <td className="py-2 px-4 border-b text-center">{receipt.quantity}</td>
+                                <td className="py-2 px-4 border-b text-center">{receipt.total}</td>
                                 <td className="py-2 px-4 border-b text-center text-white bg-green-500 rounded">
-                                    {comprobante.status}
+                                    {receipt.status}
                                 </td>
                                 <td className="py-2 px-4 border-b text-center">
                                     <button className="text-green-500 hover:text-green-700">

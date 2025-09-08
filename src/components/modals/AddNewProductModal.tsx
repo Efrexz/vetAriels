@@ -157,14 +157,14 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                             className={`${field.fullWidth ? 'lg:col-span-3 sm:col-span-2' : 'col-span-1'}`}
                         >
                             <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
-                            {field.type === 'select' && field.options  ? (
+                            {field.type === 'select' ? (
                                 <select
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
                                     className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus:border-blue-300 '} focus:outline-none`}
                                 >
-                                    {field.options.map((option, i) => (
+                                    {field.options?.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
                                     ))}
                                 </select>

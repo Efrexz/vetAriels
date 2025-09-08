@@ -1,6 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState, useMemo, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { Client, Pet } from '@t/client.types';
+import { Product, Service, PurchasedItem } from '@t/inventory.types';
+import { GroomingQueueItem } from '@t/clinical.types';
 import { ProductSearchInput } from '@components/search/ProductSearchInput';
 import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { PriceModificationModal } from '@components/modals/PriceModificationModal';
@@ -9,37 +12,61 @@ import { ActionButtons } from '@components/ui/ActionButtons';
 import { SuccessModal } from '@components/modals/SuccessModal';
 import { ErrorModal } from '@components/modals/ErrorModal';
 import { generateUniqueId } from '@utils/idGenerator';
+import { NotFound } from '@components/ui/NotFound';
 import BathIcon from '@assets/bathIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import TagIcon from '@assets/tagIcon.svg?react';
 
 
+const healthObservations = [
+    {
+        title: "Alteraciones en",
+        items: ["Oído", "Nariz", "Ojos", "Boca", "Cola", "Piel"],
+    },
+    {
+        title: "Presencia de",
+        items: ["Sarro", "Parásitos Internos", "Garrapatas", "Pulgas", "Sobrepeso", "Masas / Crecimientos corporales"],
+    },
+    {
+        title: "Pendientes",
+        items: [
+            "Vacuna de cachorro",
+            "Refuerzo Vacuna Leptospira",
+            "Vacuna anual",
+            "Aplicación de antipulgas",
+            "Refuerzo Vacuna KC",
+            "Aplicación de antiparasitario",
+        ],
+    },
+];
+
 function EditGroomingOrder() {
 
-    //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
-    const [productToEdit, setProductToEdit] = useState(null);
-
-    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-
-    //Modales
-    const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
-    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-
-    const { petsInQueueGrooming, updatePetInQueueGrooming, clients } = useContext(ClientsContext);
-    const { id } = useParams();
-    const navigate = useNavigate();
+    const { petsInQueueGrooming, updatePetInQueueGrooming, clients } = useClients();
+    const { id: clientId } = useParams<{ id: string }>();
+    const navigate = useNavigate()
 
     //obtenemos los datos del paciente en cola de la cola de grooming
-    const petInQueueGrommingData = petsInQueueGrooming.find((pet) => pet.id === id);
+    const petInQueueGrommingData : GroomingQueueItem | undefined = petsInQueueGrooming.find((pet) => pet.id === clientId);
+
     //de acuerdo a los datos del paciente, accedemos a la propiedad ownerId para obtener los datos del propietario del paciente
-    const clientData = clients.find((client) => client.id === petInQueueGrommingData?.petData?.ownerId);
+    const clientData : Client | undefined = clients.find((client) => client.id === petInQueueGrommingData?.petData?.ownerId);
+
+    //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
+    const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
+
+
+    //Modales
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+    const [isPriceModalOpen, setIsPriceModalOpen] = useState<boolean>(false);
+    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState<boolean>(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
 
     //productos y servicios seleccionados
-    const [selectedProducts, setSelectedProducts] = useState(petInQueueGrommingData?.productsAndServices || []);
+    const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
 
     // funcion para modificar el precio de un item por el modal de editar el precio
-    function handleUpdateProductPrice(updatedProduct) {
+    function handleUpdateProductPrice(updatedProduct: PurchasedItem) {
         const updatedProducts = selectedProducts.map(product =>
             product.provisionalId === updatedProduct.provisionalId
                 ? updatedProduct
@@ -49,7 +76,7 @@ function EditGroomingOrder() {
     }
 
     //funcion para actualizar cantidad de productos en la lista de forma individual
-    function updateProductQuantity(id, newQuantity) {
+    function updateProductQuantity(id: string, newQuantity: number) {
         const updatedProducts = selectedProducts.map((product) =>
             product.provisionalId === id
                 ? { ...product, quantity: newQuantity }
@@ -59,25 +86,27 @@ function EditGroomingOrder() {
     }
 
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
-    function addProductToTable(product) {
-        const provisionalId = generateUniqueId();
-        const newProduct = {
-            ...product,
-            provisionalId,
+    const now = new Date();
+    function addProductToTable(item: Product | Service) {
+        const newItem: PurchasedItem = {
+            ...item,
             //ENVIAMOS por defecto el nombre del paciente seleccionado
             petSelected: petInQueueGrommingData?.petData?.petName,
+            provisionalId: generateUniqueId(),
             quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
+            additionDate: now.toLocaleDateString(),
+            additionTime: now.toLocaleTimeString(),
         };
-        setSelectedProducts([...selectedProducts, newProduct]);
+        setSelectedProducts([...selectedProducts, newItem]);
     }
 
-    function removeProduct(productId) {
+    function removeProduct(productId: string) {
         const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== productId);
         setSelectedProducts(updatedProducts);
     }
 
     const totalPrice = selectedProducts.reduce(
-        (acc, product) => acc + (product.salePrice || product.price) * product.quantity,
+        (acc, product) => acc + (product.salePrice || 0) * product.quantity,
         0
     );
 
@@ -90,38 +119,17 @@ function EditGroomingOrder() {
     ];
 
     //notas del baño de la mascota
-    const [notes, setNotes] = useState(petInQueueGrommingData?.notes || '');
+    const [notes, setNotes] = useState<string>('');
 
-    function handleChange(e) {
+    function handleChange(e: ChangeEvent<HTMLTextAreaElement>) {
         const { value } = e.target;
         setNotes(value);
     }
-
-    const healthObservations = [
-        {
-            title: "Alteraciones en",
-            items: ["Oído", "Nariz", "Ojos", "Boca", "Cola", "Piel"],
-        },
-        {
-            title: "Presencia de",
-            items: ["Sarro", "Parásitos Internos", "Garrapatas", "Pulgas", "Sobrepeso", "Masas / Crecimientos corporales"],
-        },
-        {
-            title: "Pendientes",
-            items: [
-                "Vacuna de cachorro",
-                "Refuerzo Vacuna Leptospira",
-                "Vacuna anual",
-                "Aplicación de antipulgas",
-                "Refuerzo Vacuna KC",
-                "Aplicación de antiparasitario",
-            ],
-        },
-    ];
     //observaciones medicas seleccionadas
-    const [selectedObservations, setSelectedObservations] = useState(petInQueueGrommingData?.healthObservations || []);
+    const [selectedObservations, setSelectedObservations] = useState<string[]>([]);
+
     // cambios en las checkbox de las observaciones
-    function handleObservationChange(observation) {
+    function handleObservationChange(observation: string) {
         if (selectedObservations.includes(observation)) {
             setSelectedObservations(selectedObservations.filter(item => item !== observation));
         } else {
@@ -135,14 +143,28 @@ function EditGroomingOrder() {
             setIsErrorModalOpen(true);
             return;
         }
-        const dataToSend = {
+        const dataToSend: Partial<GroomingQueueItem> = {
             ...petInQueueGrommingData,
             productsAndServices: selectedProducts,
             notes,
             healthObservations: selectedObservations,
         };
-        updatePetInQueueGrooming(id, dataToSend);
-        setIsSuccessModalOpen(true);
+        if(clientId){
+            updatePetInQueueGrooming(clientId, dataToSend);
+            setIsSuccessModalOpen(true);
+        }
+    }
+
+    useEffect(() => {
+    if (petInQueueGrommingData) {
+        setSelectedProducts(petInQueueGrommingData.productsAndServices || []);
+        setNotes(petInQueueGrommingData.notes || '');
+        setSelectedObservations(petInQueueGrommingData.healthObservations || []);
+    }
+    }, [petInQueueGrommingData]);
+
+    if (!petInQueueGrommingData) {
+        return <NotFound entityName="Orden de Peluquería" searchId={clientId!} returnPath="/grooming" />;
     }
 
 
@@ -252,7 +274,7 @@ function EditGroomingOrder() {
                                                 setIsQuantityModalOpen(false)
                                             }}
                                         >
-                                            {product.salePrice || product.price}
+                                            {product.salePrice}
                                         </span>
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
@@ -271,7 +293,7 @@ function EditGroomingOrder() {
                                         />
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
-                                        {(product.salePrice || product.price) * product.quantity}
+                                        {(product.salePrice || 0) * product.quantity}
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
                                         <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
@@ -279,7 +301,7 @@ function EditGroomingOrder() {
                                         </span>
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
-                                        {(product.salePrice || product.price) * product.quantity}
+                                        {(product.salePrice || 0) * product.quantity}
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
                                     <td className='py-8 px-4 text-center border border-gray-300'>
@@ -297,7 +319,7 @@ function EditGroomingOrder() {
                 </div>
 
                 {
-                    isPriceModalOpen && (
+                    isPriceModalOpen && productToEdit &&(
                         <PriceModificationModal
                             onClose={() => setIsPriceModalOpen(false)}
                             productToEdit={productToEdit}
@@ -306,7 +328,7 @@ function EditGroomingOrder() {
                     )
                 }
                 {
-                    isQuantityModalOpen && (
+                    isQuantityModalOpen && productToEdit &&(
                         <QuantityModificationModal
                             quantity={productToEdit?.quantity}
                             changeQuantity={(newQuantity) => {
@@ -379,7 +401,7 @@ function EditGroomingOrder() {
                 <label className="block text-gray-700">Observaciones o comentarios de ésta orden de servicio</label>
                 <textarea
                     className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-20 hover:border-blue-300 focus-within:border-blue-300"
-                    rows="3"
+                    rows={3}
                     placeholder="Añadir observaciones..."
                     value={notes}
                     onChange={handleChange}

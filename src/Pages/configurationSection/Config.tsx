@@ -98,14 +98,14 @@ function Config() {
                                         </div>
                                     }
 
-                                    {field.type === 'select'  && field.options? (
+                                    {field.type === 'select' ? (
                                         <select
                                             id={field.id}
                                             className="border rounded-lg p-3 bg-gray-50 w-full hover:border-blue-300 focus-within:border-blue-300"
                                             value={formData[field.id as keyof CompanyData]}
                                             onChange={handleChange}
                                         >
-                                            {field.options.map((option, i) => (
+                                            {field.options?.map((option, i) => (
                                                 <option key={i} value={option}>
                                                     {option}
                                                 </option>

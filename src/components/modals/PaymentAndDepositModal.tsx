@@ -1,63 +1,84 @@
-import { useContext, useState } from 'react';
-import { FinancialContext } from '@context/FinancialContext';
-import { GlobalContext } from '@context/GlobalContext';
+import { useState, ChangeEvent } from 'react';
+import { useFinancial } from '@context/FinancialContext';
+import { useGlobal } from '@context/GlobalContext';
+import { Payment } from '@t/financial.types';
+import { User } from '@t/user.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { generateUniqueId } from '@utils/idGenerator';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import Fileinvoice from '@assets/file-invoice.svg?react';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
-import PropTypes from "prop-types";
 
-function PaymentAndDepositModal({ onClose, typeOfOperation }) {
+type OperationType = Payment['movementType'];
 
-    const { addNewPayment } = useContext(FinancialContext);
-    const { activeUser, companyData, users } = useContext(GlobalContext);
+type MethodOfPayment = Payment['paymentMethod'];
 
-    const [errors, setErrors] = useState({});
+interface PaymentAndDepositModalProps {
+    onClose: () => void;
+    typeOfOperation: OperationType;
+}
+
+interface FormDataState {
+    company: string;
+    generatedBy: string;
+    responsible: string;
+    date: string;
+    reason: string;
+    amount: string;
+    methodOfPayment: MethodOfPayment;
+    tag: string;
+};
+
+type FormErrors = Partial<Record<keyof FormDataState, string>>;
+
+function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositModalProps) {
+
+    const { addNewPayment } = useFinancial();
+    const { activeUser, companyData, users } = useGlobal();
+
+    const [errors, setErrors] = useState<FormErrors>({});
 
     const now = new Date();
-    const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-    const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
     const [formData, setFormData] = useState({
-        company: companyData?.clinicName,
+        company: companyData?.clinicName || '',
         generatedBy: `${activeUser?.name} ${activeUser?.lastName}`,
-        responsible: 'administracion ariel',
-        date: `${currentDate} ${currentTime}`,
+        responsible: `${activeUser?.name} ${activeUser?.lastName}`,
+        date: now.toLocaleString(),
         reason: '',
         amount: '',
-        methodOfPayment: 'EFECTIVO',
+        methodOfPayment: 'EFECTIVO' as MethodOfPayment,
         tag: '',
     });
 
+    function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const { name, value } = e.target;
+        setFormData(prevState => ({ ...prevState, [name]: value }));
+    }
+
     function validateForm() {
-        const newErrors = {};
+        const newErrors: FormErrors = {};
         //Validamos si todos los campos son válidos
-        if (!formData.reason || formData.reason.length < 4) {
+        if (formData.reason.trim().length < 4) {
             newErrors.reason = 'El motivo debe tener al menos 4 caracteres';
         }
-        if (!formData.amount || formData.amount < 1) {
-            newErrors.amount = 'El monto debe ser mayor a 0';
+        if (Number(formData.amount) <= 0 || isNaN(Number(formData.amount))) {
+            newErrors.amount = 'El monto debe ser un número mayor a 0';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
-    }
-
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
     }
 
     function handleSubmit() {
         if (!validateForm()) {
             return;
         }
-        const newPayment = {
+        const newPayment: Payment = {
             id: generateUniqueId(),
             date: formData.date,
-            description: formData.reason,
+            description: formData.reason.trim(),
             paymentMethod: formData.methodOfPayment,
-            income: typeOfOperation == 'ENTRADA' ? formData.amount : null,
-            expense: typeOfOperation == 'SALIDA' ? formData.amount : null,
+            income: typeOfOperation === 'ENTRADA' ? Number(formData.amount).toFixed(2) : null,
+            expense: typeOfOperation === 'SALIDA' ? Number(formData.amount).toFixed(2) : null,
             docRef: formData.tag,
             movementType: typeOfOperation
         };
@@ -65,7 +86,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
         onClose();
     }
 
-    const userOptions = users.map(user => `${user.name} ${user.lastName}`);
+    const userOptions = users.map((user: User) => `${user.name} ${user.lastName}`);
 
     const fields = [
         {
@@ -136,12 +157,12 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                     </span>
                 </h2>
                 <form className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 sm:mb-0">
-                    {fields.map((field, index) => (
+                    {fields.map((field) => (
                         <div
                             className={`${field.fullWidth ? 'col-span-1 sm:col-span-2' : ''}`}
-                            key={index}
+                            key={field.name}
                         >
-                            <label className="block text-sm font-medium text-gray-700 pb-1">
+                            <label className="block text-sm font-medium text-gray-700 pb-1" htmlFor={field.name}>
                                 {field.label}
                             </label>
                             <div className="flex">
@@ -153,15 +174,16 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                 {field.type === 'select' ? (
                                     <select
                                         name={field.name}
-                                        value={formData[field.name]}
+                                        id={field.name}
+                                        value={formData[field.name as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className={`border border-gray-300 rounded-md p-2 w-full text-gray-600 focus:outline-none ${errors[field.name]
+                                        className={`border border-gray-300 rounded-md p-2 w-full text-gray-600 focus:outline-none ${errors[field.name as keyof FormDataState]
                                             ? 'border-red-500'
                                             : 'hover:border-blue-300 focus-within:border-blue-300'
                                             }`}
                                     >
-                                        {field.options.map((option, index) => (
-                                            <option key={index} value={option}>
+                                        {field.options?.map((option) => (
+                                            <option key={option} value={option}>
                                                 {option}
                                             </option>
                                         ))}
@@ -169,22 +191,23 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
                                 ) : (
                                     <input
                                         className={`border border-gray-300 ${field.icon ? 'rounded-r-md' : 'rounded-md'
-                                            } p-2 w-full outline-none text-gray-600 ${errors[field.name]
+                                            } p-2 w-full outline-none text-gray-600 ${errors[field.name as keyof FormDataState]
                                                 ? 'border-red-500'
                                                 : 'hover:border-blue-300 focus-within:border-blue-300'
                                             }`}
+                                        id={field.name}
                                         type={field.type}
                                         name={field.name}
-                                        value={formData[field.name]}
+                                        value={formData[field.name as keyof FormDataState ]}
                                         onChange={handleChange}
                                         disabled={field.disabled}
                                         placeholder={field.label}
                                     />
                                 )}
                             </div>
-                            {errors[field.name] && (
+                            {errors[field.name as keyof FormDataState] && (
                                 <p className="text-red-500 text-sm mt-1">
-                                    {errors[field.name]}
+                                    {errors[field.name as keyof FormDataState]}
                                 </p>
                             )}
                         </div>
@@ -205,8 +228,3 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }) {
 }
 
 export { PaymentAndDepositModal }
-
-PaymentAndDepositModal.propTypes = {
-    onClose: PropTypes.func,
-    typeOfOperation: PropTypes.string
-}

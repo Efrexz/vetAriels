@@ -1,6 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState, useMemo, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { Client, Pet } from '@t/client.types';
+import { Product, Service, PurchasedItem } from '@t/inventory.types';
+import { GroomingQueueItem } from '@t/clinical.types';
 import { ProductSearchInput } from '@components/search/ProductSearchInput';
 import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { PriceModificationModal } from '@components/modals/PriceModificationModal';
@@ -15,54 +18,58 @@ import TagIcon from '@assets/tagIcon.svg?react';
 
 function GroomingOrderCreation() {
 
-    const { clients, petsData, addPetToQueueGrooming, petsInQueueGrooming } = useContext(ClientsContext);
+    const { clients, petsData, addPetToQueueGrooming, petsInQueueGrooming } = useClients();
+    const navigate = useNavigate();
+    const { id: clientId } = useParams<{ id: string }>();
 
     //estado de productos seleccionados al escribir en nuestro input de busqueda
-    const [selectedProducts, setSelectedProducts] = useState([]);
+    const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
 
-    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
 
     //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
-    const [productToEdit, setProductToEdit] = useState(null);
+    const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
 
-
-    // funcion para modificar el precio de un item por el modal de editar el precio
-    function handleUpdateProductPrice(updatedProduct) {
-        const updatedProducts = selectedProducts.map(product =>
-            product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product
-        );
-        setSelectedProducts(updatedProducts);
-    }
+    const clientData: Client | undefined =  clients.find(client => client.id === clientId)
 
     //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
-    function addProductToTable(product) {
-        const provisionalId = generateUniqueId();
-        const newProduct = {
-            ...product,
-            petSelected,
-            provisionalId,
-            quantity: 1,// por defecto siempre sera un producto al agregarlo a la lista
+    function addProductToTable(item: Product | Service) {
+        const newProduct: PurchasedItem = {
+            ...item,
+            petSelected: petSelectedName,
+            provisionalId: generateUniqueId(),
+            quantity: 1,
+            additionDate: new Date().toLocaleDateString(),
+            additionTime: new Date().toLocaleTimeString(),
         };
-        setSelectedProducts([...selectedProducts, newProduct]);
+        setSelectedProducts(prev => [...prev, newProduct]);
     }
 
-    function removeProduct(id) {
-        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== id);
+    function removeProduct(itemId: string) {
+        const updatedProducts = selectedProducts.filter((product) => product.provisionalId !== itemId);
         setSelectedProducts(updatedProducts);
     }
 
     //funcion para actualizar cantidad de productos en la lista de forma individual
-    function updateProductQuantity(id, newQuantity) {
+    function updateProductQuantity(itemId: string, newQuantity: number) {
         const updatedProducts = selectedProducts.map((product) =>
-            product.provisionalId === id
+            product.provisionalId === itemId
                 ? { ...product, quantity: newQuantity }
                 : product
         );
         setSelectedProducts(updatedProducts);
     }
 
+    // funcion para modificar el precio de un item por el modal de editar el precio
+    function handleUpdateProductPrice(updatedProduct: PurchasedItem) {
+        const updatedProducts = selectedProducts.map(product =>
+            product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product
+        );
+        setSelectedProducts(updatedProducts);
+    }
+
     const totalPrice = selectedProducts.reduce(
-        (acc, product) => acc + (product.salePrice || product.price) * product.quantity,
+        (acc, product) => acc + (product.salePrice || 0) * product.quantity,
         0
     );
 
@@ -76,54 +83,62 @@ function GroomingOrderCreation() {
         { label: 'TOTAL', value: totalPrice, bold: true },
     ];
 
-    const navigate = useNavigate();
-    const { id } = useParams();
-    const isClientSelected = clients.find(client => client.id === id);
-
     //obtenemos las mascotas del propietario para poder mostrarlos en la lista del select
-    const petsByOwner = petsData.filter(pet => pet.ownerId === id);
+    const petsByOwner: Pet[] = useMemo(() =>
+        clientId ? petsData.filter(pet => pet.ownerId === clientId) : [],
+    [petsData, clientId]);
 
-    const [petSelected, setPetSelected] = useState(petsByOwner[0]?.petName);//por defecto seleccionamos la primera mascota del propietario por si no cambia este select
+    useEffect(() => {
+        if (petsByOwner.length > 0) {
+            setPetSelectedName(petsByOwner[0].petName);
+        } else {
+            setPetSelectedName('');
+        }
+    }, [petsByOwner]);
 
+    const [petSelectedName, setPetSelectedName] = useState<string>('');
 
     //estado de las observaciones del baño de la mascota
-    const [notes, setNotes] = useState('');
+    const [notes, setNotes] = useState<string>('');
 
-    function handleChange(e) {
+    function handleChange(e: ChangeEvent<HTMLTextAreaElement>) {
         const { value } = e.target;
         setNotes(value);
     }
 
     //Modales
-    const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
-    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
+    const [isPriceModalOpen, setIsPriceModalOpen] = useState<boolean>(false);
+    const [isQuantityModalOpen, setIsQuantityModalOpen] = useState<boolean>(false);
 
     function sendInfoToQueueGrooming() {
-        //depende la mascota seleccionada en el input de select, obtenemos toda la data de la mascota para enviarla a cola
-        const petSelectedData = petsData.find(pet => pet.petName === petSelected);
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
-
         //Validamos que haya seleccionado al menos un producto agregado
         if (selectedProducts.length < 1) {
             setIsErrorModalOpen(true);
             return;
         }
+        //depende la mascota seleccionada en el input de select, obtenemos toda la data de la mascota para enviarla a cola
+        const petSelectedData = petsData.find(pet => pet.petName === petSelectedName);
 
-        const dataToSend = {
+        if (!petSelectedData || !clientData) {
+            console.error("No se encontró el cliente o la mascota seleccionada");
+            return;
+        }
+
+        const now = new Date();
+        const dataToSend: GroomingQueueItem  = {
             id: generateUniqueId(),
             petData: petSelectedData,
             turn: petsInQueueGrooming.length > 0
                 ? petsInQueueGrooming[petsInQueueGrooming.length - 1].turn + 1
                 : 1, // Si la cola está vacía, el turno será 1
             systemCode: petSelectedData.hc,
-            ownerName: `${isClientSelected.firstName} ${isClientSelected.lastName}`,
+            ownerName: `${clientData.firstName} ${clientData.lastName}`,
             notes,
-            dateOfAttention: currentDate,
-            timeOfAttention: currentTime,
+            dateOfAttention: now.toLocaleDateString(),
+            timeOfAttention: now.toLocaleTimeString(),
             state: "Pendiente",
             productsAndServices: selectedProducts,
+            healthObservations: [], // las observaciones por defecto van vacias
         };
         addPetToQueueGrooming(dataToSend);
         navigate("/grooming");
@@ -144,14 +159,15 @@ function GroomingOrderCreation() {
                     <div className="col-span-2">
                         <label className="block text-gray-700">Mascota</label>
                         {
-                            isClientSelected ? (
+                            clientData ? (
                                 <select
                                     className="w-full mt-2 border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300 outline-none"
-                                    onChange={(e) => setPetSelected(e.target.value)}
+                                    value={petSelectedName}
+                                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setPetSelectedName(e.target.value)}
                                 >
                                     {
-                                        petsByOwner.map((pet, index) => (
-                                            <option key={index} value={pet.petName}>{pet.petName}</option>
+                                        petsByOwner.map((pet) => (
+                                            <option key={pet.id} value={pet.petName}>{pet.petName}</option>
                                         ))
                                     }
                                 </select>
@@ -169,7 +185,7 @@ function GroomingOrderCreation() {
                     <div className="col-span-2">
                         <label className="block text-gray-700">Dirección</label>
                         <input
-                            value={isClientSelected ? `${isClientSelected.address}, ${isClientSelected.distrit}, ${isClientSelected.city} ` : ''}
+                            value={clientData ? `${clientData.address}, ${clientData.district} ` : ''}
                             className="mt-2 w-full border-gray-300 rounded py-2 px-4 bg-gray-200"
                             disabled
                         />
@@ -179,7 +195,7 @@ function GroomingOrderCreation() {
                         <input
                             type="text"
                             className="mt-2 w-full border-gray-300 rounded p-2 bg-gray-200"
-                            value={isClientSelected ? `${isClientSelected.reference}` : ''}
+                            value={clientData ? `${clientData.reference}` : ''}
                             disabled
                         />
                     </div>
@@ -201,7 +217,7 @@ function GroomingOrderCreation() {
 
                     <div className="col-span-1">
                         <label className="block text-gray-700 mb-2">Almacén de origen</label>
-                        {isClientSelected ? (
+                        {clientData ? (
                             <select className="w-full border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300 outline-none">
                                 <option>ALMACEN PRODUCTOS P/VENTAS</option>
                             </select>
@@ -217,7 +233,7 @@ function GroomingOrderCreation() {
                         <label className="block text-gray-700 mb-2">
                             Buscar y agregar productos y/o servicios:
                         </label>
-                        {isClientSelected ? (
+                        {clientData ? (
                             <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                         ) : (
                             <input
@@ -258,7 +274,7 @@ function GroomingOrderCreation() {
                                                 setIsQuantityModalOpen(false)
                                             }}
                                         >
-                                            {product.salePrice || product.price}
+                                            {product.salePrice}
                                         </span>
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
@@ -276,7 +292,7 @@ function GroomingOrderCreation() {
                                             }} />
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
-                                        {(product.salePrice || product.price) * product.quantity}
+                                        {(product.salePrice || 0 ) * product.quantity}
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
                                         <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
@@ -284,7 +300,7 @@ function GroomingOrderCreation() {
                                         </span>
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>
-                                        {(product.salePrice || product.price) * product.quantity}
+                                        {(product.salePrice || 0) * product.quantity}
                                     </td>
                                     <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
                                     <td className='py-8 px-4 text-center border border-gray-300'>
@@ -303,7 +319,7 @@ function GroomingOrderCreation() {
 
 
                 {
-                    isPriceModalOpen && (
+                    isPriceModalOpen && productToEdit &&(
                         <PriceModificationModal
                             onClose={() => setIsPriceModalOpen(false)}
                             productToEdit={productToEdit}
@@ -312,7 +328,7 @@ function GroomingOrderCreation() {
                     )
                 }
                 {
-                    isQuantityModalOpen && (
+                    isQuantityModalOpen && productToEdit &&  (
                         <QuantityModificationModal
                             quantity={productToEdit?.quantity}
                             maxQuantity={productToEdit?.availableStock}
@@ -353,7 +369,7 @@ function GroomingOrderCreation() {
                 <textarea
                     className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-20 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
                     id="note"
-                    rows="3"
+                    rows={3}
                     placeholder="Añadir observaciones..."
                     value={notes}
                     onChange={handleChange}

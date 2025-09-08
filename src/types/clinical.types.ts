@@ -17,6 +17,7 @@ interface QueueItem {
 export interface GroomingQueueItem extends QueueItem {
     turn: number;
     systemCode: string;
+    healthObservations: string[];
     productsAndServices: PurchasedItem[];
 }
 

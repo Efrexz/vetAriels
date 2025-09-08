@@ -16,13 +16,13 @@ import { ClinicQueue } from './Pages/ClinicQueue';
 import { Internments } from './Pages/Internments.jsx';
 import { ActiveOrdersGrooming } from './Pages/grooming/ActiveOrdersGrooming';
 import { GroomingHistory } from './Pages/grooming/GroomingHistory';
-import { GroomingOrderCreation } from './Pages/grooming/GroomingOrderCreation.jsx';
-import { EditGroomingOrder } from './Pages/grooming/EditGroomingOrder.jsx';
+import { GroomingOrderCreation } from './Pages/grooming/GroomingOrderCreation';
+import { EditGroomingOrder } from './Pages/grooming/EditGroomingOrder';
 import { Clients } from './Pages/Clients';
 import { CreateClientForm } from './Pages/CreateClientForm';
 import { ClientInfo } from './Pages/clientData/ClientInfo';
 import { PetsData } from './Pages/PetsData';
-import { CreatePetForm } from './Pages/CreatePetForm.jsx';
+import { CreatePetForm } from './Pages/CreatePetForm';
 import { PetInfo } from './Pages/petInfo/PetInfo';
 import { Products } from './Pages/products/Products';
 import { ProductInfo } from './Pages/products/ProductInfo';
@@ -45,7 +45,7 @@ import { EditUser } from './Pages/configurationSection/EditUser';
 import { UserInfo } from './Pages/configurationSection/UserInfo/index';
 import { NotFound } from './Pages/NotFound';
 import { Layout } from './components/layout/Layout';
-import ScrollToTop from './components/ScrollToTop.jsx';
+import ScrollToTop from './components/ScrollToTop';
 import './index.css';
 
 function App() {

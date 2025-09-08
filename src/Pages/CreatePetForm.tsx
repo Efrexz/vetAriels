@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import { ClientsContext } from '@context/ClientsContext';
+import { useClients } from '@context/ClientsContext';
+import { Pet } from '@t/client.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { ClientSearchInput } from '@components/search/ClientSearchInput';
 import PawIcon from '@assets/pawIcon.svg?react';
@@ -9,38 +10,57 @@ import CakeIcon from '@assets/cakeIcon.svg?react';
 import BookIcon from '@assets/bookIcon.svg?react';
 import MicrochipIcon from '@assets/microChip.svg?react';
 
+type FormDataState = Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'registrationDate' | 'registrationTime' | 'active' | 'records'> & {
+    owner: string;
+    esterilized: 'SI' | 'NO'
+};
+
+type FormErrors = Partial<Record<keyof FormDataState, string>>;
 
 function CreatePetForm() {
+    const { clients, addPet, historyCounter } = useClients();
+    const { id: ownerId } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { clients, addPet, historyCounter } = useContext(ClientsContext);
-    const { id: ownerId } = useParams();
 
+    const [errors, setErrors] = useState<FormErrors>({});
 
-    const individualClientData = clients.find(client => client.id === ownerId);
-    const [errors, setErrors] = useState({});
+    const individualClientData = ownerId !== 'no_client'
+        ? clients.find(client => client.id === ownerId)
+        : undefined;
 
-
-    const [formData, setFormData] = useState({
-        owner: ownerId !== "no_client" ? individualClientData?.firstName + " " + individualClientData?.lastName : "", //si nuestra url dice que no es un cliente, entonces no se debe mostrar por defecto el propietario
+    const [formData, setFormData] = useState<FormDataState>({
+        owner: individualClientData ? `${individualClientData.firstName} ${individualClientData.lastName}` : "",
         petName: '',
         birthDate: '',
-        hc: historyCounter.current, //TODO - Generar por los momentos un hc segun el largo de la lista de mascotas
         microchip: '',
-        species: '',
-        breed: '',
-        sex: '',
-        esterilized: '',
+        species: 'CANINO',
+        breed: 'CRUCE',
+        sex: 'MACHO',
+        esterilized: 'NO',
     });
+
+    useEffect(() => {
+        const client = clients.find(client => client.id === ownerId);
+        setFormData(prev => ({
+            ...prev,
+            owner: client ? `${client.firstName} ${client.lastName}` : ""
+        }));
+    }, [ownerId, clients]);
+
+    function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const { id, value } = e.target;
+        setFormData(prev => ({ ...prev, [id as keyof FormDataState]: value }));
+    }
 
     // Validación de los campos
     function validateForm() {
-        const newErrors = {};
+        const newErrors: FormErrors = {};
         //Validamos si todos los campos son válidos
-        if (ownerId === 'no_client') {
+        if (ownerId === 'no_client' || !formData.owner) {
             newErrors.owner = 'Debe seleccionar un propietario';
         }
-        if (!formData.petName || formData.petName.length < 3) {
-            newErrors.petName = 'El nombre del mascote debe tener al menos 3 caracteres';
+        if (!formData.petName || formData.petName.trim().length < 3) {
+            newErrors.petName = 'El nombre del mascota debe tener al menos 3 caracteres';
         }
         if (!formData.birthDate) {
             newErrors.birthDate = 'Introduzca una fecha de nacimiento válida';
@@ -49,39 +69,30 @@ function CreatePetForm() {
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
     }
 
-    function handleChange(e) {
-        const { id, value } = e.target;
-        setFormData({
-            ...formData,
-            [id]: value
-        });
-    }
-
     function createNewPet() {
         if (!validateForm()) {
             return;
         }
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
-        const newPet = {
-            registrationDate: currentDate,
-            registrationTime: currentTime,
+        const now = new Date();
+        const newPetDataForAdd:  Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'owner'> = {
+            registrationDate: now.toLocaleDateString(),
+            registrationTime: now.toLocaleTimeString(),
             petName: formData.petName,
             birthDate: formData.birthDate,
             microchip: formData.microchip,
-            species: formData.species || "CANINO",
-            breed: formData.breed || "CRUCE",
-            sex: formData.sex || "MACHO",
+            species: formData.species,
+            breed: formData.breed,
+            sex: formData.sex,
             active: true,
-            esterilized: formData.esterilized || "NO",
+            esterilized: formData.esterilized,
+            records: [],
         };
-
-        addPet(newPet, ownerId, formData.owner);
-        navigate(`/pets`);
+        if (ownerId){
+            addPet(newPetDataForAdd, ownerId, formData.owner);
+            navigate(`/pets`);
+        }
     }
-
 
     const formFields = [
         {
@@ -167,10 +178,10 @@ function CreatePetForm() {
                         )}
                     </div>
 
-                    {formFields.map((field, index) => (
-                        <div key={index}>
+                    {formFields.map((field) => (
+                        <div key={field.label}>
                             <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full border-gray-200 border rounded-md overflow-hidden ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}>
+                            <div className={`flex w-full border-gray-200 border rounded-md overflow-hidden ${errors[field.id as keyof FormDataState] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}>
                                 {field.icon &&
                                     <div className="flex items-center justify-center bg-gray-100 px-3">
                                         <field.icon className="w-5 h-5 text-gray-600" />
@@ -181,10 +192,10 @@ function CreatePetForm() {
                                     <select
                                         id={field.id}
                                         onChange={handleChange}
-                                        className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0"
+                                        className={`w-full px-3 py-2 border-none focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                         disabled={field.disabled}
                                     >
-                                        {field.options.map((option, i) => (
+                                        {field.options?.map((option, i) => (
                                             <option key={i} value={option}>
                                                 {option}
                                             </option>
@@ -194,18 +205,16 @@ function CreatePetForm() {
                                     <input
                                         type={field.type}
                                         id={field.id}
-                                        value={formData[field.id]}
+                                        //para poder generar el hc porque no esta en el formData
+                                        value={field.id === 'hc' ? historyCounter.current.toString() : (formData[field.id as keyof FormDataState] as string)}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
+                                        className={`w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                     />
                                 )}
                             </div>
-                            {field.helperText && (
-                                <p className="text-sm text-gray-600 mt-1">{field.helperText}</p>
-                            )}
-                            {errors[field.id] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                            {errors[field.id as keyof FormDataState] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field.id as keyof FormDataState]}</p>
                             )}
                         </div>
                     ))}
