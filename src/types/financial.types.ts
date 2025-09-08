@@ -6,5 +6,5 @@ export interface Payment {
     income: string | null;
     expense: string | null;
     docRef: string;
-    movementType: 'ENTRADA' | 'INGRESO' | 'EGRESO' | 'VENTA';
+    movementType: 'ENTRADA' | 'INGRESO' | 'SALIDA' | 'VENTA';
 }

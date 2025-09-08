@@ -55,7 +55,6 @@ function ClientsProvider({ children }: ClientsProviderProps) {
         return saved ? (JSON.parse(saved) as Client[]) : [];
     });
 
-
     //Pets Data
     const [petsData, setPetsData] = useState<Pet[]>(() => {
         const saved = localStorage.getItem('petsData');
@@ -68,7 +67,6 @@ function ClientsProvider({ children }: ClientsProviderProps) {
             pet.id === petId ? { ...pet, records: [newRecord, ...(pet.records || [])] } : pet
         ));
     }
-  
 
     //editar record de consulta por mascota
     function updateRecord(petId: string, recordId: string, updatedRecord: PetRecord) {

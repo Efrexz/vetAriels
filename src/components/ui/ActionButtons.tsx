@@ -1,12 +1,14 @@
 import ReturnIcon from '@assets/returnIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 
+type Mode = 'modal' | 'form';
+
 interface ActionButtonsProps {
     onCancel: () => void;
     onSubmit: () => void;
     cancelText?: string;
     submitText?: string;
-    mode?: string;
+    mode?: Mode;
     customIcon?: React.ReactNode;
 }
 

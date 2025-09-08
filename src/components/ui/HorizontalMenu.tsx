@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-type Mode = 'clients' | 'pets' | 'services' | 'products' | 'user' | 'restock' | 'discharge';
+type Mode = 'clients' | 'pets' | 'services' | 'products' | 'user' | 'restock' | 'discharge' | 'clinics';
 
 interface HorizontalMenuProps {
     mode: Mode;
@@ -20,6 +20,8 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
             case 'discharge':
             case 'restock':
                 return 'Ver';
+            case 'clinics':
+                return 'Datos Generales';
             default:
                 return 'Editar';
         }
@@ -39,7 +41,7 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
         pets: [
             { name: 'Editar', url: "update" },
             { name: 'Historial Clínica', url: "clinical-records" },
-            // { name: 'Historial de compras', url: "purchase-history" },   
+            // { name: 'Historial de compras', url: "purchase-history" },
         ],
         services: [
             { name: 'Editar', url: "update" },
@@ -64,6 +66,11 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
             { name: 'Ver', url: "detail" },
             { name: 'Editar', url: "edit" },
         ],
+        clinics: [
+            { name: 'Datos Generales', url: "subsydiary" },
+            { name: 'Ajustes', url: "subsydiary-settings" },
+            { name: 'Logo', url: "gallery" },
+        ],
     };
 
     const { id } = useParams<{ id: string }>();
@@ -77,6 +84,7 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
         user: `/config/profile/${id}`,
         restock: `/charges/charge/${id}`,
         discharge: `/discharges/discharge/${id}`,
+        clinics: `/config/clinics/${id}`,
     };
 
     const hasAlternativeStyles = ['restock', 'discharge', 'services', 'products'].includes(mode);

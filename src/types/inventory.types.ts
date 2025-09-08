@@ -1,5 +1,5 @@
 export interface Product {
-    systemCode?: string;
+    systemCode: string;
     productName?: string;
     brand: string;
     unitOfMeasurement?: string;
@@ -11,7 +11,7 @@ export interface Product {
     category: string;
     subcategory?: string;
     minStock?: number;
-    availableStock?: number;
+    availableStock: number;
     cost: number;
     salePrice: number;
     registrationDate: string;
