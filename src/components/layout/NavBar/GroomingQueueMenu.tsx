@@ -20,38 +20,40 @@ export function GroomingQueueMenu({ onClose }: GroomingQueueMenuProps) {
     };
 
     return (
-        <div className="absolute top-20 md:top-14 right-6 md:right-20 bg-white shadow-lg rounded-lg w-64 z-20 max-h-80">
-            {/* Contenedor con scroll solo para los pacientes */}
-            <div className="max-h-64 overflow-y-auto">
+        <div className="absolute top-16 right-4 md:right-20 bg-gray-800/95 backdrop-blur-sm shadow-2xl rounded-lg w-72 z-20 border border-gray-700/50 overflow-hidden flex flex-col max-h-[340px]">
+            <div className="px-3 pt-3 pb-2">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400">En Espera de Grooming</h4>
+            </div>
+
+            <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                 <ul>
                     {petsInQueueGrooming.map((pet) => (
                         <li
                             key={pet.id}
-                            className="p-3 border-b flex items-center hover:bg-gray-50 cursor-pointer"
+                            className="px-3 py-2.5 border-t border-gray-700/50 flex items-start gap-3 hover:bg-cyan-500/10 cursor-pointer transition-colors group"
                             onClick={() => handleItemClick(pet.petData.id)}
                         >
                             <img src="https://t1.ea.ltmcdn.com/es/posts/8/9/2/nombres_graciosos_para_perros_pequenos_23298_3_600.webp"
                                 alt="PetImage"
-                                className="w-10 h-10 rounded-lg"
+                                className="w-10 h-10 rounded-lg object-cover mt-0.5"
                             />
-                            <div className='ml-2 gap-2'>
-                                <span className="text-blue-500">{pet?.petData?.petName}</span>
-                                <span className="block text-gray-500 text-xs">{pet?.timeOfAttention}</span>
+                            <div>
+                                <span className="font-bold text-white group-hover:text-cyan-400 transition-colors">{pet?.petData?.petName}</span>
+                                <span className="block text-gray-400 text-xs">{pet?.timeOfAttention}</span>
                             </div>
                         </li>
                     ))}
                 </ul>
             </div>
 
-            {/* Opción fija al final, sin afectar el scroll */}
-            <li className='p-3 hover:bg-gray-50 border-t'>
+            <div className="p-3 bg-gray-900/50 border-t border-gray-700">
                 <Link
-                    className="text-blue-500 cursor-pointer hover:underline"
+                    className="text-cyan-400 hover:underline text-sm font-medium text-center block"
                     onClick={handleGoToGroomingClick}
                     to="/grooming">
-                    Ir a la Peluquería
+                    Gestionar Cola de Peluquería
                 </Link>
-            </li>
+            </div>
         </div>
     )
 }

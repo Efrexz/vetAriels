@@ -16,26 +16,26 @@ function Layout({ children }: LayoutProps) {
     return (
         <>
             <NavBar />
-            <main className="flex h-[calc(100vh-62px)] w-full fixed">
-                {/* Botón para abrir/cerrar el sidebar en tamaños pequeños */}
-                <button
-                    className="lg:hidden absolute top-4 left-4 z-50 bg-gray-100 p-2 rounded-lg shadow-md"
-                    onClick={toggleSideMenu}
-                >
-                    {isSidebarOpen ? <XIcon className="w-6 h-6" /> : <BurguerMenuIcon className="w-6 h-6" />}
-                </button>
-
+            <main className="flex h-screen w-full bg-gray-950 text-gray-50">
                 {/* Sidebar */}
-                <section
-                    className={`bg-gray-100 md:w-56 w-full h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar transition-transform duration-300 z-40 absolute  lg:relative ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                        } lg:translate-x-0`}
+                <aside
+                    className={`bg-gray-900 w-64 h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar transition-transform duration-300 z-40 fixed lg:relative ${
+                        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    } lg:translate-x-0`}
                 >
+                    <button
+                        className="lg:hidden absolute top-4 left-[210px] z-50 p-2 rounded-lg text-cyan-400"
+                        onClick={toggleSideMenu}
+                    >
+                        {isSidebarOpen ? <XIcon className="w-6 h-6" /> : null}
+                    </button>
                     <SideBarMenu toggleSideMenu={toggleSideMenu} />
-                </section>
+                </aside>
 
-                {/* Contenido principal */}
-                <section className={`bg-white mx-2 w-full h-auto flex flex-col overflow-auto custom-scrollbar  lg:pl-0 mb-14 md:mb-4`}>
-                    {children}
+                <section className="flex-1 flex flex-col overflow-auto custom-scrollbar pt-16 lg:pt-0">
+                    <div className="flex-1 p-4 sm:p-6">
+                        {children}
+                    </div>
                 </section>
             </main>
         </>

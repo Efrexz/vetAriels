@@ -15,12 +15,12 @@ import NewUserIcon from '@assets/newUserIcon.svg?react';
 
 
 interface PageSection {
-    icon: ComponentType<React.SVGProps<SVGSVGElement>> // Tipo para componentes de íconos SVG
-    tooltip: string;
-    path?: string;
-    count: boolean;
-    countData?: number;
-    action?: () => void; // Un action opcional para los iconos que no navegan
+  icon: ComponentType<any>; // Tipo para componentes de íconos SVG
+  tooltip: string;
+  path?: string;
+  count: boolean;
+  countData?: number;
+  action?: () => void; // Un action opcional para los iconos que no navegan
 }
 
 function NavBar() {
@@ -72,7 +72,7 @@ function NavBar() {
 
 
     return (
-        <nav className={`flex justify-between items-center py-4 px-2 md:px-6 w-full bg-${themeColor}-400 text-white`}>
+        <nav className='flex justify-between items-center py-4 px-4 md:px-8 w-full bg-gray-800 text-gray-300 shadow-lg'>
             <Link
                 to="/"
                 className='w-[50%] items-center cursor-pointer'
@@ -84,19 +84,21 @@ function NavBar() {
                         setIsSidebarOpen(false);
                     }}
             >
-                <h1 className="text-md lg:text-xl font-medium cursor-pointer">
+                <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
                     {companyData?.clinicName || 'VETERINARIA ARIEL´S EIRL'}
                 </h1>
             </Link>
+
             <div className="flex justify-end items-center gap-3 md:gap-5 w-full">
                 <SearchIcon
-                    className={`${showSearchInput ? "w-10 h-10" : "w-5 h-5"} hover:text-[#206D5A] cursor-pointer`}
+                    className='w-6 h-6 hover:text-cyan-400 cursor-pointer transition-colors'
                     onClick={toggleSearchModal}
                 />
                 {showSearchInput && (
                     <ClientSearchInput mode={"sales"} />
                 )}
-                <ul className="flex gap-3 md:gap-5 items-center">
+
+                <ul className="flex gap-4 md:gap-5 items-center bg-gray-700/50 px-4 py-2 rounded-full">
                     {pageSections.map((section, index) => (
                         <li
                             key={index}
@@ -105,36 +107,43 @@ function NavBar() {
                         >
                             {section.path ? ( // Si tiene path, es un Link
                                 <Link to={section.path} className="flex items-center">
-                                    <section.icon className="w-5 h-5 hover:text-[#206D5A]" />
+                                    <section.icon className='w-6 h-6 group-hover:text-cyan-400 transition-all' />
                                 </Link>
                             ) : ( // Si no, es un icono con una accion
                                 <section.icon
-                                    className={`w-5 h-5 cursor-pointer ${
+                                    className={`w-6 h-6 cursor-pointer transition-all ${
                                         (activeIcon === 'patients' && section.action === togglePatientList) ||
                                         (activeIcon === 'baths' && section.action === toggleBathList)
-                                        ? 'text-[#206D5A]'
-                                        : ''
+                                        ? 'text-cyan-400 scale-125'
+                                        : 'group-hover:text-cyan-400'
                                     }`}
                                     onClick={section.action} // Llama a la accion directamente
                                 />
                             )}
 
                             {section.count && (
-                                <span className="absolute top-0 right-0 bg-red-500 text-white  rounded-full py-0.2 px-1 text-xs transform translate-x-1/2 -translate-y-1/2">
+                                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs font-semibold border-2 border-gray-800">
                                     {section.countData}
                                 </span>
                             )}
-                            <div className="absolute bottom-[-135%] md:bottom-[-100%] left-[-150%] transform translate-y-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-sm rounded py-1 px-2 whitespace-nowrap z-10">
+                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black text-white text-xs rounded py-1 px-3 whitespace-nowrap z-10 pointer-events-none">
                                 {section.tooltip}
                             </div>
                         </li>
                     ))}
-                    <span className="font-bold mx-1 md:mx-3">|</span>
-                    <li className={`flex items-center gap-2 cursor-pointer hover:text-[#206D5A] ${activeIcon === "user" ? "text-[#206D5A]" : ""}`} onClick={toggleUserOptions}>
-                        <span className='hidden md:block'>{activeUser?.name}</span>
-                        <UserIcon className="w-6 h-6" />
-                    </li>
                 </ul>
+
+                <div
+                    className={`flex items-center gap-3 cursor-pointer pl-4 pr-3 py-2 rounded-full transition-colors ${
+                        activeIcon === "user"
+                        ? 'bg-cyan-500/20 text-cyan-400'
+                        : "hover:bg-gray-700"
+                    }`}
+                    onClick={toggleUserOptions}
+                >
+                    <span className='hidden md:block font-medium'>{activeUser?.name}</span>
+                    <UserIcon className="w-6 h-6" />
+                </div>
             </div>
 
             {/* Menú desplegable de pacientes en cola para baño/peluquería */}
@@ -144,7 +153,7 @@ function NavBar() {
                     setActiveIcon(null);
                 }} />
             )}
-            {/*  el menú desplegable de pacientes en cola medica */}
+            {/*  el menu desplegable de pacientes en cola medica */}
             {showPatientList && (
                 <PatientQueueMenu onClose={() => {
                     setShowPatientList(false);

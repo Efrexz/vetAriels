@@ -187,38 +187,37 @@ const categories : Category[] = [
 function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
 
     return (
-        <ul className="space-y-1 w-full pt-10 lg:pt-0 pl-4 lg:pl-0 pb-6 md:pb-0">
+        <ul className="space-y-2 w-full pt-10 lg:pt-0 pl-4 lg:pl-0 pb-6 md:pb-0 text-gray-200">
             {categories.map((category) => (
                 !category.subCategories ? (
-                    <li key={category.name}>
+                    <li key={category.name} className="group">
                         <Link
                             to={category.path}
-                            className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#60A5FA]"
+                            className="flex items-center gap-2 rounded-full px-4 py-2 text-lg sm:text-[18px] font-medium transition-colors duration-300 hover:bg-cyan-500/20 hover:text-cyan-300"
                             onClick={toggleSideMenu}
                         >
-                            <category.icon className="w-6 sm:w-5 h-6 sm:h-5" />
+                            <category.icon className="w-6 sm:w-5 h-6 sm:h-5 text-gray-400 group-hover:text-cyan-300 transition-colors duration-300" />
                             {category.name}
                         </Link>
                     </li>
                 ) : (
                     <li key={category.name} className="group">
-                        <details className="group [&_summary::-webkit-details-marker]:hidden" name="details">
-                            <summary className="flex cursor-pointer items-center rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100  hover:text-[#60A5FA]  ">
+                        <details className="group [&_summary::-webkit-details-marker]:hidden">
+                            <summary className="flex cursor-pointer items-center rounded-full px-4 py-2 transition-colors duration-300 hover:bg-cyan-500/20 hover:text-cyan-300">
                                 <span className="flex gap-2 items-center text-lg sm:text-[18px] font-medium">
-                                    <category.icon className="w-6 sm:w-5 h-6 sm:h-5 " />
+                                    <category.icon className="w-6 sm:w-5 h-6 sm:h-5 text-gray-400 group-hover:text-cyan-300 transition-colors duration-300" />
                                     {category.name}
                                 </span>
-                                <span className="shrink-0 transition duration-300 group-open:-rotate-180">
+                                <span className="shrink-0 transition duration-300 group-open:-rotate-180 ml-auto">
                                     <AngleDownIcon className="w-5 h-5" />
                                 </span>
                             </summary>
-
                             <ul className="mt-2 space-y-1 px-4">
                                 {category.subCategories?.map((subCategory) => (
                                     <li key={subCategory.name}>
                                         <Link
                                             to={subCategory.path}
-                                            className="flex items-center gap-2 rounded-lg px-2 py-2 text-lg sm:text-[18px] font-medium text-gray-600 hover:bg-gray-100 hover:text-[#60A5FA]"
+                                            className="flex items-center gap-2 rounded-full px-2 py-2 text-lg sm:text-[18px] font-medium transition-colors duration-300 hover:bg-cyan-500/20 hover:text-cyan-300"
                                             onClick={toggleSideMenu}
                                         >
                                             {subCategory.icon ? <subCategory.icon className="w-5 sm:w-5 h-5 sm:h-5" /> : null}
