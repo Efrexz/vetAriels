@@ -72,7 +72,7 @@ function NavBar() {
 
 
     return (
-        <nav className='flex justify-between items-center py-4 px-4 md:px-8 w-full bg-gray-800 text-gray-300 shadow-lg'>
+        <nav className='flex justify-between items-center py-4 px-4 md:px-8 w-full bg-gray-800 text-gray-300 shadow-lg fixed z-50'>
             <Link
                 to="/"
                 className='w-[50%] items-center cursor-pointer'
@@ -84,7 +84,7 @@ function NavBar() {
                         setIsSidebarOpen(false);
                     }}
             >
-                <h1 className="text-lg lg:text-xl font-semibold text-white tracking-wide">
+                <h1 className="text-lg lg:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
                     {companyData?.clinicName || 'VETERINARIA ARIEL´S EIRL'}
                 </h1>
             </Link>

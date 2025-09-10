@@ -150,37 +150,35 @@ function Sales() {
     }
 
     return (
-        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 overflow-auto custom-scrollbar ">
-            <h1 className="text-xl sm:text-2xl font-bold text-[#4CAF50] flex items-center mb-4 mt-6 border-b-2 border-gray-100 pb-5">
-                <ShoppingCartPlusIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
-                Ventas
+        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+                <ShoppingCartPlusIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Ventas</span>
             </h1>
 
-            <div className="bg-gray-100 rounded-lg px-6 py-4 mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="clientSearch">
+            <div className="bg-gray-900 rounded-2xl px-6 py-4 mb-6 border border-gray-700 shadow-xl">
+                <label className="block text-gray-400 text-sm font-bold mb-3" htmlFor="clientSearch">
                     Buscar y seleccionar cliente:
                 </label>
-
                 <div className="flex flex-col md:flex-row items-center gap-4">
                     <ClientSearchInput mode={"sales"} />
                     <button
-                        className={`${clientData ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"
-                            } flex justify-center items-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-[200px] `}
+                        className={`flex justify-center items-center text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] transition-all
+                            ${clientData ? "bg-green-600 hover:bg-green-700 shadow-md shadow-green-500/50" : "bg-gray-700 text-gray-400 cursor-not-allowed"}`}
                         type="button"
                         disabled={!clientData}
                         onClick={() => navigate(`/clients/client/${clientData?.id}/update`)}
                     >
-                        <UserPenIcon className="w-5 h-5" />
+                        <UserPenIcon className="w-5 h-5 mr-2" />
                     </button>
                     <button
-                        className="bg-purple-500 hover:bg-purple-700 flex justify-center items-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-[200px]"
+                        className="flex justify-center items-center text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] bg-purple-600 hover:bg-purple-700 transition-all shadow-md shadow-purple-500/50"
                         type="button"
                         onClick={() => navigate("/clients/create")}
                     >
-                        <NewUserIcon className="w-5 h-5" />
+                        <NewUserIcon className="w-5 h-5 mr-2" />
                     </button>
                 </div>
-
                 {/* Mascotas del cliente seleccionado */}
                 {clientData && (
                     <div className="flex flex-wrap gap-4 mt-6">
@@ -192,7 +190,7 @@ function Sales() {
                                     <button
                                         onMouseEnter={() => setHoveredPetId(pet.id)}
                                         onMouseLeave={() => setHoveredPetId(null)}
-                                        className="py-2 px-4 bg-white hover:bg-gray-100 text-gray-600 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-300 flex gap-1 items-center w-full md:w-auto"
+                                        className="py-2 px-4 bg-gray-800 hover:bg-gray-700 text-cyan-400 rounded-xl border border-gray-600 focus:outline-none focus:border-cyan-500 flex gap-1 items-center w-full md:w-auto transition-all"
                                         onClick={() => setActivePetMenu(activePetMenu === pet.id ? null : pet.id)}
                                     >
                                         {pet.petName}
@@ -201,26 +199,25 @@ function Sales() {
 
                                     {/* Menú desplegable */}
                                     {activePetMenu === pet.id && (
-                                        <div className="absolute left-0 w-[200px] bg-white border rounded-lg shadow-lg z-10 ">
+                                        <div className="absolute left-0 w-[200px] bg-gray-800 border border-gray-700 rounded-xl shadow-lg z-10 animate-fade-in-down">
                                             <ul className="py-2">
                                                 {menuOptions.map((option, index) => (
                                                     <li
                                                         key={index}
-                                                        className="flex gap-1 px-2 py-2 hover:bg-gray-100 cursor-pointer border-b-2 text-sm"
+                                                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 cursor-pointer text-sm border-b border-gray-700 last:border-b-0 transition-colors"
                                                         onClick={() => {
                                                             //si tiene ruta navegamos a ese lado y si no es que esta queriendo abrir el modal de enviar a cola
                                                             if (option.path) {
                                                                 const updatedPath = option.path.replace('/id', `/${pet.id}`);
                                                                 navigate(updatedPath);
-                                                            }
-                                                            else {
+                                                            } else {
                                                                 setQueueModalOpen(true);
                                                                 setActivePetMenu(null)
                                                             }
                                                         }}
                                                     >
-                                                        <option.icon className={`w-5 h-5 ${option.iconColor}`} />
-                                                        {option.tooltip}
+                                                        <option.icon className={`w-5 h-5 ${option.iconColor} drop-shadow-lg`} />
+                                                        <span className="text-gray-200">{option.tooltip}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -229,24 +226,23 @@ function Sales() {
 
                                     {/* Información al hacer hover */}
                                     {hoveredPetId === pet.id && (
-                                        <div className="absolute left-0 bottom-full w-[160px] md:w-52 bg-black text-white p-4 rounded shadow-lg">
-                                            <span className="block">#HC: {pet.hc}</span>
-                                            <span className="block">
+                                        <div className="absolute left-0 bottom-full w-[160px] md:w-52 bg-gray-700 text-gray-200 p-4 rounded-lg shadow-xl mb-2 z-20">
+                                            <span className="block text-sm">#HC: {pet.hc}</span>
+                                            <span className="block text-sm">
                                                 {petAge.years} {petAge.years === 1 ? "año" : "años"} y{" "}
                                                 {petAge.months} {petAge.months === 1 ? "mes" : "meses"}
                                             </span>
-                                            <span className="block">ESPECIE: {pet.species}</span>
-                                            <span className="block">RAZA: {pet.breed}</span>
-                                            <span className="block">SEXO: {pet.sex}</span>
+                                            <span className="block text-sm">ESPECIE: {pet.species}</span>
+                                            <span className="block text-sm">RAZA: {pet.breed}</span>
+                                            <span className="block text-sm">SEXO: {pet.sex}</span>
                                         </div>
                                     )}
                                 </div>
                             );
                         })}
-
                         {/* Botón para agregar mascotas */}
                         <button
-                            className="py-2 px-4 bg-orange-400 hover:bg-orange-500 flex gap-1 items-center rounded-md ml-0 md:ml-5"
+                            className="py-2 px-4 bg-orange-600 hover:bg-orange-700 flex gap-1 items-center rounded-xl transition-all shadow-md shadow-orange-500/50"
                             onClick={() => navigate(`/pets/create/${clientId}`)}
                         >
                             <PetIcon className="w-5 h-5 text-white" />
@@ -256,20 +252,22 @@ function Sales() {
                 )}
             </div>
 
-            <div className="bg-gray-100 rounded-lg px-6 py-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="bg-gray-900 rounded-2xl px-20 py-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 border border-cyan-500 shadow-xl ">
                 <button
-                    className={`${clientData ? "bg-blue-500 hover:bg-blue-700" : "bg-[#70D0EE]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
+                    className={`text-white font-bold py-3 px-32 rounded-xl focus:outline-none w-full md:w-auto transition-all
+                    ${clientData ? "bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/50" : "bg-gray-700 text-gray-400 cursor-not-allowed"}`}
                     disabled={!clientData}
                     onClick={() => setQueueModalOpen(true)}
                 >
                     Enviar a la cola médica
                 </button>
                 <button
-                    className={`${clientData ? "bg-green-500 hover:bg-green-700" : "bg-[#72D78A]"} text-white font-medium py-1 rounded focus:outline-none focus:shadow-outline mx-1 w-full`}
+                    className={`text-white font-bold py-3 px-32 rounded-xl focus:outline-none w-full md:w-auto transition-all
+                    ${clientData ? "bg-green-600 hover:bg-green-700 shadow-md shadow-green-500/50" : "bg-gray-700 text-gray-400 cursor-not-allowed"}`}
                     disabled={!clientData}
                     onClick={() => {
                         //esto para evitar el error que lanza vscode de que clientData puede ser undefined
-                        if(clientData) {
+                        if (clientData) {
                             navigate(`/grooming/order-creation/${clientData.id}`)
                         }
                     }}
@@ -277,6 +275,7 @@ function Sales() {
                     Enviar a cola de grooming
                 </button>
             </div>
+
             {
                 isQueueModalOpen && clientData && (
                     <AddPatientToQueueModal
@@ -287,61 +286,56 @@ function Sales() {
                 )
             }
 
-            <div className="bg-white shadow-md rounded-lg p-6">
-                {
-                    clientData && (
-                        <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-6'>
-                            <div className=' col-span-1'>
-                                <label htmlFor="store" className="block text-gray-700 mb-2 pl-2">Almacén de origen</label>
-                                <select
-                                    id='store'
-                                    name="store"
-                                    className="w-full rounded border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300  focus:border-blue-300 focus:outline-none"
-                                >
-                                    <option value="">VET ARIEL</option>
-                                </select>
-                            </div>
-
-                            <div className='col-span-1 md:col-span-3'>
-                                <label
-                                    htmlFor="search"
-                                    className="block text-gray-700 mb-2 pl-2">
-                                    Buscar y agregar productos y servicios a la cuenta del cliente:
-                                </label>
-                                <ProductSearchInput addProductToTable={handleAddProduct} mode={"sales"} />
-                            </div>
+            <div className="bg-gray-900 shadow-xl rounded-2xl p-6 border border-gray-700">
+                {clientData && (
+                    <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-6'>
+                        <div className='col-span-1'>
+                            <label htmlFor="store" className="block text-gray-400 mb-2 pl-2">Almacén de origen</label>
+                            <select
+                                id='store'
+                                name="store"
+                                className="w-full rounded-xl border-gray-600 border-2 bg-gray-800 text-gray-200 py-3 px-4 hover:border-cyan-500 focus:border-cyan-500 focus:outline-none transition-colors"
+                            >
+                                <option value="">VET ARIEL</option>
+                            </select>
                         </div>
-                    )
-                }
-                <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                        <div className='col-span-1 md:col-span-3'>
+                            <label
+                                htmlFor="search"
+                                className="block text-gray-400 mb-2 pl-2">
+                                Buscar y agregar productos y servicios a la cuenta del cliente:
+                            </label>
+                            <ProductSearchInput addProductToTable={handleAddProduct} mode={"sales"} />
+                        </div>
+                    </div>
+                )}
+                <div className="overflow-x-auto custom-scrollbar">
+                    <table className="min-w-full bg-gray-800 rounded-xl overflow-hidden">
                         <thead>
-                            <tr>
-                                <th className="py-2 px-4 text-center bg-gray-100 border-gray-300 border-2">
-                                    <input type="checkbox" className="form-checkbox" />
+                            <tr className="bg-gray-700 text-gray-300 uppercase text-xs sm:text-sm leading-normal">
+                                <th className="py-2 px-3 text-center border-b-2 border-gray-600">
+                                    <input type="checkbox" className="form-checkbox text-blue-500 rounded-sm focus:ring-blue-500" />
                                 </th>
                                 {tableCategories.map((category, index) => (
                                     <th
                                         key={index}
-                                        className="py-2 px-4 bg-gray-100 text-gray-600 font-bold uppercase text-sm border-gray-300 border-2"
+                                        className="py-2 px-3 text-center font-bold border-b-2 border-gray-600"
                                     >
                                         {category}
                                     </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="text-gray-400 text-xs sm:text-sm font-light">
                             {selectedProducts.map((product) => (
-                                <tr key={product.provisionalId} className="border-b">
-                                    <td className="py-2 px-4 text-center border-gray-300 border-2">
-                                        <input type="checkbox" className="form-checkbox" />
+                                <tr key={product.provisionalId} className="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
+                                    <td className="py-2 px-3 text-center">
+                                        <input type="checkbox" className="form-checkbox text-blue-500 rounded-sm focus:ring-blue-500" />
                                     </td>
-                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        {product.productName || product.serviceName}
-                                    </td>
-                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                    <td className="py-2 px-3 text-center whitespace-nowrap">{product.productName || product.serviceName}</td>
+                                    <td className="py-2 px-3 text-center">
                                         <span
-                                            className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
+                                            className='inline-block bg-gray-800 text-gray-200 border border-gray-600 px-3 py-1 rounded-lg cursor-pointer hover:border-cyan-500 transition-colors text-sm'
                                             onClick={() => {
                                                 setProductToEdit(product)
                                                 setIsPriceModalOpen(true)
@@ -351,7 +345,7 @@ function Sales() {
                                             {product.salePrice}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                    <td className="py-2 px-3 text-center">
                                         <QuantityCounter
                                             itemCount={product.quantity}
                                             changeQuantity={(newQuantity) => {
@@ -365,19 +359,19 @@ function Sales() {
                                                 setProductToEdit(product)
                                             }} />
                                     </td>
-                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                    <td className="py-2 px-3 text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
+                                    <td className="py-2 px-3 text-center">
+                                        <span className='inline-block bg-gray-800 text-gray-200 border border-gray-600 px-3 py-1 rounded-lg text-sm'>
                                             0.00
                                         </span>
                                     </td>
-                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
+                                    <td className="py-2 px-3 text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className="py-2 px-4 border-gray-300 border-2 text-center">
-                                        <select className="border rounded p-1">
+                                    <td className="py-2 px-3 text-center">
+                                        <select className="bg-gray-800 text-gray-200 border border-gray-600 rounded-lg p-1 text-sm focus:outline-none focus:border-cyan-500 transition-colors">
                                             {
                                                 petsByOwner.map((pet, index) => (
                                                     <option key={index} value={pet.petName}>{pet.petName}</option>
@@ -385,20 +379,20 @@ function Sales() {
                                             }
                                         </select>
                                     </td>
-                                    <td className="py-8 px-4 text-center border-2 border-gray-300" >
-                                        <div className="flex justify-center items-center h-full space-x-2">
-                                            <button className="text-orange-400 hover:text-orange-500">
-                                                <GiftIcon className='w-4 h-4 cursor-pointer' />
+                                    <td className="py-2 px-3 text-center">
+                                        <div className="flex justify-center items-center space-x-2">
+                                            <button className="text-orange-400 hover:text-orange-500 transition-colors">
+                                                <GiftIcon className='w-5 h-5 cursor-pointer' />
                                             </button>
                                             <button
-                                                className="text-red-500 hover:text-red-700"
+                                                className="text-red-500 hover:text-red-600 transition-colors"
                                                 onClick={() => {
-                                                    if(clientId) {
+                                                    if (clientId) {
                                                         removeProductFromClient(clientId, product.provisionalId);
                                                     }
                                                 }}
                                             >
-                                                <TrashIcon className="w-4 h-4" />
+                                                <TrashIcon className="w-5 h-5" />
                                             </button>
                                         </div>
                                     </td>
@@ -407,8 +401,9 @@ function Sales() {
                         </tbody>
                     </table>
                 </div>
+            </div>
 
-                {
+            {
                     isPriceModalOpen && productToEdit && (
                         <PriceModificationModal
                             onClose={() => setIsPriceModalOpen(false)}
@@ -432,28 +427,28 @@ function Sales() {
                     )
                 }
 
-                <div className=" p-6">
+                <div className="p-6">
                     <div className="w-full lg:w-1/2 ml-auto">
-                        <table className="min-w-full ">
+                        <table className="min-w-full">
                             <tbody>
                                 {taxesData.map((row, index) => (
-                                    <tr key={index} className={`border-t border-gray-300 ${row.bold ? 'font-bold' : ''}`}>
-                                        <td className="py-2 text-gray-600">{row.label}</td>
-                                        <td className="py-2 text-right text-gray-600">{row.value}</td>
+                                    <tr key={index} className={`border-t border-gray-700 ${row.bold ? 'font-bold' : ''}`}>
+                                        <td className="py-3 text-gray-400">{row.label}</td>
+                                        <td className="py-3 text-right text-gray-200">{row.value}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <div className="bg-gray-100 rounded-lg px-6 py-4 mt-6 flex justify-center md:justify-end">
+            <div className="bg-gray-900 rounded-2xl px-6 py-4 mt-6 flex justify-center md:justify-end border border-gray-700 shadow-xl">
                 <button
-                    className={`${!clientData || selectedProducts.length < 1 ? "bg-green-400" : "bg-green-500 hover:bg-green-600"} text-white font-bold py-2 px-4 rounded`}
+                    className={`font-bold py-3 px-6 rounded-xl transition-all shadow-md
+                    ${!clientData || selectedProducts.length < 1 ? "bg-green-700 text-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 text-white shadow-green-500/50"}`}
                     type="button"
                     onClick={() => {
-                        if(clientData){
+                        if (clientData) {
                             navigate(`/sales/invoices/create/${clientData.id}`, { state: { selectedProducts } })
                         }
                     }}

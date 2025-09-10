@@ -17,7 +17,7 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
     const isDecreaseDisabled = itemCount <= 1;
 
     // El aumento se deshabilita solo en 'sales' o 'discharge' si se alcanza el stock máximo.
-    const isIncreaseDisabled = 
+    const isIncreaseDisabled =
         (mode === 'sales' || mode === 'discharge') &&
         maxQuantity !== undefined &&
         itemCount >= maxQuantity;
@@ -46,7 +46,7 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
             </button>
 
             <div
-                className="border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer"
+                className="border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer text-black"
                 onClick={() => openQuantityModal()}
             >
                 {itemCount}

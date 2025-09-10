@@ -21,47 +21,49 @@ function Payments() {
     const [paymentToEdit, setPaymentToEdit] = useState<Payment | null>(null);
     const [operationType, setOperationType] = useState<OperationType>('ENTRADA');
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-xl md:text-2xl font-bold text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <FileInvoiceIcon className="w-6 md:w-9 h-6 md:h-9 mr-2" />
-                Entradas / Salidas de Caja
+        <section className="container mx-auto p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+                <FileInvoiceIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Entradas / Salidas de Caja</span>
             </h1>
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <div className="p-4 rounded-lg mb-2 bg-white shadow">
+            <div className="bg-gray-900 rounded-2xl shadow-xl p-4 sm:p-6 mb-8 border border-gray-700">
+                <div className="p-4 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
                     <div className="flex flex-col md:flex-row md:items-center md:gap-4 mb-4">
-                        <div className="flex flex-col md:flex-row gap-2 w-full">
+                        <div className="flex flex-col md:flex-row gap-4 w-full">
                             <input
                                 type="text"
                                 placeholder="Buscar por ID..."
-                                className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
                             />
                             <input
                                 type="text"
                                 placeholder="Buscar descripción..."
-                                className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
                             />
                             <input
                                 type="date"
-                                className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
                             />
                         </div>
                     </div>
-
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-4">
                         <div className="w-full sm:w-[300px]">
                             <select
                                 name="Metodo-de-pago"
-                                className="w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm py-2 px-3"
+                                className="w-full rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-3 px-5 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
                             >
-                                <option value="">Método de Pago</option>
-                                <option value="AMERICAN EXPRESS">American Express</option>
-                                <option value="VISA">VISA</option>
-                                <option value="MASTERCARD">Mastercard</option>
+                                <option className="bg-gray-700" value="">Método de Pago</option>
+                                <option className="bg-gray-700" value="AMERICAN EXPRESS">American Express</option>
+                                <option className="bg-gray-700" value="VISA">VISA</option>
+                                <option className="bg-gray-700" value="MASTERCARD">Mastercard</option>
                             </select>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button
-                                className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 w-full sm:w-auto"
+                                className="py-3 px-6 rounded-xl font-bold transition-all w-full sm:w-auto
+                                bg-transparent text-green-500 border-2 border-green-500
+                                shadow-md shadow-green-500/50 hover:bg-green-500 hover:text-white
+                                hover:shadow-green-400/80"
                                 onClick={() => {
                                     setIsModalOpen(true);
                                     setOperationType("ENTRADA");
@@ -70,7 +72,10 @@ function Payments() {
                                 + ENTRADA
                             </button>
                             <button
-                                className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 w-full sm:w-auto"
+                                className="py-3 px-6 rounded-xl font-bold transition-all w-full sm:w-auto
+                                bg-transparent text-red-500 border-2 border-red-500
+                                shadow-md shadow-red-500/50 hover:bg-red-500 hover:text-white
+                                hover:shadow-red-400/80"
                                 onClick={() => {
                                     setIsModalOpen(true);
                                     setOperationType("SALIDA");
@@ -81,18 +86,17 @@ function Payments() {
                         </div>
                     </div>
                 </div>
-
                 {
                     isModalOpen && (
                         <PaymentAndDepositModal onClose={() => setIsModalOpen(false)} typeOfOperation={operationType} />
                     )
                 }
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white">
-                        <thead>
+                <div className="overflow-x-auto border border-gray-700 rounded-xl shadow-inner">
+                    <table className="min-w-full bg-gray-900">
+                        <thead className='bg-gray-800 border-b border-gray-700'>
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-2 border text-gray-700 text-center text-xs">
+                                    <th key={header} className="py-3 px-2 text-center text-sm font-bold text-gray-300 uppercase tracking-wider">
                                         {header}
                                     </th>
                                 ))}
@@ -100,43 +104,41 @@ function Payments() {
                         </thead>
                         <tbody>
                             {paymentsData.map((payment) => (
-                                <tr key={payment.id} className="hover:bg-gray-100 text-xs">
-                                    <td className="py-2 px-2 border-b text-center border">{payment.id.slice(0, 9).toUpperCase()}</td>
-                                    <td className="py-2 px-2 border-b text-center border">{payment.date}</td>
-                                    <td className="py-2 px-2 border-b text-left border">{payment.description}</td>
-                                    <td className="py-2 px-2 border-b text-center border">{payment.paymentMethod}</td>
-                                    <td className="py-2 px-2 border-b text-center border text-green-600">{payment.income}</td>
-                                    <td className="py-2 px-2 border-b text-center border text-red-600">{payment.expense}</td>
-                                    <td className="py-2 px-2 border-b text-center border">{payment.docRef}</td>
-                                    <td className="py-2 px-2 border-b text-center border">{payment.movementType}</td>
-                                    <td className="py-8 px-4 text-center border">
-                                        <div className="flex justify-center items-center h-full space-x-2">
-                                            <button className="text-blue-400 hover:text-blue-500" title="Ver imagen">
-                                                <ImageIcon className="w-4 h-4" />
+                                <tr key={payment.id} className="hover:bg-gray-800 text-xs transition-colors duration-200">
+                                    <td className="py-2 px-2 border-b border-gray-700 text-center">{payment.id.slice(0, 9).toUpperCase()}</td>
+                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-400">{payment.date}</td>
+                                    <td className="py-2 px-2 border-b border-gray-700 text-left text-gray-200">{payment.description}</td>
+                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-300">{payment.paymentMethod}</td>
+                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-green-400 font-bold">{payment.income}</td>
+                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-red-400 font-bold">{payment.expense}</td>
+                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-400">{payment.docRef}</td>
+                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-400">{payment.movementType}</td>
+                                    <td className="py-4 px-4 border-b border-gray-700 text-center">
+                                        <div className="flex justify-center items-center h-full space-x-4">
+                                            <button className="text-cyan-500 hover:text-cyan-300 transition-colors" title="Ver imagen">
+                                                <ImageIcon className="w-5 h-5" />
                                             </button>
                                             <button
-                                                className="text-red-500 hover:text-red-600"
+                                                className="text-red-500 hover:text-red-400 transition-colors"
                                                 onClick={() => {
                                                     setPaymentToEdit(payment)
                                                     setConfirmModalOpen(true)
                                                 }}
                                             >
-                                                <TrashIcon className="w-4 h-4" />
+                                                <TrashIcon className="w-5 h-5" />
                                             </button>
-                                            <button className="text-blue-400 hover:text-blue-500">
-                                                <RoleUserIcon className="w-4 h-4" />
+                                            <button className="text-emerald-500 hover:text-emerald-300 transition-colors">
+                                                <RoleUserIcon className="w-5 h-5" />
                                             </button>
                                         </div>
-
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-
                 {
-                    isConfirmModalOpen &&  paymentToEdit && (
+                    isConfirmModalOpen && paymentToEdit && (
                         <ConfirmActionModal
                             elementData={paymentToEdit}
                             typeOfOperation="payments"
@@ -144,17 +146,17 @@ function Payments() {
                         />
                     )
                 }
-                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                    <p className="text-gray-600 text-center md:text-left">
+                <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
+                    <p className="text-gray-400 text-center md:text-left">
                         Página: 1 de 1 | Registros del 1 al {paymentsData.length} | Total{" "}
-                        {paymentsData.length}
+                        <span className="font-extrabold text-gray-200">{paymentsData.length}</span>
                     </p>
                     <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-2 px-4 border rounded">Primera</button>
-                        <button className="py-2 px-4 border rounded">Anterior</button>
-                        <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
-                        <button className="py-2 px-4 border rounded">Siguiente</button>
-                        <button className="py-2 px-4 border rounded">Última</button>
+                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Primera</button>
+                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Anterior</button>
+                        <button className="py-2 px-4 border-2 border-cyan-500 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-white font-bold shadow-md hover:from-cyan-400 hover:to-emerald-400 transition-all">1</button>
+                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Siguiente</button>
+                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Última</button>
                     </div>
                 </div>
             </div>
