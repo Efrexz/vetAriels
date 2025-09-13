@@ -9,14 +9,13 @@ interface LayoutProps {
     children: ReactNode;
 }
 
-
 function Layout({ children }: LayoutProps) {
     const { isSidebarOpen, toggleSideMenu } = useGlobal();
 
     return (
         <>
             <NavBar />
-            <main className="flex h-screen w-full bg-gray-950 text-gray-50 relative pt-16">
+            <main className="flex h-screen w-full bg-gray-950 text-gray-800 relative pt-16">
                 <button
                     className="lg:hidden absolute top-4 left-4 z-50 p-2 rounded-lg shadow-md bg-gray-900 text-cyan-400"
                     onClick={toggleSideMenu}

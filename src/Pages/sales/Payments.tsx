@@ -21,8 +21,8 @@ function Payments() {
     const [paymentToEdit, setPaymentToEdit] = useState<Payment | null>(null);
     const [operationType, setOperationType] = useState<OperationType>('ENTRADA');
     return (
-        <section className="container mx-auto p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+        <section className="p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl sm:text-3xl font-medium  mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
                 <FileInvoiceIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Entradas / Salidas de Caja</span>
             </h1>
@@ -96,7 +96,7 @@ function Payments() {
                         <thead className='bg-gray-800 border-b border-gray-700'>
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-3 px-2 text-center text-sm font-bold text-gray-300 uppercase tracking-wider">
+                                    <th key={header} className="py-3 px-2 text-center text-sm font-bold text-gray-300 uppercase tracking-wider border-r border-gray-700">
                                         {header}
                                     </th>
                                 ))}
@@ -105,18 +105,18 @@ function Payments() {
                         <tbody>
                             {paymentsData.map((payment) => (
                                 <tr key={payment.id} className="hover:bg-gray-800 text-xs transition-colors duration-200">
-                                    <td className="py-2 px-2 border-b border-gray-700 text-center">{payment.id.slice(0, 9).toUpperCase()}</td>
-                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-400">{payment.date}</td>
-                                    <td className="py-2 px-2 border-b border-gray-700 text-left text-gray-200">{payment.description}</td>
-                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-300">{payment.paymentMethod}</td>
-                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-green-400 font-bold">{payment.income}</td>
-                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-red-400 font-bold">{payment.expense}</td>
-                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-400">{payment.docRef}</td>
-                                    <td className="py-2 px-2 border-b border-gray-700 text-center text-gray-400">{payment.movementType}</td>
-                                    <td className="py-4 px-4 border-b border-gray-700 text-center">
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center">{payment.id.slice(0, 9).toUpperCase()}</td>
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.date}</td>
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-left text-gray-200">{payment.description}</td>
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-300">{payment.paymentMethod}</td>
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-green-400 font-bold">{payment.income}</td>
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-red-400 font-bold">{payment.expense}</td>
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.docRef}</td>
+                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.movementType}</td>
+                                    <td className="py-4 px-4 border-b border-r border-gray-700 text-center">
                                         <div className="flex justify-center items-center h-full space-x-4">
                                             <button className="text-cyan-500 hover:text-cyan-300 transition-colors" title="Ver imagen">
-                                                <ImageIcon className="w-5 h-5" />
+                                                <ImageIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                                             </button>
                                             <button
                                                 className="text-red-500 hover:text-red-400 transition-colors"

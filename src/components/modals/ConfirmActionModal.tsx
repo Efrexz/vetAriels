@@ -121,17 +121,16 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 pt-20">
-            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg modal-appear mx-4">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex items-start justify-center z-50 pt-20">
+            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-lg shadow-xl modal-appear mx-4 border border-gray-700">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-medium text-gray-600">
+                    <h2 className="text-xl font-medium text-cyan-500">
                         {config.title}
                     </h2>
                 </div>
-
                 {config.requiresReason && (
                     <div className="mb-4">
-                        <label htmlFor="reason" className="block text-gray-700 font-medium mb-2">
+                        <label htmlFor="reason" className="block text-gray-400 font-medium mb-2">
                             ¿Cuál es el motivo del extorno?
                         </label>
                         <input
@@ -144,27 +143,27 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                                 setErrorMessage("");
                             }}
                             placeholder="Escribe el motivo aquí"
-                            className={`w-full border rounded-md p-2 focus:outline-none ${errorMessage ? 'border-red-500' : 'border-gray-300'
-                                }`}
+                            className={`w-full border rounded-md p-2 bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:border-cyan-500 transition-colors ${
+                                errorMessage ? 'border-rose-500' : 'border-gray-600'
+                            }`}
                             required
                         />
                         {errorMessage && (
-                            <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+                            <p className="text-rose-500 text-sm mt-1">{errorMessage}</p>
                         )}
                     </div>
                 )}
-
-                <div className="flex flex-col sm:flex-row justify-end border-t border-gray-300 pt-4 gap-4">
+                <div className="flex flex-col sm:flex-row justify-end border-t border-gray-700 pt-4 gap-4">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg hover:bg-gray-400 w-full md:w-auto"
+                        className="px-4 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors w-full md:w-auto"
                     >
                         Cancelar
                     </button>
                     <button
                         type="button"
-                        className={`px-4 py-2 ${config.buttonColor || "bg-red-500 hover:bg-red-600"} text-white rounded-lg flex items-center w-full md:w-auto whitespace-nowrap`}
+                        className={`px-4 py-2 ${config.buttonColor || "bg-red-600 hover:bg-red-700"} text-white rounded-lg flex items-center w-full md:w-auto whitespace-nowrap transition-colors`}
                         onClick={typeOfOperationConfirm}
                     >
                         <DiskIcon className="w-5 h-5 mr-2" />

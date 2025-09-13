@@ -97,80 +97,80 @@ const sections: ReportSection[] = [
 
 function BalanceReport() {
     return (
-        <section className="container mx-auto p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-    <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
-        <FileInvoiceIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Cuadre de caja</span>
-    </h1>
-    <div className="flex flex-col sm:flex-row items-center gap-4 py-4 px-6 bg-gray-900 rounded-2xl shadow-xl mb-8 border border-gray-700">
-        <div className="flex items-center w-full md:w-[25%] rounded-xl border-2 border-gray-600 focus-within:border-cyan-500 transition-colors">
-            <span className="bg-gray-700 p-2 flex items-center justify-center rounded-l-xl">
-                <CalendarIcon className="w-6 h-6 text-gray-400 group-focus-within:text-cyan-400" />
-            </span>
-            <input
-                type="date"
-                className="px-4 py-2 w-full text-base bg-gray-800 text-gray-200 rounded-r-xl focus:outline-none"
-            />
-        </div>
-        <select className="border-2 border-gray-600 rounded-xl p-3 text-base bg-gray-800 text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500 transition-colors w-full md:w-[20%]">
-            <option className="bg-gray-700" value="">Seleccione empresa</option>
-        </select>
-        <button className="flex items-center gap-2 px-6 py-3 bg-transparent text-white font-bold rounded-xl border-2 border-orange-500 w-full md:w-auto justify-center transition-all shadow-md shadow-orange-500/50 hover:bg-orange-500 hover:text-white hover:shadow-orange-400/80">
-            HISTORIAL
-        </button>
-    </div>
-    {sections.map((section, index) => {
-        return !section.payments ? (
-            (
-                <div key={index} className="bg-gray-800 shadow-lg rounded-xl p-4 sm:p-6 mb-6 border border-gray-700">
-                    <h2 className="text-xl font-medium text-gray-300 mb-4">{section.title}</h2>
-                    {section.data.map((item, i) => (
-                        <div
-                            key={i}
-                            className={`flex justify-between text-base py-3 px-4 rounded-lg my-2
-                            ${item.highlight ? 'text-cyan-400 font-bold bg-gray-700 border-2 border-cyan-500/50' : 'text-gray-200 bg-gray-700 border border-gray-600'}
-                            hover:bg-gray-700/50 transition-all`}
-                        >
-                            <span>{item.label}</span>
-                            <span>{item.value || item.value.toFixed(2)}</span>
-                        </div>
-                    ))}
+        <section className="p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl sm:text-3xl font-medium text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+                <FileInvoiceIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Cuadre de caja</span>
+            </h1>
+            <div className="flex flex-col sm:flex-row items-center gap-4 py-4 px-6 bg-gray-900 rounded-2xl shadow-xl mb-8 border border-gray-700">
+                <div className="flex items-center w-full md:w-[25%] rounded-xl border-2 border-gray-600 focus-within:border-cyan-500 transition-colors">
+                    <span className="bg-gray-700 p-2 flex items-center justify-center rounded-l-xl">
+                        <CalendarIcon className="w-6 h-6 text-gray-400 group-focus-within:text-cyan-400" />
+                    </span>
+                    <input
+                        type="date"
+                        className="px-4 py-2 w-full text-base bg-gray-800 text-gray-200 rounded-r-xl focus:outline-none"
+                    />
                 </div>
-            )
-        )
-            : (
-                <div key={index} className="bg-gray-800 shadow-lg rounded-xl p-4 sm:p-6 mb-6 border border-gray-700">
-                    <h2 className="text-xl text-gray-300 font-semibold mb-3">
-                        Resumen de entradas y salidas de dinero directos de caja (no considera ventas):
-                    </h2>
-                    {section.data.map((section, index) => (
-                        <div key={index} className="mb-4">
-                            <div className='flex justify-between items-center px-4 font-bold text-gray-400 mb-2'>
-                                <span>{section?.type}</span>
-                                <span>Monto</span>
-                            </div>
-                            <div className="grid grid-cols-2 bg-gray-700 rounded-lg text-base items-center border border-gray-600">
-                                <span className="py-3 px-4 text-gray-200">EFECTIVO</span>
-                                <span className="py-3 px-4 text-right text-gray-200 font-bold">
-                                    {section?.items[0]?.value}
-                                </span>
-                            </div>
+                <select className="border-2 border-gray-600 rounded-xl p-3 text-base bg-gray-800 text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500 transition-colors w-full md:w-[20%]">
+                    <option className="bg-gray-700" value="">Seleccione empresa</option>
+                </select>
+                <button className="flex items-center gap-2 px-6 py-3 bg-transparent text-white font-bold rounded-xl border-2 border-orange-500 w-full md:w-auto justify-center transition-all shadow-md shadow-orange-500/50 hover:bg-orange-500 hover:text-white hover:shadow-orange-400/80">
+                    HISTORIAL
+                </button>
+            </div>
+            {sections.map((section, index) => {
+                return !section.payments ? (
+                    (
+                        <div key={index} className="bg-gray-800 shadow-lg rounded-xl p-4 sm:p-6 mb-6 border border-gray-700">
+                            <h2 className="text-xl font-medium text-gray-300 mb-4">{section.title}</h2>
+                            {section.data.map((item, i) => (
+                                <div
+                                    key={i}
+                                    className={`flex justify-between text-base py-3 px-4 rounded-lg my-2
+                                    ${item.highlight ? 'text-cyan-400 font-bold bg-gray-700 border-2 border-cyan-500/50' : 'text-gray-200 bg-gray-700 border border-gray-600'}
+                                    hover:bg-gray-700/50 transition-all`}
+                                >
+                                    <span>{item.label}</span>
+                                    <span>{item.value || item.value.toFixed(2)}</span>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            );
-    })}
-    <div className="bg-gray-800 rounded-xl p-4 sm:p-6 mb-4 flex flex-col sm:flex-row items-center gap-4 md:gap-8 border border-gray-700">
-        <button className="bg-transparent text-white font-bold py-3 px-6 rounded-xl border-2 border-orange-500 w-full md:w-60 justify-center transition-all shadow-md shadow-orange-500/50 hover:bg-orange-500 hover:text-white hover:shadow-orange-400/80 flex items-center gap-2">
-            <PDFIcon className="w-6 h-6" />
-            IMPRIMIR
-        </button>
-        <button className="bg-transparent text-white font-bold py-3 px-6 rounded-xl border-2 border-green-500 w-full md:w-60 justify-center transition-all shadow-md shadow-green-500/50 hover:bg-green-500 hover:text-white hover:shadow-green-400/80 flex items-center gap-2">
-            <ExcelIcon className="w-6 h-6" />
-            EXPORTAR A EXCEL
-        </button>
-    </div>
-</section>
+                    )
+                )
+                    : (
+                        <div key={index} className="bg-gray-800 shadow-lg rounded-xl p-4 sm:p-6 mb-6 border border-gray-700">
+                            <h2 className="text-xl text-gray-300 font-semibold mb-3">
+                                Resumen de entradas y salidas de dinero directos de caja (no considera ventas):
+                            </h2>
+                            {section.data.map((section, index) => (
+                                <div key={index} className="mb-4">
+                                    <div className='flex justify-between items-center px-4 font-bold text-gray-400 mb-2'>
+                                        <span>{section?.type}</span>
+                                        <span>Monto</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 bg-gray-700 rounded-lg text-base items-center border border-gray-600">
+                                        <span className="py-3 px-4 text-gray-200">EFECTIVO</span>
+                                        <span className="py-3 px-4 text-right text-gray-200 font-bold">
+                                            {section?.items[0]?.value}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    );
+            })}
+            <div className="bg-gray-800 rounded-xl p-4 sm:p-6 mb-4 flex flex-col sm:flex-row items-center gap-4 md:gap-8 border border-gray-700">
+                <button className="bg-transparent text-white font-bold py-3 px-6 rounded-xl border-2 border-orange-500 w-full md:w-60 justify-center transition-all shadow-md shadow-orange-500/50 hover:bg-orange-500 hover:text-white hover:shadow-orange-400/80 flex items-center gap-2">
+                    <PDFIcon className="w-6 h-6" />
+                    IMPRIMIR
+                </button>
+                <button className="bg-transparent text-white font-bold py-3 px-6 rounded-xl border-2 border-green-500 w-full md:w-60 justify-center transition-all shadow-md shadow-green-500/50 hover:bg-green-500 hover:text-white hover:shadow-green-400/80 flex items-center gap-2">
+                    <ExcelIcon className="w-6 h-6" />
+                    EXPORTAR A EXCEL
+                </button>
+            </div>
+        </section>
     );
 }
 

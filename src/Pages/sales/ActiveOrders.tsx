@@ -23,8 +23,8 @@ function ActiveOrders() {
         return total.toFixed(2); // 2 decimales para mostrarlo como moneda.
     };
     return (
-        <section className="container mx-auto p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+        <section className=" p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl sm:text-3xl font-medium text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
                 <ShoppingCart className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Cuentas activas</span>
             </h1>
@@ -51,7 +51,7 @@ function ActiveOrders() {
                         <thead className='bg-gray-800 border-b border-gray-700'>
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-3 text-center text-sm font-bold text-gray-300 uppercase tracking-wider px-4">
+                                    <th key={header} className="py-3 text-center text-sm font-bold text-gray-300 uppercase tracking-wider px-4 border-r border-gray-700">
                                         {header}
                                     </th>
                                 ))}
@@ -61,24 +61,24 @@ function ActiveOrders() {
                             {activeAccounts?.map((account) => (
                                 <tr
                                     key={account.id}
-                                    className='hover:bg-gray-800 transition-colors duration-200 cursor-pointer border-b border-gray-800 last:border-b-0'
+                                    className='hover:bg-gray-800 transition-colors duration-200 cursor-pointer'
                                     onClick={() => navigate(`/sales/client/${account.id}`)}
                                 >
-                                    <td className="py-4 text-center text-gray-200 px-4">
+                                    <td className="py-2 border border-gray-700  text-center text-gray-200 px-4">
                                         {account.firstName} {account.lastName}
                                     </td>
-                                    <td className="py-4 text-center text-gray-400 text-sm px-4">
+                                    <td className="py-2 border border-gray-700 text-center text-gray-400 text-sm px-4">
                                         {account?.products[0].additionDate} {account.products[0].additionTime}
                                     </td>
-                                    <td className="py-4 text-center text-gray-200 font-semibold px-4">
+                                    <td className="py-2 border border-gray-700 text-center text-gray-200 font-semibold px-4">
                                         {account.products.length}
                                     </td>
-                                    <td className="py-4 text-center text-green-400 font-bold px-4">
+                                    <td className="py-2 border border-gray-700 text-center text-green-400 font-bold px-4">
                                         <span>
                                             S/{calculateTotal(account.products)}
                                         </span>
                                     </td>
-                                    <td className="py-4 text-center px-4">
+                                    <td className="py-2 text-center px-4">
                                         <button
                                             className="text-cyan-500 hover:text-cyan-300 transition-colors duration-200"
                                             onClick={(e) => { e.stopPropagation(); navigate(`/sales/client/${account.id}`); }}

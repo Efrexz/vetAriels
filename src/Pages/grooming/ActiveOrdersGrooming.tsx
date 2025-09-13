@@ -15,7 +15,7 @@ type OperationType = "finishGrooming" | "deleteGrooming";
 
 type GroomingState = GroomingQueueItem['state']
 
-const tableHeaders = ["Turno", "Fecha", "Entreda", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
+const tableHeaders = ["Turno", "Fecha", "Entrada", "Salida", "Cliente", "Mascota", "Raza", "Servicios", "Estado", "Opciones"];
 
 function ActiveOrdersGrooming() {
 
@@ -40,54 +40,54 @@ function ActiveOrdersGrooming() {
     }
 
     return (
-        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8  overflow-auto custom-scrollbar mt-6">
-            <h1 className="text-xl sm:text-3xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
-                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-blue-400 mr-2" />
-                Peluquería: <span className="text-green-600 font-light pl-1"> Turnos de hoy</span>
+        <section className="w-full px-4 sm:px-6 lg:px-8 overflow-auto custom-scrollbar mt-6 bg-gray-950 text-gray-200">
+            <h1 className="text-xl sm:text-3xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
+                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-cyan-500 mr-2" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Peluquería:</span> <span className="text-esmerald-400 font-light pl-1"> Turnos de hoy</span>
             </h1>
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <div className="p-4 rounded-lg mb-2 shadow">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4">
-                        <div className="flex w-full md:w-[350px] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
-                            <div className="flex items-center justify-center bg-gray-100 px-3">
-                                <SearchIcon className="w-5 h-5 text-gray-600" />
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="Buscar por cliente o mascota......"
-                                className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
-                            />
-                        </div>
-                        <button
-                            className="w-full md:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-2"
-                            onClick={() => navigate("/grooming/order-creation/no_client")}
-                        >
-                            <PlusIcon className="w-5 h-5" />
-                            CREAR ORDEN DE SERVICIO
-                        </button>
-                    </div>
-                    <div>
-                        <select
-                            name="status"
-                            className="w-full md:w-[30%] rounded-lg border-gray-200 border text-gray-700 sm:text-sm py-2 px-4 hover:border-blue-300 focus:border-blue-300"
-                        >
-                            <option value="">--Seleccionar estado--</option>
-                            <option value="Pendiente">Pendiente</option>
-                            <option value="En Atención">En Atención</option>
-                            <option value="Terminado">Terminado</option>
-                            <option value="Entregado">Entregado</option>
-                        </select>
-                    </div>
-                </div>
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white border rounded-lg">
-                        <thead className="bg-gray-100">
+            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
+                <div className="p-4 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4 ">
+        <div className="flex w-full md:w-[350px] bg-gray-700 border border-gray-600 rounded-xl overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500 transition-colors">
+            <div className="flex items-center justify-center px-3 border-r border-gray-600">
+                <SearchIcon className="w-5 h-5 text-gray-400" />
+            </div>
+            <input
+                type="text"
+                placeholder="Buscar por cliente o mascota......"
+                className="w-full py-3 px-4 bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-transparent"
+            />
+        </div>
+        <button
+            className="w-full md:w-auto border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
+            onClick={() => navigate("/grooming/order-creation/no_client")}
+        >
+            <PlusIcon className="w-5 h-5" />
+            CREAR ORDEN DE SERVICIO
+        </button>
+    </div>
+    <div>
+        <select
+            name="status"
+            className="w-full md:w-[30%] rounded-xl border-gray-600 border bg-gray-700 text-gray-200 sm:text-sm py-3 px-4 hover:border-cyan-500 focus:border-cyan-500 focus:outline-none transition-colors"
+        >
+            <option className="bg-gray-700" value="">--Seleccionar estado--</option>
+            <option className="bg-gray-700" value="Pendiente">Pendiente</option>
+            <option className="bg-gray-700" value="En Atención">En Atención</option>
+            <option className="bg-gray-700" value="Terminado">Terminado</option>
+            <option className="bg-gray-700" value="Entregado">Entregado</option>
+        </select>
+    </div>
+</div>
+                <div className="overflow-x-auto border border-gray-700 rounded-lg">
+                    <table className="min-w-full bg-gray-800 border rounded-lg">
+                        <thead className="bg-gray-700">
                             <tr>
-                                <th className="py-2 px-4 text-left border">
-                                    <input type="checkbox" className="form-checkbox" />
+                                <th className="py-2 px-4 text-left border-r border-gray-700">
+                                    <input type="checkbox" className="form-checkbox bg-gray-900 border-gray-500 text-cyan-500 rounded focus:ring-cyan-500" />
                                 </th>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className={`py-2 px-4 ${header === "Mascota" ? "text-left" : "text-center"} border font-medium text-gray-700`}>
+                                    <th key={header} className={`py-2 px-4 ${header === "Mascota" ? "text-left" : "text-center"} border-r border-gray-600 font-medium text-gray-300`}>
                                         {header}
                                     </th>
                                 ))}
@@ -95,31 +95,31 @@ function ActiveOrdersGrooming() {
                         </thead>
                         <tbody>
                             {petsInQueueGrooming.map((groomingData) => (
-                                <tr key={groomingData.id} className="hover:bg-gray-100 border-b">
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">
-                                        <input type="checkbox" className="form-checkbox" />
+                                <tr key={groomingData.id} className="hover:bg-gray-700 transition-colors duration-200">
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">
+                                        <input type="checkbox" className="form-checkbox bg-gray-900 border-gray-500 text-cyan-500 rounded focus:ring-cyan-500" />
                                     </td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.turn}</td>
-                                    <td className="py-2 px-4 text-center border align-top pt-4">{groomingData?.dateOfAttention}</td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.timeOfAttention}</td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.timeOfAttention}</td>
-                                    <td className="py-2 px-4 border-b text-center border align-top pt-4">
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.turn}</td>
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.dateOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.timeOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.timeOfAttention}</td>
+                                    <td className="py-2 px-4 border-b border-r border-gray-700 align-top pt-4">
                                         <Link
-                                            className="text-md  cursor-pointer text-blue-500 hover:underline"
+                                            className="text-md cursor-pointer text-cyan-500 hover:text-cyan-400 hover:underline transition-colors"
                                             to={`/clients/client/${groomingData?.petData?.ownerId}/update`}>
                                             {groomingData?.ownerName}
                                         </Link>
                                     </td>
-                                    <td className="py-2 px-4 border-b text-center border-2 align-top pt-4">
+                                    <td className="py-2 px-4 border-b border-r border-gray-700 align-top pt-4">
                                         <Link
-                                            className="text-md  cursor-pointer text-blue-500 hover:underline"
+                                            className="text-md cursor-pointer text-cyan-500 hover:text-cyan-400 hover:underline transition-colors"
                                             to={`/pets/pet/${groomingData?.petData.id}/update`}>
                                             {groomingData?.petData?.petName}
                                         </Link>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-2 align-top pt-4">{groomingData?.petData?.breed}</td>
-                                    <td className="py-2 pr-3 pl-2 border-2 align-top pt-3 text-sm">
-                                        <ul className='list-disc pl-4'>
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.petData?.breed}</td>
+                                    <td className="py-2 pr-3 pl-2 border-b border-r border-gray-700 align-top pt-3 text-sm">
+                                        <ul className='list-disc pl-4 text-gray-300'>
                                             {groomingData?.productsAndServices?.map((service) => (
                                                 <li key={service?.provisionalId} >
                                                     {service?.productName || service?.serviceName}
@@ -127,9 +127,9 @@ function ActiveOrdersGrooming() {
                                             ))}
                                         </ul>
                                     </td>
-                                    <td className="py-2 px-4 border-2 align-top pt-5">
+                                    <td className="py-2 px-4 border-b border-r border-gray-700 align-top pt-5">
                                         <span
-                                            className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white  ${getStateColor(groomingData?.state)} rounded-full whitespace-nowrap cursor-pointer`}
+                                            className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(groomingData?.state)} rounded-full whitespace-nowrap cursor-pointer transition-all hover:scale-105`}
                                             onClick={() => {
                                                 setIsUpdateStateModalOpen(true)
                                                 setGroomingDataToEdit(groomingData)
@@ -138,13 +138,13 @@ function ActiveOrdersGrooming() {
                                             {groomingData.state}
                                         </span>
                                     </td>
-                                    <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-300">
+                                    <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-700 border-b">
                                         <PenIcon
-                                            className="w-4.5 h-4.5 text-blue-500 cursor-pointer"
+                                            className="w-5 h-5 text-orange-500 cursor-pointer hover:text-orange-400 transition-colors"
                                             onClick={() => navigate(`/grooming/update/${groomingData.id}`)}
                                         />
                                         <CheckIcon
-                                            className="w-4.5 h-4.5 text-green-500 cursor-pointer"
+                                            className="w-5 h-5 text-green-500 cursor-pointer hover:text-green-400 transition-colors"
                                             onClick={() => {
                                                 setGroomingDataToEdit({ ...groomingData, state: "Terminado" })
                                                 setTypeOfOperation("finishGrooming")
@@ -152,7 +152,7 @@ function ActiveOrdersGrooming() {
                                             }}
                                         />
                                         <BanIcon
-                                            className="w-4.5 h-4.5 text-red-500 cursor-pointer"
+                                            className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-400 transition-colors"
                                             onClick={() => {
                                                 setGroomingDataToEdit(groomingData)
                                                 setTypeOfOperation("deleteGrooming")
@@ -165,7 +165,6 @@ function ActiveOrdersGrooming() {
                         </tbody>
                     </table>
                 </div>
-
                 {
                     isConfirmActionModalOpen && groomingDataToEdit && (
                         <ConfirmActionModal
@@ -176,7 +175,7 @@ function ActiveOrdersGrooming() {
                     )
                 }
                 {
-                    isUpdateStateModalOpen && groomingDataToEdit &&(
+                    isUpdateStateModalOpen && groomingDataToEdit && (
                         <UpdateStateModal
                             dataToUpdate={groomingDataToEdit}
                             mode="grooming"
@@ -184,18 +183,17 @@ function ActiveOrdersGrooming() {
                         />
                     )
                 }
-
                 <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                    <p className="text-gray-600 text-center md:text-left">
+                    <p className="text-gray-400 text-center md:text-left">
                         Página: 1 de 1 | Registros del 1 al {petsInQueueGrooming.length} | Total{" "}
                         {petsInQueueGrooming.length}
                     </p>
                     <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-2 px-4 border rounded">Primera</button>
-                        <button className="py-2 px-4 border rounded">Anterior</button>
-                        <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
-                        <button className="py-2 px-4 border rounded">Siguiente</button>
-                        <button className="py-2 px-4 border rounded">Última</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
                     </div>
                 </div>
             </div>

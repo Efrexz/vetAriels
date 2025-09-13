@@ -150,8 +150,8 @@ function Sales() {
     }
 
     return (
-        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+        <section className="w-full px-4 sm:px-6 lg:px-8 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl sm:text-3xl font-medium text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
                 <ShoppingCartPlusIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Ventas</span>
             </h1>
@@ -309,33 +309,33 @@ function Sales() {
                         </div>
                     </div>
                 )}
-                <div className="overflow-x-auto custom-scrollbar">
-                    <table className="min-w-full bg-gray-800 rounded-xl overflow-hidden">
+                <div className="overflow-x-auto custom-scrollbar border border-gray-700 rounded-xl">
+                    <table className="min-w-full rounded-xl overflow-hidden">
                         <thead>
                             <tr className="bg-gray-700 text-gray-300 uppercase text-xs sm:text-sm leading-normal">
-                                <th className="py-2 px-3 text-center border-b-2 border-gray-600">
+                                <th className="py-2 px-3 text-center border-gray-600 border-r">
                                     <input type="checkbox" className="form-checkbox text-blue-500 rounded-sm focus:ring-blue-500" />
                                 </th>
                                 {tableCategories.map((category, index) => (
                                     <th
                                         key={index}
-                                        className="py-2 px-3 text-center font-bold border-b-2 border-gray-600"
+                                        className="py-2 px-3 text-center font-bold border-r border-gray-600"
                                     >
                                         {category}
                                     </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody className="text-gray-400 text-xs sm:text-sm font-light">
+                        <tbody className="text-gray-200 text-xs sm:text-sm font-light ">
                             {selectedProducts.map((product) => (
-                                <tr key={product.provisionalId} className="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
-                                    <td className="py-2 px-3 text-center">
+                                <tr key={product.provisionalId} className="hover:bg-gray-700/50 transition-colors border-b border-gray-700">
+                                    <td className="py-2 px-3 text-center border-x border-gray-700">
                                         <input type="checkbox" className="form-checkbox text-blue-500 rounded-sm focus:ring-blue-500" />
                                     </td>
-                                    <td className="py-2 px-3 text-center whitespace-nowrap">{product.productName || product.serviceName}</td>
-                                    <td className="py-2 px-3 text-center">
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center whitespace-nowrap">{product.productName || product.serviceName}</td>
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center ">
                                         <span
-                                            className='inline-block bg-gray-800 text-gray-200 border border-gray-600 px-3 py-1 rounded-lg cursor-pointer hover:border-cyan-500 transition-colors text-sm'
+                                            className='inline-block bg-gray-800 border border-gray-600 px-3 py-1 rounded-lg cursor-pointer hover:border-cyan-500 transition-colors text-sm'
                                             onClick={() => {
                                                 setProductToEdit(product)
                                                 setIsPriceModalOpen(true)
@@ -345,7 +345,7 @@ function Sales() {
                                             {product.salePrice}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-3 text-center">
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center">
                                         <QuantityCounter
                                             itemCount={product.quantity}
                                             changeQuantity={(newQuantity) => {
@@ -359,19 +359,19 @@ function Sales() {
                                                 setProductToEdit(product)
                                             }} />
                                     </td>
-                                    <td className="py-2 px-3 text-center">
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className="py-2 px-3 text-center">
-                                        <span className='inline-block bg-gray-800 text-gray-200 border border-gray-600 px-3 py-1 rounded-lg text-sm'>
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center">
+                                        <span className='inline-block bg-gray-800 border border-gray-600 px-3 py-1 rounded-lg text-sm'>
                                             0.00
                                         </span>
                                     </td>
-                                    <td className="py-2 px-3 text-center">
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className="py-2 px-3 text-center">
-                                        <select className="bg-gray-800 text-gray-200 border border-gray-600 rounded-lg p-1 text-sm focus:outline-none focus:border-cyan-500 transition-colors">
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center">
+                                        <select className="bg-gray-800 border border-gray-600 rounded-lg p-1 text-sm focus:outline-none focus:border-cyan-500 transition-colors">
                                             {
                                                 petsByOwner.map((pet, index) => (
                                                     <option key={index} value={pet.petName}>{pet.petName}</option>
@@ -379,7 +379,7 @@ function Sales() {
                                             }
                                         </select>
                                     </td>
-                                    <td className="py-2 px-3 text-center">
+                                    <td className="py-2 px-3 border-r border-gray-700 text-center">
                                         <div className="flex justify-center items-center space-x-2">
                                             <button className="text-orange-400 hover:text-orange-500 transition-colors">
                                                 <GiftIcon className='w-5 h-5 cursor-pointer' />
