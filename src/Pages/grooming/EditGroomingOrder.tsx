@@ -169,60 +169,60 @@ function EditGroomingOrder() {
 
 
     return (
-        <section className="bg-white p-6 overflow-auto custom-scrollbar">
-            <h1 className="text-xl md:text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
-                Peluquería
+        <section className="bg-gray-900 p-6 overflow-auto custom-scrollbar">
+            <h1 className="text-xl md:text-3xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex">
+                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-cyan-500 mr-2" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Peluquería</span> 
             </h1>
-            <div className="bg-gray-100 p-4 rounded mb-4">
+            <div className="bg-gray-800 p-4 rounded-xl mb-4 border border-gray-700">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="col-span-2">
-                        <label className="block text-gray-700 mb-2">Propietario</label>
+                        <label className="block text-gray-400 mb-2">Propietario</label>
                         <input
-                            className="w-full bg-gray-200 py-2 px-4 rounded text-gray-600"
+                            className="w-full bg-gray-700 py-3 px-4 rounded-lg text-gray-400 border border-gray-600 focus:outline-none"
                             value={petInQueueGrommingData?.ownerName}
                             disabled
                         />
                     </div>
                     <div className="col-span-2">
-                        <label className="block text-gray-700 mb-2">Mascota</label>
+                        <label className="block text-gray-400 mb-2">Mascota</label>
                         <input
-                            className="w-full bg-gray-200 py-2 px-4 rounded text-gray-600"
+                            className="w-full bg-gray-700 py-3 px-4 rounded-lg text-gray-400 border border-gray-600 focus:outline-none"
                             value={`${petInQueueGrommingData?.petData?.petName} (${petInQueueGrommingData?.petData?.species} | ${petInQueueGrommingData?.petData?.breed} | #HC: ${petInQueueGrommingData?.petData?.hc})`}
                             disabled
                         />
                     </div>
                     <div className="col-span-2">
-                        <label className="block text-gray-700 mb-2">Telefonos</label>
+                        <label className="block text-gray-400 mb-2">Telefonos</label>
                         <input
-                            className="w-full bg-gray-200 py-2 px-4 rounded text-gray-600"
+                            className="w-full bg-gray-700 py-3 px-4 rounded-lg text-gray-400 border border-gray-600 focus:outline-none"
                             value={`${clientData?.phone1} | ${clientData?.phone2}`}
                             disabled
                         />
                     </div>
 
                     <div className="col-span-2">
-                        <label className="block text-gray-700">Dirección</label>
+                        <label className="block text-gray-400">Dirección</label>
                         <input
                             value={clientData?.address}
-                            className="mt-2 w-full border-gray-300 rounded text-gray-600 py-2 px-4 bg-gray-200"
+                            className="mt-2 w-full border-gray-600 rounded-lg text-gray-400 py-3 px-4 bg-gray-700 focus:outline-none"
                             disabled
                         />
                     </div>
                     <div className='col-span-2'>
-                        <label className="block text-gray-700">Referencias</label>
+                        <label className="block text-gray-400">Referencias</label>
                         <input
                             type="text"
-                            className="mt-2 w-full border-gray-300 rounded text-gray-600 p-2 bg-gray-200"
+                            className="mt-2 w-full border-gray-600 rounded-lg text-gray-400 p-3 bg-gray-700 focus:outline-none"
                             value={clientData?.reference}
                             disabled
                         />
                     </div>
 
                     <div className='col-span-2'>
-                        <label className="block text-gray-700">Empresa</label>
-                        <select className="w-full mt-2 border border-gray-300 rounded p-2 bg-white hover:border-blue-300 focus-within:border-blue-300">
-                            <option>VETERINARIA ARIEL`S E.I.R.L 0000 - 20608438719</option>
+                        <label className="block text-gray-400">Empresa</label>
+                        <select className="w-full mt-2 border border-gray-600 rounded-lg p-3 bg-gray-700 text-gray-200 hover:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none">
+                            <option>VETERINARIA ARIEL'S E.I.R.L 0000 - 20608438719</option>
                         </select>
                         <span className="text-sm text-gray-500 mt-1">
                             Los datos de la empresa seleccionada se utilizarán en el ticket de la orden de servicio.
@@ -231,43 +231,43 @@ function EditGroomingOrder() {
                 </div>
             </div>
 
-            <div className="bg-gray-100 p-4 rounded shadow">
+            <div className="bg-gray-800 p-4 rounded-xl shadow border border-gray-700">
                 <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
                     <div className='w-full md:w-[420px]'>
-                        <label className="block text-gray-700 mb-2">Almacén de origen</label>
-                        <select className="w-full  border-gray-300 border rounded py-2 px-4 hover:border-blue-300 focus-within:border-blue-300" >
+                        <label className="block text-gray-400 mb-2">Almacén de origen</label>
+                        <select className="w-full border-gray-600 border rounded-lg py-3 px-4 bg-gray-700 text-gray-200 hover:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none">
                             <option>ALMACEN PRODUCTOS P/VENTAS</option>
                         </select>
                     </div>
                     <div className='w-full'>
-                        <label className="block text-gray-700 mb-2">Buscar y agregar productos y/o servicios:</label>
+                        <label className="block text-gray-400 mb-2">Buscar y agregar productos y/o servicios:</label>
                         <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                     </div>
                 </div>
 
                 <div className='overflow-x-auto'>
-                    <table className="w-full border border-gray-300 rounded-lg mt-8">
+                    <table className="w-full border border-gray-700 rounded-lg mt-8">
                         <thead>
-                            <tr>
-                                <th className="py-2 px-4 border border-gray-300 text-center">Concepto</th>
-                                <th className="py-2 px-4 border  border-gray-300 text-center">Valor Unitario</th>
-                                <th className="py-2 px-4 border  border-gray-300 text-center">Cantidad</th>
-                                <th className="py-2 px-4 border  border-gray-300 text-center">Sub Total</th>
-                                <th className="py-2 px-4 border  border-gray-300 text-center">Impuestos</th>
-                                <th className="py-2 px-4 border border-gray-300  text-center">Total</th>
-                                <th className="py-2 px-4 border border-gray-300  text-center">Mascota</th>
-                                <th className="py-2 px-4 border  border-gray-300 text-center">Opciones</th>
+                            <tr className="bg-gray-800 text-gray-400">
+                                <th className="py-2 px-4 border border-gray-700 text-center">Concepto</th>
+                                <th className="py-2 px-4 border border-gray-700 text-center">Valor Unitario</th>
+                                <th className="py-2 px-4 border border-gray-700 text-center">Cantidad</th>
+                                <th className="py-2 px-4 border border-gray-700 text-center">Sub Total</th>
+                                <th className="py-2 px-4 border border-gray-700 text-center">Impuestos</th>
+                                <th className="py-2 px-4 border border-gray-700 text-center">Total</th>
+                                <th className="py-2 px-4 border border-gray-700 text-center">Mascota</th>
+                                <th className="py-2 px-4 border border-gray-700 text-center">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {selectedProducts.map((product) => (
-                                <tr key={product.provisionalId}>
-                                    <td className='py-2 px-4 border border-gray-300 text-center'>
+                                <tr key={product.provisionalId} className="bg-gray-800 text-gray-200">
+                                    <td className='py-2 px-4 border border-gray-700 text-center'>
                                         {product.productName || product.serviceName}
                                     </td>
-                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    <td className='py-2 px-4 border border-gray-700 text-center'>
                                         <span
-                                            className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'
+                                            className='border border-gray-600 bg-gray-700 px-4 py-1 rounded-lg text-center w-12 cursor-pointer text-cyan-400 font-medium'
                                             onClick={() => {
                                                 setProductToEdit(product)
                                                 setIsPriceModalOpen(true)
@@ -277,7 +277,7 @@ function EditGroomingOrder() {
                                             {product.salePrice}
                                         </span>
                                     </td>
-                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    <td className='py-2 px-4 border border-gray-700 text-center'>
                                         <QuantityCounter
                                             itemCount={product.quantity}
                                             changeQuantity={(newQuantity) => {
@@ -292,21 +292,21 @@ function EditGroomingOrder() {
                                             }}
                                         />
                                     </td>
-                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    <td className='py-2 px-4 border border-gray-700 text-center'>
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className='py-2 px-4  border border-gray-300 text-center'>
-                                        <span className='border border-gray-300 bg-white px-4 py-1 rounded text-center w-12 cursor-pointer'>
+                                    <td className='py-2 px-4 border border-gray-700 text-center'>
+                                        <span className='border border-gray-600 bg-gray-700 px-4 py-1 rounded-lg text-center w-12 cursor-pointer text-gray-200'>
                                             0.00
                                         </span>
                                     </td>
-                                    <td className='py-2 px-4  border border-gray-300 text-center'>
+                                    <td className='py-2 px-4 border border-gray-700 text-center'>
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className='py-2 px-4  border border-gray-300 text-center'>{product.petSelected}</td>
-                                    <td className='py-8 px-4 text-center border border-gray-300'>
+                                    <td className='py-2 px-4 border border-gray-700 text-center text-gray-400'>{product.petSelected}</td>
+                                    <td className='py-8 px-4 text-center border border-gray-700'>
                                         <div className="flex justify-center items-center h-full space-x-2">
-                                            <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
+                                            <TagIcon className='w-5 h-5 text-cyan-500 cursor-pointer' />
                                             <TrashIcon
                                                 onClick={() => removeProduct(product.provisionalId)}
                                                 className='w-5 h-5 text-red-500 cursor-pointer' />
@@ -319,7 +319,7 @@ function EditGroomingOrder() {
                 </div>
 
                 {
-                    isPriceModalOpen && productToEdit &&(
+                    isPriceModalOpen && productToEdit && (
                         <PriceModificationModal
                             onClose={() => setIsPriceModalOpen(false)}
                             productToEdit={productToEdit}
@@ -328,7 +328,7 @@ function EditGroomingOrder() {
                     )
                 }
                 {
-                    isQuantityModalOpen && productToEdit &&(
+                    isQuantityModalOpen && productToEdit && (
                         <QuantityModificationModal
                             quantity={productToEdit?.quantity}
                             changeQuantity={(newQuantity) => {
@@ -354,14 +354,14 @@ function EditGroomingOrder() {
                     )
                 }
 
-                <div className="bg-gray-100 pt-6 pb-6">
+                <div className="bg-gray-800 pt-6 pb-6 rounded-xl border-t border-gray-700 mt-4">
                     <div className="w-full lg:w-1/2 ml-auto">
-                        <table className="min-w-full bg-gray-100">
+                        <table className="min-w-full bg-gray-800">
                             <tbody>
                                 {taxesData.map((row, index) => (
-                                    <tr key={index} className={`border-t border-gray-300 ${row.bold ? 'font-bold' : ''}`}>
-                                        <td className="py-2 text-gray-600">{row.label}</td>
-                                        <td className="py-2 text-right text-gray-600">{row.value}</td>
+                                    <tr key={index} className={`border-t border-gray-700 ${row.bold ? 'font-bold text-gray-200' : 'text-gray-400'}`}>
+                                        <td className="py-2">{row.label}</td>
+                                        <td className="py-2 text-right">{row.value}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -371,21 +371,21 @@ function EditGroomingOrder() {
             </div>
 
             {/* Observaciones de Salud de la mascota */}
-            <div className="w-full bg-gray-100 p-6 rounded mt-4">
-                <h2 className="text-xl font-semibold text-gray-700 mb-6">Observaciones de Salud de la mascota</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid.cols-3 gap-6">
+            <div className="w-full bg-gray-800 p-6 rounded-xl mt-4 border border-gray-700">
+                <h2 className="text-xl font-semibold text-cyan-500 mb-6">Observaciones de Salud de la mascota</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {healthObservations.map((section, index) => (
                         <div key={index}>
-                            <h3 className="font-semibold mb-4">{section.title}</h3>
+                            <h3 className="font-semibold text-gray-400 mb-4">{section.title}</h3>
                             <ul className="space-y-2">
                                 {section.items.map((item, idx) => (
-                                    <li key={idx} className="flex items-center">
+                                    <li key={idx} className="flex items-center text-gray-300">
                                         <input
                                             type="checkbox"
                                             id={`${section.title}-${item}`}
                                             onChange={() => handleObservationChange(item)}
                                             checked={selectedObservations.includes(item)}
-                                            className="mr-2"
+                                            className="mr-2 h-4 w-4 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500"
                                         />
                                         <label htmlFor={`${section.title}-${item}`}>{item}</label>
                                     </li>
@@ -397,10 +397,10 @@ function EditGroomingOrder() {
             </div >
 
             {/* Observaciones */}
-            <div className='bg-gray-100 p-4 mb-4 mt-4 rounded' >
-                <label className="block text-gray-700">Observaciones o comentarios de ésta orden de servicio</label>
+            <div className='bg-gray-800 p-4 mb-4 mt-4 rounded-xl border border-gray-700'>
+                <label className="block text-gray-400">Observaciones o comentarios de esta orden de servicio</label>
                 <textarea
-                    className="w-full mt-3 border border-gray-300 rounded p-2 bg-white max-h-60 min-h-20 hover:border-blue-300 focus-within:border-blue-300"
+                    className="w-full mt-3 border border-gray-600 rounded-lg p-3 bg-gray-700 text-gray-200 placeholder-gray-500 max-h-60 min-h-20 hover:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none"
                     rows={3}
                     placeholder="Añadir observaciones..."
                     value={notes}
@@ -409,34 +409,34 @@ function EditGroomingOrder() {
             </div>
 
             {/* recordatorio en agenda */}
-            <div className='bg-gray-100 p-4 mb-4 mt-1 rounded shadow flex flex-col md:flex-row items-center gap-4' >
+            <div className='bg-gray-800 p-4 mb-4 mt-1 rounded-xl shadow border border-gray-700 flex flex-col md:flex-row items-center gap-4' >
 
                 <div className="w-full">
-                    <label htmlFor="date">Fecha de próximo servicio (recordatorio en agenda)</label>
+                    <label htmlFor="date" className="text-gray-400">Fecha de próximo servicio (recordatorio en agenda)</label>
                     <input
                         type="date"
                         id="date"
-                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full py-3 px-4 mt-1.5 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 hover:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none"
                     />
                 </div>
 
                 <div className=" w-full">
-                    <label htmlFor="typeService">Tipo de evento </label>
+                    <label htmlFor="typeService" className="text-gray-400">Tipo de evento</label>
                     <select
                         name="type"
                         id="typeService"
-                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full py-3 px-4 mt-1.5 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 hover:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none"
                     >
                         <option value="baño">Baño</option>
                     </select>
                 </div>
 
                 <div className='w-full'>
-                    <label htmlFor="client">Anotaciones</label>
+                    <label htmlFor="client" className="text-gray-400">Anotaciones</label>
                     <input
                         type="text"
                         placeholder="Anotaciones..."
-                        className="w-full py-2 px-4 mt-1.5 border-gray-200 border-2 rounded-lg hover:border-blue-300 focus-within:border-blue-300"
+                        className="w-full py-3 px-4 mt-1.5 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-500 hover:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none"
                     />
                 </div>
             </div>

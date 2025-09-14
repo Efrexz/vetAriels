@@ -38,11 +38,11 @@ function ActiveOrders() {
                         <input
                             type="text"
                             placeholder="Buscar cliente..."
-                            className="w-full md:w-[280px] py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                            className="w-full md:w-[280px] py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                         />
                         <input
                             type="date"
-                            className="w-full md:w-[280px] py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                            className="w-full md:w-[280px] py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                         />
                     </div>
                 </div>
@@ -78,7 +78,7 @@ function ActiveOrders() {
                                             S/{calculateTotal(account.products)}
                                         </span>
                                     </td>
-                                    <td className="py-2 text-center px-4">
+                                    <td className="py-2 text-center px-4 border border-gray-700">
                                         <button
                                             className="text-cyan-500 hover:text-cyan-300 transition-colors duration-200"
                                             onClick={(e) => { e.stopPropagation(); navigate(`/sales/client/${account.id}`); }}
@@ -97,18 +97,18 @@ function ActiveOrders() {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-                <p className="text-gray-400 text-center md:text-left">
-                    Página: 1 de 1 | Registros del 1 al {activeAccounts.length} | Total{" "}
-                    <span className="font-extrabold text-gray-200">{activeAccounts.length}</span>
-                </p>
-                <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                    <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Primera</button>
-                    <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Anterior</button>
-                    <button className="py-2 px-4 border-2 border-cyan-500 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-white font-bold shadow-md hover:from-cyan-400 hover:to-emerald-400 transition-all">1</button>
-                    <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Siguiente</button>
-                    <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Última</button>
+                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
+                    <p className="text-gray-400 text-center md:text-left">
+                        Página: 1 de 1 | Registros del 1 al {activeAccounts.length} | Total{" "}
+                        {activeAccounts.length}
+                    </p>
+                    <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
+                    </div>
                 </div>
             </div>
         </section>

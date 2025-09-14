@@ -30,9 +30,9 @@ function ActiveOrdersGrooming() {
     // determinar el color de fondo según el estado
     function getStateColor(state: GroomingState): string {
         switch (state) {
-            case "En Atención": return "bg-red-500";
-            case "Pendiente": return "bg-orange-500";
-            case "Terminado": return "bg-green-500";
+            case "En Atención": return "bg-rose-600";
+            case "Pendiente": return "bg-amber-500";
+            case "Terminado": return "bg-emerald-600";
             case "Entregado": return "bg-blue-500";
             case "En espera": return "bg-yellow-500";
             default: return "bg-gray-400";
@@ -47,38 +47,38 @@ function ActiveOrdersGrooming() {
             </h1>
             <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
                 <div className="p-4 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
-    <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4 ">
-        <div className="flex w-full md:w-[350px] bg-gray-700 border border-gray-600 rounded-xl overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500 transition-colors">
-            <div className="flex items-center justify-center px-3 border-r border-gray-600">
-                <SearchIcon className="w-5 h-5 text-gray-400" />
+                <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4 ">
+                    <div className="flex w-full md:w-[350px] bg-gray-700 border border-gray-600 rounded-xl overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500 transition-colors">
+                        <div className="flex items-center justify-center px-3 border-r border-gray-600">
+                            <SearchIcon className="w-5 h-5 text-gray-400" />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Buscar por cliente o mascota......"
+                            className="w-full py-3 px-4 bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-transparent"
+                        />
+                    </div>
+                    <button
+                        className="w-full md:w-auto border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
+                        onClick={() => navigate("/grooming/order-creation/no_client")}
+                    >
+                        <PlusIcon className="w-5 h-5" />
+                        CREAR ORDEN DE SERVICIO
+                    </button>
+                </div>
+                <div>
+                    <select
+                        name="status"
+                        className="w-full md:w-[30%] rounded-xl border-gray-600 border bg-gray-700 text-gray-200 sm:text-sm py-3 px-4 hover:border-cyan-500 focus:border-cyan-500 focus:outline-none transition-colors"
+                    >
+                        <option className="bg-gray-700" value="">--Seleccionar estado--</option>
+                        <option className="bg-gray-700" value="Pendiente">Pendiente</option>
+                        <option className="bg-gray-700" value="En Atención">En Atención</option>
+                        <option className="bg-gray-700" value="Terminado">Terminado</option>
+                        <option className="bg-gray-700" value="Entregado">Entregado</option>
+                    </select>
+                </div>
             </div>
-            <input
-                type="text"
-                placeholder="Buscar por cliente o mascota......"
-                className="w-full py-3 px-4 bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-transparent"
-            />
-        </div>
-        <button
-            className="w-full md:w-auto border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
-            onClick={() => navigate("/grooming/order-creation/no_client")}
-        >
-            <PlusIcon className="w-5 h-5" />
-            CREAR ORDEN DE SERVICIO
-        </button>
-    </div>
-    <div>
-        <select
-            name="status"
-            className="w-full md:w-[30%] rounded-xl border-gray-600 border bg-gray-700 text-gray-200 sm:text-sm py-3 px-4 hover:border-cyan-500 focus:border-cyan-500 focus:outline-none transition-colors"
-        >
-            <option className="bg-gray-700" value="">--Seleccionar estado--</option>
-            <option className="bg-gray-700" value="Pendiente">Pendiente</option>
-            <option className="bg-gray-700" value="En Atención">En Atención</option>
-            <option className="bg-gray-700" value="Terminado">Terminado</option>
-            <option className="bg-gray-700" value="Entregado">Entregado</option>
-        </select>
-    </div>
-</div>
                 <div className="overflow-x-auto border border-gray-700 rounded-lg">
                     <table className="min-w-full bg-gray-800 border rounded-lg">
                         <thead className="bg-gray-700">
@@ -127,7 +127,7 @@ function ActiveOrdersGrooming() {
                                             ))}
                                         </ul>
                                     </td>
-                                    <td className="py-2 px-4 border-b border-r border-gray-700 align-top pt-5">
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-5">
                                         <span
                                             className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(groomingData?.state)} rounded-full whitespace-nowrap cursor-pointer transition-all hover:scale-105`}
                                             onClick={() => {
@@ -138,27 +138,29 @@ function ActiveOrdersGrooming() {
                                             {groomingData.state}
                                         </span>
                                     </td>
-                                    <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-700 border-b">
-                                        <PenIcon
+                                    <td className="py-10 px-4 text-center align-top pt-5 border-gray-700 border-b border-r">
+                                        <div className="flex justify-center space-x-2">
+                                            <PenIcon
                                             className="w-5 h-5 text-orange-500 cursor-pointer hover:text-orange-400 transition-colors"
                                             onClick={() => navigate(`/grooming/update/${groomingData.id}`)}
-                                        />
-                                        <CheckIcon
+                                            />
+                                            <CheckIcon
                                             className="w-5 h-5 text-green-500 cursor-pointer hover:text-green-400 transition-colors"
                                             onClick={() => {
                                                 setGroomingDataToEdit({ ...groomingData, state: "Terminado" })
                                                 setTypeOfOperation("finishGrooming")
                                                 setIsConfirmActionModalOpen(true)
                                             }}
-                                        />
-                                        <BanIcon
+                                            />
+                                            <BanIcon
                                             className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-400 transition-colors"
                                             onClick={() => {
                                                 setGroomingDataToEdit(groomingData)
                                                 setTypeOfOperation("deleteGrooming")
                                                 setIsConfirmActionModalOpen(true)
                                             }}
-                                        />
+                                            />
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

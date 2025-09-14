@@ -87,11 +87,11 @@ function ClinicQueue() {
                             <input
                                 type="text"
                                 placeholder="Buscar por ID..."
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                             <input
                                 type="date"
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                         </div>
                         <button
@@ -107,7 +107,7 @@ function ClinicQueue() {
                             <div key={index} className="w-full">
                                 <select
                                     name={option.type}
-                                    className="w-full mt-1.5 rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-3 px-5 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                                    className="w-full mt-1.5 rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-3 px-5 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                                 >
                                     <option value="">{option.type}</option>
                                     {option.options.map((option, idx) => (
@@ -140,17 +140,17 @@ function ClinicQueue() {
                         <tbody>
                             {petsInQueueMedical.map((petInQueue, index) => (
                                 <tr key={petInQueue.id} className="hover:bg-gray-700 transition-colors duration-200">
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700">
+                                    <td className=" px-4 text-center border-b border-r border-gray-700">
                                         <input type="checkbox" className="form-checkbox bg-gray-900 border-gray-500 text-blue-500 rounded focus:ring-blue-500" />
                                     </td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700">{index + 1}</td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700">
+                                    <td className=" px-4 text-center border-b border-r border-gray-700">{index + 1}</td>
+                                    <td className=" px-4 text-center border-b border-r border-gray-700">
                                         <span className="block">{petInQueue?.dateOfAttention}</span>
                                         <span className="block text-gray-400 text-sm">
                                             {petInQueue?.timeOfAttention}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700">
+                                    <td className=" px-2 border-b border-r border-gray-700">
                                         <Link to={`/pets/pet/${petInQueue?.petData?.id}/update`}>
                                             <div>{petInQueue?.petData?.petName}</div>
                                             <div className="text-gray-400 text-sm">
@@ -170,8 +170,8 @@ function ClinicQueue() {
                                             {petInQueue?.petData?.ownerName}
                                         </Link>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700">{petInQueue?.assignedDoctor}</td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700">
+                                    <td className=" px-4 text-center border-b border-r border-gray-700">{petInQueue?.assignedDoctor}</td>
+                                    <td className=" px-4 text-center border-b border-r border-gray-700">
                                         <span
                                             className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(
                                                 petInQueue?.state
@@ -181,11 +181,13 @@ function ClinicQueue() {
                                             {petInQueue?.state}
                                         </span>
                                     </td>
-                                    <td className="px-8 text-center border-b border-r border-gray-700">
-                                        <Stethoscope className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-400 transition-colors" />
+                                    <td className="py-8 px-8 text-center border-b border-r border-gray-700 ">
+                                        <div className="flex justify-center space-x-2 w-full">
+                                            <Stethoscope className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-400 transition-colors" />
+                                        </div>
                                     </td>
                                     <td className="py-8 px-4 text-center border-b border-r border-gray-700 last:border-r-0">
-                                        <div className="flex justify-center items-center h-full space-x-2">
+                                        <div className="flex justify-center space-x-2">
                                             <PenIcon
                                                 className="w-5 h-5 text-emerald-500 cursor-pointer hover:text-esmerald-600 transition-colors"
                                                 onClick={() => openEditModal(petInQueue)}

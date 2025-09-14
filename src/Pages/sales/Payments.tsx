@@ -33,16 +33,16 @@ function Payments() {
                             <input
                                 type="text"
                                 placeholder="Buscar por ID..."
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                             <input
                                 type="text"
                                 placeholder="Buscar descripción..."
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                             <input
                                 type="date"
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                         </div>
                     </div>
@@ -50,7 +50,7 @@ function Payments() {
                         <div className="w-full sm:w-[300px]">
                             <select
                                 name="Metodo-de-pago"
-                                className="w-full rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-3 px-5 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
+                                className="w-full rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-3 px-5 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             >
                                 <option className="bg-gray-700" value="">Método de Pago</option>
                                 <option className="bg-gray-700" value="AMERICAN EXPRESS">American Express</option>
@@ -146,17 +146,17 @@ function Payments() {
                         />
                     )
                 }
-                <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
                     <p className="text-gray-400 text-center md:text-left">
                         Página: 1 de 1 | Registros del 1 al {paymentsData.length} | Total{" "}
-                        <span className="font-extrabold text-gray-200">{paymentsData.length}</span>
+                        {paymentsData.length}
                     </p>
                     <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Primera</button>
-                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Anterior</button>
-                        <button className="py-2 px-4 border-2 border-cyan-500 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-white font-bold shadow-md hover:from-cyan-400 hover:to-emerald-400 transition-all">1</button>
-                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Siguiente</button>
-                        <button className="py-2 px-4 border border-gray-700 rounded-xl text-gray-400 hover:bg-gray-800 transition-colors">Última</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
                     </div>
                 </div>
             </div>

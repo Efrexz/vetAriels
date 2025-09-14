@@ -21,15 +21,15 @@ function ErrorModal({ onClose, typeOfError }: ErrorModalProps) {
     const message = errorMessages[typeOfError] || errorMessages.default;
     return (
         <div
-            className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50"
+            className="fixed inset-0 flex justify-center items-start bg-gray-900 bg-opacity-70 z-50 pt-20"
             onClick={onClose}
         >
             <div
-                className="bg-white p-6 rounded-md w-full h-auto max-w-xl mt-8 modal-appear mx-4"
+                className="bg-gray-800 p-6 rounded-xl w-full h-auto max-w-xl modal-appear mx-4 border border-gray-700"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="border-b border-gray-300 p-2 mb-4">
-                    <p className="text-white text-left bg-red-500 mb-4 p-4 rounded-md">
+                <div className="border-b border-gray-700 p-2 mb-4">
+                    <p className="text-red-500 text-left bg-red-500/10 mb-4 p-4 rounded-lg border border-red-500/20">
                         <span className="flex items-center gap-2">
                             <AlertIcon className="w-5 h-5" />
                             {message}
@@ -39,7 +39,7 @@ function ErrorModal({ onClose, typeOfError }: ErrorModalProps) {
 
                 <div className="flex justify-end mt-6 gap-4">
                     <button
-                        className="bg-green-500 text-white border border-gray-300  py-2 px-4 text-sm rounded hover:bg-green-600 flex items-center font-semibold"
+                        className="bg-cyan-600 text-white py-2 px-4 text-sm rounded-lg hover:bg-cyan-700 flex items-center font-semibold transition-colors"
                         onClick={onClose}
                     >
                         ACEPTAR
