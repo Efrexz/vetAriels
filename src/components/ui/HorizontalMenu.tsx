@@ -89,14 +89,14 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
 
     const hasAlternativeStyles = ['restock', 'discharge', 'services', 'products'].includes(mode);
     return (
-        <div className={`${hasAlternativeStyles  ? "border-b-2 border-gray-200 pb-4 mb-4" : ""}`}>
+        <div className={`${hasAlternativeStyles ? "border-b-2 border-gray-700 pb-4 mb-4" : ""}`}>
             <nav className="flex flex-wrap gap-2 md:gap-6" aria-label="Tabs">
                 {tabsConfig[mode]?.map((tab) => (
                     <Link
                         key={tab.name}
                         to={`${baseUrl[mode]}/${tab.url}`}
                         className={`shrink-0 rounded-lg px-4 py-2 text-sm font-bold transition-all
-                        ${selectedTab === tab.name ? "bg-sky-400 text-white" : "text-sky-500 hover:text-sky-600 hover:bg-gray-50"}`}
+                        ${selectedTab === tab.name ? "bg-cyan-500 text-white" : "text-cyan-400 hover:text-cyan-500 hover:bg-gray-700"}`}
                         onClick={() => handleTabClick(tab.name)}
                     >
                         {tab.name}

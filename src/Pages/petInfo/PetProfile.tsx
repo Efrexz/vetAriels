@@ -159,16 +159,16 @@ function PetProfile({ petData }: PetProfileProps) {
     ];
 
     return (
-        <div className="flex flex-col w-full justify-between ">
+        <div className="flex flex-col w-full justify-between">
             <div className="flex-grow p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label htmlFor={field.id} className="block text-gray-600 mb-1 font-medium">{field.label}</label>
-                            <div className="flex items-center ">
+                            <label htmlFor={field.id} className="block text-gray-300 mb-2">{field.label}</label>
+                            <div className={`flex w-full items-center rounded-lg overflow-hidden bg-gray-700 ${errors[field.id] ? 'border border-red-500' : 'border border-gray-600 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
                                 {field.icon &&
-                                    <div className={`flex items-center justify-center bg-gray-100 px-3 py-3.5 rounded-l-lg `}>
-                                        <field.icon className="w-5 h-5 text-gray-600" />
+                                    <div className="flex items-center justify-center bg-gray-700 px-3 py-3.5 rounded-l-lg border border-gray-600 border-r-1 ">
+                                        <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
 
@@ -177,7 +177,7 @@ function PetProfile({ petData }: PetProfileProps) {
                                         id={field.id}
                                         onChange={handleChange}
                                         value={formData[field.id as keyof FormDataType]}
-                                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'} `}
+                                         className={`w-full p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent text-gray-100 bg-gray-700 `}
                                     >
                                         {field.options?.map((option, i) => (
                                             <option key={i} value={option}>
@@ -192,7 +192,7 @@ function PetProfile({ petData }: PetProfileProps) {
                                         value={formData[field.id as keyof FormDataType]}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className={`border rounded-r-lg p-3  w-full focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}
+                                        className={`w-full py-3 px-4 focus:outline-none focus:ring-0 focus:border-transparent text-gray-100 bg-gray-700 `}
                                     />
                                 )}
                             </div>
@@ -209,7 +209,7 @@ function PetProfile({ petData }: PetProfileProps) {
                 onSubmit={updateData}
                 submitText="GUARDAR CAMBIOS"
             />
-        </div >
+        </div>
     );
 }
 

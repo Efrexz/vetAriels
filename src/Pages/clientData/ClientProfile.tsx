@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { useClients } from '@context/ClientsContext';
 import { Client } from '@t/client.types';
+import { ActionButtons } from '@components/ui/ActionButtons';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import DocumentIcon from '@assets/documentIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
@@ -138,17 +139,17 @@ function ClientProfile() {
 
     return (
         <div className="flex flex-col w-full">
-            <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-4 mt-4 mb-6">
+            <div className="flex-grow p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-600">{field.label}</label>
-                            <div className="flex items-center ">
-                                <div className="flex items-center justify-center bg-gray-100 px-3 py-3.5 rounded-l-lg">
-                                    <field.icon className="w-5 h-5 text-gray-500" />
+                            <label className="block text-gray-300 mb-2">{field.label}</label>
+                            <div className="flex items-center">
+                                <div className="flex items-center justify-center bg-gray-700 px-3 py-3.5 rounded-l-lg border border-gray-600 border-r-0">
+                                    <field.icon className="w-5 h-5 text-gray-400" />
                                 </div>
                                 <input
-                                    className={`border rounded-r-lg p-3 bg-gray-50 w-full focus:outline-none ${errors[field.id] ? "border-red-500" : "hover:border-blue-300 focus-within:border-blue-300"} `}
+                                    className={`border rounded-r-lg p-3 bg-gray-700 w-full focus:outline-none text-gray-200 border-gray-600 transition-colors ${errors[field.id] ? "border-red-500" : "focus:border-cyan-500 hover:border-cyan-500"}`}
                                     type={field.type}
                                     id={field.id}
                                     value={formData[field.id as keyof FormDataState]}
@@ -157,20 +158,17 @@ function ClientProfile() {
                                 />
                             </div>
                             {
-                                errors[field.id] && <p className="text-red-500 text-xs">{errors[field.id]}</p>
+                                errors[field.id] && <p className="text-red-500 text-xs mt-1">{errors[field.id]}</p>
                             }
                         </div>
                     ))}
                 </div>
             </div>
-            <div className='flex w-full justify-end  items-center bg-gray-100 py-3 px-5 shadow-lg rounded-b-lg'>
-                <button
-                    onClick={updateData}
-                    className="bg-green-500 w-full sm:w-auto justify-center text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3">
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    GUARDAR CAMBIOS
-                </button>
-            </div>
+            <ActionButtons
+                onCancel={() => navigate(-1)}
+                onSubmit={updateData}
+                submitText="GUARDAR CAMBIOS"
+            />
         </div >
     );
 }

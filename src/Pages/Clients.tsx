@@ -19,32 +19,32 @@ function Clients() {
     const navigate = useNavigate();
 
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-xl sm:text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <UserGroupIcon className="w-6 md:w-9 h-6 md:h-9 text-blue-500 mr-2" />
-                Clientes
+        <section className="bg-gray-900 w-full p-6">
+            <h1 className="text-xl sm:text-3xl font-medium text-cyan-500 mb-4 pb-4 border-b-2 border-cyan-500 flex">
+                <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 text-cyan-500 mr-2" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Clientes</span> 
             </h1>
-            <div className="bg-white rounded-lg shadow p-3 mb-6">
+            <div className="bg-gray-800 rounded-xl shadow-lg p-3 mb-6 border border-gray-700">
                 <div className="p-3 rounded-lg mb-1">
-                    <div className="flex flex-wrap items-center  mb-3 gap-3">
+                    <div className="flex flex-wrap items-center mb-3 gap-3">
                         <div className="w-full md:w-auto flex flex-wrap md:flex-nowrap gap-2">
-                            <div className="flex w-full md:w-auto border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300 ">
-                                <div className="flex items-center justify-center bg-gray-100 px-3">
-                                    <SearchIcon className="w-5 h-5 text-gray-600" />
+                            <div className="flex w-full md:w-auto border-gray-600 border rounded-lg overflow-hidden bg-gray-700 focus-within:border-cyan-500">
+                                <div className="flex items-center justify-center bg-gray-700 px-3">
+                                    <SearchIcon className="w-5 h-5 text-gray-400" />
                                 </div>
                                 <input
                                     type="text"
                                     placeholder="Buscar..."
-                                    className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
+                                    className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200 placeholder-gray-500 hover:border-cyan-500"
                                 />
                             </div>
                             <input
                                 type="date"
-                                className="w-full md:w-[250px] py-2 px-4 border-gray-200 border rounded-lg focus:outline-none focus:border-blue-300"
+                                className="w-full md:w-[250px] py-2 px-4 border-gray-600 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 focus:border-cyan-500 hover:border-cyan-500"
                             />
                         </div>
                         <button
-                            className="w-full md:w-auto border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2"
+                            className="w-full md:w-auto border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
                             onClick={() => navigate("/clients/create")}
                         >
                             <PlusIcon className="w-5 h-5" />
@@ -53,15 +53,15 @@ function Clients() {
                     </div>
                 </div>
 
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white border rounded-lg">
-                        <thead className="bg-gray-100">
+                <div className="overflow-x-auto border border-gray-700 rounded-lg">
+                    <table className="min-w-full bg-gray-800 border rounded-lg">
+                        <thead className="bg-gray-700">
                             <tr>
-                                <th className="py-2 px-4 text-left border">
-                                    <input type="checkbox" className="form-checkbox" />
+                                <th className="py-2 px-4 text-center border border-gray-600">
+                                    <input type="checkbox" className="form-checkbox h-4 w-4 text-cyan-500 bg-gray-600 border-gray-500 rounded focus:ring-cyan-500" />
                                 </th>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className={`py-2 px-4 ${header === "Mascota" ? "text-left" : "text-center"} border font-medium text-gray-700`}>
+                                    <th key={header} className={`py-2 px-4 ${header === "Mascota" ? "text-left" : "text-center"} border border-gray-600 font-medium text-gray-300`}>
                                         {header}
                                     </th>
                                 ))}
@@ -69,28 +69,28 @@ function Clients() {
                         </thead>
                         <tbody>
                             {clients.map((clientData) => (
-                                <tr key={clientData.id} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 text-center border">
-                                        <input type="checkbox" className="form-checkbox" />
+                                <tr key={clientData.id} className="bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
+                                    <td className="py-2 px-4 text-center border border-gray-600">
+                                        <input type="checkbox" className="form-checkbox h-4 w-4 text-cyan-500 bg-gray-600 border-gray-500 rounded focus:ring-cyan-500" />
                                     </td>
-                                    <td className="py-2 px-4 text-center border">
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">
                                         <div>{clientData.date}</div>
                                         <div>{clientData.hour}</div>
                                     </td>
-                                    <td className="py-2 px-4 text-center border">{clientData.firstName + ", " + clientData.lastName}</td>
-                                    <td className="py-2 px-4 text-center border">{clientData.phone1}</td>
-                                    <td className="py-2 px-4 text-center border">{clientData.email}</td>
-                                    <td className="py-2 px-4 text-center border">{clientData.address}</td>
-                                    <td className="py-8 px-4 text-center border">
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{clientData.firstName + ", " + clientData.lastName}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{clientData.phone1}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{clientData.email}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{clientData.address}</td>
+                                    <td className="py-8 px-4 text-center border border-gray-600">
                                         <div className="flex justify-center items-center h-full space-x-2">
                                             <PenIcon
-                                                className="w-4 h-4 text-green-500 cursor-pointer"
+                                                className="w-5 h-5 text-yellow-500 cursor-pointer hover:scale-110 transition-transform"
                                                 onClick={() => navigate(`/clients/client/${clientData.id}/update`)} />
                                             <PawIcon
-                                                className="w-4 h-4 text-[#7266BA] cursor-pointer"
+                                                className="w-5 h-5 text-purple-500 cursor-pointer hover:scale-110 transition-transform"
                                                 onClick={() => navigate(`/clients/client/${clientData.id}/pets`)} />
                                             <TrashIcon
-                                                className="w-4 h-4 text-red-500 cursor-pointer"
+                                                className="w-5 h-5 text-red-500 cursor-pointer hover:scale-110 transition-transform"
                                                 onClick={() => {
                                                     setClientDataToDelete(clientData)
                                                     setIsDeleteModalOpen(true)
@@ -113,16 +113,16 @@ function Clients() {
                     )
                 }
                 <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                    <p className="text-gray-600 text-center md:text-left">
+                    <p className="text-gray-400 text-center md:text-left">
                         Página: 1 de 1 | Registros del 1 al {clients.length} | Total{" "}
                         {clients.length}
                     </p>
                     <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-2 px-4 border rounded">Primera</button>
-                        <button className="py-2 px-4 border rounded">Anterior</button>
-                        <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
-                        <button className="py-2 px-4 border rounded">Siguiente</button>
-                        <button className="py-2 px-4 border rounded">Última</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
                     </div>
                 </div>
             </div>

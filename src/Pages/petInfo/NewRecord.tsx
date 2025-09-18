@@ -66,9 +66,9 @@ function NewRecord() {
     }
 
     return (
-        <div className="w-full max-w-[1300px] mx-auto border border-gray-200 rounded-lg">
-            <div className="flex tems-center justify-start p-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-bold text-gray-600">Nueva Ficha de Consulta</h2>
+        <div className="w-full max-w-[1300px] mx-auto border border-gray-700 rounded-lg bg-gray-800">
+            <div className="flex items-center justify-start p-4 border-b border-gray-700 bg-gray-900">
+                <h2 className="text-lg font-bold text-cyan-500">Nueva Ficha de Consulta</h2>
             </div>
             <RecordForm
                 formData={formData}

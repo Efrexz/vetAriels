@@ -8,6 +8,7 @@ import { AddClinicalNote } from './AddClinicalNote';
 import { EditRecord } from './EditRecord';
 import { EditClinicalNote } from './EditClinicalNote';
 import { Pet } from '@t/client.types';
+import { NotFound } from '@components/ui/NotFound';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import AlertIcon from '@assets/alertIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
@@ -50,70 +51,55 @@ function PetInfo() {
     // Si no se encuentra la mascota, mostrar un mensaje de error
     if (!individualPetData) {
         return (
-            <div className="container mx-auto p-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
-                <div className="bg-white rounded-xl shadow-lg p-12 max-w-xl w-full text-center border-t-4 border-blue-500">
-                    <AlertIcon className="text-blue-500 w-16  mx-auto mb-6 opacity-80" />
-                    <h1 className="text-4xl font-extrabold text-gray-700 mb-4">
-                        Mascota no Registrada
-                    </h1>
-                    <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                        No hemos encontrado ninguna mascota asociada al ID "<strong className="text-blue-600">#{id}</strong>" en nuestros registros. Por favor, verifica el identificador.
-                    </p>
-                    {/*Separador*/}
-                    <div className="border-t border-gray-200 pt-6 mt-6">
-                        <Link
-                            to="/pets"
-                            className="inline-flex items-center px-8 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ease-in-out text-lg"
-                        >
-                            <SearchIcon className="w-10 mr-3 text-xl" /> Ver listado de pacientes
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        );
+            <NotFound
+                entityName="Mascota"
+                searchId={id!}
+                returnPath={`/pets`}
+            />
+        )
     }
 
     return (
-        <main className="container mx-auto p-6">
-            <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-6 border-b-2 border-gray-100 pb-5">
-                <h1 className="text-2xl font-semibold text-gray-600">
-                    Informacion de la Mascota
+        <main className="p-4 sm:p-6 bg-gray-950 text-gray-200">
+            <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-6 border-b border-cyan-500 pb-5">
+                <h1 className="text-xl sm:text-3xl font-medium text-cyan-500">
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Información de la Mascota</span>
                 </h1>
                 <HorizontalMenu mode="pets" />
             </div>
 
-            <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-t-lg overflow-hidden">
-                <div className="w-full md:w-1/4 p-6 bg-gray-100 flex flex-col items-center">
-                    <div className="w-32 h-32 bg-gray-300 rounded-full flex items-center justify-center mb-4">
-                        <RoleUserIcon className="w-16 h-16 text-gray-500" />
+            <div className="flex flex-col md:flex-row bg-gray-800 border border-gray-700 shadow-lg rounded-lg overflow-hidden">
+                <div className="w-full md:w-1/4 p-6 bg-gray-700 flex flex-col items-center">
+                    <div className="w-32 h-32 bg-gray-600 rounded-full flex items-center justify-center mb-4">
+                        <RoleUserIcon className="w-16 h-16 text-cyan-400" />
                     </div>
-                    <h2 className="text-2xl font-semibold text-gray-800">{individualPetData?.petName}</h2>
+                    <h2 className="text-xl font-semibold text-gray-200">{individualPetData?.petName}</h2>
                     <div className="text-center mt-4 space-y-2">
-                        <p className="text-gray-600">
+                        <p className="text-gray-400">
                             <strong>N° Historia Clínica: </strong>{individualPetData?.hc}
                         </p>
-                        <p className="text-gray-600">
+                        <p className="text-gray-400">
                             <strong>Especie: </strong>{individualPetData?.species}
                         </p>
-                        <p className="text-gray-600">
+                        <p className="text-gray-400">
                             <strong>Raza: </strong>{individualPetData?.breed}
                         </p>
-                        <p className="text-gray-600">
+                        <p className="text-gray-400">
                             <strong>Sexo: </strong>{individualPetData?.sex}
                         </p>
-                        <p className="text-gray-600">
+                        <p className="text-gray-400">
                             <strong>¿Esterilizado?: </strong>{individualPetData?.esterilized ? 'SÍ' : 'NO'}
                         </p>
-                        <p className="text-gray-600">
+                        <p className="text-gray-400">
                             <strong>Fecha de Nacimiento: </strong>{individualPetData?.birthDate}
                         </p>
-                        <div className="text-gray-600">
+                        <div className="text-gray-400">
                             <strong>Edad: </strong>
                             {petAge.years} {petAge.years === 1 ? "año" : "años"}, {petAge.months} {petAge.months === 1 ? "mes" : "meses"} y {petAge.days} {petAge.days === 1 ? "día" : "días"}
                         </div>
-                        <p className="text-gray-600">
+                        <p className="text-gray-400">
                             <strong>Propietario: </strong>
-                            <Link to={`/clients/client/${individualPetData?.ownerId}/update `} className="text-blue-500 underline">
+                            <Link to={`/clients/client/${individualPetData?.ownerId}/update `} className="text-cyan-500 underline">
                                 {individualPetData?.ownerName}
                             </Link>
                         </p>

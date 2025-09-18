@@ -96,29 +96,29 @@ function ActiveOrdersGrooming() {
                         <tbody>
                             {petsInQueueGrooming.map((groomingData) => (
                                 <tr key={groomingData.id} className="hover:bg-gray-700 transition-colors duration-200">
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4">
                                         <input type="checkbox" className="form-checkbox bg-gray-900 border-gray-500 text-cyan-500 rounded focus:ring-cyan-500" />
                                     </td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.turn}</td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.dateOfAttention}</td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.timeOfAttention}</td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.timeOfAttention}</td>
-                                    <td className="py-2 px-4 border-b border-r border-gray-700 align-top pt-4">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4">{groomingData?.turn}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4">{groomingData?.dateOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4">{groomingData?.timeOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4">{groomingData?.timeOfAttention}</td>
+                                    <td className="py-2 px-4 border border-gray-600 align-top pt-4">
                                         <Link
                                             className="text-md cursor-pointer text-cyan-500 hover:text-cyan-400 hover:underline transition-colors"
                                             to={`/clients/client/${groomingData?.petData?.ownerId}/update`}>
                                             {groomingData?.ownerName}
                                         </Link>
                                     </td>
-                                    <td className="py-2 px-4 border-b border-r border-gray-700 align-top pt-4">
+                                    <td className="py-2 px-4 border border-gray-600 align-top pt-4">
                                         <Link
                                             className="text-md cursor-pointer text-cyan-500 hover:text-cyan-400 hover:underline transition-colors"
                                             to={`/pets/pet/${groomingData?.petData.id}/update`}>
                                             {groomingData?.petData?.petName}
                                         </Link>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-4">{groomingData?.petData?.breed}</td>
-                                    <td className="py-2 pr-3 pl-2 border-b border-r border-gray-700 align-top pt-3 text-sm">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4">{groomingData?.petData?.breed}</td>
+                                    <td className="py-2 pr-3 pl-2 border border-gray-600 align-top pt-3 text-sm">
                                         <ul className='list-disc pl-4 text-gray-300'>
                                             {groomingData?.productsAndServices?.map((service) => (
                                                 <li key={service?.provisionalId} >
@@ -127,7 +127,7 @@ function ActiveOrdersGrooming() {
                                             ))}
                                         </ul>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700 align-top pt-5">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-5">
                                         <span
                                             className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(groomingData?.state)} rounded-full whitespace-nowrap cursor-pointer transition-all hover:scale-105`}
                                             onClick={() => {
@@ -138,7 +138,7 @@ function ActiveOrdersGrooming() {
                                             {groomingData.state}
                                         </span>
                                     </td>
-                                    <td className="py-10 px-4 text-center align-top pt-5 border-gray-700 border-b border-r">
+                                    <td className="py-10 px-4 text-center align-top pt-5 border-gray-600 border">
                                         <div className="flex justify-center space-x-2">
                                             <PenIcon
                                             className="w-5 h-5 text-orange-500 cursor-pointer hover:text-orange-400 transition-colors"

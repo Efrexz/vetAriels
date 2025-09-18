@@ -76,7 +76,7 @@ function GroomingHistory() {
                         <thead className="bg-gray-700">
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className={`py-3 px-4 ${header === "Mascota" ? "text-left" : "text-center"} border-b border-gray-600 font-medium text-gray-300`}>
+                                    <th key={header} className={`py-3 px-4 ${header === "Mascota" ? "text-left" : "text-center"} border border-gray-600 font-medium text-gray-300`}>
                                         {header}
                                     </th>
                                 ))}
@@ -84,21 +84,21 @@ function GroomingHistory() {
                         </thead>
                         <tbody>
                             {petsInQueueGroomingHistory.map((groomingData) => (
-                                <tr key={groomingData.id} className="hover:bg-gray-700 border-b border-gray-700 transition-colors">
-                                    <td className="py-2 px-4 text-center border-r border-gray-700 align-top pt-4 text-gray-200">
+                                <tr key={groomingData.id} className="hover:bg-gray-700 border-b border-gray-600 transition-colors">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4 text-gray-200">
                                         {groomingData.systemCode.slice(0, 9).toUpperCase()}
                                     </td>
-                                    <td className="py-2 px-4 text-center border-r border-gray-700 align-top pt-4 text-gray-200">{groomingData.dateOfAttention}</td>
-                                    <td className="py-2 px-4 text-center border-r border-gray-700 align-top pt-4 text-gray-200">{groomingData.timeOfAttention}</td>
-                                    <td className="py-2 px-4 text-center border-r border-gray-700 align-top pt-4 text-gray-200">{groomingData.timeOfAttention}</td>
-                                    <td className="py-2 px-4 text-center border-r border-gray-700 align-top pt-4 text-cyan-500 hover:underline cursor-pointer">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4 text-gray-200">{groomingData.dateOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4 text-gray-200">{groomingData.timeOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4 text-gray-200">{groomingData.timeOfAttention}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4 text-cyan-500 hover:underline cursor-pointer">
                                         {groomingData.ownerName}
                                     </td>
-                                    <td className="py-2 px-4 text-center border-r border-gray-700 align-top pt-4 text-cyan-500 hover:underline cursor-pointer">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4 text-cyan-500 hover:underline cursor-pointer">
                                         {groomingData.petData?.petName}
                                     </td>
-                                    <td className="py-2 px-4 text-center border-r border-gray-700 align-top pt-4 text-gray-200">{groomingData.petData?.breed}</td>
-                                    <td className="py-2 px-4 border-r border-gray-700 align-top pt-3 text-gray-200">
+                                    <td className="py-2 px-4 text-center border border-gray-600 align-top pt-4 text-gray-200">{groomingData.petData?.breed}</td>
+                                    <td className="py-2 px-4 border border-gray-600 align-top pt-3 text-gray-200">
                                         <ul className='list-disc pl-4'>
                                             {groomingData.productsAndServices.map((item) => (
                                                 <li key={item.provisionalId} >
@@ -107,7 +107,7 @@ function GroomingHistory() {
                                             ))}
                                         </ul>
                                     </td>
-                                    <td className="py-2 px-4 border-r border-gray-700 align-top pt-5 text-center">
+                                    <td className="py-2 px-4 border border-gray-600 align-top pt-5 text-center">
                                         <span
                                             className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(groomingData?.state)} rounded-full cursor-pointer whitespace-nowrap`}
                                             onClick={() => {
@@ -118,7 +118,7 @@ function GroomingHistory() {
                                             {groomingData.state}
                                         </span>
                                     </td>
-                                    <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-700">
+                                    <td className="py-10 px-4 text-center flex justify-center space-x-2 align-top pt-5 border-gray-600">
                                         {/* <PenIcon className="w-5 h-5 text-blue-500 cursor-pointer" /> */}
                                         <button
                                             aria-label="Regresar a la cola"

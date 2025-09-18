@@ -140,17 +140,17 @@ function ClinicQueue() {
                         <tbody>
                             {petsInQueueMedical.map((petInQueue, index) => (
                                 <tr key={petInQueue.id} className="hover:bg-gray-700 transition-colors duration-200">
-                                    <td className=" px-4 text-center border-b border-r border-gray-700">
+                                    <td className=" px-4 text-center border-b border-r border-gray-600">
                                         <input type="checkbox" className="form-checkbox bg-gray-900 border-gray-500 text-blue-500 rounded focus:ring-blue-500" />
                                     </td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-700">{index + 1}</td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-700">
+                                    <td className=" px-4 text-center border-b border-r border-gray-600">{index + 1}</td>
+                                    <td className=" px-4 text-center border-b border-r border-gray-600">
                                         <span className="block">{petInQueue?.dateOfAttention}</span>
                                         <span className="block text-gray-400 text-sm">
                                             {petInQueue?.timeOfAttention}
                                         </span>
                                     </td>
-                                    <td className=" px-2 border-b border-r border-gray-700">
+                                    <td className=" px-2 border-b border-r border-gray-600">
                                         <Link to={`/pets/pet/${petInQueue?.petData?.id}/update`}>
                                             <div>{petInQueue?.petData?.petName}</div>
                                             <div className="text-gray-400 text-sm">
@@ -162,7 +162,7 @@ function ClinicQueue() {
                                             </div>
                                         </Link>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-b border-r border-gray-700">
+                                    <td className="py-2 px-4 text-center border-b border-r border-gray-600">
                                         <Link
                                             className="text-cyan-500 hover:text-cyan-400 transition-colors cursor-pointer hover:underline"
                                             to={`/clients/client/${petInQueue?.petData?.ownerId}/update`}
@@ -170,8 +170,8 @@ function ClinicQueue() {
                                             {petInQueue?.petData?.ownerName}
                                         </Link>
                                     </td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-700">{petInQueue?.assignedDoctor}</td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-700">
+                                    <td className=" px-4 text-center border-b border-r border-gray-600">{petInQueue?.assignedDoctor}</td>
+                                    <td className=" px-4 text-center border-b border-r border-gray-600">
                                         <span
                                             className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(
                                                 petInQueue?.state
@@ -181,12 +181,12 @@ function ClinicQueue() {
                                             {petInQueue?.state}
                                         </span>
                                     </td>
-                                    <td className="py-8 px-8 text-center border-b border-r border-gray-700 ">
+                                    <td className="py-8 px-8 text-center border-b border-r border-gray-600 ">
                                         <div className="flex justify-center space-x-2 w-full">
                                             <Stethoscope className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-400 transition-colors" />
                                         </div>
                                     </td>
-                                    <td className="py-8 px-4 text-center border-b border-r border-gray-700 last:border-r-0">
+                                    <td className="py-8 px-4 text-center border-b border-r border-gray-600 last:border-r-0">
                                         <div className="flex justify-center space-x-2">
                                             <PenIcon
                                                 className="w-5 h-5 text-emerald-500 cursor-pointer hover:text-esmerald-600 transition-colors"

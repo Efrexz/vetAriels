@@ -156,20 +156,20 @@ function CreatePetForm() {
     ];
 
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-xl md:text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <PawIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
-                Mascotas
+        <section className="p-4 sm:p-6 bg-gray-950 text-gray-200">
+            <h1 className="text-xl sm:text-3xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
+                <PawIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Mascotas</span>
             </h1>
-            <div className="bg-white p-4 pb-10 rounded-t-lg shadow-lg">
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl bg-gray-800 border-2 border-cyan-500/30 mb-5">
                     <div>
-                        <label className="block text-gray-700 font-medium mb-2">Propietario*</label>
+                        <label className="block text-gray-300 font-medium mb-2">Propietario*</label>
                         <div
-                            className={`flex w-full border-gray-200 border rounded-md ${errors["owner"] ? "border-red-500" : "hover:border-blue-300 focus-within:border-blue-300"}`}
+                            className={`flex w-full rounded-md  ${errors["owner"] ? "border border-red-500" : "border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500"}`}
                         >
-                            <div className="flex items-center justify-center bg-gray-100 px-3">
-                                <RoleUserIcon className="w-5 h-5 text-gray-600" />
+                            <div className="flex items-center justify-center bg-gray-700 px-3">
+                                <RoleUserIcon className="w-5 h-5 text-gray-400" />
                             </div>
                             <ClientSearchInput mode={"pets"} />
                         </div>
@@ -180,11 +180,11 @@ function CreatePetForm() {
 
                     {formFields.map((field) => (
                         <div key={field.label}>
-                            <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full border-gray-200 border rounded-md overflow-hidden ${errors[field.id as keyof FormDataState] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}>
+                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
+                            <div className={`flex w-full rounded-md overflow-hidden ${errors[field.id as keyof FormDataState] ? 'border border-red-500' : 'border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-100 px-3">
-                                        <field.icon className="w-5 h-5 text-gray-600" />
+                                    <div className="flex items-center justify-center bg-gray-700 px-3">
+                                        <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
 
@@ -192,7 +192,7 @@ function CreatePetForm() {
                                     <select
                                         id={field.id}
                                         onChange={handleChange}
-                                        className={`w-full px-3 py-2 border-none focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                        className={`w-full bg-gray-800 p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
                                         disabled={field.disabled}
                                     >
                                         {field.options?.map((option, i) => (
@@ -205,11 +205,10 @@ function CreatePetForm() {
                                     <input
                                         type={field.type}
                                         id={field.id}
-                                        //para poder generar el hc porque no esta en el formData
                                         value={field.id === 'hc' ? historyCounter.current.toString() : (formData[field.id as keyof FormDataState] as string)}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className={`w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                        className={`w-full bg-gray-800 py-3 px-4 focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
                                     />
                                 )}
                             </div>
@@ -219,13 +218,12 @@ function CreatePetForm() {
                         </div>
                     ))}
                 </form>
+                <ActionButtons
+                    onCancel={() => navigate(-1)}
+                    onSubmit={createNewPet}
+                    submitText="CREAR NUEVA MASCOTA"
+                />
             </div>
-
-            <ActionButtons
-                onCancel={() => navigate(-1)}
-                onSubmit={createNewPet}
-                submitText="CREAR NUEVA MASCOTA"
-            />
         </section>
     )
 }

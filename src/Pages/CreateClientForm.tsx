@@ -121,20 +121,20 @@ function CreateClientForm() {
 
 
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-xl sm:text-2xl font-medium text-blue-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
-                Clientes
+        <section className="p-4 sm:p-6 bg-gray-950 text-gray-200">
+            <h1 className="text-xl sm:text-3xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
+                <UserGroupIcon className="w-8 h-8 sm:w-10 sm:h-10 text-cyan-400 mr-3 drop-shadow-lg" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Clientes</span>
             </h1>
-            <div className="bg-white p-4 pb-10 rounded-t-lg shadow-lg">
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl bg-gray-800 border-2 border-cyan-500/30 mb-5">
                     {formFields.map((field) => (
                         <div key={field.id}>
-                            <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full border-gray-200 border rounded-lg overflow-hidden ${errors[field.id] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300'}`}>
+                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
+                            <div className={`flex w-full rounded-md overflow-hidden ${errors[field.id] ? 'border border-red-500' : 'border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-100 px-3">
-                                        <field.icon className="w-5 h-5 text-gray-600" />
+                                    <div className="flex items-center justify-center bg-gray-700 px-3">
+                                        <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
                                 {field.type === 'select' ? (
@@ -142,7 +142,7 @@ function CreateClientForm() {
                                         id={field.id}
                                         value={formData[field.id]}
                                         onChange={handleChange}
-                                        className={"w-full px-3 py-2 border-none focus:outline-none focus:ring-0"}
+                                        className={`w-full bg-gray-800 p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
                                     >
                                         {field.options?.map((option) => (
                                             <option key={option} value={option}>{option}</option>
@@ -154,7 +154,8 @@ function CreateClientForm() {
                                         id={field.id}
                                         value={formData[field.id]}
                                         onChange={handleChange}
-                                        className="w-full py-2 px-4 focus:outline-none focus:ring-0"
+                                        placeholder={field.placeholder}
+                                        className={`w-full bg-gray-800 py-3 px-4 focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
                                     />
                                 )}
                             </div>
@@ -162,18 +163,17 @@ function CreateClientForm() {
                                 <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
                             )}
                             {field.helperText && (
-                                <p className="text-sm text-gray-600 mt-1">{field.helperText}</p>
+                                <p className="text-sm text-gray-500 mt-1">{field.helperText}</p>
                             )}
                         </div>
                     ))}
                 </form>
+                <ActionButtons
+                    onCancel={() => navigate(-1)}
+                    onSubmit={createNewClient}
+                    submitText="CREAR NUEVO CLIENTE"
+                />
             </div>
-
-            <ActionButtons
-                onCancel={() => navigate(-1)}
-                onSubmit={createNewClient}
-                submitText="CREAR NUEVO CLIENTE"
-            />
         </section>
     )
 }

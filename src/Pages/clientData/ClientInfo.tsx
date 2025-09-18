@@ -34,20 +34,20 @@ function ClientInfo() {
     }
 
     return (
-        <div className="w-full max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto custom-scrollbar mt-3">
-            <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-6 border-b-2 border-gray-100 pb-5">
-                <h1 className="text-2xl font-semibold text-gray-800 text-center lg:text-left">
-                    Información del Cliente
+        <main className="p-4 sm:p-6 bg-gray-950 text-gray-200">
+            <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-6 border-b border-cyan-500 pb-5">
+                <h1 className="text-xl sm:text-3xl font-medium text-cyan-500">
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Información del Cliente</span>
                 </h1>
                 <HorizontalMenu mode="clients" />
             </div>
 
-            <div className="flex flex-col lg:flex-row bg-white border border-gray-100 shadow-lg rounded-lg overflow-hidden">
-                <div className="w-full lg:w-[200px] p-6 bg-gray-100 flex flex-col items-center h-auto">
-                    <div className="w-32 h-32 bg-gray-300 rounded-full flex items-center justify-center mb-4">
-                        <RoleUserIcon className="w-16 h-16 text-gray-500" />
+            <div className="flex flex-col lg:flex-row bg-gray-800 border border-gray-700 shadow-lg rounded-lg overflow-hidden">
+                <div className="w-full md:w-1/5 p-6 bg-gray-700 flex flex-col items-center h-auto">
+                    <div className="w-32 h-32 bg-gray-600 rounded-full flex items-center justify-center mb-4">
+                        <RoleUserIcon className="w-16 h-16 text-cyan-400" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-800 text-center">
+                    <h2 className="text-xl font-semibold text-gray-200 text-center">
                         {individualClientData.firstName} {individualClientData.lastName}
                     </h2>
                     <p className="text-sm text-red-500 mt-1 flex items-center">
@@ -60,7 +60,7 @@ function ClientInfo() {
                     {section === 'purchase-history' && <PurchaseHistory />}
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
 
