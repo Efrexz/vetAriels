@@ -163,7 +163,7 @@ function Sales() {
                 <div className="flex flex-col md:flex-row items-center gap-4">
                     <ClientSearchInput mode={"sales"} />
                     <button
-                        className={`flex justify-center items-center text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] transition-all
+                        className={`flex justify-center items-center text-white font-bold py-3 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] transition-all
                             ${clientData ? "bg-green-600 hover:bg-green-700 shadow-md shadow-green-500/50" : "bg-gray-700 text-gray-400 cursor-not-allowed"}`}
                         type="button"
                         disabled={!clientData}
@@ -172,7 +172,7 @@ function Sales() {
                         <UserPenIcon className="w-5 h-5 mr-2" />
                     </button>
                     <button
-                        className="flex justify-center items-center text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] bg-purple-600 hover:bg-purple-700 transition-all shadow-md shadow-purple-500/50"
+                        className="flex justify-center items-center text-white font-bold py-3 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] bg-purple-600 hover:bg-purple-700 transition-all shadow-md shadow-purple-500/50"
                         type="button"
                         onClick={() => navigate("/clients/create")}
                     >

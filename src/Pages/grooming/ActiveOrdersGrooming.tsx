@@ -59,7 +59,7 @@ function ActiveOrdersGrooming() {
                         />
                     </div>
                     <button
-                        className="w-full md:w-auto border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
+                        className="w-full md:w-auto border border-gray-700 text-white bg-emerald-600 py-3 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
                         onClick={() => navigate("/grooming/order-creation/no_client")}
                     >
                         <PlusIcon className="w-5 h-5" />

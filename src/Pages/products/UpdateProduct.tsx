@@ -157,7 +157,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
 
 
     return (
-        <form className="pt-4 bg-gray-50 py-4 px-6 shadow-md rounded-t-md ">
+        <form className="pt-4 bg-gray-900 py-4 px-6 shadow-xl rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
                 {fields.map((field) => (
                     <div
@@ -170,13 +170,13 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                             4
                         )} lg:col-span-${field.columsNumber}`}
                     >
-                        <label className="block text-gray-500 font-medium mb-2" htmlFor={field.name}>
+                        <label className="block text-gray-300 font-medium mb-2" htmlFor={field.name}>
                             {field.label}
                         </label>
-                        <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden text-gray-600">
+                        <div className="flex w-full border border-gray-600 rounded-lg overflow-hidden focus-within:border-cyan-500 hover:border-cyan-500 transition-colors">
                             {field.icon && (
-                                <div className="flex items-center justify-center bg-gray-100 px-3">
-                                    <field.icon className="w-5 h-5 text-gray-600" />
+                                <div className="flex items-center justify-center bg-gray-700 px-3">
+                                    <field.icon className="w-5 h-5 text-gray-400" />
                                 </div>
                             )}
                             {field.type === "text" || field.type === "number" ? (
@@ -187,9 +187,9 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                     value={formData[field.name]}
                                     onChange={handleChange}
                                     disabled={field.disabled}
-                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
+                                    className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
                                         ? "border-red-500"
-                                        : "border-gray-200 hover:border-blue-300 focus:border-blue-300"
+                                        : ""
                                         }`}
                                 />
                             ) : (
@@ -198,9 +198,9 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name]
+                                    className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
                                         ? "border-red-500"
-                                        : "border-gray-200 hover:border-blue-300 focus:border-blue-300"
+                                        : ""
                                         }`}
                                 >
                                     {field?.options?.map((option, i) => (
@@ -212,7 +212,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                             )}
                         </div>
                         {field.tooltip && (
-                            <p className="text-xs text-gray-500 mt-1">{field.tooltip}</p>
+                            <p className="text-xs text-gray-400 mt-1">{field.tooltip}</p>
                         )}
                         {errors[field.name] && (
                             <p className="text-red-500 text-sm mt-1 whitespace-nowrap">{errors[field.name]}</p>
@@ -231,7 +231,6 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                 cancelText="REGRESAR AL LISTADO"
             />
         </form>
-
     );
 }
 

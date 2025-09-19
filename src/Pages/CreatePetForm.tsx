@@ -183,7 +183,7 @@ function CreatePetForm() {
                             <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
                             <div className={`flex w-full rounded-md overflow-hidden ${errors[field.id as keyof FormDataState] ? 'border border-red-500' : 'border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-700 px-3">
+                                    <div className="flex items-center justify-center bg-gray-700 px-3 py-3.5 rounded-l-lg border border-gray-600 border-r-1 ">
                                         <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
@@ -192,7 +192,7 @@ function CreatePetForm() {
                                     <select
                                         id={field.id}
                                         onChange={handleChange}
-                                        className={`w-full bg-gray-800 p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
+                                        className={`w-full bg-gray-700 p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
                                         disabled={field.disabled}
                                     >
                                         {field.options?.map((option, i) => (
@@ -208,7 +208,7 @@ function CreatePetForm() {
                                         value={field.id === 'hc' ? historyCounter.current.toString() : (formData[field.id as keyof FormDataState] as string)}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className={`w-full bg-gray-800 py-3 px-4 focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
+                                        className={`w-full bg-gray-700 py-3 px-4 focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-600 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
                                     />
                                 )}
                             </div>

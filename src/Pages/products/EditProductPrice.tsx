@@ -70,21 +70,22 @@ const formFields = [
 
 function EditProductPrice({ productData }: EditProductPriceProps) {
     console.log(productData);
+
     return (
-        <form className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md space-y-6">
+        <form className="pt-4 bg-gray-900 p-6 shadow-xl rounded-b-md space-y-6 border border-gray-700">
             {formFields.map((field) => (
                 <div key={field.label} className="space-y-1">
                     <label
                         htmlFor={field.id}
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-gray-300"
                     >
                         {field.label}
                     </label>
-                    <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden text-gray-600">
+                    <div className="flex w-full border border-gray-600 rounded-lg overflow-hidden text-gray-200 hover:border-cyan-500 focus-within:border-cyan-500 transition-colors">
                         {
                             field.icon && (
-                                <div className="flex items-center justify-center bg-gray-100 px-3">
-                                    <field.icon className="w-5 h-5 text-gray-600" />
+                                <div className="flex items-center justify-center bg-gray-800 px-3">
+                                    <field.icon className="w-5 h-5 text-gray-400" />
                                 </div>
                             )
                         }
@@ -92,19 +93,18 @@ function EditProductPrice({ productData }: EditProductPriceProps) {
                             type={field.type}
                             id={field.id}
                             disabled={field.disabled || false}
-                            className="w-full px-4 py-2 border rounded-r-lg hover:border-blue-300 focus-within:border-blue-300 focus:outline-none"
+                            className="w-full px-4 py-2 bg-gray-700 focus:outline-none"
                         />
                     </div>
                     {field.extraCheckbox && (
                         <label className="flex items-center space-x-2 mt-2">
                             <input
                                 type="checkbox"
-                                className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                className="h-4 w-4 text-cyan-500 border-gray-600 rounded bg-gray-700 focus:ring-cyan-500 transition-colors"
                             />
-                            <span className="text-sm text-gray-600">{field.extraCheckbox}</span>
+                            <span className="text-sm text-gray-400">{field.extraCheckbox}</span>
                         </label>
                     )}
-
                 </div>
             ))}
         </form>

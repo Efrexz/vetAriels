@@ -167,24 +167,26 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
     const tableHeaders = ["Código de Barras", "Producto", "Precio Unitario de Compra", "Precio Unitario de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
 
     return (
-        <section className="container mx-auto p-6 border-b-2 border-gray-100">
-            <header className="flex items-center mb-6 border-b-2 border-gray-100 pb-4">
-                <h1 className={`text-xl md:text-3xl font-medium flex items-center ${typeOfOperation === 'discharge' ? 'text-red-500' : 'text-green-500'}`}>
-                    {typeOfOperation === 'discharge' ? <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" /> : <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />}
-                    {typeOfOperation === 'discharge' ? 'Descargar Stock' : 'Cargar Stock'}
+        <section className="w-full p-6 bg-gray-950 text-gray-200">
+            <header className="flex items-center mb-6 border-b-2 border-cyan-500 pb-4">
+                <h1 className="text-xl md:text-3xl font-medium flex items-center">
+                    {typeOfOperation === 'discharge' ? <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-rose-500" /> : <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-emerald-500" />}
+                    <span className={typeOfOperation === 'discharge' ? 'text-rose-500' : 'text-emerald-500'}>
+                        {typeOfOperation === 'discharge' ? 'Descargar Stock' : 'Cargar Stock'}
+                    </span>
                 </h1>
             </header>
 
-            <div className="gap-4 mb-6 bg-gray-50 p-4 rounded-md ">
+            <div className="gap-4 mb-6 bg-gray-900 p-4 rounded-md border border-gray-700 shadow-xl">
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-700 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full  border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300 ${errors[field.id as keyof FormErrors] ? 'border-red-500' : 'border-gray-200'}`}>
+                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
+                            <div className={`flex w-full border rounded-lg overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500 ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-600'}`}>
                                 {field.type === 'select' ? (
                                     <select
                                         id={field.id}
-                                        className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0"
+                                        className="w-full px-3 py-2 bg-gray-700 text-gray-200 border-none focus:outline-none focus:ring-0"
                                         onChange={handleChange}
                                     >
                                         {field.options?.map((option, i) => (
@@ -199,12 +201,12 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                                         id={field.id}
                                         value={formData[field.id as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
+                                        className="w-full py-2 px-4 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-transparent"
                                     />
                                 )}
                             </div>
                             {errors[field.id as keyof FormErrors] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
+                                <p className="text-rose-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
                             )}
                         </div>
                     ))}
@@ -213,24 +215,24 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
 
             {isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />}
 
-            <div className="mb-6 bg-gray-50 p-4 rounded-md">
+            <div className="mb-6 bg-gray-900 p-4 rounded-md border border-gray-700 shadow-xl">
                 <div className='w-full flex flex-col justify-center mb-4'>
                     <label
                         htmlFor="search"
-                        className="block text-gray-700 mb-2 pl-2">
+                        className="block text-gray-300 mb-2 pl-2">
                         Buscar y agregar productos a la lista:
                     </label>
                     <ProductSearchInput addProductToTable={addProductToTable} mode={typeOfOperation} stockMode={true} />
-                    {errors.products && <p className="text-red-500 text-sm mt-1">{errors.products}</p>}
+                    {errors.products && <p className="text-rose-500 text-sm mt-1">{errors.products}</p>}
                 </div>
 
-                <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-                        <thead className="bg-gray-100">
+                <div className="overflow-x-auto border border-gray-700 rounded-lg mb-6">
+                    <table className="min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden">
+                        <thead className="bg-gray-700">
                             <tr>
                                 {
                                     tableHeaders.map((header) => (
-                                        <th key={header} className="px-6 py-3 border text-center text-sm font-medium text-gray-700">
+                                        <th key={header} className="px-6 py-3 border border-gray-600 text-center text-sm font-medium text-gray-300">
                                             {header}
                                         </th>
                                     ))
@@ -240,12 +242,12 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                         <tbody>
                             {
                                 selectedProducts.map((product) => (
-                                    <tr key={product.provisionalId} className="hover:bg-gray-100">
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.productName}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.salePrice}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">{product.salePrice}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border text-center text-sm text-gray-900">
+                                    <tr key={product.provisionalId} className="hover:bg-gray-700 text-md">
+                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-left text-gray-400">{product.productName}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">
                                             {<QuantityCounter
                                                 itemCount={product.quantity}
                                                 changeQuantity={(newQuantity) => {
@@ -259,10 +261,10 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                                                 }}
                                             />}
                                         </td>
-                                        <td className="py-6 px-4 text-center border">
+                                        <td className="py-6 px-4 text-center border border-gray-700">
                                             <div className="flex justify-center items-center h-full">
                                                 <TrashIcon
-                                                    className="w-4 h-4 text-red-500 hover:text-red-600 cursor-pointer"
+                                                    className="w-5 h-5 text-rose-500 hover:text-rose-600 cursor-pointer"
                                                     onClick={() => {
                                                         removeProduct(product.provisionalId)
                                                     }}
@@ -297,7 +299,7 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
 
             </div>
 
-            <div className="mt-6 p-4 bg-blue-100 text-blue-700 rounded-lg">
+            <div className="mt-6 p-4 bg-gray-800 text-gray-400 rounded-lg border border-gray-700">
                 <p>
                     Puedes usar esta herramienta para descargar el stock de productos directamente.
                 </p>

@@ -25,12 +25,14 @@ function ProductInfo() {
     }
 
     return (
-        <main className="w-full mx-auto p-6 bg-white">
-            <h2 className="text-xl sm:text-3xl font-medium mb-4 border-b-2 border-gray-200 pb-3 text-blue-400" >
-                {product.productName}
+        <main className="w-full mx-auto p-6 bg-gray-800 text-gray-200 rounded-md">
+            <h2 className="text-xl sm:text-3xl font-medium mb-4 border-b-2 border-gray-700 pb-3">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
+                    {product.productName}
+                </span>
             </h2>
             <HorizontalMenu mode={"products"} />
-            <section >
+            <section>
                 {section === 'update' && <UpdateProduct productData={product} />}
                 {section === 'prices' && <EditProductPrice productData={product} />}
             </section>

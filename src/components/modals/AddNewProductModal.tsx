@@ -147,33 +147,35 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
 
 
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50 overflow-y-scroll custom-scrollbar" >
-            <div className="bg-white py-4 px-8 rounded-md w-full h-auto max-w-5xl mt-6 mx-4 modal-appear">
-                <h2 className="text-xl font-bold text-blue-500 mb-2">Agregar nuevo producto</h2>
-                <form onSubmit={createProduct} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-b border-gray-300 pb-6 mb-4">
+        <div className="fixed inset-0 flex justify-center items-start bg-gray-950 bg-opacity-70 z-50 overflow-y-scroll" >
+            <div className="bg-gray-900 border border-gray-700 py-4 px-8 rounded-md w-full h-auto max-w-5xl mt-6 mx-4 modal-appear">
+                <h2 className="text-xl font-bold text-cyan-500 mb-2 border-b border-gray-700 pb-2">
+                    Agregar nuevo producto
+                </h2>
+                <form onSubmit={createProduct} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-b border-gray-700 pb-6 mb-4">
                     {formFields.map((field) => (
                         <div
                             key={field.name}
                             className={`${field.fullWidth ? 'lg:col-span-3 sm:col-span-2' : 'col-span-1'}`}
                         >
-                            <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">{field.label}</label>
                             {field.type === 'select' ? (
                                 <select
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus:border-blue-300 '} focus:outline-none`}
+                                    className={`border border-gray-600 rounded-md p-2 w-full bg-gray-700 text-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500 ${errors[field.name] ? 'border-red-500' : ''}`}
                                 >
                                     {field.options?.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
                                     ))}
                                 </select>
                             ) : (
-                                <div className="rounded-lg overflow-hidden">
-                                    <div className="flex w-full">
+                                <div>
+                                    <div className="flex w-full border border-gray-600 rounded-md focus-within:ring-1 focus-within:ring-cyan-500 hover:border-cyan-500 transition-colors">
                                         {field.icon && (
-                                            <div className="flex items-center justify-center bg-gray-100 px-3">
-                                                <field.icon className="w-5 h-5 text-gray-600" />
+                                            <div className="flex items-center justify-center bg-gray-700 px-3">
+                                                <field.icon className="w-5 h-5 text-gray-400" />
                                             </div>
                                         )}
                                         <input
@@ -182,7 +184,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                             placeholder={field.placeholder}
                                             value={formData[field.name]}
                                             onChange={handleChange}
-                                            className={`border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-1 focus:ring-blue-500 ${errors[field.name] ? 'border-red-500' : ''}`}
+                                            className={`p-2 w-full bg-gray-700 text-gray-200  focus:outline-none ${errors[field.name] ? 'border-red-500' : ''}`}
                                         />
                                     </div>
                                     {field.infoMessage && (

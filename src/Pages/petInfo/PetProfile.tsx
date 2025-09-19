@@ -177,7 +177,7 @@ function PetProfile({ petData }: PetProfileProps) {
                                         id={field.id}
                                         onChange={handleChange}
                                         value={formData[field.id as keyof FormDataType]}
-                                         className={`w-full p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent text-gray-100 bg-gray-700 `}
+                                        className={`w-full p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent text-gray-100 bg-gray-700 `}
                                     >
                                         {field.options?.map((option, i) => (
                                             <option key={i} value={option}>

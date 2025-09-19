@@ -176,7 +176,7 @@ function Products() {
                 />
             )
         }
-                        <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
                     <p className="text-gray-400 text-center md:text-left">
                         Página: 1 de 1 | Registros del 1 al {productsData.length} | Total{" "}
                         {productsData.length}

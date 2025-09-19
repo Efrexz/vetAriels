@@ -51,45 +51,45 @@ function OperationInfo({ typeOfOperation }: OperationInfoProps) {
 
 
     return (
-        <main className="w-full mx-auto p-6 bg-white ">
-            <h2 className={`text-xl md:text-3xl font-medium mb-4 border-b-2 border-gray-200 pb-3 flex items-center gap-2 ${isRestock ? "text-green-400" : "text-red-400"}`}>
+        <main className="w-full mx-auto p-6 bg-gray-950 text-gray-200">
+            <h2 className={`text-xl md:text-3xl font-medium mb-4 border-b-2 border-cyan-500 pb-3 flex items-center gap-2`}>
                 <span className="flex items-center gap-2">
                     {isRestock ? (
                         <>
-                        <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9" />
-                        <span>Carga de stock #{operationId}</span>
+                        <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 text-emerald-500" />
+                        <span className="text-emerald-500">Carga de stock #{operationId}</span>
                         </>
                     ) : (
                         <>
-                        <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9" />
-                        <span>Descarga de stock #{operationId}</span>
+                        <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 text-rose-600" />
+                        <span className="text-rose-600">Descarga de stock #{operationId}</span>
                         </>
                     )}
                 </span>
             </h2>
             <HorizontalMenu mode={typeOfOperation} />
-            <section >
+            <section>
                 {section === 'detail' && <OperationDetail typeOfOperation={typeOfOperation} operationData={operationData} tableCategories={tableCategories} />}
                 {section === 'edit' && <EditOperation typeOfOperation={typeOfOperation} operationData={operationData} tableCategories={tableCategories} />}
-                <div className='flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t border-gray-200 bg-gray-50 shadow-md text-sm'>
+                <div className='flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t border-gray-700 bg-gray-900 shadow-xl text-sm'>
                     <button
-                        className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 flex items-center gap-3 w-full sm:w-auto"
+                        className="bg-gray-800 border border-gray-700 text-gray-400 py-2 px-4 rounded-lg hover:bg-gray-700 flex items-center gap-3 w-full sm:w-auto transition-colors"
                         onClick={() => navigate(isRestock ? "/charges" : "/discharges")}
                     >
-                        <ReturnIcon className="w-5 h-5 text-gray-700" />
+                        <ReturnIcon className="w-5 h-5 text-gray-400" />
                         REGRESAR AL LISTADO DE {isRestock ? "CARGAS" : "DESCARGAS"}
                     </button>
-                    <button className={`${section === "detail" ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"} text-white py-2 px-4 rounded hover:bg-opacity-80 flex items-center gap-3 w-full sm:w-auto`}
+                    <button className={`${section === "detail" ? "bg-cyan-600 hover:bg-cyan-700" : "bg-emerald-600 hover:bg-emerald-700"} text-white py-2 px-4 rounded-lg hover:bg-opacity-80 flex items-center gap-3 w-full sm:w-auto transition-colors`}
                     >
                         <FileContract className="w-5 h-5 text-white" />
                         {section === "detail" ? "IMPRIMIR" : "GUARDAR CAMBIOS"}
                     </button>
                 </div>
             </section>
-            <div className="bg-orange-50 text-orange-800 p-4 rounded-md mt-6 flex items-start border-l-4 border-orange-400">
+            <div className="bg-gray-800 text-gray-400 p-4 rounded-md mt-6 flex items-start border-l-4 border-yellow-500 bg-yellow-900/40">
                 <Lightbulb className="w-5 h-5 mr-2" />
                 <p className="text-sm">
-                Por seguridad, los productos y cantidades de esta {isRestock ? "carga" : "descarga"} no se pueden editar. Al hacerlo se corre el riesgo de fallas en el stock. Si deseas corregir un producto por error, puedes hacer una rectificación desde la herramienta de {isRestock ? "descargar stock" : "cargar stock"}.
+                    Por seguridad, los productos y cantidades de esta {isRestock ? "carga" : "descarga"} no se pueden editar. Al hacerlo se corre el riesgo de fallas en el stock. Si deseas corregir un producto por error, puedes hacer una rectificación desde la herramienta de {isRestock ? "descargar stock" : "cargar stock"}.
                 </p>
             </div>
         </main>
