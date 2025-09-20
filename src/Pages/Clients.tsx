@@ -104,7 +104,7 @@ function Clients() {
                     </table>
                 </div>
                 {
-                    isDeleteModalOpen && (
+                    isDeleteModalOpen && clientDataToDelete && (
                         <DeleteModal
                             elementToDelete={clientDataToDelete}
                             onClose={() => setIsDeleteModalOpen(false)}

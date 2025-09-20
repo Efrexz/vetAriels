@@ -95,7 +95,7 @@ function ClinicQueue() {
                             />
                         </div>
                         <button
-                             className="w-full sm:w-auto border border-gray-700 text-white bg-emerald-600 py-3 px-4 rounded-xl hover:bg-emerald-700 flex items-center gap-2 justify-center whitespace-nowrap transition-colors"
+                            className="w-full sm:w-auto border border-gray-700 text-white bg-emerald-600 py-3 px-4 rounded-xl hover:bg-emerald-700 flex items-center gap-2 justify-center whitespace-nowrap transition-colors"
                             onClick={() => navigate("/sales/client/no_client")}
                         >
                             <PlusIcon className="w-5 h-5" />
@@ -204,13 +204,13 @@ function ClinicQueue() {
                     </table>
                 </div>
                 {/* Modals */}
-                {isEditQueueModalOpen && (
+                {isEditQueueModalOpen && queueDataToEdit && (
                     <EditQueuePatientModal
                         queueData={queueDataToEdit}
                         onClose={() => setIsEditQueueModalOpen(false)}
                     />
                 )}
-                {isConfirmActionModalOpen && (
+                {isConfirmActionModalOpen && patientToDelete && (
                     <ConfirmActionModal
                         elementData={patientToDelete}
                         typeOfOperation="medical"

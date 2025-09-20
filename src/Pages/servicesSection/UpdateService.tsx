@@ -102,17 +102,17 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
     ];
 
     return (
-        <form className="pt-4 bg-gray-50 p-6 shadow-md rounded-t-md ">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <form className="pt-4 bg-gray-900 p-6 shadow-xl rounded-t-lg border-2 border-gray-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-2 border-b border-gray-700 pb-6">
                 {fields.map((field) => (
                     <div
                         key={field.name}
                         className={`mb-4 ${field.name === 'serviceName'
                             ? 'col-span-1 sm:col-span-2 md:col-span-4'
                             : 'col-span-1 sm:col-span-1 md:col-span-2'
-                            }`}
+                        }`}
                     >
-                        <label className="block text-gray-500 font-medium mb-2" htmlFor={field.name}>
+                        <label className="block text-gray-300 font-medium mb-2" htmlFor={field.name}>
                             {field.label}
                         </label>
                         {field.type === 'text' ? (
@@ -122,7 +122,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                                 name={field.name}
                                 value={formData.serviceName}
                                 onChange={handleChange}
-                                className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors.serviceName ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'}`}
+                                className={`w-full px-4 py-2 border rounded-md focus:outline-none bg-gray-700 text-gray-200 ${errors.serviceName ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'}`}
                             />
                         ) : (
                             <select
@@ -130,7 +130,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                                 name={field.name}
                                 value={formData[field.name as keyof Omit<FormDataState, 'serviceName'>]}
                                 onChange={handleChange}
-                                className={`w-full px-4 py-2 border rounded-md focus:outline-none ${errors[field.name as keyof Omit<FormDataState, 'serviceName'>] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus:border-blue-300'}`}
+                                className={`w-full px-4 py-2 border rounded-md focus:outline-none bg-gray-700 text-gray-200 ${errors[field.name as keyof Omit<FormDataState, 'serviceName'>] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'}`}
                             >
                                 {field?.options?.map((option, i) => (
                                     <option key={i} value={option}>
@@ -140,7 +140,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                             </select>
                         )}
                         {errors[field.name as keyof FormErrors] && (
-                            <p className="text-red-500 text-sm mt-1">{errors[field.name as keyof FormErrors]}</p>
+                            <p className="text-rose-500 text-sm mt-1">{errors[field.name as keyof FormErrors]}</p>
                         )}
                     </div>
                 ))}

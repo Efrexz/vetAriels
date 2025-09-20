@@ -52,7 +52,7 @@ function OperationInfo({ typeOfOperation }: OperationInfoProps) {
 
     return (
         <main className="w-full mx-auto p-6 bg-gray-950 text-gray-200">
-            <h2 className={`text-xl md:text-3xl font-medium mb-4 border-b-2 border-cyan-500 pb-3 flex items-center gap-2`}>
+            <h2 className={`text-xl md:text-3xl font-medium mb-4 border-b-2 border-gray-700 pb-3 flex items-center gap-2`}>
                 <span className="flex items-center gap-2">
                     {isRestock ? (
                         <>

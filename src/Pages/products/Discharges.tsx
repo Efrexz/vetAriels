@@ -32,16 +32,16 @@ function Discharges() {
 
     return (
         <section className="w-full p-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl md:text-3xl items-center font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex">
+            <h1 className="text-xl md:text-3xl items-center font-medium mb-4 pb-4 border-b-2 border-gray-700 flex">
                 <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-rose-600" />
                 <span className="text-rose-600">
                     Descargas de stock
                 </span>
             </h1>
 
-            <div className='flex gap-2 px-4 border-b-2 border-cyan-500 mb-4 pb-4'>
-                <button className='bg-cyan-600 text-white rounded-lg px-4 py-2 border-t border-r border-l border-gray-700 mb-2'>Descargas Emitidas</button>
-                <button className='text-gray-400 rounded-lg px-4 py-2  hover:bg-gray-800 hover:text-cyan-400 transition-colors mb-2'>Por Items</button>
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6 border-b border-cyan-500 pb-4">
+                <button className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-emerald-500 text-white py-3 px-6 rounded-xl font-bold hover:from-cyan-400 hover:to-emerald-400 transition-all shadow-md">Descargas Emitidas</button>
+                <button className="w-full sm:w-auto bg-gray-800 text-cyan-400 py-3 px-6 rounded-xl font-bold border border-cyan-500 hover:bg-cyan-500 hover:text-white transition-all shadow-md">Por items</button>
             </div>
 
             <div className="bg-gray-900 rounded-lg shadow-xl p-3 mb-6 border border-gray-700">

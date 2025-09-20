@@ -96,7 +96,10 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
                         key={tab.name}
                         to={`${baseUrl[mode]}/${tab.url}`}
                         className={`shrink-0 rounded-lg px-4 py-2 text-sm font-bold transition-all
-                        ${selectedTab === tab.name ? "bg-cyan-500 text-white" : "text-cyan-400 hover:text-cyan-500 hover:bg-gray-700"}`}
+                            ${selectedTab === tab.name 
+                                ? "bg-gradient-to-r from-cyan-500 to-emerald-500 text-white shadow-md" 
+                                : "bg-gray-800 text-cyan-400 border border-cyan-500 hover:bg-cyan-500 hover:text-white"
+                            }`}
                         onClick={() => handleTabClick(tab.name)}
                     >
                         {tab.name}

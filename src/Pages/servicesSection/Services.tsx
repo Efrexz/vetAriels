@@ -47,27 +47,27 @@ function Services() {
     };
 
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-xl sm:text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <KitMedical className="text-blue-500 w-6 sm:w-9 h-6 sm:h-9 mr-2" />
-                Servicios
+        <section className="w-full p-6 bg-gray-950 text-gray-200">
+            <h1 className="text-xl sm:text-3xl font-medium text-gray-200 mb-4 pb-4 border-b-2 border-cyan-500 flex bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
+                <KitMedical className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Servicios</span>
             </h1>
-            <div className="bg-white rounded-lg shadow p-3 mb-6">
-                <div className="p-4 rounded-lg mb-2">
+            <div className="bg-gray-900 rounded-lg shadow-xl p-3 mb-6">
+                <div className="p-4 rounded-lg mb-6 bg-gray-800 border-2 border-cyan-500/50">
                     <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-2 mb-4">
-                        <div className="flex w-full md:w-[350px] border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
-                            <div className="flex items-center justify-center bg-gray-100 px-3">
-                                <SearchIcon className="w-5 h-5 text-gray-600" />
+                        <div className="flex w-full md:w-[350px] border border-gray-600 rounded-lg overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500">
+                            <div className="flex items-center justify-center bg-gray-700 px-3">
+                                <SearchIcon className="w-5 h-5 text-gray-400" />
                             </div>
                             <input
                                 type="text"
                                 placeholder="Buscar..."
-                                className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
+                                className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                             />
                         </div>
                         <button
-                            className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 w-full md:w-auto"
+                            className="border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-lg hover:bg-emerald-700 flex items-center gap-2 w-full md:w-auto transition-colors"
                             onClick={() => setIsAddModalOpen(true)}
                         >
                             <PlusIcon className="w-5 h-5" />
@@ -80,7 +80,7 @@ function Services() {
                                 <select
                                     name={filter.type}
                                     onChange={handleFilterChange}
-                                    className="mt-1.5 w-full rounded-lg hover:border-blue-300 focus-within:border-blue-300 border-2 text-gray-700 sm:text-sm p-2"
+                                    className="mt-1.5 w-full rounded-lg hover:border-cyan-500 focus-within:border-cyan-500 border border-gray-600 bg-gray-700 text-gray-200 sm:text-sm p-2"
                                 >
                                     <option value="">{filter.label}</option>
                                     {filter.options.map((opt, idx) => (
@@ -91,12 +91,12 @@ function Services() {
                         ))}
                     </div>
                 </div>
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white border rounded-lg">
-                        <thead className="bg-gray-100">
+                <div className="overflow-x-auto border border-gray-700 rounded-lg">
+                    <table className="min-w-full bg-gray-800">
+                        <thead className="bg-gray-700">
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 text-center border-2 font-medium text-gray-700">
+                                    <th key={header} className="py-2 px-4 text-center border-2 border-gray-600 font-medium text-gray-300">
                                         {header}
                                     </th>
                                 ))}
@@ -104,31 +104,31 @@ function Services() {
                         </thead>
                         <tbody>
                             {filteredServices.map((service) => (
-                                <tr key={service.id} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 text-center border-2">{service?.id.slice(0, 8).toUpperCase()}</td>
-                                    <td className="py-2 px-4 text-center border-2">
+                                <tr key={service.id} className="hover:bg-gray-700 transition-colors">
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{service?.id.slice(0, 8).toUpperCase()}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">
                                         <span className="block">{service?.registrationDate}</span>
-                                        <span className="block text-sm text-gray-600">{service?.registrationTime}</span>
+                                        <span className="block text-sm text-gray-500">{service?.registrationTime}</span>
                                     </td>
-                                    <td className="py-2 px-4 text-center border-2">{service?.serviceName}</td>
-                                    <td className="py-2 px-4 text-center border-2">{service?.line}</td>
-                                    <td className="py-2 px-4 text-center border-2">{service?.category}</td>
-                                    <td className="py-2 px-4 text-center border-2">{service?.salePrice}</td>
-                                    <td className="py-2 px-4 text-center border-2 ">
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{service?.serviceName}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{service?.line}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{service?.category}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600 text-gray-400">{service?.salePrice}</td>
+                                    <td className="py-2 px-4 text-center border border-gray-600">
                                         <span
-                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${service?.status ? "bg-green-500" : "bg-red-500"}`}
+                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${service?.status ? "bg-emerald-500" : "bg-rose-500"}`}
                                         />
                                     </td>
-                                    <td className="py-8 px-4 text-center border">
+                                    <td className="py-8 px-4 text-center border border-gray-600">
                                         <div className="flex justify-center items-center h-full space-x-2">
                                             <button aria-label={`Editar ${service.serviceName}`} onClick={() => navigate(`/service/${service.id}/update`)}>
-                                                <PenIcon className="w-4 h-4 text-green-500 cursor-pointer" />
+                                                <PenIcon className="w-4 h-4 text-cyan-500 cursor-pointer hover:text-cyan-400 transition-colors" />
                                             </button>
                                             <button aria-label={`Eliminar ${service.serviceName}`} onClick={() => {
                                                 setIsDeleteModalOpen(true);
                                                 setServiceToDelete(service);
                                             }}>
-                                                <TrashIcon className="w-4 h-4 text-red-500 cursor-pointer" />
+                                                <TrashIcon className="w-4 h-4 text-rose-500 cursor-pointer hover:text-rose-400 transition-colors" />
                                             </button>
                                         </div>
                                     </td>
@@ -137,14 +137,14 @@ function Services() {
                         </tbody>
                     </table>
                     {
-                        isAddModalOpen  && (
+                        isAddModalOpen && (
                             <AddNewServiceModal
                                 onClose={() => setIsAddModalOpen(false)}
                             />
                         )
                     }
                     {
-                        isDeleteModalOpen && serviceToDelete &&(
+                        isDeleteModalOpen && serviceToDelete && (
                             <DeleteModal
                                 onClose={() => setIsDeleteModalOpen(false)}
                                 elementToDelete={serviceToDelete}
@@ -153,17 +153,18 @@ function Services() {
                         )
                     }
                 </div>
+
                 <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                    <p className="text-gray-600 text-center md:text-left">
+                    <p className="text-gray-400 text-center md:text-left">
                         Página: 1 de 1 | Registros del 1 al {servicesData.length} | Total{" "}
                         {servicesData.length}
                     </p>
                     <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-2 px-4 border rounded">Primera</button>
-                        <button className="py-2 px-4 border rounded">Anterior</button>
-                        <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
-                        <button className="py-2 px-4 border rounded">Siguiente</button>
-                        <button className="py-2 px-4 border rounded">Última</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
+                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
                     </div>
                 </div>
             </div>

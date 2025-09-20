@@ -47,11 +47,11 @@ function ActiveOrders() {
                     </div>
                 </div>
                 <div className="overflow-x-auto border border-gray-700 rounded-xl shadow-inner">
-                    <table className="min-w-full bg-gray-900">
-                        <thead className='bg-gray-800 border-b border-gray-700'>
+                    <table className="min-w-full bg-gray-800">
+                        <thead className='bg-gray-700 border-b border-gray-600'>
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-3 text-center text-sm font-bold text-gray-300 uppercase tracking-wider px-4 border-r border-gray-700">
+                                    <th key={header} className="py-3 text-center text-sm font-bold text-gray-300 uppercase tracking-wider px-4 border-r border-gray-600">
                                         {header}
                                     </th>
                                 ))}

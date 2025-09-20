@@ -25,7 +25,7 @@ function ProductInfo() {
     }
 
     return (
-        <main className="w-full mx-auto p-6 bg-gray-800 text-gray-200 rounded-md">
+        <section className="w-full mx-auto p-6 bg-gray-800 text-gray-200 rounded-md">
             <h2 className="text-xl sm:text-3xl font-medium mb-4 border-b-2 border-gray-700 pb-3">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
                     {product.productName}
@@ -36,7 +36,7 @@ function ProductInfo() {
                 {section === 'update' && <UpdateProduct productData={product} />}
                 {section === 'prices' && <EditProductPrice productData={product} />}
             </section>
-        </main>
+        </section>
     );
 }
 

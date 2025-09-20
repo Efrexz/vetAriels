@@ -109,32 +109,32 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
     }
 
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-800 bg-opacity-50 z-50 overflow-y-scroll custom-scrollbar">
-            <div className="bg-white p-8 rounded-md w-full h-auto max-w-5xl mt-8 mx-4  modal-appear">
-                <h2 className="text-xl font-bold text-blue-500 mb-4">Agregar nuevo servicio</h2>
-                <form className="grid  gird-cols-1 sm:grid-cols-4 gap-4 border-b border-gray-300 pb-6 mb-4">
+        <div className="fixed inset-0 flex justify-center items-start bg-gray-950 bg-opacity-75 z-50 overflow-y-scroll custom-scrollbar">
+            <div className="bg-gray-900 p-8 rounded-lg border border-gray-700 w-full h-auto max-w-5xl mt-8 mx-4 shadow-2xl modal-appear">
+                <h2 className="text-xl font-bold text-cyan-500 border-b border-gray-700 pb-2 mb-4">Agregar nuevo servicio</h2>
+                <form className="grid gird-cols-1 sm:grid-cols-4 gap-4 border-b border-gray-700 pb-6 mb-4">
                     {formFields.map((field, index) => (
                         <div
                             key={index}
                             className={`${field.fullWidth ? 'sm:col-span-4' : field.smallWidth ? 'sm:col-span-1' : 'sm:col-span-2'}`}
                         >
-                            <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">{field.label}</label>
                             {field.type === 'select' ? (
                                 <select
                                     name={field.name}
                                     value={formData[field.name as keyof FormDataState]}
                                     onChange={handleChange}
-                                    className={`border border-gray-300 rounded-md p-2 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none'}`}
+                                    className={`border rounded-lg p-2 w-full bg-gray-800 text-gray-200 ${errors[field.name] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500 focus:outline-none'}`}
                                 >
                                     {field.options?.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
                                     ))}
                                 </select>
                             ) : (
-                                <div className="flex w-full rounded-lg overflow-hidden ">
+                                <div className="flex w-full rounded-lg border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500">
                                     {field.icon && (
-                                        <div className="flex items-center justify-center bg-gray-100 px-3">
-                                            <field.icon className="w-5 h-5 text-gray-600" />
+                                        <div className="flex items-center justify-center bg-gray-800 px-3">
+                                            <field.icon className="w-5 h-5 text-gray-400" />
                                         </div>
                                     )}
                                     <input
@@ -143,12 +143,12 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
                                         placeholder={field.placeholder}
                                         value={formData[field.name as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className={`border border-gray-300 rounded-r-lg py-2 px-4 w-full ${errors[field.name] ? 'border-red-500' : 'border-gray-200 hover:border-blue-300 focus-within:border-blue-300 focus:outline-none'}`}
+                                        className={`py-2 px-4 w-full bg-gray-800 text-gray-200 focus:outline-none focus:ring-0 focus:border-transparent border-l border-gray-600 ${errors[field.name] ? 'border border-rose-500' : ''}`}
                                     />
                                 </div>
                             )}
                             {errors[field.name] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                                <p className="text-rose-500 text-sm mt-1">{errors[field.name]}</p>
                             )}
                         </div>
                     ))}
@@ -161,7 +161,7 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
                     mode="modal"
                 />
             </div>
-        </div >
+        </div>
     )
 }
 
