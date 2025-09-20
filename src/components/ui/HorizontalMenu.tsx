@@ -68,8 +68,8 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
         ],
         clinics: [
             { name: 'Datos Generales', url: "subsydiary" },
-            { name: 'Ajustes', url: "subsydiary-settings" },
-            { name: 'Logo', url: "gallery" },
+            // { name: 'Ajustes', url: "subsydiary-settings" },
+            // { name: 'Logo', url: "gallery" },
         ],
     };
 

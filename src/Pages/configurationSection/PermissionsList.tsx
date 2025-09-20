@@ -137,22 +137,22 @@ function PermissionsList() {
     ];
 
     return (
-        <div className="p-6 bg-gray-100 ">
-            <h1 className="text-2xl sm:text-3xl font-medium items-center text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <KeyIcon className="w-9 h-9 mr-2" />
-                Permisos
+        <div className="p-6 bg-gray-950 text-gray-200">
+            <h1 className="text-2xl sm:text-3xl font-medium items-center text-gray-500 mb-4 pb-4 border-b border-cyan-500 flex">
+                <KeyIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Permisos</span>
             </h1>
-            <div className="w-full mx-auto bg-white shadow-md rounded-lg p-6">
+            <div className="w-full mx-auto bg-gray-900 shadow-xl rounded-lg p-6">
                 {sections.map((section, index) => (
-                    <div key={index} className="mb-3 border-b border-gray-200 pb-3">
-                        <h2 className="text-xl font-semibold text-gray-800 mb-3">{section.title}</h2>
+                    <div key={index} className="mb-3 border-b border-gray-700 pb-3">
+                        <h2 className="text-xl font-semibold text-gray-200 mb-3">{section.title}</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {section.actions.map((action, i) => (
                                 <div
                                     key={i}
-                                    className="flex justify-between items-center bg-gray-50 p-3 rounded-md shadow-sm border"
+                                    className="flex justify-between items-center bg-gray-800 p-3 rounded-md shadow-md border border-gray-700"
                                 >
-                                    <span className="text-gray-700">{action}</span>
+                                    <span className="text-gray-400">{action}</span>
                                     <ToggleSwitchButton />
                                 </div>
                             ))}

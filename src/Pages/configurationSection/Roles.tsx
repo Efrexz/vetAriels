@@ -12,44 +12,44 @@ function Roles() {
     const navigate = useNavigate();
 
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-2xl font-ligth text-gray-500 mb-4 pb-4 border-b-2 border-gray-100 flex items-center">
-                <RoleUserIcon className="w-6 h-6 mr-2" />
-                Roles
+        <section className="w-full p-6 bg-gray-950 text-gray-200">
+            <h1 className="text-xl sm:text-3xl font-medium mb-4 pb-4 border-b border-cyan-500 flex items-center">
+                <RoleUserIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Roles</span>
             </h1>
-            <div className="bg-white rounded-lg shadow p-3 mb-6">
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
+            <div className="bg-gray-900 rounded-lg shadow-xl p-3 mb-6">
+                <div className="overflow-x-auto border border-cyan-500/30 rounded-lg">
                     <button
-                        className="border border-gray-300 text-white bg-green-500 py-2 px-4 rounded hover:bg-green-600 flex items-center gap-2 m-3"
+                        className="border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-lg hover:bg-emerald-700 flex items-center gap-2 m-3 transition-colors"
                         onClick={() => navigate("/config/roles/create")}
                     >
                         <PlusIcon className="w-5 h-5" />
                         CREAR NUEVO ROL
                     </button>
                     <div className="overflow-x-auto">
-                        <table className="w-full bg-white shadow-md overflow-hidden">
-                            <thead className="bg-gray-100">
+                        <table className="w-full bg-gray-900">
+                            <thead className="bg-gray-800">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 border">Nombre</th>
-                                    <th className="px-6 py-3 text-center text-sm font-medium text-gray-700 border ">Opciones</th>
+                                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 border-b border-r border-gray-700">Nombre</th>
+                                    <th className="px-6 py-3 text-center text-sm font-medium text-gray-300 border-b border-r border-gray-700">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {roles.map((role) => (
-                                    <tr key={role.id} className="border hover:bg-gray-50">
-                                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-700 border">{role.name}</td>
-                                        <td className="py-3 text-sm font-medium border text-center">
+                                    <tr key={role.id} className="border-b border-gray-700 hover:bg-gray-800 transition-colors">
+                                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-300 border-r border-gray-700">{role.name}</td>
+                                        <td className="py-3 text-sm font-medium border-r border-gray-700 text-center">
                                             <button
-                                                className="text-yellow-500 hover:text-yellow-600 mx-2"
+                                                className="text-amber-500 hover:text-amber-400 mx-2 transition-colors"
                                                 onClick={() => navigate(`/config/role/permissions/${role.name}`)}
                                             >
                                                 <KeyIcon className="w-4 h-4" />
                                             </button>
-                                            <button className="text-green-500 hover:text-green-600 mx-2">
+                                            <button className="text-cyan-500 hover:text-cyan-600 mx-2 transition-colors">
                                                 <EditIcon className="w-4 h-4" />
                                             </button>
                                             <button
-                                                className="text-red-500 hover:text-red-600 mx-2"
+                                                className="text-rose-500 hover:text-rose-600 mx-2 transition-colors"
                                                 onClick={() => removeRole(role.id)}
                                             >
                                                 <TrashIcon className="w-4 h-4" />
@@ -61,7 +61,7 @@ function Roles() {
                         </table>
                     </div>
 
-                    <div className="mt-6 p-4 bg-blue-100 text-blue-700 rounded-lg m-3">
+                    <div className="mt-6 p-4 bg-cyan-900 text-cyan-200 rounded-lg m-3">
                         <p>
                             Los roles equivalen a los puestos de trabajo dentro de la clínica. Cada usuario del sistema debe asumir un rol. Cada rol debe tener permisos de acceso a las diferentes áreas del sistema. Por ejemplo: si creamos un usuario llamado Pedro Cavas y le asignamos el rol de "recepcionista", los permisos de Pedro dependerán del rol recepcionista. Otro usuario llamado Juan también podría asumir el rol de recepcionista y tendría los mismos permisos que Pedro.
                         </p>

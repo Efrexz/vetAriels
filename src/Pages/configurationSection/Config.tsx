@@ -75,14 +75,14 @@ function Config() {
     }
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="flex justify-between items-center mb-6">
+        <div className="w-full p-6 bg-gray-950 text-gray-200">
+            <div className="flex justify-between items-center mb-6 border-b border-cyan-500 pb-4">
                 <HorizontalMenu mode="clinics" />
             </div>
-            <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-t-lg overflow-hidden">
-                <div className="w-full md:w-1/3 p-6 bg-gray-100 flex flex-col items-center justify-center">
-                    <div className="w-32 h-32 bg-gray-300 rounded-full flex items-center justify-center mb-4">
-                        <RoleUserIcon className="w-16 h-16 text-gray-500" />
+            <div className="flex flex-col md:flex-row bg-gray-900 shadow-xl rounded-t-lg overflow-hidden border border-gray-700">
+                <div className="w-full md:w-1/3 p-6 bg-gray-800 flex flex-col items-center justify-center border-r border-gray-700">
+                    <div className="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                        <RoleUserIcon className="w-16 h-16 text-gray-400" />
                     </div>
                 </div>
 
@@ -90,18 +90,18 @@ function Config() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {formFields.map((field, index) => (
                             <div key={index}>
-                                <label className="block text-gray-600">{field.label}</label>
-                                <div className="flex items-center ">
+                                <label className="block text-gray-400">{field.label}</label>
+                                <div className="flex items-center">
                                     {field.icon &&
-                                        <div className="flex items-center justify-center bg-gray-100 px-3 py-3.5 rounded-l-lg">
-                                            <field.icon className="w-5 h-5 text-gray-600" />
+                                        <div className="flex items-center justify-center bg-gray-700 px-3 py-3.5 rounded-l-lg border-y border border-gray-600">
+                                            <field.icon className="w-5 h-5 text-gray-400" />
                                         </div>
                                     }
 
                                     {field.type === 'select' ? (
                                         <select
                                             id={field.id}
-                                            className="border rounded-lg p-3 bg-gray-50 w-full hover:border-blue-300 focus-within:border-blue-300"
+                                            className="border border-gray-700 rounded-lg p-3 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500"
                                             value={formData[field.id as keyof CompanyData]}
                                             onChange={handleChange}
                                         >
@@ -113,7 +113,7 @@ function Config() {
                                         </select>
                                     ) : (
                                         <input
-                                            className="border rounded-r-lg p-3 bg-gray-50 w-full hover:border-blue-300 focus-within:border-blue-300"
+                                            className="border rounded-r-lg p-3 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500 border-y border-r border-gray-700"
                                             type={field.type}
                                             id={field.id}
                                             value={formData[field.id as keyof CompanyData]}
@@ -125,25 +125,11 @@ function Config() {
                             </div>
                         ))}
                     </div>
-                    <div className="items-center mt-6 w-[70%]">
-                        <h2>Temas</h2>
-                        <div className='gap-4 mt-4 flex flex-wrap'>
-                            {themeColorList.map((theme, index) => (
-                                <button
-                                    key={index}
-                                    className={`${theme.bgClass} text-white py-3 px-5 w-28 rounded ${theme.hoverClass}`}
-                                    onClick={() => setThemeColor(theme.color)}
-                                >
-                                    {theme.color}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
                 </div>
             </div>
-            <div className='flex justify-end items-center bg-gray-100 py-3 px-5 shadow-lg rounded-b-lg'>
+            <div className='flex justify-end items-center bg-gray-800 py-3 px-5 shadow-xl rounded-b-lg border border-gray-700'>
                 <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
+                    className="bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 flex items-center gap-3"
                     onClick={updateCompanyData}
                 >
                     <PlusIcon className="w-5 h-5 text-white" />

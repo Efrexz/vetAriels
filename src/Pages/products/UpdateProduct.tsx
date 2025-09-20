@@ -157,80 +157,81 @@ function UpdateProduct({ productData }: UpdateProductProps) {
 
 
     return (
-        <form className="pt-4 bg-gray-900 py-4 px-6 shadow-xl rounded-lg border border-gray-700">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
-                {fields.map((field) => (
-                    <div
-                        key={field.name}
-                        className={`mb-4 col-span-1 sm:col-span-${Math.min(
-                            field.columsNumber,
-                            2
-                        )} md:col-span-${Math.min(
-                            field.columsNumber,
-                            4
-                        )} lg:col-span-${field.columsNumber}`}
-                    >
-                        <label className="block text-gray-300 font-medium mb-2" htmlFor={field.name}>
-                            {field.label}
-                        </label>
-                        <div className="flex w-full border border-gray-600 rounded-lg overflow-hidden focus-within:border-cyan-500 hover:border-cyan-500 transition-colors">
-                            {field.icon && (
-                                <div className="flex items-center justify-center bg-gray-700 px-3">
-                                    <field.icon className="w-5 h-5 text-gray-400" />
-                                </div>
+        <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
+            <form className="pt-4 bg-gray-900 py-4 px-6 shadow-xl rounded-lg border border-cyan-500/30">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+                    {fields.map((field) => (
+                        <div
+                            key={field.name}
+                            className={`mb-4 col-span-1 sm:col-span-${Math.min(
+                                field.columsNumber,
+                                2
+                            )} md:col-span-${Math.min(
+                                field.columsNumber,
+                                4
+                            )} lg:col-span-${field.columsNumber}`}
+                        >
+                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.name}>
+                                {field.label}
+                            </label>
+                            <div className="flex w-full border border-gray-600 rounded-lg overflow-hidden focus-within:border-cyan-500 hover:border-cyan-500 transition-colors">
+                                {field.icon && (
+                                    <div className="flex items-center justify-center bg-gray-700 px-3">
+                                        <field.icon className="w-5 h-5 text-gray-400" />
+                                    </div>
+                                )}
+                                {field.type === "text" || field.type === "number" ? (
+                                    <input
+                                        type={field.type}
+                                        id={field.name}
+                                        name={field.name}
+                                        value={formData[field.name]}
+                                        onChange={handleChange}
+                                        disabled={field.disabled}
+                                        className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
+                                            ? "border-red-500"
+                                            : ""
+                                            }`}
+                                    />
+                                ) : (
+                                    <select
+                                        id={field.name}
+                                        name={field.name}
+                                        value={formData[field.name]}
+                                        onChange={handleChange}
+                                        className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
+                                            ? "border-red-500"
+                                            : ""
+                                            }`}
+                                    >
+                                        {field?.options?.map((option, i) => (
+                                            <option key={i} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            </div>
+                            {field.tooltip && (
+                                <p className="text-xs text-gray-400 mt-1">{field.tooltip}</p>
                             )}
-                            {field.type === "text" || field.type === "number" ? (
-                                <input
-                                    type={field.type}
-                                    id={field.name}
-                                    name={field.name}
-                                    value={formData[field.name]}
-                                    onChange={handleChange}
-                                    disabled={field.disabled}
-                                    className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
-                                        ? "border-red-500"
-                                        : ""
-                                        }`}
-                                />
-                            ) : (
-                                <select
-                                    id={field.name}
-                                    name={field.name}
-                                    value={formData[field.name]}
-                                    onChange={handleChange}
-                                    className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
-                                        ? "border-red-500"
-                                        : ""
-                                        }`}
-                                >
-                                    {field?.options?.map((option, i) => (
-                                        <option key={i} value={option}>
-                                            {option}
-                                        </option>
-                                    ))}
-                                </select>
+                            {errors[field.name] && (
+                                <p className="text-red-500 text-sm mt-1 whitespace-nowrap">{errors[field.name]}</p>
                             )}
                         </div>
-                        {field.tooltip && (
-                            <p className="text-xs text-gray-400 mt-1">{field.tooltip}</p>
-                        )}
-                        {errors[field.name] && (
-                            <p className="text-red-500 text-sm mt-1 whitespace-nowrap">{errors[field.name]}</p>
-                        )}
-                    </div>
-                ))}
-            </div>
-            {
-                isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />
-            }
-
+                    ))}
+                </div>
+                {
+                    isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />
+                }
+            </form>
             <ActionButtons
-                onCancel={() => navigate("/products")}
-                onSubmit={updateProduct}
-                submitText="ACTUALIZAR PRODUCTO"
-                cancelText="REGRESAR AL LISTADO"
-            />
-        </form>
+                    onCancel={() => navigate("/products")}
+                    onSubmit={updateProduct}
+                    submitText="ACTUALIZAR PRODUCTO"
+                    cancelText="REGRESAR AL LISTADO"
+                />
+        </div>
     );
 }
 
