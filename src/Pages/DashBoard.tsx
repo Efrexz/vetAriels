@@ -43,12 +43,12 @@ const dashBoardCategories: DashboardCategory[] = [
         color: "bg-blue-500",
         link: "/grooming"
     },
-    {
-        name: "Comprobantes",
-        icon: FileInvoiceIcon,
-        color: "bg-green-700",
-        link: "/sales/invoices"
-    },
+    // {
+    //     name: "Comprobantes",
+    //     icon: FileInvoiceIcon,
+    //     color: "bg-green-700",
+    //     link: "/sales/invoices"
+    // },
     {
         name: "Clientes",
         icon: UserGroupIcon,

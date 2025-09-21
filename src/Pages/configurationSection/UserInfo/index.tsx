@@ -10,21 +10,19 @@ function UserInfo() {
     const { section } = useParams();
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="flex items-center mb-6 border-b-2 border-gray-100 pb-5 px-4">
-                <h1 className="text-xl md:text-2xl font-bold flex items-center text-blue-400" >
-                    <RoleUserIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2" />
-                    Perfil
+        <div className="w-full p-6 bg-gray-950">
+            <div className="flex items-center mb-6 border-b-2 border-gray-700 pb-5 px-4">
+                <h1 className="text-xl md:text-3xl font-bold flex items-center" >
+                    <RoleUserIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Perfil</span>
                 </h1>
             </div>
-            <div className="mb-6 border-b-2 border-gray-100 pb-5">
-                <HorizontalMenu mode="user" />
-            </div>
+            <HorizontalMenu mode="user" />
 
-            <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-t-lg overflow-hidden">
-                <div className="w-full md:w-1/4 p-6 bg-gray-100 flex flex-col items-center">
-                    <div className="w-32 h-32 bg-gray-300 rounded-full flex items-center justify-center mb-4">
-                        <RoleUserIcon className="w-16 h-16 text-gray-500" />
+            <div className="flex flex-col md:flex-row bg-gray-900 shadow-xl rounded-t-lg overflow-hidden mt-6">
+                <div className="w-full md:w-1/4 p-6 bg-gray-800 flex flex-col items-center">
+                    <div className="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                        <RoleUserIcon className="w-16 h-16 text-gray-400" />
                     </div>
                 </div>
                 {section === 'update' && <UserProfile />}

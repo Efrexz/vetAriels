@@ -142,11 +142,11 @@ function UserProfile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-4 mt-4 mb-6">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-600 mb-1">{field.label}</label>
-                            <div className="flex items-center ">
+                            <label className="block text-gray-300 mb-1">{field.label}</label>
+                            <div className="flex items-center">
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-100 px-3 py-3.5 rounded-l-lg">
-                                        <field.icon className="w-5 h-5 text-gray-600" />
+                                    <div className="flex items-center justify-center bg-gray-800 px-3 py-3.5 rounded-l-lg">
+                                        <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
                                 <input
@@ -155,24 +155,24 @@ function UserProfile() {
                                     value={formData[field.id as keyof FormDataState]}
                                     onChange={handleChange}
                                     disabled={field.disabled}
-                                    className={`border rounded-r-lg p-3 w-full focus:outline-none ${errors[field.id as keyof FormErrors] ? 'border-red-500' : 'border-gray-300 hover:border-blue-300 focus-within:border-blue-300'} `}
+                                    className={`border rounded-r-lg p-3 w-full focus:outline-none bg-gray-800 text-gray-200 ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'} `}
                                 />
                             </div>
                             {
                                 errors[field.id as keyof FormErrors] && (
-                                    <p className="text-red-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
+                                    <p className="text-rose-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
                                 )
                             }
                         </div>
                     ))}
                 </div>
             </div>
-            <div className='flex justify-center sm:justify-end items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg'>
+            <div className='flex justify-center sm:justify-end items-center bg-gray-900 py-3 px-4 shadow-xl border-t border-gray-700 pt-4'>
                 <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center justify-center gap-3 w-full sm:w-auto"
+                    className="bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-3 w-full sm:w-auto"
                     onClick={updateData}
                 >
-                    <PlusIcon className="w-5 h-5 text-white" />
+                    <PlusIcon className="w-5 h-5" />
                     GUARDAR CAMBIOS
                 </button>
             </div>
@@ -181,8 +181,7 @@ function UserProfile() {
                     <SuccessModal onClose={() => setIsModalOpen(false)} />
                 )
             }
-        </div >
-
+        </div>
     );
 }
 

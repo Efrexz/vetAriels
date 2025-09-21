@@ -82,8 +82,8 @@ function UserPassword() {
 
     return (
         <div className="flex flex-col w-full">
-            <div className="mt-6 p-4 bg-blue-500 text-white rounded-lg m-3 flex gap-2">
-                <InfoIcon className="w-5 h-5 text-white" />
+            <div className="mt-6 p-4 bg-cyan-900 text-cyan-200 rounded-lg m-3 flex gap-2">
+                <InfoIcon className="w-5 h-5 text-cyan-200" />
                 <p>
                     Ingresa tu contraseña actual y luego la contraseña nueva por la que quieres cambiarla.
                 </p>
@@ -92,11 +92,11 @@ function UserPassword() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-4 mt-4 mb-8">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-600 mb-1">{field.label}</label>
+                            <label className="block text-gray-300 mb-1">{field.label}</label>
                             <div className="flex items-center ">
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-100 px-3 py-3.5 rounded-l-lg">
-                                        <field.icon className="w-5 h-5 text-gray-600" />
+                                    <div className="flex items-center justify-center bg-gray-800 px-3 py-3.5 rounded-l-lg">
+                                        <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
                                 <input
@@ -104,21 +104,21 @@ function UserPassword() {
                                     id={field.id}
                                     value={formData[field.id]}
                                     onChange={handleChange}
-                                    className={`border rounded-r-lg p-3 w-full hover:border-blue-300 focus:outline-none ${errors[field.id] ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`border rounded-r-lg p-3 w-full hover:border-cyan-500 focus:outline-none focus:border-cyan-500 bg-gray-800 text-gray-200 ${errors[field.id] ? 'border-rose-500' : 'border-gray-700'}`}
                                 />
                             </div>
                             {errors[field.id] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+                                <p className="text-rose-500 text-sm mt-1">{errors[field.id]}</p>
                             )}
                         </div>
                     ))}
                 </div>
             </div>
-            <div className='flex justify-end items-center bg-gray-100 py-3 px-4 shadow-lg rounded-b-lg'>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
+            <div className='flex justify-end items-center bg-gray-900 py-3 px-4 shadow-xl rounded-b-lg border-t border-gray-700 pt-4'>
+                <button className="bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 flex items-center gap-3"
                     onClick={updatePassword}
                 >
-                    <PlusIcon className="w-5 h-5 text-white" />
+                    <PlusIcon className="w-5 h-5" />
                     GUARDAR CAMBIOS
                 </button>
             </div>
@@ -132,8 +132,7 @@ function UserPassword() {
                     <SuccessModal onClose={() => setSuccessModalOpen(false)} />
                 )
             }
-        </div >
-
+        </div>
     );
 }
 

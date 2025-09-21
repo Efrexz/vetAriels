@@ -87,9 +87,8 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
         clinics: `/config/clinics/${id}`,
     };
 
-    const hasAlternativeStyles = ['restock', 'discharge', 'services', 'products'].includes(mode);
     return (
-        <div className={`${hasAlternativeStyles ? "border-b-2 border-cyan-500 pb-4 mb-4" : ""}`}>
+        <div className="border-b-2 border-cyan-500 pb-5 mb-4" >
             <nav className="flex flex-wrap gap-2 md:gap-6" aria-label="Tabs">
                 {tabsConfig[mode]?.map((tab) => (
                     <Link

@@ -98,10 +98,10 @@ function CreateUser() {
 
     return (
         <section className="w-full mx-auto p-6 bg-gray-950">
-            <h2 className="text-3xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
-                <RoleUserIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+            <h1 className=" text-xl sm:text-3xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex">
+                <RoleUserIcon className="w-6 h-6 sm:w-9 sm:h-9 text-cyan-400 mr-2" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Crear Usuario</span>
-            </h2>
+            </h1>
             <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
                 <form className="pt-4 bg-gray-900 p-6 shadow-xl rounded-t-lg border border-cyan-500/30">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

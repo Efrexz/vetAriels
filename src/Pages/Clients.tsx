@@ -19,36 +19,37 @@ function Clients() {
     const navigate = useNavigate();
 
     return (
-        <section className="bg-gray-900 w-full p-6">
+        <section className="bg-gray-950 w-full p-6">
             <h1 className="text-xl sm:text-3xl font-medium text-cyan-500 mb-4 pb-4 border-b-2 border-cyan-500 flex">
                 <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 text-cyan-500 mr-2" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Clientes</span> 
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Clientes</span>
             </h1>
-            <div className="bg-gray-800 rounded-xl shadow-lg p-3 mb-6 border border-gray-700">
-                <div className="p-3 rounded-lg mb-1">
-                    <div className="flex flex-wrap items-center mb-3 gap-3">
-                        <div className="w-full md:w-auto flex flex-wrap md:flex-nowrap gap-2">
-                            <div className="flex w-full md:w-auto border-gray-600 border rounded-lg overflow-hidden bg-gray-700 focus-within:border-cyan-500">
-                                <div className="flex items-center justify-center bg-gray-700 px-3">
-                                    <SearchIcon className="w-5 h-5 text-gray-400" />
-                                </div>
-                                <input
-                                    type="text"
-                                    placeholder="Buscar..."
-                                    className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200 placeholder-gray-500 hover:border-cyan-500"
-                                />
+            <div className="bg-gray-900 rounded-xl shadow-lg p-4 mb-6 border border-gray-700">
+                <div className="p-3 rounded-lg border border-cyan-500/30 mb-4">
+                    <div className="flex flex-wrap md:flex-nowrap items-center gap-3">
+                        <div className="flex flex-wrap md:flex-nowrap gap-2">
+                        <div className="flex border-gray-600 border rounded-lg overflow-hidden bg-gray-700 focus-within:border-cyan-500">
+                            <div className="flex items-center justify-center bg-gray-700 px-3">
+                            <SearchIcon className="w-5 h-5 text-gray-400" />
                             </div>
                             <input
-                                type="date"
-                                className="w-full md:w-[250px] py-2 px-4 border-gray-600 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 focus:border-cyan-500 hover:border-cyan-500"
+                            type="text"
+                            placeholder="Buscar..."
+                            className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200 placeholder-gray-500"
                             />
                         </div>
+                        <input
+                            type="date"
+                            className="w-full md:w-[250px] py-2 px-4 border-gray-600 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 focus:border-cyan-500"
+                        />
+                        </div>
+
                         <button
-                            className="w-full md:w-auto border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
-                            onClick={() => navigate("/clients/create")}
+                        className="border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
+                        onClick={() => navigate("/clients/create")}
                         >
-                            <PlusIcon className="w-5 h-5" />
-                            CREAR NUEVO CLIENTE
+                        <PlusIcon className="w-5 h-5" />
+                        CREAR NUEVO CLIENTE
                         </button>
                     </div>
                 </div>
