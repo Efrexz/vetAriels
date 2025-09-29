@@ -168,8 +168,8 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
 
     return (
         <section className="w-full p-6 bg-gray-950 text-gray-200">
-            <header className="flex items-center mb-6 border-b-2 border-cyan-500 pb-4">
-                <h1 className="text-xl md:text-3xl font-medium flex items-center">
+            <header className="flex items-center mb-4 border-b-2 border-cyan-500 pb-4">
+                <h1 className="text-xl md:text-2xl font-medium flex items-center">
                     {typeOfOperation === 'discharge' ? <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-rose-500" /> : <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-emerald-500" />}
                     <span className={typeOfOperation === 'discharge' ? 'text-rose-500' : 'text-emerald-500'}>
                         {typeOfOperation === 'discharge' ? 'Descargar Stock' : 'Cargar Stock'}
@@ -178,15 +178,15 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
             </header>
 
             <div className="gap-4 mb-6 bg-gray-900 p-4 rounded-md border border-gray-700 shadow-xl">
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
+                            <label className="block text-gray-300 font-medium mb-1" htmlFor={field.id}>{field.label}</label>
                             <div className={`flex w-full border rounded-lg overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500 ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-600'}`}>
                                 {field.type === 'select' ? (
                                     <select
                                         id={field.id}
-                                        className="w-full px-3 py-2 bg-gray-700 text-gray-200 border-none focus:outline-none focus:ring-0"
+                                        className="w-full px-3 py-1 bg-gray-700 text-gray-200 border-none focus:outline-none focus:ring-0"
                                         onChange={handleChange}
                                     >
                                         {field.options?.map((option, i) => (
@@ -201,7 +201,7 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                                         id={field.id}
                                         value={formData[field.id as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className="w-full py-2 px-4 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-transparent"
+                                        className="w-full py-1 px-4 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-transparent"
                                     />
                                 )}
                             </div>
@@ -226,13 +226,13 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                     {errors.products && <p className="text-rose-500 text-sm mt-1">{errors.products}</p>}
                 </div>
 
-                <div className="overflow-x-auto border border-gray-700 rounded-lg mb-6">
+                <div className="overflow-x-auto border border-gray-700 rounded-lg mb-6 mt-6">
                     <table className="min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden">
                         <thead className="bg-gray-700">
                             <tr>
                                 {
                                     tableHeaders.map((header) => (
-                                        <th key={header} className="px-6 py-3 border border-gray-600 text-center text-sm font-medium text-gray-300">
+                                        <th key={header} className="px-6 py-1 border border-gray-600 text-center text-sm font-medium text-gray-300">
                                             {header}
                                         </th>
                                     ))
@@ -242,12 +242,12 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                         <tbody>
                             {
                                 selectedProducts.map((product) => (
-                                    <tr key={product.provisionalId} className="hover:bg-gray-700 text-md">
-                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-left text-gray-400">{product.productName}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap border border-gray-600 text-center text-gray-400">
+                                    <tr key={product.provisionalId} className="hover:bg-gray-700 text-sm">
+                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
+                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-left text-gray-400">{product.productName}</td>
+                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
+                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
+                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">
                                             {<QuantityCounter
                                                 itemCount={product.quantity}
                                                 changeQuantity={(newQuantity) => {
@@ -261,10 +261,10 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                                                 }}
                                             />}
                                         </td>
-                                        <td className="py-6 px-4 text-center border border-gray-700">
+                                        <td className="py-3 px-4 text-center border border-gray-600">
                                             <div className="flex justify-center items-center h-full">
                                                 <TrashIcon
-                                                    className="w-5 h-5 text-rose-500 hover:text-rose-600 cursor-pointer"
+                                                    className="w-4 h-4 text-rose-500 hover:text-rose-600 cursor-pointer"
                                                     onClick={() => {
                                                         removeProduct(product.provisionalId)
                                                     }}

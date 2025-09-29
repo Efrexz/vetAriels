@@ -74,7 +74,7 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
     return (
         <div className="w-full relative">
             <input
-                className="bg-gray-700 border border-gray-600 rounded-lg w-full py-3 px-4 text-gray-200 placeholder-gray-400 focus:ring-1 focus:ring-cyan-500 focus:outline-none hover:border-cyan-500"
+                className="bg-gray-700 border border-gray-600 rounded-lg w-full py-1 px-4 text-gray-200 placeholder-gray-400 focus:ring-1 focus:ring-cyan-500 focus:outline-none hover:border-cyan-500"
                 id="productSearch"
                 type="search"
                 placeholder="Buscar producto o servicio..."

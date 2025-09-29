@@ -172,7 +172,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                 </select>
                             ) : (
                                 <div>
-                                    <div className="flex w-full border border-gray-600 rounded-md focus-within:ring-1 focus-within:ring-cyan-500 hover:border-cyan-500 transition-colors">
+                                    <div className="flex w-full rounded-md transition-colors">
                                         {field.icon && (
                                             <div className="flex items-center justify-center bg-gray-700 px-3">
                                                 <field.icon className="w-5 h-5 text-gray-400" />
@@ -184,7 +184,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                             placeholder={field.placeholder}
                                             value={formData[field.name]}
                                             onChange={handleChange}
-                                            className={`p-2 w-full bg-gray-700 text-gray-200  focus:outline-none ${errors[field.name] ? 'border-red-500' : ''}`}
+                                            className={`p-2 w-full bg-gray-700 border border-gray-600 text-gray-200  focus:outline-none hover:border-cyan-500 focus:border-cyan-500 ${errors[field.name] ? 'border-red-500' : ''}`}
                                         />
                                     </div>
                                     {field.infoMessage && (

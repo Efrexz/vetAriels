@@ -11,9 +11,9 @@ function UserInfo() {
 
     return (
         <div className="w-full p-6 bg-gray-950">
-            <div className="flex items-center mb-6 border-b-2 border-gray-700 pb-5 px-4">
-                <h1 className="text-xl md:text-3xl font-bold flex items-center" >
-                    <RoleUserIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+            <div className="flex items-center mb-4 border-b border-cyan-500 pb-4 px-4">
+                <h1 className="text-xl md:text-2xl font-medium flex items-center" >
+                    <RoleUserIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Perfil</span>
                 </h1>
             </div>

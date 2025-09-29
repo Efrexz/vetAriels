@@ -56,7 +56,7 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }: Edit
                         id="responsible"
                         value={formData.responsible}
                         onChange={handleChange}
-                        className="w-full py-2 px-4 border border-gray-600 rounded-lg focus:outline-none bg-gray-700 text-gray-200 hover:border-cyan-500 focus-within:border-cyan-500"
+                        className="w-full py-1 px-4 border border-gray-600 rounded-lg focus:outline-none bg-gray-700 text-gray-200 hover:border-cyan-500 focus-within:border-cyan-500"
                     >
                         <option value="">Seleccionar Responsable</option>
                         {users.map((user) => (
@@ -81,7 +81,7 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }: Edit
                             value={formData.reason}
                             onChange={handleChange}
                             placeholder="Motivo..."
-                            className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
+                            className="w-full py-1 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
                         />
                     </div>
                 </div>
@@ -94,7 +94,7 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }: Edit
                             {tableCategories.map((category) => (
                                 <th
                                     key={category}
-                                    className="py-2 px-4 bg-gray-900 text-gray-300 font-bold uppercase text-xs border border-gray-700"
+                                    className="py-1 px-4 bg-gray-700 text-gray-300 font-bold  text-sm border border-gray-600"
                                 >
                                     {category}
                                 </th>
@@ -103,27 +103,27 @@ function EditOperation({ typeOfOperation, operationData, tableCategories }: Edit
                     </thead>
                     <tbody>
                         {selectedProducts.map((product: PurchasedItem) => (
-                            <tr key={product.provisionalId} className="border-b border-gray-700">
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                            <tr key={product.provisionalId} className="border-b border-gray-700 text-sm">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.systemCode?.slice(0, 9).toUpperCase()}
                                 </td>
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.productName}
                                 </td>
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.cost}
                                 </td>
                                 {
                                     typeOfOperation === "restock" && (
-                                        <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                        <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                             {product.salePrice}
                                         </td>
                                     )
                                 }
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.quantity}
                                 </td>
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.cost || 0 * product.quantity}
                                 </td>
                             </tr>

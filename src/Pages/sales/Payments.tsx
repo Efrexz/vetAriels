@@ -21,28 +21,28 @@ function Payments() {
     const [paymentToEdit, setPaymentToEdit] = useState<Payment | null>(null);
     const [operationType, setOperationType] = useState<OperationType>('ENTRADA');
     return (
-        <section className="p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-xl sm:text-3xl font-medium  mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
-                <FileInvoiceIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+        <section className="w-full p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl sm:text-2xl font-medium  mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+                <FileInvoiceIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Entradas / Salidas de Caja</span>
             </h1>
-            <div className="bg-gray-900 rounded-2xl shadow-xl p-4 sm:p-6 mb-8 border border-gray-700">
+            <div className="bg-gray-900 rounded-2xl shadow-xl p-4 mb-6 border border-gray-700">
                 <div className="p-4 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
                     <div className="flex flex-col md:flex-row md:items-center md:gap-4 mb-4">
                         <div className="flex flex-col md:flex-row gap-4 w-full">
                             <input
                                 type="text"
                                 placeholder="Buscar por ID..."
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
+                                className="w-full py-1 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                             <input
                                 type="text"
                                 placeholder="Buscar descripción..."
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
+                                className="w-full py-1 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                             <input
                                 type="date"
-                                className="w-full py-3 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
+                                className="w-full py-1 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             />
                         </div>
                     </div>
@@ -50,7 +50,7 @@ function Payments() {
                         <div className="w-full sm:w-[300px]">
                             <select
                                 name="Metodo-de-pago"
-                                className="w-full rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-3 px-5 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
+                                className="w-full rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-1 px-5 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
                             >
                                 <option className="bg-gray-700" value="">Método de Pago</option>
                                 <option className="bg-gray-700" value="AMERICAN EXPRESS">American Express</option>
@@ -60,7 +60,7 @@ function Payments() {
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button
-                                className="py-3 px-6 rounded-xl font-bold transition-all w-full sm:w-auto
+                                className="py-1 px-4 rounded-xl font-bold transition-all w-full sm:w-auto
                                 bg-transparent text-green-500 border-2 border-green-500
                                 shadow-md shadow-green-500/50 hover:bg-green-500 hover:text-white
                                 hover:shadow-green-400/80"
@@ -72,7 +72,7 @@ function Payments() {
                                 + ENTRADA
                             </button>
                             <button
-                                className="py-3 px-6 rounded-xl font-bold transition-all w-full sm:w-auto
+                                className="py-1 px-4 rounded-xl font-bold transition-all w-full sm:w-auto
                                 bg-transparent text-red-500 border-2 border-red-500
                                 shadow-md shadow-red-500/50 hover:bg-red-500 hover:text-white
                                 hover:shadow-red-400/80"
@@ -96,7 +96,7 @@ function Payments() {
                         <thead className='bg-gray-700 border-b border-gray-700'>
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-3 px-2 text-center text-sm font-bold text-gray-300 uppercase tracking-wider border-r border-gray-600">
+                                    <th key={header} className="py-1 px-2 text-center text-xs font-bold text-gray-300 uppercase tracking-wider border-r border-gray-600">
                                         {header}
                                     </th>
                                 ))}
@@ -105,18 +105,18 @@ function Payments() {
                         <tbody>
                             {paymentsData.map((payment) => (
                                 <tr key={payment.id} className="hover:bg-gray-800 text-xs transition-colors duration-200">
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center">{payment.id.slice(0, 9).toUpperCase()}</td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.date}</td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-left text-gray-200">{payment.description}</td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-300">{payment.paymentMethod}</td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-green-400 font-bold">{payment.income}</td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-red-400 font-bold">{payment.expense}</td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.docRef}</td>
-                                    <td className="py-2 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.movementType}</td>
-                                    <td className="py-4 px-4 border-b border-r border-gray-700 text-center">
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-center">{payment.id.slice(0, 9).toUpperCase()}</td>
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.date}</td>
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-left text-gray-200">{payment.description}</td>
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-center text-gray-300">{payment.paymentMethod}</td>
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-center text-green-400 font-bold">{payment.income}</td>
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-center text-red-400 font-bold">{payment.expense}</td>
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.docRef}</td>
+                                    <td className="py-1 px-2 border-b border-r border-gray-700 text-center text-gray-400">{payment.movementType}</td>
+                                    <td className="py-1 px-4 border-b border-r border-gray-700 text-center">
                                         <div className="flex justify-center items-center h-full space-x-4">
                                             <button className="text-cyan-500 hover:text-cyan-300 transition-colors" title="Ver imagen">
-                                                <ImageIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                                                <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                             </button>
                                             <button
                                                 className="text-red-500 hover:text-red-400 transition-colors"
@@ -125,10 +125,10 @@ function Payments() {
                                                     setConfirmModalOpen(true)
                                                 }}
                                             >
-                                                <TrashIcon className="w-5 h-5" />
+                                                <TrashIcon className="w-4 h-4 sm:w-4 sm:h-4" />
                                             </button>
                                             <button className="text-emerald-500 hover:text-emerald-300 transition-colors">
-                                                <RoleUserIcon className="w-5 h-5" />
+                                                <RoleUserIcon className="w-4 h-4 sm:w-4 sm:h-4" />
                                             </button>
                                         </div>
                                     </td>
@@ -147,16 +147,16 @@ function Payments() {
                     )
                 }
                 <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                    <p className="text-gray-400 text-center md:text-left">
+                    <p className="text-gray-400 text-center md:text-left text-sm">
                         Página: 1 de 1 | Registros del 1 al {paymentsData.length} | Total{" "}
                         {paymentsData.length}
                     </p>
                     <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
-                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
-                        <button className="py-2 px-4 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
-                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
-                        <button className="py-2 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
+                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
+                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
+                        <button className="py-1 px-3 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
+                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
+                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
                     </div>
                 </div>
             </div>

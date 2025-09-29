@@ -25,7 +25,7 @@ function Layout({ children }: LayoutProps) {
 
                 {/* Sidebar */}
                 <aside
-                    className={`bg-gray-900 w-64 h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar transition-transform duration-300 z-40 fixed lg:relative ${
+                    className={`bg-gray-900 w-56 h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar transition-transform duration-300 z-40 fixed lg:relative ${
                         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     } lg:translate-x-0`}
                 >

@@ -126,7 +126,7 @@ function EditUser() {
 
     return (
         <section className="w-full mx-auto p-6 bg-gray-950">
-            <h1 className="text-2xl md:text-3xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
+            <h1 className="text-2xl md:text-2xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex items-center ">
                 <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Editar Usuario</span>
             </h1>
@@ -140,7 +140,7 @@ function EditUser() {
                             <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
                             <div className={`flex w-full border rounded-lg overflow-hidden ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-700 px-3 border-r border-gray-600">
+                                    <div className="flex items-center justify-center bg-gray-700 px-3 py-1 border-r border-gray-600">
                                         <field.icon className="w-4 h-4 text-gray-400" />
                                     </div>
                                 }
@@ -151,7 +151,7 @@ function EditUser() {
                                         name={field.id}
                                         onChange={handleChange}
                                         value={formData[field.id as keyof FormDataState]}
-                                        className="w-full px-3 py-2 border-none focus:outline-none focus:ring-0 bg-gray-700 text-gray-200"
+                                        className="w-full px-3 py-1 border-none focus:outline-none focus:ring-0 bg-gray-700 text-gray-200"
                                     >
                                         {field.options?.map((option) => (
                                             <option key={option} value={option}>
@@ -165,7 +165,7 @@ function EditUser() {
                                         id={field.id}
                                         value={formData[field.id as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
+                                        className="w-full py-1 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
                                     />
                                 )}
                             </div>
@@ -177,16 +177,16 @@ function EditUser() {
                 </form>
                 <div className='flex flex-col sm:flex-row justify-end items-center gap-4 p-4 border-t border-gray-700 bg-gray-900 shadow-xl rounded-b-lg'>
                     <button
-                        className="bg-gray-700 hover:bg-gray-600 w-full sm:w-auto border border-gray-700 text-white py-2 px-4 rounded-lg  transition-colors flex items-center justify-center gap-3"
+                        className="bg-gray-700 hover:bg-gray-600 w-full sm:w-auto border border-gray-700 text-white px-3 py-1 rounded-lg  transition-colors flex items-center justify-center gap-3"
                         onClick={() => navigate(-1)}
                     >
-                        <ReturnIcon className="w-5 h-5 text-gray-300" />
+                        <ReturnIcon className="w-4 h-4 text-gray-300" />
                         CANCELAR
                     </button>
-                    <button className="bg-emerald-600 w-full sm:w-auto text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-3"
+                    <button className="bg-emerald-600 w-full sm:w-auto text-white px-3 py-1 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-3"
                         onClick={updateUserInfo}
                     >
-                        <PlusIcon className="w-5 h-5 text-white" />
+                        <PlusIcon className="w-4 h-4 text-white" />
                         GUARDAR INFORMACION
                     </button>
                 </div>

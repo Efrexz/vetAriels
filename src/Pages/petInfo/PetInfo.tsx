@@ -61,8 +61,8 @@ function PetInfo() {
 
     return (
         <main className="p-4 sm:p-6 bg-gray-950 text-gray-200">
-            <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-6 border-b border-cyan-500 pb-5">
-                <h1 className="text-xl sm:text-3xl font-medium text-cyan-500">
+            <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-4 pb-4 border-b border-cyan-500 ">
+                <h1 className="text-xl sm:text-2xl font-medium text-cyan-500">
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Información de la Mascota</span>
                 </h1>
                 <HorizontalMenu mode="pets" />

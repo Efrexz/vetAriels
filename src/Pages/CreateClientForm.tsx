@@ -121,19 +121,19 @@ function CreateClientForm() {
 
 
     return (
-        <section className="p-4 sm:p-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl sm:text-3xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
-                <UserGroupIcon className="w-8 h-8 sm:w-10 sm:h-10 text-cyan-400 mr-3 drop-shadow-lg" />
+        <section className="w-full p-4 sm:p-6 bg-gray-950 text-gray-200">
+            <h1 className="text-xl sm:text-2xl font-medium mb-4 pb-4 border-b border-cyan-500 flex items-center">
+                <UserGroupIcon className="w-8 h-8 sm:w-9 sm:h-9 text-cyan-400 mr-3" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Clientes</span>
             </h1>
             <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl bg-gray-800 border-2 border-cyan-500/30 mb-5">
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-xl bg-gray-800 border-2 border-cyan-500/30 mb-5">
                     {formFields.map((field) => (
                         <div key={field.id}>
                             <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
                             <div className={`flex w-full rounded-md overflow-hidden ${errors[field.id] ? 'border border-red-500' : 'border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-700 px-3 py-3.5 rounded-l-lg border border-gray-600 border-r-1 ">
+                                    <div className="flex items-center justify-center bg-gray-700 px-3 py-1 rounded-l-lg border border-gray-600 border-r-1 ">
                                         <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
@@ -142,7 +142,7 @@ function CreateClientForm() {
                                         id={field.id}
                                         value={formData[field.id]}
                                         onChange={handleChange}
-                                        className={`w-full p-3 border-none focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700`}
+                                        className={`w-full py-1.5 px-4  border-none focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700`}
                                     >
                                         {field.options?.map((option) => (
                                             <option key={option} value={option}>{option}</option>
@@ -154,7 +154,7 @@ function CreateClientForm() {
                                         id={field.id}
                                         value={formData[field.id]}
                                         onChange={handleChange}
-                                        className={`w-full  py-3 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700`}
+                                        className={`w-full  py-1.5 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700`}
                                     />
                                 )}
                             </div>

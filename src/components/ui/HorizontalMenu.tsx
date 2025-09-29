@@ -87,16 +87,17 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
         clinics: `/config/clinics/${id}`,
     };
 
+    const hasAlternativeStyles = ['restock', 'discharge', 'services', 'products'].includes(mode);
     return (
-        <div className="border-b-2 border-cyan-500 pb-5 mb-4" >
+        <div className={`${hasAlternativeStyles ? "border-b-2 border-cyan-500 pb-4 mb-4" : ""}`}>
             <nav className="flex flex-wrap gap-2 md:gap-6" aria-label="Tabs">
                 {tabsConfig[mode]?.map((tab) => (
                     <Link
                         key={tab.name}
                         to={`${baseUrl[mode]}/${tab.url}`}
-                        className={`shrink-0 rounded-lg px-4 py-2 text-sm font-bold transition-all
-                            ${selectedTab === tab.name 
-                                ? "bg-gradient-to-r from-cyan-500 to-emerald-500 text-white shadow-md" 
+                        className={`shrink-0 rounded-lg px-4 py-1.5 text-sm font-bold transition-all
+                            ${selectedTab === tab.name
+                                ? "bg-gradient-to-r from-cyan-500 to-emerald-500 text-white shadow-md"
                                 : "bg-gray-800 text-cyan-400 border border-cyan-500 hover:bg-cyan-500 hover:text-white"
                             }`}
                         onClick={() => handleTabClick(tab.name)}

@@ -149,7 +149,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
             phone: "917104426",
             registrationDate: "10/19/2024",
             registrationTime: "4:51:27 PM",
-            rol: "Asistente Administrativo",
+            rol: "Administrador",
             status: "ACTIVO"
         }];
         return saved ? (JSON.parse(saved) as User[]) : defaultUser;

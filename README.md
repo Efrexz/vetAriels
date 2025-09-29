@@ -6,20 +6,18 @@ Gestor Veterinario es una aplicación para la administración de clínicas veter
 
 ## Características principales
 
-- 🔑 **Sistema de login**: Acceso seguro para usuarios registrados.
 - 👤 **Gestor de clientes y mascotas**: Creación y administración de clientes y sus respectivas mascotas.
 - 📋 **Historial clínico**: Registro de consultas, vacunas y tratamientos de cada mascota.
 - ✂️ **Sistema de grooming**: Gestiona una cola de grooming con servicios personalizados para cada mascota.
 - 🛍️ **Ventas de productos y servicios**: Registro de ventas de productos y creación de servicios clínicos.
 - 📦 **Control de inventario**: Sistema de carga y descarga de productos en stock.
-- 👥 **Gestor de usuarios y roles**: Creación de usuarios con diferentes roles.
 
 ## Tecnologías utilizadas
 
+- **TypeScript**
 - **React**
 - **React Router**
 - **Tailwind CSS**
-- **Context API**
 
 ## Instalación y ejecución
 
@@ -42,7 +40,7 @@ Gestor Veterinario es una aplicación para la administración de clínicas veter
 
 ## 🚀 Demo en vivo
 
-👉 Prueba la aplicación aquí: [VetAriels Demo](https://vet-ariel.vercel.app/)
+👉 Prueba la aplicación aquí: [VetAriels Demo](https://vet-arielsclinic.vercel.app/)
 
 ## Cómo probar la aplicación
 
@@ -88,18 +86,18 @@ En el caso del grooming, puedes agregar servicios como baño o corte, y luego a�
 
 ## ✅ Recomendación final
 
-Una vez que hayas creado usuarios, clientes, mascotas, productos y servicios, podrás explorar el resto del sistema de forma intuitiva. Te recomendamos probar las distintas secciones para conocer su funcionalidad completa.
+Una vez que hayas creado usuarios, clientes, mascotas, productos y servicios, podrás explorar el resto del sistema de forma intuitiva. Te recomiendo probar las distintas secciones para conocer su funcionalidad completa.
 
 ## Mejoras futuras
 
 - 📅 **Agenda de citas veterinarias.**
 - 📊 **Reportes de ingresos y ventas.**
 - 🌍 **Soporte para múltiples sucursales.**
-- 📱 **Aplicación móvil.**
+- 📈 **Agregar funcionalidad a los roles de usuario.**
 
 ## Contacto
 
-📩 **Email**: efrexz448@outlook.com  
+📩 **Email**: efrexz448@outlook.com
 💼 **Linkedin**: https://www.linkedin.com/in/efrainandrade-dev/
 
 ---

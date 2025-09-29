@@ -27,7 +27,7 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }: Op
                     <div className="flex-shrink-0">
                         <BookIcon className="w-8 h-8 text-cyan-400" />
                     </div>
-                    <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2">
+                    <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 text-xs">
                         <p>Fecha de registro:</p>
                         <span className="font-medium text-gray-200">{operationData.date} - {operationData.time}</span>
                         <p>Motivo:</p>
@@ -41,7 +41,7 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }: Op
                     <div className="flex-shrink-0">
                         <RoleUserIcon className="w-8 h-8 text-cyan-400" />
                     </div>
-                    <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2">
+                    <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 text-xs">
                         <p>Responsable:</p>
                         <span className="font-medium text-gray-200">{operationData.responsible}</span>
                         <p>Registrado por:</p>
@@ -57,7 +57,7 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }: Op
                             {tableCategories.map((category, index) => (
                                 <th
                                     key={index}
-                                    className="py-2 px-4 bg-gray-700 text-gray-300 font-bold uppercase text-xs border-gray-600 border"
+                                    className="py-1 px-4 bg-gray-700 text-gray-300 font-bold text-sm border-gray-600 border"
                                 >
                                     {category}
                                 </th>
@@ -66,28 +66,28 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }: Op
                     </thead>
                     <tbody>
                         {selectedProducts.map((product: PurchasedItem) => (
-                            <tr key={product.provisionalId} className="border-b border-gray-700">
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                            <tr key={product.provisionalId} className="border-b border-gray-700 text-sm">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.systemCode?.slice(0, 9).toUpperCase()}
                                 </td>
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.productName}
                                 </td>
 
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.cost}
                                 </td>
                                 {
                                     typeOfOperation === "restock" && (
-                                        <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                        <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                             {product.salePrice}
                                         </td>
                                     )
                                 }
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.quantity}
                                 </td>
-                                <td className="py-2 px-4 border border-gray-700 text-center text-gray-400">
+                                <td className="py-1 px-4 border border-gray-700 text-center text-gray-400">
                                     {product.cost ?? 0 * product.quantity}
                                 </td>
                             </tr>
@@ -96,7 +96,7 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }: Op
                 </table>
             </div>
 
-            <div className="mt-4 text-gray-400 flex flex-col justify-center items-end gap-4 border-t border-gray-700 bg-gray-900 p-4 rounded-b-lg">
+            <div className="mt-4 text-gray-400 flex flex-col justify-center items-end gap-2 border-t border-gray-700 bg-gray-900 p-4 rounded-b-lg text-sm">
                 <div className="flex justify-between w-full max-w-sm">
                     <p>Subtotal:</p>
                     <span className="font-medium text-gray-200">{(subtotal - subtotal * 0.18).toFixed(2)}</span>
@@ -105,7 +105,7 @@ function OperationDetail({ typeOfOperation, operationData, tableCategories }: Op
                     <p>Impuestos (18%):</p>
                     <span className="font-medium text-gray-200">{(subtotal * 0.18).toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between w-full max-w-sm text-2xl font-semibold text-emerald-400">
+                <div className="flex justify-between w-full max-w-sm text-xl font-semibold text-emerald-400">
                     <p>TOTAL:</p>
                     <span>{subtotal.toFixed(2)}</span>
                 </div>

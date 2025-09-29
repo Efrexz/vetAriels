@@ -52,7 +52,7 @@ function OperationInfo({ typeOfOperation }: OperationInfoProps) {
 
     return (
         <main className="w-full mx-auto p-6 bg-gray-950 text-gray-200">
-            <h2 className={`text-xl md:text-3xl font-medium mb-4 border-b-2 border-gray-700 pb-3 flex items-center gap-2`}>
+            <h2 className={`text-xl md:text-2xl font-medium mb-4 border-b-2 border-gray-700 pb-4 flex items-center gap-2`}>
                 <span className="flex items-center gap-2">
                     {isRestock ? (
                         <>
@@ -73,13 +73,13 @@ function OperationInfo({ typeOfOperation }: OperationInfoProps) {
                 {section === 'edit' && <EditOperation typeOfOperation={typeOfOperation} operationData={operationData} tableCategories={tableCategories} />}
                 <div className='flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t border-gray-700 bg-gray-900 shadow-xl text-sm'>
                     <button
-                        className="bg-gray-800 border border-gray-700 text-gray-400 py-2 px-4 rounded-lg hover:bg-gray-700 flex items-center gap-3 w-full sm:w-auto transition-colors"
+                        className="bg-gray-800 border border-gray-700 text-gray-400 py-1.5 px-4 rounded-lg hover:bg-gray-700 flex items-center gap-3 w-full sm:w-auto transition-colors"
                         onClick={() => navigate(isRestock ? "/charges" : "/discharges")}
                     >
                         <ReturnIcon className="w-5 h-5 text-gray-400" />
                         REGRESAR AL LISTADO DE {isRestock ? "CARGAS" : "DESCARGAS"}
                     </button>
-                    <button className={`${section === "detail" ? "bg-cyan-600 hover:bg-cyan-700" : "bg-emerald-600 hover:bg-emerald-700"} text-white py-2 px-4 rounded-lg hover:bg-opacity-80 flex items-center gap-3 w-full sm:w-auto transition-colors`}
+                    <button className={`${section === "detail" ? "bg-cyan-600 hover:bg-cyan-700" : "bg-emerald-600 hover:bg-emerald-700"} text-white py-1.5 px-4 rounded-lg hover:bg-opacity-80 flex items-center gap-3 w-full sm:w-auto transition-colors`}
                     >
                         <FileContract className="w-5 h-5 text-white" />
                         {section === "detail" ? "IMPRIMIR" : "GUARDAR CAMBIOS"}

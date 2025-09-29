@@ -15,12 +15,12 @@ import NewUserIcon from '@assets/newUserIcon.svg?react';
 
 
 interface PageSection {
-  icon: ComponentType<any>; // Tipo para componentes de íconos SVG
-  tooltip: string;
-  path?: string;
-  count: boolean;
-  countData?: number;
-  action?: () => void; // Un action opcional para los iconos que no navegan
+    icon: ComponentType<any>; // Tipo para componentes de íconos SVG
+    tooltip: string;
+    path?: string;
+    count: boolean;
+    countData?: number;
+    action?: () => void; // Un action opcional para los iconos que no navegan
 }
 
 function NavBar() {
@@ -72,7 +72,7 @@ function NavBar() {
 
 
     return (
-        <nav className='flex justify-between items-center py-4 px-4 md:px-8 w-full bg-gray-800 text-gray-300 shadow-lg fixed z-50'>
+        <nav className='flex justify-between items-center py-3 px-4 md:px-8 w-full bg-gray-800 text-gray-300 shadow-lg fixed z-50'>
             <Link
                 to="/"
                 className='w-[50%] items-center cursor-pointer'
@@ -91,7 +91,7 @@ function NavBar() {
 
             <div className="flex justify-end items-center gap-3 md:gap-5 w-full">
                 <SearchIcon
-                    className='w-6 h-6 hover:text-cyan-400 cursor-pointer transition-colors'
+                    className='w-5 h-5 hover:text-cyan-400 cursor-pointer transition-colors'
                     onClick={toggleSearchModal}
                 />
                 {showSearchInput && (
@@ -107,11 +107,11 @@ function NavBar() {
                         >
                             {section.path ? ( // Si tiene path, es un Link
                                 <Link to={section.path} className="flex items-center">
-                                    <section.icon className='w-6 h-6 group-hover:text-cyan-400 transition-all' />
+                                    <section.icon className='w-5 h-5 group-hover:text-cyan-400 transition-all' />
                                 </Link>
                             ) : ( // Si no, es un icono con una accion
                                 <section.icon
-                                    className={`w-6 h-6 cursor-pointer transition-all ${
+                                    className={`w-5 h-5 cursor-pointer transition-all ${
                                         (activeIcon === 'patients' && section.action === togglePatientList) ||
                                         (activeIcon === 'baths' && section.action === toggleBathList)
                                         ? 'text-cyan-400 scale-125'

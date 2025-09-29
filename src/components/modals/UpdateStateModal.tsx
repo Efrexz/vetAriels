@@ -35,7 +35,7 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps
     }
 
     return (
-       <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex items-start justify-center z-50 pt-20">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex items-start justify-center z-50 pt-20">
             <div className="bg-gray-800 rounded-lg p-6 w-full max-w-lg shadow-xl modal-appear border border-gray-700">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-medium text-cyan-500">
@@ -50,7 +50,7 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps
                     <select
                         id="order-status"
                         name="orderStatus"
-                        className="w-full bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 p-3 text-gray-200"
+                        className="w-full bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 px-4 py-2 text-gray-200"
                         value={state}
                         onChange={(e) => setState(e.target.value as QueueItemState)}
                     >

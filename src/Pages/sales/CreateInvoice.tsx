@@ -154,21 +154,21 @@ function CreateInvoice() {
 
     return (
         <div className="p-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl sm:text-3xl font-medium mb-4 pb-4 border-b border-cyan-500 flex">
-                <FileIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+            <h1 className="text-xl sm:text-2xl font-medium mb-4 pb-4 border-b border-cyan-500 flex">
+                <FileIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Comprobante</span>
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Datos del Comprobante */}
-                <div className="bg-gray-900 p-6 rounded-lg shadow-xl">
+                <div className="bg-gray-900 px-6 py-4 rounded-lg shadow-xl">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {invoiceData.map((data) => (
                             <div key={data.label} className="flex flex-col">
                                 <label className="text-sm font-medium text-gray-400">{data.label}</label>
                                 <div className="flex items-center mt-1">
                                     {data.type === "select" ? (
-                                        <select className="w-full border border-gray-700 rounded-md px-3 py-2 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none">
+                                        <select className="w-full border border-gray-700 rounded-md px-3 py-1 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none">
                                             {data.options.map((option, index) => (
                                                 <option key={index} value={option}>
                                                     {option}
@@ -180,7 +180,7 @@ function CreateInvoice() {
                                             type={data.type}
                                             value={data.value}
                                             disabled={data.disabled}
-                                            className={`w-full border border-gray-700 rounded-md px-3 py-2 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none ${data.disabled ? "bg-gray-700 text-gray-400" : "bg-gray-800 text-gray-200"
+                                            className={`w-full border border-gray-700 rounded-md px-3 py-1 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none ${data.disabled ? "bg-gray-700 text-gray-400" : "bg-gray-800 text-gray-200"
                                                 }`}
                                         />
                                     )}
@@ -191,7 +191,7 @@ function CreateInvoice() {
                 </div>
 
                 {/*Datos del Cliente */}
-                <div className="bg-gray-900 p-6 rounded-lg shadow-xl">
+                <div className="bg-gray-900 px-6 py-4 rounded-lg shadow-xl">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {clientInfo.map((data) => (
                             <div
@@ -201,7 +201,7 @@ function CreateInvoice() {
                                 <label className="text-sm font-medium text-gray-400">{data.label}</label>
                                 <div className="flex items-center mt-1">
                                     {data.type === "select" ? (
-                                        <select className="w-full border border-gray-700 rounded-md px-3 py-2 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none">
+                                        <select className="w-full border border-gray-700 rounded-md px-3 py-1 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none">
                                             {data.options.map((option, idx) => (
                                                 <option key={idx} value={option}>
                                                     {option}
@@ -213,7 +213,7 @@ function CreateInvoice() {
                                             type={data.type}
                                             value={data.value}
                                             readOnly
-                                            className="w-full border border-gray-700 rounded-md px-3 py-2 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none"
+                                            className="w-full border border-gray-700 rounded-md px-3 py-1 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none"
                                         />
                                     )}
                                 </div>
@@ -231,7 +231,7 @@ function CreateInvoice() {
                                 {tableCategories.map((category) => (
                                     <th
                                         key={category}
-                                        className="py-2 px-4 bg-gray-800 text-gray-300 font-bold uppercase text-xs border-gray-700 border-2"
+                                        className="py-1 px-4 bg-gray-800 text-gray-300 font-bold uppercase text-xs border-gray-700 border-2"
                                     >
                                         {category}
                                     </th>
@@ -240,26 +240,26 @@ function CreateInvoice() {
                         </thead>
                         <tbody>
                             {selectedProducts.map((product) => (
-                                <tr key={product.provisionalId} className="border-b text-gray-400">
-                                    <td className="py-2 px-4 border-gray-700 border-2 text-left">
+                                <tr key={product.provisionalId} className="border-b text-gray-400 text-sm">
+                                    <td className="py-1 px-4 border-gray-700 border-2 text-left">
                                         {product.productName || product.serviceName}
                                     </td>
-                                    <td className="py-2 px-4 border-gray-700 border-2 text-center">
+                                    <td className="py-1 px-4 border-gray-700 border-2 text-center">
                                         {product.salePrice}
                                     </td>
-                                    <td className="py-2 px-4 border-gray-700 border-2 text-center">
+                                    <td className="py-1 px-4 border-gray-700 border-2 text-center">
                                         {product.quantity}
                                     </td>
-                                    <td className="py-2 px-4 border-gray-700 border-2 text-center">
+                                    <td className="py-1 px-4 border-gray-700 border-2 text-center">
                                         {product.salePrice}
                                     </td>
-                                    <td className="py-2 px-4 border-gray-700 border-2 text-center">
+                                    <td className="py-1 px-4 border-gray-700 border-2 text-center">
                                         0.00
                                     </td>
-                                    <td className="py-2 px-4 border-gray-700 border-2 text-center">
+                                    <td className="py-1 px-4 border-gray-700 border-2 text-center">
                                         0.00
                                     </td>
-                                    <td className="py-2 px-4 border-gray-700 border-2 text-center">
+                                    <td className="py-1 px-4 border-gray-700 border-2 text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
                                 </tr>
@@ -274,9 +274,9 @@ function CreateInvoice() {
                         <table className="min-w-full">
                             <tbody>
                                 {taxesData.map((row) => (
-                                    <tr key={row.label} className={`border-t border-gray-700 ${row.bold ? "font-bold" : ""}`}>
-                                        <td className="py-2 text-gray-400">{row.label}</td>
-                                        <td className="py-2 text-right text-gray-400">{row.value}</td>
+                                    <tr key={row.label} className={`border-t border-gray-700 text-sm${row.bold ? "font-bold" : ""}`}>
+                                        <td className="py-1 text-gray-400">{row.label}</td>
+                                        <td className="py-1 text-right text-gray-400">{row.value}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -306,7 +306,7 @@ function CreateInvoice() {
                             <div className="flex items-center mt-1">
                                 {data.type === "select" ? (
                                     <select
-                                        className="w-full border border-gray-700 rounded-md px-3 py-2 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none"
+                                        className="w-full border border-gray-700 rounded-md px-3 py-1 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none"
                                         defaultValue=""
                                         onChange={data.onChange}
                                     >
@@ -321,7 +321,7 @@ function CreateInvoice() {
                                         value={data.value}
                                         onChange={data.onChange}
                                         placeholder={data.placeholder}
-                                        className="w-full border border-gray-700 rounded-md px-3 py-2 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none"
+                                        className="w-full border border-gray-700 rounded-md px-3 py-1 bg-gray-800 text-gray-200 text-sm hover:border-cyan-500 focus:border-cyan-500 outline-none"
                                     />
                                 )}
                             </div>
@@ -329,7 +329,7 @@ function CreateInvoice() {
                     ))}
                     <div className="self-end w-full sm:w-auto">
                         <button
-                            className="w-full sm:w-auto bg-orange-600 text-white font-medium px-4 py-2 rounded-md hover:bg-orange-500"
+                            className="w-full sm:w-auto bg-orange-600 text-white font-medium px-4 py-1 rounded-md hover:bg-orange-500"
                             onClick={handleAddPayment}
                         >
                             + AGREGAR
@@ -339,24 +339,24 @@ function CreateInvoice() {
 
                 {/* Tabla */}
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-400 border-collapse border-gray-700 border-2">
+                    <table className="w-full text-xs font-bold text-left text-gray-400 border-collapse border-gray-700 border-2">
                         <thead className="bg-gray-800">
                             <tr>
-                                <th className="border border-gray-700 px-4 py-2">Forma de pago</th>
-                                <th className="border border-gray-700 px-4 py-2">Descripción</th>
-                                <th className="border border-gray-700 px-4 py-2 text-right">Amortización</th>
-                                <th className="border border-gray-700 px-4 py-2 text-right">Dinero recibido</th>
-                                <th className="border border-gray-700 px-4 py-2 text-center">Opciones</th>
+                                <th className="border border-gray-700 px-4 py-1.5">Forma de pago</th>
+                                <th className="border border-gray-700 px-4 py-1.5">Descripción</th>
+                                <th className="border border-gray-700 px-4 py-1.5 text-right">Amortización</th>
+                                <th className="border border-gray-700 px-4 py-1.5 text-right">Dinero recibido</th>
+                                <th className="border border-gray-700 px-4 py-1.5 text-center">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {methodsOfPaymentList.map((method) => (
                                 <tr key={method.id} className="border-b">
-                                    <td className="border border-gray-700 px-4 py-2">{method.label}</td>
-                                    <td className="border border-gray-700 px-4 py-2">{method.description}</td>
-                                    <td className="border border-gray-700 px-4 py-2 text-right">{method.amortization.toFixed(2)}</td>
-                                    <td className="border border-gray-700 px-4 py-2 text-right">{method.amount.toFixed(2)}</td>
-                                    <td className="border border-gray-700 px-4 py-2 text-center">
+                                    <td className="border border-gray-700 px-4 py-1.5">{method.label}</td>
+                                    <td className="border border-gray-700 px-4 py-1.5">{method.description}</td>
+                                    <td className="border border-gray-700 px-4 py-1.5 text-right">{method.amortization.toFixed(2)}</td>
+                                    <td className="border border-gray-700 px-4 py-1.5 text-right">{method.amount.toFixed(2)}</td>
+                                    <td className="border border-gray-700 px-4 py-1.5 text-center">
                                         <button
                                             className="text-rose-500 hover:text-rose-600"
                                             onClick={() =>
@@ -382,10 +382,10 @@ function CreateInvoice() {
                                 {paymentMethods.map((row) => (
                                     <tr
                                         key={row.label}
-                                        className="border-y border-gray-700"
+                                        className="border-y border-gray-700 text-sm"
                                     >
-                                        <td className="py-2 text-gray-400">{row.label}</td>
-                                        <td className="py-2 text-right text-gray-400">{row.value}</td>
+                                        <td className="py-1 text-gray-400">{row.label}</td>
+                                        <td className="py-1 text-right text-gray-400">{row.value}</td>
                                     </tr>
                                 ))}
                             </tbody>

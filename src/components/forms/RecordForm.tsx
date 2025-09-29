@@ -20,30 +20,30 @@ function RecordForm({
 }: RecordFormProps) {
     const navigate = useNavigate();
 
-  const physiologicalConstantsPlaceholders = {
+const physiologicalConstantsPlaceholders = {
     temperature: "Temperatura (°C)",
     heartRate: "Frec. Cardíaca (lpm)",
     weight: "Peso (kg)",
     oxygenSaturation: "Saturación O₂ (%)"
-  };
+};
 
-  return (
+return (
     <form>
-        <div className="space-y-8 p-4 text-gray-400">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-700 rounded-lg bg-gray-900">
+        <div className="space-y-3 p-4 text-gray-400">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 py-2 border border-gray-700 rounded-lg bg-gray-900">
                 <div>
                     <label className="block text-sm font-medium mb-2 text-gray-300" htmlFor="dateTime">
                         Fecha y hora de registro
                     </label>
                     <div className="flex w-full border rounded-lg overflow-hidden border-gray-600 focus-within:border-cyan-500">
                         <div className="flex items-center justify-center bg-gray-700 px-3">
-                            <CalendarIcon className="w-5 h-5 text-gray-400" />
+                            <CalendarIcon className="w-4 h-4 text-gray-400" />
                         </div>
                         <input
                             type="text"
                             id="dateTime"
                             disabled
-                            className="w-full pl-3 pr-10 py-2 bg-gray-700 focus:outline-none text-gray-200"
+                            className="w-full pl-3 pr-10 py-1 bg-gray-700 focus:outline-none text-gray-200"
                             value={formData.dateTime}
                         />
                     </div>
@@ -57,12 +57,12 @@ function RecordForm({
                         name="reason"
                         value={formData.reason}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none text-gray-200 hover:border-cyan-500 focus:border-cyan-500"
+                        className="w-full px-3 py-1 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none text-gray-200 hover:border-cyan-500 focus:border-cyan-500"
                     />
                 </div>
             </div>
 
-            <div className="space-y-2 p-4 border border-gray-700 rounded-lg bg-gray-900">
+            <div className="space-y-2 px-4 py-2 border border-gray-700 rounded-lg bg-gray-900">
                 <label htmlFor="anamnesis" className="text-sm font-medium text-gray-300">
                     Anamnesis y descripción del caso
                 </label>
@@ -75,7 +75,7 @@ function RecordForm({
                 />
             </div>
 
-            <div className="space-y-2 p-4 border border-gray-700 rounded-lg bg-gray-900">
+            <div className="space-y-2 px-4 py-2 border border-gray-700 rounded-lg bg-gray-900">
                 <label className="text-sm font-medium text-gray-300">Constantes fisiológicas</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {Object.keys(formData.physiologicalConstants).map((key) => (
@@ -88,14 +88,14 @@ function RecordForm({
                                 placeholder={physiologicalConstantsPlaceholders[key as keyof typeof physiologicalConstantsPlaceholders]}
                                 value={formData.physiologicalConstants[key as keyof typeof formData.physiologicalConstants]}
                                 onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none text-gray-200 hover:border-cyan-500 focus:border-cyan-500"
+                                className="w-full px-3 py-1 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none text-gray-200 hover:border-cyan-500 focus:border-cyan-500"
                             />
                         </div>
                     ))}
                 </div>
             </div>
 
-            <div className="space-y-2 p-4 border border-gray-700 rounded-lg bg-gray-900">
+            <div className="space-y-2 px-4 py-2 border border-gray-700 rounded-lg bg-gray-900">
                 <label htmlFor="clinicalExam" className="text-sm font-medium text-gray-300">
                     Examen clínico
                 </label>

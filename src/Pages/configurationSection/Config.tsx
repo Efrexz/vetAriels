@@ -35,7 +35,7 @@ const themeColorList = [
 
 function Config() {
 
-    const { setThemeColor, companyData, setCompanyData } = useGlobal();
+    const { companyData, setCompanyData } = useGlobal();
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
     console.log(companyData);
 
@@ -80,20 +80,20 @@ function Config() {
                 <HorizontalMenu mode="clinics" />
             </div>
             <div className="flex flex-col md:flex-row bg-gray-900 shadow-xl rounded-t-lg overflow-hidden border border-gray-700">
-                <div className="w-full md:w-1/3 p-6 bg-gray-800 flex flex-col items-center justify-center border-r border-gray-700">
+                <div className="w-full md:w-1/4 p-6 bg-gray-800 flex flex-col items-center justify-center border-r border-gray-700">
                     <div className="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center mb-4">
                         <RoleUserIcon className="w-16 h-16 text-gray-400" />
                     </div>
                 </div>
 
-                <div className="w-full md:w-2/3 p-6">
+                <div className="w-full md:w-3/4 p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {formFields.map((field, index) => (
                             <div key={index}>
                                 <label className="block text-gray-400">{field.label}</label>
                                 <div className="flex items-center">
                                     {field.icon &&
-                                        <div className="flex items-center justify-center bg-gray-700 px-3 py-3.5 rounded-l-lg border-y border border-gray-600">
+                                        <div className="flex items-center justify-center bg-gray-700 px-3 py-1.5 rounded-l-lg border-y border border-gray-600">
                                             <field.icon className="w-5 h-5 text-gray-400" />
                                         </div>
                                     }
@@ -101,7 +101,7 @@ function Config() {
                                     {field.type === 'select' ? (
                                         <select
                                             id={field.id}
-                                            className="border border-gray-700 rounded-lg p-3 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500"
+                                            className="border border-gray-700 rounded-lg px-3 py-1 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500"
                                             value={formData[field.id as keyof CompanyData]}
                                             onChange={handleChange}
                                         >
@@ -113,7 +113,7 @@ function Config() {
                                         </select>
                                     ) : (
                                         <input
-                                            className="border rounded-r-lg p-3 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500 border-y border-r border-gray-700"
+                                            className="border rounded-r-lg px-3 py-1 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500 border-y border-r border-gray-700"
                                             type={field.type}
                                             id={field.id}
                                             value={formData[field.id as keyof CompanyData]}
@@ -129,7 +129,7 @@ function Config() {
             </div>
             <div className='flex justify-end items-center bg-gray-800 py-3 px-5 shadow-xl rounded-b-lg border border-gray-700'>
                 <button
-                    className="bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 flex items-center gap-3"
+                    className="bg-emerald-600 text-white py-1 px-3 rounded-lg hover:bg-emerald-700 flex items-center gap-3"
                     onClick={updateCompanyData}
                 >
                     <PlusIcon className="w-5 h-5 text-white" />

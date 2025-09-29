@@ -157,13 +157,13 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors w-full md:w-auto"
+                        className="px-4 py-1 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors w-full md:w-auto"
                     >
                         Cancelar
                     </button>
                     <button
                         type="button"
-                        className={`px-4 py-2 ${config.buttonColor || "bg-red-600 hover:bg-red-700"} text-white rounded-lg flex items-center w-full md:w-auto whitespace-nowrap transition-colors`}
+                        className={`px-4 py-1 ${config.buttonColor || "bg-red-600 hover:bg-red-700"} text-white rounded-lg flex items-center w-full md:w-auto whitespace-nowrap transition-colors`}
                         onClick={typeOfOperationConfirm}
                     >
                         <DiskIcon className="w-5 h-5 mr-2" />

@@ -41,7 +41,7 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
         <div className="fixed inset-0 flex justify-center items-start bg-gray-900 bg-opacity-70 z-50 pt-20">
             <div className="bg-gray-800 p-6 rounded-xl w-full h-auto max-w-md modal-appear mx-4 border border-gray-700">
                 <h2 className="text-xl font-medium text-cyan-500 mb-4 border-b-2 pb-4 border-gray-700">Modificar Cantidad</h2>
-                <div className="flex flex-col gap-4 pb-8">
+                <div className="flex flex-col gap-4 pb-8 border-b border-gray-700">
                     <div>
                         <label className="block text-sm font-medium text-gray-400 mb-2">Cantidad</label>
                         <input
@@ -49,7 +49,7 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
                             type="number"
                             value={itemQuantity}
                             onChange={handleChange}
-                            className={`border ${errorMessage ? "border-red-500" : "border-gray-600"} rounded-lg py-3 px-4 w-full bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 ${errorMessage ? "focus:ring-red-500" : "focus:ring-cyan-500"} text-center`}
+                            className={`border ${errorMessage ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-4 w-full bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 ${errorMessage ? "focus:ring-red-500" : "focus:ring-cyan-500"} text-center`}
                             autoFocus
                         />
                         {

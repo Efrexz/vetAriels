@@ -145,7 +145,7 @@ function UserProfile() {
                             <label className="block text-gray-300 mb-1">{field.label}</label>
                             <div className="flex items-center">
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-800 px-3 py-3.5 rounded-l-lg">
+                                    <div className="flex items-center justify-center bg-gray-800 px-3 py-2 rounded-l-lg">
                                         <field.icon className="w-5 h-5 text-gray-400" />
                                     </div>
                                 }
@@ -155,7 +155,7 @@ function UserProfile() {
                                     value={formData[field.id as keyof FormDataState]}
                                     onChange={handleChange}
                                     disabled={field.disabled}
-                                    className={`border rounded-r-lg p-3 w-full focus:outline-none bg-gray-800 text-gray-200 ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'} `}
+                                    className={`border rounded-r-lg py-1 px-3 w-full focus:outline-none bg-gray-800 text-gray-200 ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'} `}
                                 />
                             </div>
                             {
@@ -169,7 +169,7 @@ function UserProfile() {
             </div>
             <div className='flex justify-center sm:justify-end items-center bg-gray-900 py-3 px-4 shadow-xl border-t border-gray-700 pt-4'>
                 <button
-                    className="bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-3 w-full sm:w-auto"
+                    className="bg-emerald-600 text-white py-1 px-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-3 w-full sm:w-auto"
                     onClick={updateData}
                 >
                     <PlusIcon className="w-5 h-5" />

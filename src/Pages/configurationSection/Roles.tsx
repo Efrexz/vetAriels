@@ -13,14 +13,14 @@ function Roles() {
 
     return (
         <section className="w-full p-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl sm:text-3xl font-medium mb-4 pb-4 border-b border-cyan-500 flex items-center">
+            <h1 className="text-xl sm:text-2xl font-medium mb-4 pb-4 border-b border-cyan-500 flex items-center">
                 <RoleUserIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Roles</span>
             </h1>
             <div className="bg-gray-900 rounded-lg shadow-xl p-3 mb-6">
                 <div className="overflow-x-auto border border-cyan-500/30 rounded-lg">
                     <button
-                        className="border border-gray-700 text-white bg-emerald-600 py-2 px-4 rounded-lg hover:bg-emerald-700 flex items-center gap-2 m-3 transition-colors"
+                        className="border border-gray-700 text-white bg-emerald-600 py-1 px-3 rounded-lg hover:bg-emerald-700 flex items-center gap-2 m-3 transition-colors"
                         onClick={() => navigate("/config/roles/create")}
                     >
                         <PlusIcon className="w-5 h-5" />
@@ -30,8 +30,8 @@ function Roles() {
                         <table className="w-full bg-gray-900">
                             <thead className="bg-gray-800">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 border-b border-r border-gray-700">Nombre</th>
-                                    <th className="px-6 py-3 text-center text-sm font-medium text-gray-300 border-b border-r border-gray-700">Opciones</th>
+                                    <th className="px-6 py-2 text-left text-sm font-medium text-gray-300 border-b border-r border-gray-700">Nombre</th>
+                                    <th className="px-6 py-2 text-center text-sm font-medium text-gray-300 border-b border-r border-gray-700">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -145,11 +145,11 @@ function ClientProfile() {
                         <div key={index}>
                             <label className="block text-gray-300 mb-2">{field.label}</label>
                             <div className="flex items-center">
-                                <div className="flex items-center justify-center bg-gray-700 px-3 py-3.5 rounded-l-lg border border-gray-600 border-r-0">
+                                <div className="flex items-center justify-center bg-gray-700 px-3 py-2 rounded-l-lg border border-gray-600 border-r-0">
                                     <field.icon className="w-5 h-5 text-gray-400" />
                                 </div>
                                 <input
-                                    className={`border rounded-r-lg p-3 bg-gray-700 w-full focus:outline-none text-gray-200 border-gray-600 transition-colors ${errors[field.id] ? "border-red-500" : "focus:border-cyan-500 hover:border-cyan-500"}`}
+                                    className={`border rounded-r-lg px-3 py-1.5 bg-gray-700 w-full focus:outline-none text-gray-200 border-gray-600 transition-colors ${errors[field.id] ? "border-red-500" : "focus:border-cyan-500 hover:border-cyan-500"}`}
                                     type={field.type}
                                     id={field.id}
                                     value={formData[field.id as keyof FormDataState]}

@@ -94,7 +94,7 @@ function DeleteModal({ elementToDelete, onClose, mode }: DeleteModalProps) {
                             value={itemValue}
                             onChange={(e) => setItemValue(e.target.value)}
                             placeholder="Escribe el nombre aquí"
-                            className={`w-full ${errorMessage ? 'border-red-500' : 'border-gray-600'} bg-gray-700 text-gray-200 placeholder-gray-500 border rounded-lg focus:outline-none p-3 mb-1 focus:ring-1 focus:ring-cyan-500`}
+                            className={`w-full ${errorMessage ? 'border-red-500' : 'border-gray-600'} bg-gray-700 text-gray-200 placeholder-gray-500 border rounded-lg focus:outline-none px-3 py-2 mb-1 focus:ring-1 focus:ring-cyan-500`}
                             required
                         />
                         {
