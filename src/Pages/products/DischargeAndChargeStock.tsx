@@ -164,10 +164,10 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
         },
     ]
 
-    const tableHeaders = ["Código de Barras", "Producto", "Precio Unitario de Compra", "Precio Unitario de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
+    const tableHeaders = ["Código de Barras", "Producto", "Precio de Compra", "Precio de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
 
     return (
-        <section className="w-full p-6 bg-gray-950 text-gray-200">
+        <section className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
             <header className="flex items-center mb-4 border-b-2 border-cyan-500 pb-4">
                 <h1 className="text-xl md:text-2xl font-medium flex items-center">
                     {typeOfOperation === 'discharge' ? <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-rose-500" /> : <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-emerald-500" />}
@@ -232,7 +232,7 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                             <tr>
                                 {
                                     tableHeaders.map((header) => (
-                                        <th key={header} className="px-6 py-1 border border-gray-600 text-center text-sm font-medium text-gray-300">
+                                        <th key={header} className="p-1 border border-gray-600 text-center text-sm font-medium text-gray-300">
                                             {header}
                                         </th>
                                     ))

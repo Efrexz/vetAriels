@@ -10,7 +10,7 @@ function UserInfo() {
     const { section } = useParams();
 
     return (
-        <div className="w-full p-6 bg-gray-950">
+        <div className="w-full p-1 md:p-6 bg-gray-950">
             <div className="flex items-center mb-4 border-b border-cyan-500 pb-4 px-4">
                 <h1 className="text-xl md:text-2xl font-medium flex items-center" >
                     <RoleUserIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />

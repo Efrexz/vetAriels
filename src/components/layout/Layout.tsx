@@ -17,7 +17,7 @@ function Layout({ children }: LayoutProps) {
             <NavBar />
             <main className="flex h-screen w-full bg-gray-950 text-gray-800 relative pt-16">
                 <button
-                    className="lg:hidden absolute top-4 left-4 z-50 p-2 rounded-lg shadow-md bg-gray-900 text-cyan-400"
+                    className="lg:hidden absolute top-4 left-4 z-50 p-2 mt-14 rounded-lg shadow-md bg-gray-900 text-cyan-400"
                     onClick={toggleSideMenu}
                 >
                     {isSidebarOpen ? <XIcon className="w-6 h-6" /> : <BurguerMenuIcon className="w-6 h-6" />}

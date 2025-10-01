@@ -26,7 +26,7 @@ function ClientPets() {
         <div className="flex flex-col w-full">
             <div className="p-2 lg:px-6">
                 <div className="bg-gray-800 rounded-lg shadow-lg p-3 w-full border border-gray-700">
-                    <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
+                    <div className="flex flex-row justify-center sm:justify-start items-center gap-4 mb-4">
                         <button
                             className="bg-emerald-600 text-white py-1.5 px-4 rounded-lg hover:bg-emerald-700 flex items-center gap-3 transition-colors font-semibold"
                             onClick={() => navigate(`/pets/create/${id}`)}

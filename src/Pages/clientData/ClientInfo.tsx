@@ -34,16 +34,16 @@ function ClientInfo() {
     }
 
     return (
-        <main className="w-full p-4 sm:p-6 bg-gray-950 text-gray-200">
+        <main className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
             <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-6 border-b border-cyan-500 pb-4">
-                <h1 className="text-xl sm:text-2xl font-medium text-cyan-500">
+                <h1 className="text-xl md:text-2xl font-medium text-cyan-500">
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Información del Cliente</span>
                 </h1>
                 <HorizontalMenu mode="clients" />
             </div>
 
             <div className="flex flex-col lg:flex-row bg-gray-800 border border-gray-700 shadow-lg rounded-lg overflow-hidden">
-                <div className="w-full md:w-1/5 p-6 bg-gray-700 flex flex-col items-center h-auto">
+                <div className="w-full lg:w-1/5 p-6 bg-gray-700 flex flex-col items-center h-auto">
                     <div className="w-32 h-32 bg-gray-600 rounded-full flex items-center justify-center mb-4">
                         <RoleUserIcon className="w-16 h-16 text-cyan-400" />
                     </div>

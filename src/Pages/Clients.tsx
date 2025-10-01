@@ -19,8 +19,8 @@ function Clients() {
     const navigate = useNavigate();
 
     return (
-        <section className="bg-gray-950 w-full p-6">
-            <h1 className="text-xl sm:text-2xl font-medium text-cyan-500 mb-4 pb-4 border-b-2 border-cyan-500 flex items-center">
+        <section className="bg-gray-950 w-full p-1 md:p-6">
+            <h1 className="text-xl md:text-2xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex items-center">
                 <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 text-cyan-500 mr-2" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Clientes</span>
             </h1>
@@ -28,24 +28,24 @@ function Clients() {
                 <div className="p-3 rounded-lg border border-cyan-500/30 mb-4">
                     <div className="flex flex-wrap md:flex-nowrap items-center gap-3">
                         <div className="flex flex-wrap md:flex-nowrap gap-2">
-                        <div className="flex border-gray-600 border rounded-lg overflow-hidden bg-gray-700 focus-within:border-cyan-500">
-                            <div className="flex items-center justify-center bg-gray-700 px-3">
-                            <SearchIcon className="w-5 h-5 text-gray-400" />
+                            <div className="w-full flex border-gray-600 border rounded-lg overflow-hidden bg-gray-700 focus-within:border-cyan-500">
+                                <div className="flex items-center justify-center bg-gray-700 px-3">
+                                    <SearchIcon className="w-5 h-5 text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Buscar..."
+                                    className="w-full py-1 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200 placeholder-gray-500"
+                                />
                             </div>
                             <input
-                            type="text"
-                            placeholder="Buscar..."
-                            className="w-full py-1 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200 placeholder-gray-500"
+                                type="date"
+                                className="w-full md:w-[250px] py-1 px-4 border-gray-600 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 focus:border-cyan-500"
                             />
-                        </div>
-                        <input
-                            type="date"
-                            className="w-full md:w-[250px] py-1 px-4 border-gray-600 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 focus:border-cyan-500"
-                        />
                         </div>
 
                         <button
-                        className="border border-gray-700 text-white bg-emerald-600 py-1 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
+                        className="border border-gray-700 text-white bg-emerald-600 py-1 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors w-full"
                         onClick={() => navigate("/clients/create")}
                         >
                         <PlusIcon className="w-5 h-5" />

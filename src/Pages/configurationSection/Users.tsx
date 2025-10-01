@@ -19,7 +19,7 @@ function Users() {
     const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
     return (
-        <section className="w-full p-6 bg-gray-950 text-gray-200">
+        <section className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
             <h1 className="text-xl sm:text-2xl font-medium text-white mb-4 border-b border-cyan-500 pb-4 flex items-center">
                 <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Usuarios</span>
@@ -45,7 +45,7 @@ function Users() {
                         <thead className="bg-gray-700">
                             <tr>
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-1 px-4 text-center border border-gray-600 font-bold text-sm text-gray-300">
+                                    <th key={header} className="p-1 text-center border border-gray-600 font-bold text-sm text-gray-300">
                                         {header}
                                     </th>
                                 ))}

@@ -150,9 +150,9 @@ function Sales() {
     }
 
     return (
-        <section className="w-full p-4 sm:px-6 lg:px-8 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-xl sm:text-3xl font-medium text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
-                <ShoppingCartPlusIcon className="w-8 h-8 sm:w-10 sm:h-10 mr-3 text-cyan-400 drop-shadow-lg" />
+        <section className="w-full pt-0 px-4 sm:px-6 lg:pt-4 lg:px-8 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl md:text-2xl font-medium text-white mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+                <ShoppingCartPlusIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Ventas</span>
             </h1>
 
@@ -252,9 +252,9 @@ function Sales() {
                 )}
             </div>
 
-            <div className="bg-gray-900 rounded-2xl px-20 py-2.5 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 border border-cyan-500 shadow-xl ">
+            <div className="bg-gray-900 rounded-2xl px-4 sm:px-6 md:px-10 py-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 border border-cyan-500 shadow-xl ">
                 <button
-                    className={`text-white font-bold py-1 px-28 rounded-xl focus:outline-none w-full md:w-auto transition-all
+                    className={`text-white font-bold py-2 px-4 sm:px-6 md:px-10 rounded-xl focus:outline-none w-full transition-all
                     ${petsByOwner.length !== 0 ? "bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/50" : "bg-gray-700 text-gray-400 cursor-not-allowed"}`}
                     disabled={ petsByOwner.length === 0}
                     onClick={() => setQueueModalOpen(true)}
@@ -262,7 +262,7 @@ function Sales() {
                     Enviar a la cola médica
                 </button>
                 <button
-                    className={`text-white font-bold py-1 px-28 rounded-xl focus:outline-none w-full md:w-auto transition-all
+                    className={`text-white font-bold py-2 px-4 sm:px-6 md:px-10 rounded-xl focus:outline-none w-full transition-all
                     ${petsByOwner.length !== 0 ? "bg-green-600 hover:bg-green-700 shadow-md shadow-green-500/50" : "bg-gray-700 text-gray-400 cursor-not-allowed"}`}
                     disabled={petsByOwner.length === 0}
                     onClick={() => {

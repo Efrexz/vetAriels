@@ -31,7 +31,7 @@ function Discharges() {
 
 
     return (
-        <section className="w-full p-6 bg-gray-950 text-gray-200">
+        <section className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
             <h1 className="text-xl md:text-2xl items-center font-medium mb-4 pb-4 border-b-2 border-gray-700 flex">
                 <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-rose-600" />
                 <span className="text-rose-600">

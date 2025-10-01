@@ -94,7 +94,7 @@ function EditProductPrice({ productData }: EditProductPriceProps) {
                                 type={field.type}
                                 id={field.id}
                                 disabled={field.disabled || false}
-                                className="w-full px-4 py-2 bg-gray-700 focus:outline-none"
+                                className="w-full px-4 py-1 bg-gray-700 focus:outline-none"
                             />
                         </div>
                         {field.extraCheckbox && (

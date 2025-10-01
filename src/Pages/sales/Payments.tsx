@@ -21,8 +21,8 @@ function Payments() {
     const [paymentToEdit, setPaymentToEdit] = useState<Payment | null>(null);
     const [operationType, setOperationType] = useState<OperationType>('ENTRADA');
     return (
-        <section className="w-full p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-xl sm:text-2xl font-medium  mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
+        <section className="w-full p-1 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl md:text-2xl font-medium  mb-6 tracking-wide border-b border-cyan-500 pb-3 flex items-center">
                 <FileInvoiceIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Entradas / Salidas de Caja</span>
             </h1>

@@ -150,7 +150,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
         { label: "Stock Mínimo *", name: "minStock", type: "number", tooltip: "¿Qué cantidad de este producto deberíamos tener como mínimo para evitar quedarnos sin stock?", icon: ArrowDown, columsNumber: 2 },
         { label: "Stock Máximo *", name: "maxStock", type: "number", tooltip: "¿Qué cantidad de este producto deberíamos tener como máximo para evitar sobrestock?", icon: ArrowUp, columsNumber: 2 },
         { label: "Disponible para Ventas *", name: "availableForSales", type: "select", options: ["SI", "NO"], columsNumber: 2 },
-        { label: "Frecuencia de aplicación o venta (en número de días)", name: "frequency", type: "number", columsNumber: 2 },
+        { label: "Frecuencia de aplicación o venta", name: "frequency", type: "number", columsNumber: 2 },
         { label: "Estado", name: "status", type: "select", options: ["ACTIVO", "INACTIVO"], columsNumber: 1 },
         { label: "Gravado por ICBPER", name: "icbperTax", type: "select", options: ["SI", "NO"], tooltip: "Es un impuesto que grava la compra o adquisición gratuita de bolsas plásticas", columsNumber: 1 },
     ];
@@ -163,7 +163,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                     {fields.map((field) => (
                         <div
                             key={field.name}
-                            className={`mb-4 col-span-1 sm:col-span-${Math.min(
+                            className={`mb-1.5 col-span-1 sm:col-span-${Math.min(
                                 field.columsNumber,
                                 2
                             )} md:col-span-${Math.min(
@@ -171,7 +171,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                 4
                             )} lg:col-span-${field.columsNumber}`}
                         >
-                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.name}>
+                            <label className="block text-gray-300 font-medium mb-1" htmlFor={field.name}>
                                 {field.label}
                             </label>
                             <div className="flex w-full border border-gray-600 rounded-lg overflow-hidden focus-within:border-cyan-500 hover:border-cyan-500 transition-colors">
@@ -188,7 +188,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                         value={formData[field.name]}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
+                                        className={`w-full px-4 py-1 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
                                             ? "border-red-500"
                                             : ""
                                             }`}
@@ -199,7 +199,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className={`w-full px-4 py-2 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
+                                        className={`w-full px-4 py-1  bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
                                             ? "border-red-500"
                                             : ""
                                             }`}

@@ -10,11 +10,11 @@ function SearchModal ({ onClose }: SearchModalProps)  {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-90 flex items-start justify-center pt-20 bg-black/60 backdrop-blur-sm"
             onClick={onClose}
         >
             <div
-                className="bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg mx-4 z-10 modal-appear border border-gray-700 flex flex-col"
+                className="bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg mx-4 z-90 modal-appear border border-gray-700 flex flex-col"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-center px-4 py-3 border-b border-gray-700 flex-shrink-0">
@@ -33,8 +33,8 @@ function SearchModal ({ onClose }: SearchModalProps)  {
 
                 <div className="p-4">
 
-                    <div className="flex w-full rounded-lg overflow-hidden border border-gray-600 focus-within:border-cyan-400 transition-colors">
-                        <div className="flex items-center justify-center bg-gray-900/50 px-4">
+                    <div className="flex w-full rounded-lg border border-gray-700 focus-within:border-cyan-400 transition-colors">
+                        <div className="flex items-center justify-center bg-gray-800 px-4">
                             <SearchIcon className="w-5 h-5 text-gray-400" />
                         </div>
                         <ClientSearchInput mode={"sales"} />

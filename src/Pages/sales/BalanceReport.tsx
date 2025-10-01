@@ -97,8 +97,8 @@ const sections: ReportSection[] = [
 
 function BalanceReport() {
     return (
-        <section className="w-full p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-xl sm:text-2xl font-medium text-white mb-4  border-b border-cyan-500 pb-3 flex items-center">
+        <section className="w-full p-1 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl md:text-2xl font-medium text-white mb-4  border-b border-cyan-500 pb-3 flex items-center">
                 <FileInvoiceIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Cuadre de caja</span>
             </h1>
@@ -123,11 +123,11 @@ function BalanceReport() {
                 return !section.payments ? (
                     (
                         <div key={index} className="bg-gray-800 shadow-lg rounded-xl px-4 py-2 mb-6 border border-gray-700">
-                            <h2 className="text-xl font-medium text-gray-300 mb-4">{section.title}</h2>
+                            <h2 className="text-md font-medium text-gray-300 mb-4">{section.title}</h2>
                             {section.data.map((item, i) => (
                                 <div
                                     key={i}
-                                    className={`flex justify-between text-base py-1 px-4 rounded-lg my-2
+                                    className={`flex justify-between text-sm py-1 px-4 rounded-lg my-2
                                     ${item.highlight ? 'text-cyan-400 font-bold bg-gray-700 border-2 border-cyan-500/50' : 'text-gray-200 bg-gray-700 border border-gray-600'}
                                     hover:bg-gray-700/50 transition-all`}
                                 >
@@ -140,7 +140,7 @@ function BalanceReport() {
                 )
                     : (
                         <div key={index} className="bg-gray-800 shadow-lg rounded-xl px-4 py-2 mb-6 border border-gray-700">
-                            <h2 className="text-xl text-gray-300 font-semibold mb-1">
+                            <h2 className="text-md text-gray-300 font-semibold mb-1">
                                 Resumen de entradas y salidas de dinero directos de caja (no considera ventas):
                             </h2>
                             {section.data.map((section, index) => (
@@ -149,7 +149,7 @@ function BalanceReport() {
                                         <span>{section?.type}</span>
                                         <span>Monto</span>
                                     </div>
-                                    <div className="grid grid-cols-2 bg-gray-700 rounded-lg text-base items-center border border-gray-600">
+                                    <div className="grid grid-cols-2 bg-gray-700 rounded-lg text-sm items-center border border-gray-600">
                                         <span className="py-1 px-4 text-gray-200">EFECTIVO</span>
                                         <span className="py-1 px-4 text-right text-gray-200 font-bold">
                                             {section?.items[0]?.value}

@@ -23,8 +23,8 @@ function ActiveOrders() {
         return total.toFixed(2); // 2 decimales para mostrarlo como moneda.
     };
     return (
-        <section className="w-full p-3 sm:p-4 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-xl sm:text-2xl font-medium text-white mb-4 tracking-wide border-b border-cyan-500 pb-2 flex items-center">
+        <section className="w-full p-1 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
+            <h1 className="text-xl md:text-2xl font-medium text-white mb-4 tracking-wide border-b border-cyan-500 pb-2 flex items-center">
                 <ShoppingCart className="w-7 h-7 sm:w-8 sm:h-8 mr-2 text-cyan-400 drop-shadow-lg" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Cuentas activas</span>
             </h1>

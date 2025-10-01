@@ -40,12 +40,12 @@ function ActiveOrdersGrooming() {
     }
 
     return (
-        <section className="w-full px-4 sm:px-6 lg:px-8 overflow-auto custom-scrollbar mt-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl sm:text-2xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
+        <section className="w-full p-1 md:p-6  overflow-auto custom-scrollbar bg-gray-950 text-gray-200">
+            <h1 className="text-xl md:text-2xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
                 <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-cyan-500 mr-2" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Peluquería:</span> <span className=" font-light pl-1"> Turnos de hoy</span>
             </h1>
-            <div className="bg-gray-900 rounded-lg shadow-xl px-4 py-3   mb-6 border border-gray-700">
+            <div className="bg-gray-800 px-4 py-3 rounded-xl mb-4 border border-gray-700">
                 <div className="p-4 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4 mb-4 ">
                         <div className="flex w-full md:w-[350px] bg-gray-700 border border-gray-600 rounded-xl overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500 transition-colors">

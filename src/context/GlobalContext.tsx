@@ -113,6 +113,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         setShowPatientList(false);
         setShowUserOptions(false);
         setShowBathList(false);
+        setShowSearchModal(false);
     }
 
     function toggleSearchInput() {

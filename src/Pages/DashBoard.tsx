@@ -85,14 +85,14 @@ function DashBoard() {
 
     return (
         <main className="container mx-auto p-4 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-4 border-b border-cyan-500 pb-4">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-4 border-b border-cyan-500 pb-4">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Escritorio Veterinario</span>
             </h1>
             <section className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-8 pt-6">
                 {dashBoardCategories.map((category) => (
                     <Link key={category.link} to={category.link}>
                         <div className={
-                            `relative bg-gray-900 rounded-2xl flex flex-col items-center justify-center min-h-[120px] sm:min-h-[140px] cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-cyan-500/50 group`
+                            `relative bg-gray-900 rounded-2xl flex flex-col  items-center justify-center min-h-[120px] sm:min-h-[140px] cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-cyan-500/50 group`
                         }>
                             <div className="absolute inset-0 rounded-2xl group-hover:ring-2 group-hover:ring-cyan-500/50 group-hover:ring-offset-2 group-hover:ring-offset-gray-950 transition-all duration-300"></div>
                             {<category.icon className="h-8 w-8 sm:h-10 sm:w-10 mb-3 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300 filter group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]" />}

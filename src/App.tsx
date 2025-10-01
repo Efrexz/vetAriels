@@ -6,6 +6,7 @@ import { FinancialProvider } from './context/FinancialContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { DashBoard } from './Pages/DashBoard';
 import { Login } from './Pages/Login';
+import {RegisterForm} from './Pages/Register';
 import { Sales } from './Pages/sales/Sales';
 import { ActiveOrders } from './Pages/sales/ActiveOrders';
 import { Invoices } from './Pages/sales/Invoices';

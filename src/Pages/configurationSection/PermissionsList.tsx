@@ -137,7 +137,7 @@ function PermissionsList() {
     ];
 
     return (
-        <div className="p-6 bg-gray-950 text-gray-200">
+        <div className="p-1 md:p-6 bg-gray-900 rounded-lg shadow-2xl">
             <h1 className="text-2xl sm:text-3xl font-medium items-center text-gray-500 mb-4 pb-4 border-b border-cyan-500 flex">
                 <KeyIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Permisos</span>
