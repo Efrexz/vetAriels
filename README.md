@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Gestor Veterinario es una aplicación para la administración de clínicas veterinarias. Permite gestionar clientes, mascotas, historiales clínicos, ventas de productos, servicios de grooming y control de stock. Además, cuenta con un sistema de usuarios con roles personalizados para el acceso seguro a la plataforma.
+Gestor Veterinario es una aplicación para la administración de clínicas veterinarias. Permite gestionar clientes, mascotas, historiales clínicos, ventas de productos, servicios de grooming y control de stock.
 
 ## Características principales
 
@@ -16,7 +16,6 @@ Gestor Veterinario es una aplicación para la administración de clínicas veter
 
 - **TypeScript**
 - **React**
-- **React Router**
 - **Tailwind CSS**
 
 ## Instalación y ejecución
@@ -97,7 +96,7 @@ Una vez que hayas creado usuarios, clientes, mascotas, productos y servicios, po
 
 ## Contacto
 
-📩 **Email**: efrexz448@outlook.com
+📩 **Email**: efrexz448@gmail.com
 💼 **Linkedin**: https://www.linkedin.com/in/efrainandrade-dev/
 
 ---

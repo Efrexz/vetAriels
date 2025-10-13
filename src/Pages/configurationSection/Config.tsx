@@ -75,7 +75,7 @@ function Config() {
     }
 
     return (
-        <div className="w-full p-6 bg-gray-950 text-gray-200">
+        <div className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
             <div className="flex justify-between items-center mb-6 border-b border-cyan-500 pb-4">
                 <HorizontalMenu mode="clinics" />
             </div>

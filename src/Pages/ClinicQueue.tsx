@@ -70,7 +70,6 @@ function ClinicQueue() {
         user: '',
         state: ''
     });
-    console.log(petsInQueueMedical);
 
     // aca si no usemos el useMemo porque tampoco son muchos pacientes en cola de espera
     const filteredPets = petsInQueueMedical.filter(petInQueue => {

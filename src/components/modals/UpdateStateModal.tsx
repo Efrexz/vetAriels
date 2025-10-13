@@ -36,7 +36,7 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps
 
     return (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex items-start justify-center z-50 pt-20">
-            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-lg shadow-xl modal-appear border border-gray-700">
+            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-lg shadow-xl modal-appear border border-gray-700 m-3">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-medium text-cyan-500">
                         Actualizar estado

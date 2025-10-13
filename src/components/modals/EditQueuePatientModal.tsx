@@ -57,7 +57,7 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
     };
 
     return (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center p-4 sm:p-6 z-50 overflow-y-auto">
+        <div className="fixed inset-0 flex justify-center items-start bg-gray-950 bg-opacity-70 z-50 overflow-y-scroll p-3">
             <div className="bg-gray-900 rounded-lg w-full max-w-3xl p-6 shadow-xl border border-gray-700 modal-appear mx-auto space-y-6">
                 <h2 className="text-xl sm:text-2xl font-semibold text-cyan-500 mb-4 pb-2 border-b-2 border-gray-700">Generar Consulta</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">

@@ -64,13 +64,13 @@ function Products() {
                 <div className="p-4 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
                     <div className="flex flex-wrap items-center gap-4 mb-4">
                         <div className="flex w-full sm:w-[350px] border-gray-600 border rounded-lg overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500">
-                            <div className="flex items-center justify-center bg-gray-700 px-3">
+                            <div className="flex items-center justify-center bg-gray-700 px-2">
                                 <SearchIcon className="w-5 h-5 text-gray-400" />
                             </div>
                             <input
                                 type="text"
                                 placeholder="Buscar por nombre..."
-                                className="w-full py-1 px-5 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
+                                className="w-full py-1 px-2 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
                                 value={searchTerm}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                             />

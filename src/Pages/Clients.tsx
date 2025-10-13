@@ -40,12 +40,12 @@ function Clients() {
                             </div>
                             <input
                                 type="date"
-                                className="w-full md:w-[250px] py-1 px-4 border-gray-600 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 focus:border-cyan-500"
+                                className="w-full sm:w-[250px] py-1 px-4 border-gray-600 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 focus:border-cyan-500"
                             />
                         </div>
 
                         <button
-                        className="border border-gray-700 text-white bg-emerald-600 py-1 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors w-full"
+                        className="border border-gray-700 text-white bg-emerald-600 py-1 px-4 rounded-xl hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors w-full sm:w-auto"
                         onClick={() => navigate("/clients/create")}
                         >
                         <PlusIcon className="w-5 h-5" />

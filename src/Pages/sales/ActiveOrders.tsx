@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
 import { Client } from '@t/client.types';
@@ -12,6 +13,20 @@ function ActiveOrders() {
 
     const { clients } = useClients();
     const navigate = useNavigate();
+
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filters, setFilters] = useState<Record<string, string>>({
+            provider: '',
+            line: '',
+            category: '',
+            stock: '',
+        });
+
+    const filteredClients = clients.filter(client => {
+        const matchesSearch = client.firstName?.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+
+    )
 
     //filtramos los clientes que tengan por lo menos un producto en la cola de ventas
     const activeAccounts: Client[] = clients.filter(client => client.products && client.products.length > 0);
