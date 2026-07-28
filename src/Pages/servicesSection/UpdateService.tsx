@@ -145,7 +145,6 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                             )}
                         </div>
                     ))}
-                    {isSuccessModalOpen && <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />}
                 </div>
                 {
                     isErrorModalOpen && (
@@ -160,6 +159,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                     cancelText="Regresar"
                     mode="modal"
                 />
+            {isSuccessModalOpen && <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />}
         </div>
     );
 }

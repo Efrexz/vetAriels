@@ -2,116 +2,94 @@ import { InventoryOperation, PurchasedItem } from "@t/inventory.types";
 import RoleUserIcon from "@assets/roleUserIcon.svg?react";
 import BookIcon from '@assets/bookIcon.svg?react';
 
-
 type OperationMode = 'restock' | 'discharge';
 
 interface OperationDetailProps {
-    typeOfOperation: OperationMode;
-    operationData: InventoryOperation;
-    tableCategories: string[];
+  typeOfOperation: OperationMode;
+  operationData: InventoryOperation;
 }
 
-function OperationDetail({ typeOfOperation, operationData, tableCategories }: OperationDetailProps) {
+function OperationDetail({ typeOfOperation, operationData }: OperationDetailProps) {
+  const isRestock = typeOfOperation === 'restock';
+  const selectedProducts: PurchasedItem[] = operationData.products;
 
-    const selectedProducts: PurchasedItem[] = operationData.products;
+  const subtotal = selectedProducts.reduce(
+    (acc, p) => acc + (p.cost || 0) * (p.quantity || 0), 0
+  );
 
-    const subtotal = selectedProducts.reduce(
-        (acc, product) => acc + (product.cost || 0) * (product.quantity || 0),
-        0
-    );
-
-    return (
-        <section className="w-full mx-auto p-6 bg-paper shadow-sm rounded-2xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 text-sm gap-6 p-4 bg-paper rounded-lg border border-slate-200">
-                <div className="flex flex-col md:flex-row gap-4 md:gap-8 border-b md:border-b-0 md:border-r border-slate-200 text-slate pb-4 md:pb-0 md:pl-6">
-                    <div className="flex-shrink-0">
-                        <BookIcon className="w-8 h-8 text-primary" />
-                    </div>
-                    <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 text-xs">
-                        <p>Fecha de registro:</p>
-                        <span className="font-medium text-ink">{operationData.date} - {operationData.time}</span>
-                        <p>Motivo:</p>
-                        <span className="font-medium text-ink">{operationData.reason}</span>
-                        <p>Almacén de destino:</p>
-                        <span className="font-medium text-ink">{operationData.store}</span>
-                    </div>
-                </div>
-
-                <div className="flex flex-col md:flex-row gap-4 md:gap-8 border-slate-200 text-slate pt-4 md:pt-0 md:pl-6">
-                    <div className="flex-shrink-0">
-                        <RoleUserIcon className="w-8 h-8 text-primary" />
-                    </div>
-                    <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 text-xs">
-                        <p>Responsable:</p>
-                        <span className="font-medium text-ink">{operationData.responsible}</span>
-                        <p>Registrado por:</p>
-                        <span className="font-medium text-ink">{operationData.registeredBy}</span>
-                    </div>
-                </div>
+  return (
+    <section className="w-full mx-auto bg-paper rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
+          <div className="flex gap-4 items-start">
+            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <RoleUserIcon className="w-5 h-5 text-primary" />
             </div>
-
-            <div className="overflow-x-auto mt-8 rounded-lg">
-                <table className="min-w-full bg-white overflow-hidden">
-                    <thead>
-                        <tr className="border-b border-slate-200">
-                            {tableCategories.map((category, index) => (
-                                <th
-                                    key={index}
-                                    className="py-1 px-4 bg-slate-100 text-ink font-bold text-sm"
-                                >
-                                    {category}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {selectedProducts.map((product: PurchasedItem) => (
-                            <tr key={product.provisionalId} className="border-b border-slate-100 hover:bg-slate-50/50 text-sm">
-                                <td className="py-1 px-4 text-center text-slate">
-                                    {product.systemCode?.slice(0, 9).toUpperCase()}
-                                </td>
-                                <td className="py-1 px-4 text-center text-slate">
-                                    {product.productName}
-                                </td>
-
-                                <td className="py-1 px-4 text-center text-slate">
-                                    {product.cost}
-                                </td>
-                                {
-                                    typeOfOperation === "restock" && (
-                                        <td className="py-1 px-4 text-center text-slate">
-                                            {product.salePrice}
-                                        </td>
-                                    )
-                                }
-                                <td className="py-1 px-4 text-center text-slate">
-                                    {product.quantity}
-                                </td>
-                                <td className="py-1 px-4 text-center text-slate">
-                                    {product.cost ?? 0 * product.quantity}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-1.5 text-sm">
+              <span className="text-slate">Responsable:</span>
+              <span className="font-medium text-ink">{operationData.responsible}</span>
+              <span className="text-slate">Registrado por:</span>
+              <span className="font-medium text-ink">{operationData.registeredBy}</span>
             </div>
+          </div>
 
-            <div className="mt-4 text-slate flex flex-col justify-center items-end gap-2 border-t border-slate-200 bg-paper p-4 rounded-b-lg text-sm">
-                <div className="flex justify-between w-full max-w-sm">
-                    <p>Subtotal:</p>
-                    <span className="font-medium text-ink">{(subtotal - subtotal * 0.18).toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between w-full max-w-sm">
-                    <p>Impuestos (18%):</p>
-                    <span className="font-medium text-ink">{(subtotal * 0.18).toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between w-full max-w-sm text-xl font-semibold text-emerald-400">
-                    <p>TOTAL:</p>
-                    <span>{subtotal.toFixed(2)}</span>
-                </div>
+          <div className="flex gap-4 items-start">
+            <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center flex-shrink-0">
+              <BookIcon className="w-5 h-5 text-teal" />
             </div>
-        </section>
-    );
+            <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-1.5 text-sm">
+              <span className="text-slate">Fecha:</span>
+              <span className="font-medium text-ink">{operationData.date} {operationData.time}</span>
+              <span className="text-slate">Motivo:</span>
+              <span className="font-medium text-ink truncate max-w-[200px]" title={operationData.reason}>{operationData.reason}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto mt-6">
+          <table className="min-w-full">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">C&oacute;digo</th>
+                <th className="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate">Producto</th>
+                <th className="py-3 px-3 text-center text-xs font-semibold uppercase tracking-wider text-slate">P. Compra</th>
+                {isRestock && <th className="py-3 px-3 text-center text-xs font-semibold uppercase tracking-wider text-slate">P. Venta</th>}
+                <th className="py-3 px-3 text-center text-xs font-semibold uppercase tracking-wider text-slate">Cantidad</th>
+                <th className="py-3 px-3 text-right text-xs font-semibold uppercase tracking-wider text-slate">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedProducts.map((product: PurchasedItem) => (
+                <tr key={product.provisionalId} className="border-b border-slate-100 hover:bg-slate-50/60 text-sm">
+                  <td className="py-3 px-4 text-center text-slate font-mono">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
+                  <td className="py-3 px-3 text-ink font-medium">{product.productName}</td>
+                  <td className="py-3 px-3 text-center text-slate font-mono">S/ {product.cost?.toFixed(2) || '0.00'}</td>
+                  {isRestock && <td className="py-3 px-3 text-center text-slate font-mono">S/ {product.salePrice?.toFixed(2) || '0.00'}</td>}
+                  <td className="py-3 px-3 text-center text-slate">{product.quantity}</td>
+                  <td className="py-3 px-3 text-right text-ink font-mono font-semibold">S/ {((product.cost || 0) * (product.quantity || 0)).toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="bg-slate-50 p-4 border-t border-slate-200 text-sm">
+        <div className="flex justify-between w-full max-w-sm ml-auto">
+          <span className="text-slate">Subtotal:</span>
+          <span className="font-medium text-ink">S/ {(subtotal - subtotal * 0.18).toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between w-full max-w-sm ml-auto mt-1">
+          <span className="text-slate">Impuestos (18%):</span>
+          <span className="font-medium text-ink">S/ {(subtotal * 0.18).toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between w-full max-w-sm ml-auto mt-2 pt-2 border-t border-slate-200 text-base font-display font-bold text-ink">
+          <span>TOTAL:</span>
+          <span>S/ {subtotal.toFixed(2)}</span>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export { OperationDetail };

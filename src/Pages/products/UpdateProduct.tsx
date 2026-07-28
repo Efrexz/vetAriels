@@ -163,13 +163,12 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                     {fields.map((field) => (
                         <div
                             key={field.name}
-                            className={`mb-1.5 col-span-1 sm:col-span-${Math.min(
-                                field.columsNumber,
-                                2
-                            )} md:col-span-${Math.min(
-                                field.columsNumber,
-                                4
-                            )} lg:col-span-${field.columsNumber}`}
+                            className={`mb-1.5 ${
+                                field.columsNumber >= 6 ? 'col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-6' :
+                                field.columsNumber >= 4 ? 'col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-4' :
+                                field.columsNumber >= 2 ? 'col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2' :
+                                'col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1'
+                            }`}
                         >
                             <label className="block text-sm font-medium text-ink mb-1" htmlFor={field.name}>
                                 {field.label}
