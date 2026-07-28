@@ -7,7 +7,8 @@
       "@pages/*": ["src/pages/*"],
       "@context/*": ["src/context/*"],
       "@t/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@hooks/*": ["src/hooks/*"]
     },
     "target": "es5", // Compila a una versión de JS compatible con navegadores antiguos
     "lib": [

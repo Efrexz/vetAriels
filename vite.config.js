@@ -14,6 +14,7 @@ export default defineConfig(() => {
         "@context": "/src/context",
         "@t": "/src/types",
         "@utils": "/src/utils",
+        "@hooks": "/src/hooks",
       },
     },
   };
