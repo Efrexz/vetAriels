@@ -70,13 +70,13 @@ function EditServicePrice({ serviceData }: EditServicePriceProps) {
     ];
 
     return (
-        <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-            <form className="pt-4 bg-gray-900 p-6 shadow-xl rounded-t-lg space-y-6 border border-cyan-500/30">
+        <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+            <form className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4">
                 {formFields.map((field, index) => (
                     <div key={index} className="space-y-1">
                         <label
                             htmlFor={field.id}
-                            className="block text-sm font-medium text-gray-400"
+                            className="block text-sm font-medium text-ink"
                         >
                             {field.label}
                         </label>
@@ -85,15 +85,15 @@ function EditServicePrice({ serviceData }: EditServicePriceProps) {
                             id={field.id}
                             placeholder={field.placeholder}
                             disabled={field.disabled || false}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-0 focus:border-cyan-500 bg-gray-700 text-gray-200 sm:text-sm hover:border-cyan-500"
+                            className="block w-full px-4 py-2 text-sm border border-slate-200 rounded-lg bg-white text-ink hover:border-primary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                         />
                         {field.extraCheckbox && (
                             <label className="flex items-center space-x-2 mt-2">
                                 <input
                                     type="checkbox"
-                                    className="h-4 w-4 text-cyan-500 border-gray-700 rounded bg-gray-800"
+                                    className="h-4 w-4 text-primary border-slate-300 rounded bg-white"
                                 />
-                                <span className="text-sm text-gray-500">{field.extraCheckbox}</span>
+                                <span className="text-sm text-slate">{field.extraCheckbox}</span>
                             </label>
                         )}
                     </div>

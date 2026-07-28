@@ -125,23 +125,27 @@ function EditUser() {
     }
 
     return (
-        <section className="w-full p-1 md:p-6 bg-gray-950">
-            <h1 className="text-2xl md:text-2xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex items-center ">
-                <UserGroupIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Editar Usuario</span>
-            </h1>
-            <div className="bg-cyan-900 p-4 rounded-lg mb-4">
-                <p className="text-cyan-200">Los datos personales del usuario solo pueden ser editados desde su propio perfil.</p>
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Configuraci&oacute;n
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Editar Usuario
+                </h1>
             </div>
-            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 bg-gray-900 p-6 shadow-xl rounded-t-lg border border-cyan-500/30">
+            <div className="bg-primary/5 p-4 rounded-xl mb-4 border border-primary/10">
+                <p className="text-sm text-ink">Los datos personales del usuario solo pueden ser editados desde su propio perfil.</p>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 mb-4">
                     {userFields.map((field) => (
                         <div key={field.id}>
-                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full border rounded-lg overflow-hidden ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
+                            <label className="block text-sm font-medium text-ink mb-1.5" htmlFor={field.id}>{field.label}</label>
+                            <div className={`flex w-full border rounded-lg overflow-hidden ${errors[field.id as keyof FormErrors] ? 'border-danger' : 'border-slate-200 hover:border-primary focus-within:border-primary'}`}>
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-700 px-3 py-1 border-r border-gray-600">
-                                        <field.icon className="w-4 h-4 text-gray-400" />
+                                    <div className="flex items-center justify-center bg-white px-3 py-1 border-r border-slate-200">
+                                        <field.icon className="w-4 h-4 text-slate" />
                                     </div>
                                 }
 
@@ -151,7 +155,7 @@ function EditUser() {
                                         name={field.id}
                                         onChange={handleChange}
                                         value={formData[field.id as keyof FormDataState]}
-                                        className="w-full px-3 py-1 border-none focus:outline-none focus:ring-0 bg-gray-700 text-gray-200"
+                                        className="w-full px-3 py-2 text-sm border-none focus:outline-none focus:ring-0 bg-white text-ink"
                                     >
                                         {field.options?.map((option) => (
                                             <option key={option} value={option}>
@@ -165,29 +169,29 @@ function EditUser() {
                                         id={field.id}
                                         value={formData[field.id as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className="w-full py-1 px-4 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
+                                        className="w-full py-2 px-4 focus:outline-none focus:ring-0 bg-white text-sm text-ink"
                                     />
                                 )}
                             </div>
                             {errors[field.id as keyof FormErrors] && (
-                                <p className="text-rose-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
+                                <p className="text-danger text-xs mt-1">{errors[field.id as keyof FormErrors]}</p>
                             )}
                         </div>
                     ))}
                 </form>
-                <div className='flex flex-col sm:flex-row justify-end items-center gap-4 p-4 border-t border-gray-700 bg-gray-900 shadow-xl rounded-b-lg'>
+                <div className="flex flex-col sm:flex-row justify-end items-center gap-3 pt-4 border-t border-slate-100">
                     <button
-                        className="bg-gray-700 hover:bg-gray-600 w-full sm:w-auto border border-gray-700 text-white px-3 py-1 rounded-lg  transition-colors flex items-center justify-center gap-3"
+                        className="bg-white text-slate border border-slate-200 py-2 px-4 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto text-sm font-medium"
                         onClick={() => navigate(-1)}
                     >
-                        <ReturnIcon className="w-4 h-4 text-gray-300" />
-                        CANCELAR
+                        <ReturnIcon className="w-4 h-4 text-slate" />
+                        Cancelar
                     </button>
-                    <button className="bg-emerald-600 w-full sm:w-auto text-white px-3 py-1 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-3"
+                    <button className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto text-sm font-semibold font-display shadow-sm shadow-primary/25"
                         onClick={updateUserInfo}
                     >
-                        <PlusIcon className="w-4 h-4 text-white" />
-                        GUARDAR INFORMACION
+                        <PlusIcon className="w-4 h-4" />
+                        Guardar informaci&oacute;n
                     </button>
                 </div>
             </div>

@@ -38,7 +38,7 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
         <div className="flex items-center justify-center space-x-2">
             <button
                 type='button'
-                className="bg-red-500 text-white px-1 py-1 rounded hover:bg-red-600 focus:outline-none disabled:bg-red-300 disabled:cursor-not-allowed"
+                className="bg-danger text-white px-1 py-1 rounded hover:bg-danger focus:outline-none disabled:bg-red-300 disabled:cursor-not-allowed"
                 onClick={decreaseQuantity}
                 disabled={isDecreaseDisabled}
             >
@@ -54,7 +54,7 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
 
             <button
                 type='button'
-                className="bg-green-500 text-white px-1 py-1 rounded hover:bg-green-600 focus:outline-none disabled:bg-green-300 disabled:cursor-not-allowed"
+                className="bg-primary text-white px-1 py-1 rounded hover:opacity-90 focus:outline-none disabled:bg-green-300 disabled:cursor-not-allowed"
                 onClick={increaseQuantity}
                 disabled={isIncreaseDisabled}
             >

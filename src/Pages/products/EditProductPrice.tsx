@@ -72,21 +72,21 @@ function EditProductPrice({ productData }: EditProductPriceProps) {
     console.log(productData);
 
     return (
-        <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-            <form className="pt-4 bg-gray-900 p-6 shadow-xl rounded-lg space-y-6 border border-cyan-500/30">
+        <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+            <form className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4">
                 {formFields.map((field) => (
                     <div key={field.label} className="space-y-1">
                         <label
                             htmlFor={field.id}
-                            className="block text-sm font-medium text-gray-300"
+                            className="block text-sm font-medium text-ink"
                         >
                             {field.label}
                         </label>
-                        <div className="flex w-full border border-gray-600 rounded-lg overflow-hidden text-gray-200 hover:border-cyan-500 focus-within:border-cyan-500 transition-colors">
+                        <div className="flex w-full border border-slate-200 rounded-lg overflow-hidden text-ink hover:border-primary focus-within:border-primary transition-colors">
                             {
                                 field.icon && (
-                                    <div className="flex items-center justify-center bg-gray-800 px-3">
-                                        <field.icon className="w-5 h-5 text-gray-400" />
+                                    <div className="flex items-center justify-center bg-white px-3 border-r border-slate-200">
+                                        <field.icon className="w-5 h-5 text-slate" />
                                     </div>
                                 )
                             }
@@ -94,16 +94,16 @@ function EditProductPrice({ productData }: EditProductPriceProps) {
                                 type={field.type}
                                 id={field.id}
                                 disabled={field.disabled || false}
-                                className="w-full px-4 py-1 bg-gray-700 focus:outline-none"
+                                className="w-full px-4 py-2 text-sm bg-white focus:outline-none"
                             />
                         </div>
                         {field.extraCheckbox && (
                             <label className="flex items-center space-x-2 mt-2">
                                 <input
                                     type="checkbox"
-                                    className="h-4 w-4 text-cyan-500 border-gray-600 rounded bg-gray-700 focus:ring-cyan-500 transition-colors"
+                                    className="h-4 w-4 text-primary border-slate-300 rounded bg-white focus:ring-primary/30 transition-colors"
                                 />
-                                <span className="text-sm text-gray-400">{field.extraCheckbox}</span>
+                                <span className="text-sm text-slate">{field.extraCheckbox}</span>
                             </label>
                         )}
                     </div>

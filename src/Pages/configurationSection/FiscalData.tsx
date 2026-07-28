@@ -26,18 +26,22 @@ const tableHeaders = [
 
 function FiscalData() {
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-gray-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <ConfigurationIcon className="w-9 h-9 mr-2" />
-                Datos Fiscales
-            </h1>
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white">
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Configuraci&oacute;n
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Datos Fiscales
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
                         <thead>
-                            <tr>
+                            <tr className="border-b border-slate-200">
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 border text-gray-500 text-center">
+                                    <th key={header} className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">
                                         {header}
                                     </th>
                                 ))}
@@ -45,21 +49,21 @@ function FiscalData() {
                         </thead>
                         <tbody>
                             {fiscalData.map((userData, index) => (
-                                <tr key={index} className="hover:bg-gray-100 text-sm">
-                                    <td className="py-2 px-4 border-b text-center border ">{userData.date}</td>
-                                    <td className="py-2 px-4 border-b text-center border ">{userData.name}</td>
-                                    <td className="py-2 px-4 border-b text-center border ">{userData.taxRegistrationNumber}</td>
-                                    <td className="py-2 px-4 border-b text-center border ">{userData.address}</td>
-                                    <td className="py-2 px-4 border-b text-center border ">{userData.email}</td>
-                                    <td className="py-2 px-4 border-b text-center border ">{userData.establishmentCode}</td>
-                                    <td className="py-2 px-4 border-2 text-center align-center pt-5">
-                                        <span className="inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white bg-green-500 rounded-full">
+                                <tr key={index} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.date}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-ink font-medium">{userData.name}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.taxRegistrationNumber}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.address}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.email}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.establishmentCode}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">
                                             {userData.status}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-4 border-b text-center border">
-                                        <button className="text-orange-400 hover:text-orange-500">
-                                            <EditIcon className="w-5 h-5" />
+                                    <td className="py-3 px-4 text-center">
+                                        <button className="p-1.5 rounded-lg text-slate hover:text-ink hover:bg-slate-100 transition-colors">
+                                            <EditIcon className="w-4 h-4" />
                                         </button>
                                     </td>
                                 </tr>

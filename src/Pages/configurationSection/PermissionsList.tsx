@@ -137,22 +137,20 @@ function PermissionsList() {
     ];
 
     return (
-        <div className="p-1 md:p-6 bg-gray-900 rounded-lg shadow-2xl">
-            <h1 className="text-2xl sm:text-3xl font-medium items-center text-gray-500 mb-4 pb-4 border-b border-cyan-500 flex">
-                <KeyIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Permisos</span>
-            </h1>
-            <div className="w-full mx-auto bg-gray-900 shadow-xl rounded-lg p-6">
+        <div className="rounded-2xl shadow-sm border border-slate-200">
+            <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">Configuración</span>
+            <h1 className="text-2xl font-bold font-display text-ink mb-4">Permisos</h1>
+            <div className="w-full mx-auto bg-paper rounded-2xl shadow-sm border border-slate-200 p-6">
                 {sections.map((section, index) => (
-                    <div key={index} className="mb-3 border-b border-gray-700 pb-3">
-                        <h2 className="text-xl font-semibold text-gray-200 mb-3">{section.title}</h2>
+                    <div key={index} className="mb-3 border-b border-slate-200 pb-3">
+                        <h2 className="text-xl font-semibold text-ink mb-3">{section.title}</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {section.actions.map((action, i) => (
                                 <div
                                     key={i}
-                                    className="flex justify-between items-center bg-gray-800 p-3 rounded-md shadow-md border border-gray-700"
+                                    className="flex justify-between items-center bg-white p-3 rounded-md shadow-sm border border-slate-200"
                                 >
-                                    <span className="text-gray-400">{action}</span>
+                                    <span className="text-slate">{action}</span>
                                     <ToggleSwitchButton />
                                 </div>
                             ))}

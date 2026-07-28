@@ -22,17 +22,14 @@ function GroomingOrderCreation() {
     const navigate = useNavigate();
     const { id: clientId } = useParams<{ id: string }>();
 
-    //estado de productos seleccionados al escribir en nuestro input de busqueda
     const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
 
     const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
 
-    //creamos estado que al hacer click en editar el precio o la cantidad. Se agregue al productToEdit y tener la data de cual producto seleccionamos para hacer sus modificaciones en los modales correspondientes
     const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
 
     const clientData: Client | undefined =  clients.find(client => client.id === clientId)
 
-    //agregar producto o servicio a nuestra tabla de productos a cargar al usuario para la venta
     function addProductToTable(item: Product | Service) {
         const newProduct: PurchasedItem = {
             ...item,
@@ -50,7 +47,6 @@ function GroomingOrderCreation() {
         setSelectedProducts(updatedProducts);
     }
 
-    //funcion para actualizar cantidad de productos en la lista de forma individual
     function updateProductQuantity(itemId: string, newQuantity: number) {
         const updatedProducts = selectedProducts.map((product) =>
             product.provisionalId === itemId
@@ -60,7 +56,6 @@ function GroomingOrderCreation() {
         setSelectedProducts(updatedProducts);
     }
 
-    // funcion para modificar el precio de un item por el modal de editar el precio
     function handleUpdateProductPrice(updatedProduct: PurchasedItem) {
         const updatedProducts = selectedProducts.map(product =>
             product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product
@@ -73,8 +68,6 @@ function GroomingOrderCreation() {
         0
     );
 
-    // const totalPrice = selectedProducts.reduce((acc, curr) => acc + curr.price, 0);
-
     const taxesData = [
         { label: 'Valor de venta bruto (sin descuentos)', value: totalPrice },
         { label: 'Total descuentos', value: '- 0.00' },
@@ -83,7 +76,6 @@ function GroomingOrderCreation() {
         { label: 'TOTAL', value: totalPrice, bold: true },
     ];
 
-    //obtenemos las mascotas del propietario para poder mostrarlos en la lista del select
     const petsByOwner: Pet[] = useMemo(() =>
         clientId ? petsData.filter(pet => pet.ownerId === clientId) : [],
     [petsData, clientId]);
@@ -98,7 +90,6 @@ function GroomingOrderCreation() {
 
     const [petSelectedName, setPetSelectedName] = useState<string>('');
 
-    //estado de las observaciones del baño de la mascota
     const [notes, setNotes] = useState<string>('');
 
     function handleChange(e: ChangeEvent<HTMLTextAreaElement>) {
@@ -106,17 +97,14 @@ function GroomingOrderCreation() {
         setNotes(value);
     }
 
-    //Modales
     const [isPriceModalOpen, setIsPriceModalOpen] = useState<boolean>(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState<boolean>(false);
 
     function sendInfoToQueueGrooming() {
-        //Validamos que haya seleccionado al menos un producto agregado
         if (selectedProducts.length < 1) {
             setIsErrorModalOpen(true);
             return;
         }
-        //depende la mascota seleccionada en el input de select, obtenemos toda la data de la mascota para enviarla a cola
         const petSelectedData = petsData.find(pet => pet.petName === petSelectedName);
 
         if (!petSelectedData || !clientData) {
@@ -130,7 +118,7 @@ function GroomingOrderCreation() {
             petData: petSelectedData,
             turn: petsInQueueGrooming.length > 0
                 ? petsInQueueGrooming[petsInQueueGrooming.length - 1].turn + 1
-                : 1, // Si la cola está vacía, el turno será 1
+                : 1,
             systemCode: petSelectedData.hc,
             ownerName: `${clientData.firstName} ${clientData.lastName}`,
             notes,
@@ -138,30 +126,32 @@ function GroomingOrderCreation() {
             timeOfAttention: now.toLocaleTimeString(),
             state: "Pendiente",
             productsAndServices: selectedProducts,
-            healthObservations: [], // las observaciones por defecto van vacias
+            healthObservations: [],
         };
         addPetToQueueGrooming(dataToSend);
         navigate("/grooming");
     }
 
     return (
-        <section className="bg-gray-950 p-1 md:p-6 overflow-auto custom-scrollbar rounded-xl">
-            <h1 className="text-xl md:text-2xl font-medium  mb-4 pb-4 border-b-2 border-cyan-500 flex items-center">
-                <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-cyan-500 mr-2" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400"> Peluquería</span>
-            </h1>
-            <div className="bg-gray-800 px-4 py-3 rounded-xl mb-4 border border-gray-700">
+        <section className="bg-mist p-1 md:p-6 overflow-auto custom-scrollbar rounded-2xl">
+            <div className="mb-4 pb-4 border-b-2 border-slate-200">
+                <p className="text-xs font-semibold uppercase tracking-wide text-amber mb-1">Peluquería</p>
+                <h1 className="text-xl md:text-2xl font-medium text-ink flex items-center">
+                    <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-amber mr-2" />
+                </h1>
+            </div>
+            <div className="bg-paper px-4 py-3 rounded-2xl mb-4 border border-slate-200 shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="col-span-2">
-                        <label className="block text-gray-400 mb-2">Propietario</label>
+                        <label className="block text-slate mb-2">Propietario</label>
                         <ClientSearchInput mode={"grooming"} />
                     </div>
                     <div className="col-span-2 ">
-                        <label className="block text-gray-400">Mascota</label>
+                        <label className="block text-slate">Mascota</label>
                         {
                             clientData ? (
                                 <select
-                                    className="w-full mt-2 bg-gray-700 border-gray-600 border rounded-lg py-1 px-4 text-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500"
+                                    className="w-full mt-2 bg-white border-slate-200 border rounded-lg py-1 px-4 text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
                                     value={petSelectedName}
                                     onChange={(e: ChangeEvent<HTMLSelectElement>) => setPetSelectedName(e.target.value)}
                                 >
@@ -170,14 +160,13 @@ function GroomingOrderCreation() {
                                             <option key={pet.id} value={pet.petName}>{pet.petName}</option>
                                         ))
                                     ) : (
-                                        // Si no hay mascotas
                                         <option value="">No hay mascotas para este cliente</option>
                                     )}
                                 </select>
                             ) :
                                 (
                                     <input
-                                        className="w-full mt-2 border-gray-600 border rounded-lg py-1 px-4 bg-gray-700 text-gray-400 hover:border-cyan-500"
+                                        className="w-full mt-2 border-slate-200 border rounded-lg py-1 px-4 bg-white text-slate hover:border-primary"
                                         value=""
                                         disabled
                                     />
@@ -186,60 +175,60 @@ function GroomingOrderCreation() {
                     </div>
 
                     <div className="col-span-2">
-                        <label className="block text-gray-400">Dirección</label>
+                        <label className="block text-slate">Dirección</label>
                         <input
                             value={clientData ? `${clientData.address}, ${clientData.district} ` : ''}
-                            className="mt-2 w-full border-gray-600 border rounded-lg py-1 px-4 bg-gray-700 text-gray-400"
+                            className="mt-2 w-full border-slate-200 border rounded-lg py-1 px-4 bg-white text-slate"
                             disabled
                         />
                     </div>
                     <div className='col-span-2'>
-                        <label className="block text-gray-400">Referencias</label>
+                        <label className="block text-slate">Referencias</label>
                         <input
                             type="text"
-                            className="mt-2 w-full border-gray-600 border rounded-lg py-1 px-4 bg-gray-700 text-gray-400"
+                            className="mt-2 w-full border-slate-200 border rounded-lg py-1 px-4 bg-white text-slate"
                             value={clientData ? `${clientData.reference}` : ''}
                             disabled
                         />
                     </div>
 
                     <div className='col-span-2'>
-                        <label className="block text-gray-400">Empresa</label>
-                        <select className="w-full mt-2 border border-gray-600 rounded-lg py-1 px-3  bg-gray-700 text-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500">
+                        <label className="block text-slate">Empresa</label>
+                        <select className="w-full mt-2 border border-slate-200 rounded-lg py-1 px-3  bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary">
                             <option>VETERINARIA ARIEL`S E.I.R.L 0000 - 20608438719</option>
                         </select>
-                        <span className="text-sm text-gray-500 mt-1">
+                        <span className="text-sm text-slate mt-1">
                             Los datos de la empresa seleccionada se utilizarán en el ticket de la orden de servicio.
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-gray-800 px-4 py-3 rounded-xl shadow border border-gray-700">
+            <div className="bg-paper px-4 py-3 rounded-2xl shadow-sm border border-slate-200">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     <div className="col-span-1">
-                        <label className="block text-gray-400 mb-2">Almacén de origen</label>
+                        <label className="block text-slate mb-2">Almacén de origen</label>
                         {clientData ? (
-                            <select className="w-full bg-gray-700 border-gray-600 border rounded-lg py-1 px-4 text-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500">
+                            <select className="w-full bg-white border-slate-200 border rounded-lg py-1 px-4 text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary">
                                 <option>ALMACEN PRODUCTOS P/VENTAS</option>
                             </select>
                         ) : (
                             <input
-                                className="w-full bg-gray-700 border-gray-600 rounded-lg py-1 px-4 text-gray-400"
+                                className="w-full bg-white border-slate-200 rounded-lg py-1 px-4 text-slate"
                                 value="ALMACEN PRODUCTOS P/VENTAS"
                                 disabled
                             />
                         )}
                     </div>
                     <div className="col-span-1 md:col-span-3">
-                        <label className="block text-gray-400 mb-2">
+                        <label className="block text-slate mb-2">
                             Buscar y agregar productos y/o servicios:
                         </label>
                         {clientData ? (
                             <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                         ) : (
                             <input
-                                className="w-full bg-gray-700 border-gray-600 rounded-lg py-1 px-4 text-gray-400"
+                                className="w-full bg-white border-slate-200 rounded-lg py-1 px-4 text-slate"
                                 value=""
                                 disabled
                             />
@@ -247,29 +236,29 @@ function GroomingOrderCreation() {
                     </div>
                 </div>
 
-                <div className='overflow-x-auto border border-gray-700 rounded-xl'>
-                    <table className="min-w-full bg-gray-800 rounded-xl mt-2">
+                <div className='overflow-x-auto rounded-xl'>
+                    <table className="min-w-full bg-white rounded-xl mt-2">
                         <thead>
-                            <tr className="bg-gray-700 border-gray-600 border text-sm ">
-                                <th className="py-1 px-4 border-gray-600 border-r text-center text-gray-300">Concepto</th>
-                                <th className=" px-4 border-gray-600 border-r text-center text-gray-300">Valor Unitario</th>
-                                <th className=" px-4 border-gray-600 border-r text-center text-gray-300">Cantidad</th>
-                                <th className=" px-4 border-gray-600 border-r text-center text-gray-300">Sub Total</th>
-                                <th className=" px-4 border-gray-600 border-r text-center text-gray-300">Impuestos</th>
-                                <th className=" px-4 border-gray-600 border-r text-center text-gray-300">Total</th>
-                                <th className=" px-4 border-gray-600 border-r text-center text-gray-300">Mascota</th>
-                                <th className=" px-4 border-gray-600 border-r text-center text-gray-300">Opciones</th>
+                            <tr className="bg-slate-100 border-b border-slate-200 text-sm">
+                                <th className="py-1 px-4 text-center text-slate">Concepto</th>
+                                <th className="px-4 text-center text-slate">Valor Unitario</th>
+                                <th className="px-4 text-center text-slate">Cantidad</th>
+                                <th className="px-4 text-center text-slate">Sub Total</th>
+                                <th className="px-4 text-center text-slate">Impuestos</th>
+                                <th className="px-4 text-center text-slate">Total</th>
+                                <th className="px-4 text-center text-slate">Mascota</th>
+                                <th className="px-4 text-center text-slate">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {selectedProducts.map((product) => (
-                                <tr key={product.provisionalId} className="hover:bg-gray-700 transition-colors text-sm">
-                                    <td className='py-2 px-4 border border-gray-600 text-center text-gray-200'>
+                                <tr key={product.provisionalId} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors text-sm">
+                                    <td className='py-2 px-4 text-center text-ink'>
                                         {product.productName || product.serviceName}
                                     </td>
-                                    <td className='py-2 px-4 border border-gray-600 text-center text-gray-200'>
+                                    <td className='py-2 px-4 text-center text-ink'>
                                         <span
-                                            className='border border-gray-600 bg-gray-800 px-2 py-1 rounded-lg text-center w-12 cursor-pointer text-gray-200 hover:border-cyan-500'
+                                            className='border border-slate-200 bg-paper px-2 py-1 rounded-lg text-center w-12 cursor-pointer text-ink hover:border-primary'
                                             onClick={() => {
                                                 setProductToEdit(product)
                                                 setIsPriceModalOpen(true)
@@ -279,7 +268,7 @@ function GroomingOrderCreation() {
                                             {product.salePrice}
                                         </span>
                                     </td>
-                                    <td className='py-2 px-4 border border-gray-600 text-center text-gray-200'>
+                                    <td className='py-2 px-4 text-center text-ink'>
                                         <QuantityCounter
                                             itemCount={product.quantity}
                                             changeQuantity={(newQuantity) => {
@@ -293,19 +282,19 @@ function GroomingOrderCreation() {
                                                 setProductToEdit(product)
                                             }} />
                                     </td>
-                                    <td className='py-2 px-4 border border-gray-600 text-center text-gray-200'>
+                                    <td className='py-2 px-4 text-center text-ink'>
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className='py-3 px-3 border border-gray-600 text-center text-gray-200'>
-                                        <span className='border border-gray-600 bg-gray-800 px-2 py-1 rounded-lg text-center w-12 cursor-pointer hover:border-cyan-500'>
+                                    <td className='py-3 px-3 text-center text-ink'>
+                                        <span className='border border-slate-200 bg-paper px-2 py-1 rounded-lg text-center w-12 cursor-pointer hover:border-primary'>
                                             0.00
                                         </span>
                                     </td>
-                                    <td className='py-2 px-4 border border-gray-600 text-center text-gray-200'>
+                                    <td className='py-2 px-4 text-center text-ink'>
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className='py-2 px-4 border border-gray-600 text-center text-gray-200'>{product.petSelected}</td>
-                                    <td className='py-2 px-4 text-center border border-gray-600'>
+                                    <td className='py-2 px-4 text-center text-ink'>{product.petSelected}</td>
+                                    <td className='py-2 px-4 text-center'>
                                         <div className="flex justify-center items-center h-full space-x-2">
                                             <TagIcon className='w-5 h-5 text-orange-400 cursor-pointer' />
                                             <TrashIcon
@@ -319,14 +308,14 @@ function GroomingOrderCreation() {
                     </table>
                 </div>
 
-                <div className="bg-gray-800 pt-6 ">
+                <div className="bg-paper pt-6 ">
                     <div className="w-full lg:w-1/2 ml-auto">
-                        <table className="min-w-full bg-gray-800">
+                        <table className="min-w-full bg-white">
                             <tbody>
                                 {taxesData.map((row, index) => (
-                                    <tr key={index} className={`border-t border-gray-700 ${row.bold ? 'font-bold' : ''}`}>
-                                        <td className="py-2 text-gray-400">{row.label}</td>
-                                        <td className="py-2 text-right text-gray-400">{row.value}</td>
+                                    <tr key={index} className={`border-t border-slate-200 ${row.bold ? 'font-bold' : ''}`}>
+                                        <td className="py-2 text-slate">{row.label}</td>
+                                        <td className="py-2 text-right text-slate">{row.value}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -335,11 +324,10 @@ function GroomingOrderCreation() {
                 </div>
             </div>
 
-            {/* Observaciones */}
-            <div className='bg-gray-800 px-4 py-3 mb-4 mt-4 rounded-xl shadow border border-gray-700'>
-                <label htmlFor="note" className="block text-gray-400">Observaciones o comentarios de esta orden de servicio</label>
+            <div className='bg-paper px-4 py-3 mb-4 mt-4 rounded-2xl shadow-sm border border-slate-200'>
+                <label htmlFor="note" className="block text-slate">Observaciones o comentarios de esta orden de servicio</label>
                 <textarea
-                    className="w-full mt-3 border border-gray-600 rounded-lg p-3 bg-gray-700 text-gray-200 placeholder-gray-400 max-h-60 min-h-20 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500"
+                    className="w-full mt-3 border border-slate-200 rounded-lg p-3 bg-white text-ink placeholder-slate max-h-60 min-h-20 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
                     id="note"
                     rows={3}
                     placeholder="Añadir observaciones..."
@@ -348,34 +336,33 @@ function GroomingOrderCreation() {
                 ></textarea>
             </div>
 
-            {/* recordatorio en agenda */}
-            <div className="bg-gray-800 px-4 py-3 mb-4 mt-1 rounded-xl shadow flex flex-col md:flex-row items-center gap-4 border border-gray-700">
+            <div className="bg-paper px-4 py-3 mb-4 mt-1 rounded-2xl shadow-sm flex flex-col md:flex-row items-center gap-4 border border-slate-200">
                 <div className="w-full">
-                    <label htmlFor="date" className="block text-gray-400">Fecha de próximo servicio</label>
+                    <label htmlFor="date" className="block text-slate">Fecha de próximo servicio</label>
                     <input
                         type="date"
                         id="date"
-                        className="w-full py-1 px-4 mt-1.5 bg-gray-700 border-gray-600 border rounded-lg text-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500"
+                        className="w-full py-1 px-4 mt-1.5 bg-white border-slate-200 border rounded-lg text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
                     />
                 </div>
 
                 <div className="w-full">
-                    <label htmlFor="typeService" className="block text-gray-400">Tipo de evento</label>
+                    <label htmlFor="typeService" className="block text-slate">Tipo de evento</label>
                     <select
                         name="type"
                         id="typeService"
-                        className="w-full py-1 px-4 mt-1.5 bg-gray-700 border-gray-600 border rounded-lg text-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500"
+                        className="w-full py-1 px-4 mt-1.5 bg-white border-slate-200 border rounded-lg text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
                     >
-                        <option className="bg-gray-700" value="baño">Baño</option>
+                        <option className="bg-white" value="baño">Baño</option>
                     </select>
                 </div>
 
                 <div className="w-full">
-                    <label htmlFor="client" className="block text-gray-400">Anotaciones</label>
+                    <label htmlFor="client" className="block text-slate">Anotaciones</label>
                     <input
                         type="text"
                         placeholder="Anotaciones..."
-                        className="w-full py-1 px-4 mt-1.5 bg-gray-700 border-gray-600 border rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500"
+                        className="w-full py-1 px-4 mt-1.5 bg-white border-slate-200 border rounded-lg text-ink placeholder-slate focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
                     />
                 </div>
 
@@ -412,7 +399,7 @@ function GroomingOrderCreation() {
             <ActionButtons
                 onCancel={() => navigate(-1)}
                 onSubmit={sendInfoToQueueGrooming}
-                submitText="CREAR ORDEN DE SERVICIO"
+                submitText="Crear orden de servicio"
             />
         </section >
     );

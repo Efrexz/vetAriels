@@ -51,76 +51,79 @@ const tableHeaders: string[] = [
 
 function Internments() {
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <HospitalIcon className="w-9 h-9 mr-2" />
-                Internados
-            </h1>
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <div className="flex items-center space-x-4 mb-4">
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded">Pacientes</button>
-                    <button className="bg-transparent text-blue-400 py-2 px-4 rounded hover:bg-gray-100 hover:text-blue-600">Tratamientos</button>
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Hospitalizaci&oacute;n
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Internados
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <div className="flex items-center gap-2 mb-5 border-b border-slate-100 pb-3">
+                    <button className="bg-primary/10 text-primary py-2 px-4 rounded-lg text-sm font-semibold font-display">Pacientes</button>
+                    <button className="text-slate py-2 px-4 rounded-lg text-sm hover:bg-slate-50 transition-colors font-medium">Tratamientos</button>
                 </div>
-                <div className="p-4 rounded-lg mb-2">
-                    <div className="flex items-center space-x-2 mb-4">
-                        <div className=" w-[60%] flex gap-2">
-                            <div className="flex w-full border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
-                                <div className="flex items-center justify-center bg-gray-100 px-3">
-                                    <SearchIcon className="w-5 h-5 text-gray-600" />
+                <div className="p-4 rounded-xl mb-4 border border-slate-200 bg-slate-50/50">
+                    <div className="flex flex-col sm:flex-row items-center gap-3 mb-4">
+                        <div className="flex w-full gap-3">
+                            <div className="flex flex-1 items-center border border-slate-200 rounded-lg overflow-hidden bg-white focus-within:border-primary">
+                                <div className="flex items-center justify-center px-3">
+                                    <SearchIcon className="w-4 h-4 text-slate" />
                                 </div>
                                 <input
                                     type="text"
                                     placeholder="Buscar..."
-                                    className="w-full py-2 px-4 focus:outline-none focus:ring-0 focus:border-transparent"
+                                    className="w-full py-2 px-2 focus:outline-none focus:ring-0 bg-white text-sm text-ink placeholder:text-slate/70"
                                 />
                             </div>
                             <input
                                 type="text"
-                                placeholder="Numero de historia clinica..."
-                                className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                                placeholder="N&uacute;mero de historia cl&iacute;nica..."
+                                className="flex-1 py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                             />
                         </div>
-                        <div>
-                            <button className="bg-transparent border border-gray-300 text-orange-500 py-2 px-4 rounded hover:bg-gray-200">
+                        <div className="flex gap-2">
+                            <button className="border border-slate-200 text-slate py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors">
                                 <PDFIcon className="w-5 h-5" />
                             </button>
-                            <button className="bg-transparent border border-gray-300 text-green-600 py-2 px-4 rounded hover:bg-gray-200">
+                            <button className="border border-slate-200 text-slate py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors">
                                 <ExcelIcon className="w-5 h-5" />
                             </button>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-2 mb-4">
-                        <div className=" w-[80%] flex gap-2">
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                        <div className="flex w-full gap-3">
                             <input
                                 type="date"
-                                className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                                className="flex-1 py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                             />
                             <select
                                 name="status"
-                                className="w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2"
+                                className="flex-1 rounded-lg border border-slate-200 bg-white text-sm py-2 px-3 text-slate focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                             >
                                 <option value="">Cualquier Estado</option>
                                 <option value="hospitalized">Internado</option>
                                 <option value="discharged ">De Alta</option>
                             </select>
-                            <div className='flex'>
-                                <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
+                            <div className="flex gap-2">
+                                <button className="border border-slate-200 text-slate py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors">
                                     <EraserIcon className="w-5 h-5" />
                                 </button>
-                                <button className="bg-transparent border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-200">
+                                <button className="border border-slate-200 text-slate py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors">
                                     <RefreshIcon className="w-5 h-5" />
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
                         <thead>
-                            <tr>
+                            <tr className="border-b border-slate-200">
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 border text-gray-700 text-center">
+                                    <th key={header} className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">
                                         {header}
                                     </th>
                                 ))}
@@ -128,32 +131,40 @@ function Internments() {
                         </thead>
                         <tbody>
                             {userInfo.map((userData) => (
-                                <tr key={userData.id} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 border-b text-center border ">{userData.date}</td>
-                                    <td className="py-2 px-4 border">
+                                <tr key={userData.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.date}</td>
+                                    <td className="py-3 px-4">
                                         <div>
-                                            <span className='cursor-pointer text-lg text-green-500 hover:underline hover:text-green-600'>{userData.patient}</span>
+                                            <span className="cursor-pointer text-sm font-semibold text-primary hover:underline">{userData.patient}</span>
                                         </div>
-                                        <div className="text-gray-500 text-sm">{userData.owner}</div>
-                                        <div className="text-gray-500 text-sm italic">{userData.note}</div>
+                                        <div className="text-slate text-xs mt-0.5">{userData.owner}</div>
+                                        <div className="text-slate text-xs italic">{userData.note}</div>
                                     </td>
-                                    <td className="py-2 px-4 border-b text-center border">
-                                        <span className="text-md  cursor-pointer text-blue-500 hover:underline">{userData.owner}</span>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className="cursor-pointer text-sm text-primary hover:underline">{userData.owner}</span>
                                     </td>
-                                    <td className="py-2 px-4 border-b text-center border text-white bg-green-500 rounded">{userData.status}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                            userData.status === 'Internado' ? 'bg-amber/10 text-amber' : 'bg-success/10 text-success'
+                                        }`}>
+                                            {userData.status}
+                                        </span>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                    <p className="text-gray-600">Página: 1 de 1 | Registros del 1 al 4 | Total 4</p>
-                    <div className="flex space-x-2">
-                        <button className="py-2 px-4 border rounded">Primera</button>
-                        <button className="py-2 px-4 border rounded">Anterior</button>
-                        <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
-                        <button className="py-2 px-4 border rounded">Siguiente</button>
-                        <button className="py-2 px-4 border rounded">Última</button>
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-5 gap-4">
+                    <p className="text-slate text-sm">
+                        Registros 1&ndash;4 de 4
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Primera</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Anterior</button>
+                        <button className="py-1.5 px-3 rounded-lg text-sm bg-primary text-white font-semibold transition-colors">1</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Siguiente</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">&Uacute;ltima</button>
                     </div>
                 </div>
             </div>

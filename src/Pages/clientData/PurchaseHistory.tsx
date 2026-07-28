@@ -85,32 +85,32 @@ const headlinesOptions = [
 
 function PurchaseHistory() {
     return (
-        <section className="bg-white rounded-lg shadow p-4">
-            <div className="p-4 rounded-lg mb-4">
-                <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
-                    <div className="flex flex-col sm:flex-row gap-4 w-full">
-                        <div className="flex w-full sm:w-auto border-gray-200 border rounded-lg overflow-hidden hover:border-blue-300 focus-within:border-blue-300">
-                            <div className="flex items-center justify-center bg-gray-100 px-3">
-                                <SearchIcon className="w-5 h-5 text-gray-600" />
+        <section className="bg-paper rounded-2xl shadow-sm p-5 border border-slate-200">
+            <div className="p-4 rounded-xl mb-4 border border-slate-200 bg-slate-50/50">
+                <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between mb-4">
+                    <div className="flex flex-col sm:flex-row gap-3 w-full">
+                        <div className="flex items-center w-full sm:w-auto border border-slate-200 rounded-lg overflow-hidden bg-white focus-within:border-primary">
+                            <div className="flex items-center justify-center px-3">
+                                <SearchIcon className="w-4 h-4 text-slate" />
                             </div>
                             <input
                                 type="text"
                                 placeholder="Buscar..."
-                                className="w-full sm:w-[250px] py-2 px-4 focus:outline-none focus:ring-0"
+                                className="w-full sm:w-[250px] py-2 px-2 focus:outline-none focus:ring-0 text-sm text-ink placeholder:text-slate/70"
                             />
                         </div>
                         <input
                             type="date"
-                            className="w-full sm:w-auto py-2 px-4 border-gray-200 border rounded-lg focus:outline-none focus:border-blue-500"
+                            className="w-full sm:w-auto py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                         />
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {headlinesOptions.map((option, index) => (
                         <div key={index} className="w-full">
                             <select
                                 name={option.type}
-                                className="w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2 hover:border-blue-300 focus-within:border-blue-300"
+                                className="w-full rounded-lg border border-slate-200 bg-white text-sm py-2 px-3 text-slate focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                             >
                                 <option value="">{option.type}</option>
                                 {option.options.map((opt, optIndex) => (
@@ -123,12 +123,12 @@ function PurchaseHistory() {
                     ))}
                 </div>
             </div>
-            <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                <table className="min-w-full bg-white">
+            <div className="overflow-x-auto">
+                <table className="min-w-full">
                     <thead>
-                        <tr>
+                        <tr className="border-b border-slate-200">
                             {tableHeaders.map((header) => (
-                                <th key={header} className="py-2 px-4 border text-gray-700 text-center">
+                                <th key={header} className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">
                                     {header}
                                 </th>
                             ))}
@@ -136,20 +136,26 @@ function PurchaseHistory() {
                     </thead>
                     <tbody>
                         {receipts.map((receipt, index) => (
-                            <tr key={index} className="hover:bg-gray-100 cursor-pointer">
-                                <td className="py-2 px-4 border-b text-center">{receipt.date}</td>
-                                <td className="py-2 px-4 border-b text-center">{receipt.comprobante}</td>
-                                <td className="py-2 px-4 border-b text-center">{receipt.concept}</td>
-                                <td className="py-2 px-4 border-b text-center">{receipt.pet}</td>
-                                <td className="py-2 px-4 border-b text-center">{receipt.price}</td>
-                                <td className="py-2 px-4 border-b text-center">{receipt.quantity}</td>
-                                <td className="py-2 px-4 border-b text-center">{receipt.total}</td>
-                                <td className="py-2 px-4 border-b text-center text-white bg-green-500 rounded">
-                                    {receipt.status}
+                            <tr key={index} className="border-b border-slate-100 hover:bg-slate-50/50 cursor-pointer transition-colors">
+                                <td className="py-3 px-4 text-center text-sm text-slate">{receipt.date}</td>
+                                <td className="py-3 px-4 text-center text-sm text-ink font-medium">{receipt.comprobante}</td>
+                                <td className="py-3 px-4 text-center text-sm text-slate">{receipt.concept}</td>
+                                <td className="py-3 px-4 text-center text-sm text-slate">{receipt.pet}</td>
+                                <td className="py-3 px-4 text-center text-sm text-ink font-semibold font-display">{receipt.price}</td>
+                                <td className="py-3 px-4 text-center text-sm text-slate">{receipt.quantity}</td>
+                                <td className="py-3 px-4 text-center text-sm text-ink font-semibold font-display">{receipt.total}</td>
+                                <td className="py-3 px-4 text-center">
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                        receipt.status === 'PAGADO' ? 'bg-success/10 text-success' :
+                                        receipt.status === 'PENDIENTE' ? 'bg-amber/10 text-amber' :
+                                        'bg-danger/10 text-danger'
+                                    }`}>
+                                        {receipt.status}
+                                    </span>
                                 </td>
-                                <td className="py-2 px-4 border-b text-center">
-                                    <button className="text-green-500 hover:text-green-700">
-                                        <SearchIcon className="w-5 h-5" />
+                                <td className="py-3 px-4 text-center">
+                                    <button className="p-1.5 rounded-lg text-slate hover:text-primary hover:bg-primary/10 transition-colors">
+                                        <SearchIcon className="w-4 h-4" />
                                     </button>
                                 </td>
                             </tr>
@@ -157,16 +163,16 @@ function PurchaseHistory() {
                     </tbody>
                 </table>
             </div>
-            <div className="flex flex-col md:flex-row justify-between items-center mt-4 space-y-4 md:space-y-0">
-                <p className="text-gray-600 text-sm text-center md:text-left">
-                    Página: 1 de 1 | Registros del 1 al 4 | Total 4
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-5 gap-4">
+                <p className="text-slate text-sm">
+                    Registros 1&ndash;4 de 4
                 </p>
-                <div className="flex space-x-2">
-                    <button className="py-2 px-4 border rounded">Primera</button>
-                    <button className="py-2 px-4 border rounded">Anterior</button>
-                    <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
-                    <button className="py-2 px-4 border rounded">Siguiente</button>
-                    <button className="py-2 px-4 border rounded">Última</button>
+                <div className="flex flex-wrap gap-2">
+                    <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Primera</button>
+                    <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Anterior</button>
+                    <button className="py-1.5 px-3 rounded-lg text-sm bg-primary text-white font-semibold transition-colors">1</button>
+                    <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Siguiente</button>
+                    <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">&Uacute;ltima</button>
                 </div>
             </div>
         </section>

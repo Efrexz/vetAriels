@@ -20,41 +20,41 @@ const paymentsData = [{
 function VoucherConfiguration() {
 
     return (
-        <section className="container mx-auto p-6">
-            <h1 className="text-3xl font-medium text-orange-400 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <FileInvoiceIcon className="w-8 h-8 mr-2" />
-                Configuración de Comprobantes
-            </h1>
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <div className="p-4 rounded-lg mb-2">
-                    <div className="flex items-center space-x-4 mb-4">
-                        <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex items-center gap-3"
-                        >
-                            <PlusIcon className="w-5 h-5 text-white" />
-                            AGREGAR COMPROBANTE
-                        </button>
-                        <div className="w-[400px] flex gap-2">
-                            <select
-                                name="company"
-                                className=" w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2"
-                            >
-                                <option value="">Empresa</option>
-                                <option value="RUC10">OLGA BUSTINZA RODRIGUEZ</option>
-                                <option value="RUC20">VETERINARIA ARIELS E.I.R.L</option>
-                            </select>
-                        </div>
-                        <button className="bg-transparent border border-gray-300 text-gray-600 py-2 px-4 rounded hover:bg-gray-200">
-                            <RefreshIcon className="w-5 h-5" />
-                        </button>
-                    </div>
-
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Configuraci&oacute;n
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Configuraci&oacute;n de Comprobantes
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <div className="flex flex-col sm:flex-row items-center gap-3 mb-5">
+                    <button
+                        className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 flex items-center gap-2 transition-colors font-semibold font-display shadow-sm shadow-primary/25"
+                    >
+                        <PlusIcon className="w-5 h-5" />
+                        Agregar comprobante
+                    </button>
+                    <select
+                        name="company"
+                        className="w-full sm:w-[260px] rounded-lg border border-slate-200 bg-white text-sm py-2 px-3 text-slate focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
+                    >
+                        <option value="">Empresa</option>
+                        <option value="RUC10">OLGA BUSTINZA RODRIGUEZ</option>
+                        <option value="RUC20">VETERINARIA ARIELS E.I.R.L</option>
+                    </select>
+                    <button className="ml-auto border border-slate-200 text-slate py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors">
+                        <RefreshIcon className="w-5 h-5" />
+                    </button>
                 </div>
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
                         <thead>
-                            <tr>
+                            <tr className="border-b border-slate-200">
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 border text-gray-700 text-center">
+                                    <th key={header} className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">
                                         {header}
                                     </th>
                                 ))}
@@ -62,23 +62,25 @@ function VoucherConfiguration() {
                         </thead>
                         <tbody>
                             {paymentsData.map((payment, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 border-b text-center border">{payment.date}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.companie}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.voucherName}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.serialNumber}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.lastNumber}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{payment.default ? 'Si' : 'No'}</td>
-                                    <td className="py-6 px-4 border-b text-center flex items-center justify-center gap-1">
-                                        <button className="text-orange-500 hover:text-orange-600" title="Ver imagen">
-                                            <SearchIcon className="w-4 h-4" />
-                                        </button>
-                                        <button className="text-purple-400 hover:text-purple-500">
-                                            <FileInvoiceIcon className="w-4 h-4" />
-                                        </button>
-                                        <button className="text-red-500 hover:text-red-600">
-                                            <TrashIcon className="w-4 h-4" />
-                                        </button>
+                                <tr key={index} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{payment.date}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-ink font-medium">{payment.companie}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{payment.voucherName}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{payment.serialNumber}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-ink font-semibold font-display">{payment.lastNumber}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{payment.default ? 'Si' : 'No'}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <div className="flex items-center justify-center gap-1">
+                                            <button className="p-1.5 rounded-lg text-slate hover:text-ink hover:bg-slate-100 transition-colors">
+                                                <SearchIcon className="w-4 h-4" />
+                                            </button>
+                                            <button className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors">
+                                                <FileInvoiceIcon className="w-4 h-4" />
+                                            </button>
+                                            <button className="p-1.5 rounded-lg text-slate hover:text-danger hover:bg-danger/10 transition-colors">
+                                                <TrashIcon className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

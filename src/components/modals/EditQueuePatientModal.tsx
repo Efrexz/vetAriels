@@ -57,31 +57,31 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
     };
 
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-950 bg-opacity-70 z-50 overflow-y-scroll p-3">
-            <div className="bg-gray-900 rounded-lg w-full max-w-3xl p-6 shadow-xl border border-gray-700 modal-appear mx-auto space-y-6">
-                <h2 className="text-xl sm:text-2xl font-semibold text-cyan-500 mb-4 pb-2 border-b-2 border-gray-700">Generar Consulta</h2>
+        <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll p-3">
+            <div className="bg-paper rounded-2xl w-full max-w-3xl p-6 shadow-sm border border-slate-200 modal-appear mx-auto space-y-6">
+                <h2 className="text-xl sm:text-2xl font-semibold text-ink font-display mb-4 pb-2 border-b-2 border-slate-200">Generar Consulta</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div className="flex flex-col">
-                        <label htmlFor="date" className="text-md font-semibold text-gray-400 mb-1">
+                        <label htmlFor="date" className="text-md font-semibold text-slate mb-1">
                             Fecha de atención
                         </label>
                         <div className="relative">
                             <input
                                 type="text"
                                 id="date"
-                                className="border border-gray-600 rounded-md bg-gray-800 text-gray-400 p-2 w-full focus-within:border-cyan-500 focus:outline-none transition-colors"
+                                className="border border-slate-200 rounded-md bg-white text-slate p-2 w-full focus-within:border-primary focus:outline-none transition-colors"
                                 value={`${queueData?.dateOfAttention} ${queueData?.timeOfAttention}`}
                                 disabled
                             />
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="doctor" className="text-md font-semibold text-gray-400 mb-1">
+                        <label htmlFor="doctor" className="text-md font-semibold text-slate mb-1">
                             Médico asignado
                         </label>
                         <select
                             id="doctor"
-                            className="border border-gray-600 rounded-md bg-gray-800 text-gray-200 p-2 w-full hover:border-cyan-500 focus-within:border-cyan-500 focus:outline-none transition-colors"
+                            className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
                             value={selectedDoctor}
                             onChange={handleSelectChange}
                         >
@@ -90,21 +90,21 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                         </select>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="owner" className="text-md font-semibold text-gray-400 mb-1">
+                        <label htmlFor="owner" className="text-md font-semibold text-slate mb-1">
                             Propietario
                         </label>
-                        <div className="flex items-center bg-gray-800 p-2 rounded-md border border-gray-600">
-                            <RoleUserIcon className="w-5 h-5 mr-3 text-cyan-500" />
-                            <span className="text-gray-200">{queueData?.petData?.ownerName}</span>
+                        <div className="flex items-center bg-white p-2 rounded-md border border-slate-200">
+                            <RoleUserIcon className="w-5 h-5 mr-3 text-primary" />
+                            <span className="text-ink">{queueData?.petData?.ownerName}</span>
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="pet" className="text-md font-semibold text-gray-400 mb-1">
+                        <label htmlFor="pet" className="text-md font-semibold text-slate mb-1">
                             Mascota:
                         </label>
                         <select
                             id="pet"
-                            className="border border-gray-600 rounded-md bg-gray-800 text-gray-200 p-2 w-full hover:border-cyan-500 focus-within:border-cyan-500 focus:outline-none transition-colors"
+                            className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
                             value={selectedPetId || ''}
                             onChange={handleSelectChange}
                         >
@@ -120,19 +120,19 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                     <input
                         type="checkbox"
                         id="emergency"
-                        className="mr-2 h-4 w-4 text-cyan-500 bg-gray-800 border-gray-600 rounded focus:ring-cyan-500"
+                        className="mr-2 h-4 w-4 text-primary bg-white border-slate-200 rounded focus:ring-primary/30 focus:border-primary"
                     />
-                    <label htmlFor="emergency" className="text-sm text-gray-400">
+                    <label htmlFor="emergency" className="text-sm text-slate">
                         Indicar atención como emergencia
                     </label>
                 </div>
                 <div className="flex flex-col mb-3">
-                    <label htmlFor="notes" className="text-sm font-semibold text-gray-400 mb-1">
+                    <label htmlFor="notes" className="text-sm font-semibold text-slate mb-1">
                         Notas
                     </label>
                     <textarea
                         id="notes"
-                        className="border border-gray-600 rounded-md bg-gray-800 text-gray-200 p-2 w-full max-h-60 hover:border-cyan-500 focus-within:border-cyan-500 focus:outline-none transition-colors"
+                        className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full max-h-60 hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
                         rows={4}
                         placeholder="Escribe las notas aquí..."
                         value={notes}
@@ -140,12 +140,12 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                     ></textarea>
                 </div>
                 <div className="flex flex-col w-full sm:w-[50%] mb-4">
-                    <label htmlFor="status" className="text-md font-semibold text-gray-400 mb-2">
+                    <label htmlFor="status" className="text-md font-semibold text-slate mb-2">
                         Estado
                     </label>
                     <select
                         id="status"
-                        className="border border-gray-600 rounded-md bg-gray-800 text-gray-200 p-2 w-full hover:border-cyan-500 focus-within:border-cyan-500 focus:outline-none transition-colors"
+                        className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
                         value={status}
                         onChange={handleSelectChange}
                     >
@@ -155,11 +155,11 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                         <option>Suspendido</option>
                     </select>
                 </div>
-                <div className="border-t border-gray-700 pt-4">
+                <div className="border-t border-slate-200 pt-4">
                     <ActionButtons
                         onCancel={onClose}
                         onSubmit={updateQueueData}
-                        submitText="GUARDAR CAMBIOS"
+                        submitText="Guardar cambios"
                         mode="modal"
                     />
                 </div>

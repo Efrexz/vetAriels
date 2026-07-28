@@ -97,24 +97,28 @@ function CreateUser() {
     ];
 
     return (
-        <section className="w-full mx-auto p-1 md:p-6 bg-gray-950">
-            <h1 className=" text-xl sm:text-2xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex">
-                <RoleUserIcon className="w-6 h-6 sm:w-9 sm:h-9 text-cyan-400 mr-2" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Crear Usuario</span>
-            </h1>
-            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-                <form className="pt-4 bg-gray-900 p-6 shadow-xl rounded-t-lg border border-cyan-500/30">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Configuraci&oacute;n
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Crear Usuario
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <form className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                         {fields.map((field, index) => (
-                            <div key={index} className={`mb-2 ${field.name === 'nombreServicio' ? 'col-span-4' : 'col-span-2'} `}>
-                                <label className="block text-gray-300 font-medium mb-2" htmlFor={field.name}>
+                            <div key={index} className="mb-2">
+                                <label className="block text-sm font-medium text-ink mb-1.5" htmlFor={field.name}>
                                     {field.label}
                                 </label>
                                 {field.type === "select" ? (
                                     <select
                                         name={field.name}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-1 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 border-gray-700 hover:border-cyan-500 focus:border-cyan-500"
+                                        className="w-full px-4 py-2 text-sm border rounded-lg focus:outline-none bg-white text-ink border-slate-200 hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/30"
                                     >
                                         {field.options?.map((option, i) => (
                                             <option key={i} value={option}>
@@ -128,29 +132,29 @@ function CreateUser() {
                                         name={field.name}
                                         value={formData[field.name as keyof Omit<FormDataState, 'rol'>]}
                                         onChange={handleChange}
-                                        className={`w-full px-4 py-1 border rounded-lg focus:outline-none bg-gray-700 text-gray-200 ${errors[field.name as keyof FormErrors] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'}`}
+                                        className={`w-full px-4 py-2 text-sm border rounded-lg focus:outline-none bg-white text-ink ${errors[field.name as keyof FormErrors] ? 'border-danger' : 'border-slate-200 hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/30'}`}
                                     />
                                 )}
                                 {errors[field.name as keyof FormErrors] && (
-                                    <p className="text-rose-500 text-sm mt-1">{errors[field.name as keyof FormErrors]}</p>
+                                    <p className="text-danger text-xs mt-1">{errors[field.name as keyof FormErrors]}</p>
                                 )}
                             </div>
                         ))}
                     </div>
                 </form>
-                <div className='flex flex-col sm:flex-row justify-end items-center gap-4 p-4 border-t border-gray-700 shadow-xl rounded-b-lg'>
+                <div className="flex flex-col sm:flex-row justify-end items-center gap-3 pt-4 border-t border-slate-100">
                     <button
-                        className="bg-gray-700 border border-gray-700 text-white py-1.5 px-3 rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-3 w-full sm:w-auto"
+                        className="bg-white text-slate border border-slate-200 py-2 px-4 rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 w-full sm:w-auto text-sm font-medium"
                         onClick={() => navigate(-1)}
                     >
-                        <ReturnIcon className="w-5 h-5 text-gray-300" />
-                        CANCELAR
+                        <ReturnIcon className="w-4 h-4 text-slate" />
+                        Cancelar
                     </button>
-                    <button className="bg-emerald-600 text-white py-1.5 px-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-3 w-full sm:w-auto"
+                    <button className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 transition-colors flex items-center gap-2 w-full sm:w-auto text-sm font-semibold font-display shadow-sm shadow-primary/25"
                         onClick={createNewUser}
                     >
-                        <PlusIcon className="w-5 h-5" />
-                        CREAR NUEVO USUARIO
+                        <PlusIcon className="w-4 h-4" />
+                        Crear usuario
                     </button>
                 </div>
             </div>

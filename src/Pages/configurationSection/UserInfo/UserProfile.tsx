@@ -86,7 +86,7 @@ function UserProfile() {
 
     if (!activeUser) {
         return (
-        <div className="p-6 text-center text-gray-500">
+        <div className="p-6 text-center text-slate">
             No hay un usuario activo para mostrar el perfil.
         </div>
         );
@@ -139,14 +139,14 @@ function UserProfile() {
     return (
         <div className="flex flex-col w-full">
             <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-4 mt-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-4 mt-4 mb-6">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-300 mb-1">{field.label}</label>
+                            <label className="block text-sm font-medium text-ink mb-1.5">{field.label}</label>
                             <div className="flex items-center">
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-800 px-3 py-2 rounded-l-lg">
-                                        <field.icon className="w-5 h-5 text-gray-400" />
+                                    <div className="flex items-center justify-center bg-slate-50 px-3 py-2 rounded-l-lg border border-slate-200 border-r-0">
+                                        <field.icon className="w-5 h-5 text-slate" />
                                     </div>
                                 }
                                 <input
@@ -155,25 +155,25 @@ function UserProfile() {
                                     value={formData[field.id as keyof FormDataState]}
                                     onChange={handleChange}
                                     disabled={field.disabled}
-                                    className={`border rounded-r-lg py-1 px-3 w-full focus:outline-none bg-gray-800 text-gray-200 ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'} `}
+                                    className={`border rounded-r-lg py-2 px-3 w-full focus:outline-none text-sm bg-white text-ink ${errors[field.id as keyof FormErrors] ? 'border-danger' : 'border-slate-200 hover:border-primary focus:border-primary'} `}
                                 />
                             </div>
                             {
                                 errors[field.id as keyof FormErrors] && (
-                                    <p className="text-rose-500 text-sm mt-1">{errors[field.id as keyof FormErrors]}</p>
+                                    <p className="text-danger text-xs mt-1">{errors[field.id as keyof FormErrors]}</p>
                                 )
                             }
                         </div>
                     ))}
                 </div>
             </div>
-            <div className='flex justify-center sm:justify-end items-center bg-gray-900 py-3 px-4 shadow-xl border-t border-gray-700 pt-4'>
+            <div className="flex justify-center sm:justify-end items-center py-3 px-4 border-t border-slate-100 pt-4">
                 <button
-                    className="bg-emerald-600 text-white py-1 px-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-3 w-full sm:w-auto"
+                    className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto text-sm font-semibold font-display shadow-sm shadow-primary/25"
                     onClick={updateData}
                 >
-                    <PlusIcon className="w-5 h-5" />
-                    GUARDAR CAMBIOS
+                    <PlusIcon className="w-4 h-4" />
+                    Guardar cambios
                 </button>
             </div>
             {

@@ -25,14 +25,18 @@ function ServiceInfo() {
     }
 
     return (
-        <section className="w-full p-6 bg-gray-800 text-gray-200 rounded-md">
-            <h2 className="text-xl sm:text-2xl font-medium mb-4 border-b-2 border-gray-700 pb-4 flex">
-                <PillsIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
-                    {serviceData.serviceName}
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Detalle del servicio
                 </span>
-            </h2>
-            <HorizontalMenu mode={"services"} />
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    {serviceData.serviceName}
+                </h1>
+            </div>
+            <div className="mb-5">
+                <HorizontalMenu mode={"services"} />
+            </div>
             <section>
                 {section === 'update' && <UpdateService serviceData={serviceData} />}
                 {section === 'prices' && <EditServicePrice serviceData={serviceData} />}

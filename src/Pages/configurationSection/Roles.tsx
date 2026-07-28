@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useGlobal } from '@context/GlobalContext';
-import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import KeyIcon from '@assets/keyIcon.svg?react';
@@ -12,40 +11,38 @@ function Roles() {
     const navigate = useNavigate();
 
     return (
-        <section className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl sm:text-2xl font-medium mb-4 pb-4 border-b border-cyan-500 flex items-center">
-                <RoleUserIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-cyan-500" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Roles</span>
-            </h1>
-            <div className="bg-gray-900 rounded-lg shadow-xl p-3 mb-6">
-                <div className="overflow-x-auto border border-cyan-500/30 rounded-lg">
+        <section className="w-full text-ink">
+            <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">Configuración</span>
+            <h1 className="text-2xl font-bold font-display text-ink">Roles</h1>
+            <div className="bg-paper rounded-2xl shadow-sm border border-slate-200 p-3 mb-6 mt-4">
+                <div className="overflow-x-auto rounded-lg">
                     <button
-                        className="border border-gray-700 text-white bg-emerald-600 py-1 px-3 rounded-lg hover:bg-emerald-700 flex items-center gap-2 m-3 transition-colors"
+                        className="border text-white bg-primary py-1 px-3 rounded-xl hover:opacity-90 font-semibold font-display shadow-sm shadow-primary/25 flex items-center gap-2 m-3 transition-colors"
                         onClick={() => navigate("/config/roles/create")}
                     >
                         <PlusIcon className="w-5 h-5" />
-                        CREAR NUEVO ROL
+                        Crear nuevo rol
                     </button>
                     <div className="overflow-x-auto">
-                        <table className="w-full bg-gray-900">
-                            <thead className="bg-gray-800">
-                                <tr>
-                                    <th className="px-6 py-2 text-left text-sm font-medium text-gray-300 border-b border-r border-gray-700">Nombre</th>
-                                    <th className="px-6 py-2 text-center text-sm font-medium text-gray-300 border-b border-r border-gray-700">Opciones</th>
+                        <table className="w-full bg-paper">
+                            <thead>
+                                <tr className="border-b border-slate-200">
+                                    <th className="py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider text-slate">Nombre</th>
+                                    <th className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {roles.map((role) => (
-                                    <tr key={role.id} className="border-b border-gray-700 hover:bg-gray-800 transition-colors">
-                                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-300 border-r border-gray-700">{role.name}</td>
-                                        <td className="py-3 text-sm font-medium border-r border-gray-700 text-center">
+                                    <tr key={role.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                        <td className="py-3 px-4 text-sm text-slate">{role.name}</td>
+                                        <td className="py-3 px-4 text-sm text-center">
                                             <button
                                                 className="text-amber-500 hover:text-amber-400 mx-2 transition-colors"
                                                 onClick={() => navigate(`/config/role/permissions/${role.name}`)}
                                             >
                                                 <KeyIcon className="w-4 h-4" />
                                             </button>
-                                            <button className="text-cyan-500 hover:text-cyan-600 mx-2 transition-colors">
+                                            <button className="text-primary hover:opacity-90 mx-2 transition-colors">
                                                 <EditIcon className="w-4 h-4" />
                                             </button>
                                             <button
@@ -61,7 +58,7 @@ function Roles() {
                         </table>
                     </div>
 
-                    <div className="mt-6 p-4 bg-cyan-900 text-cyan-200 rounded-lg m-3">
+                    <div className="mt-6 p-4 bg-primary/10 text-primary rounded-lg m-3">
                         <p>
                             Los roles equivalen a los puestos de trabajo dentro de la clínica. Cada usuario del sistema debe asumir un rol. Cada rol debe tener permisos de acceso a las diferentes áreas del sistema. Por ejemplo: si creamos un usuario llamado Pedro Cavas y le asignamos el rol de "recepcionista", los permisos de Pedro dependerán del rol recepcionista. Otro usuario llamado Juan también podría asumir el rol de recepcionista y tendría los mismos permisos que Pedro.
                         </p>

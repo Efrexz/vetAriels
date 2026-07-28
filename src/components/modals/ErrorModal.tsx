@@ -21,28 +21,28 @@ function ErrorModal({ onClose, typeOfError }: ErrorModalProps) {
     const message = errorMessages[typeOfError] || errorMessages.default;
     return (
         <div
-            className="fixed inset-0 flex justify-center items-start bg-gray-900 bg-opacity-70 z-50 pt-20"
+            className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 pt-20"
             onClick={onClose}
         >
             <div
-                className="bg-gray-800 p-6 rounded-xl w-full h-auto max-w-xl modal-appear mx-4 border border-gray-700"
+                className="bg-paper p-6 rounded-2xl w-full h-auto max-w-xl shadow-sm modal-appear mx-4 border border-slate-200"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="border-b border-gray-700 p-2 mb-4">
-                    <p className="text-red-500 text-left bg-red-500/10 mb-4 p-4 rounded-lg border border-red-500/20">
+                <div className="bg-danger/10 mb-4 p-4 rounded-lg border border-danger/20">
+                    <p className="text-danger text-left text-sm">
                         <span className="flex items-center gap-2">
-                            <AlertIcon className="w-5 h-5" />
+                            <AlertIcon className="w-5 h-5 flex-shrink-0" />
                             {message}
                         </span>
                     </p>
                 </div>
 
-                <div className="flex justify-end mt-6 gap-4">
+                <div className="flex justify-end mt-4 gap-4">
                     <button
-                        className="bg-cyan-600 text-white py-2 px-4 text-sm rounded-lg hover:bg-cyan-700 flex items-center font-semibold transition-colors"
+                        className="bg-primary text-white py-2 px-5 text-sm rounded-xl hover:opacity-90 flex items-center font-semibold font-display shadow-sm shadow-primary/25 transition-colors"
                         onClick={onClose}
                     >
-                        ACEPTAR
+                        Aceptar
                     </button>
                 </div>
             </div>

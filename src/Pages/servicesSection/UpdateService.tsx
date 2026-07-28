@@ -102,8 +102,8 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
     ];
 
     return (
-        <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-            <form className="pt-4 bg-gray-900 p-6 shadow-xl rounded-lg border border-cyan-500/30">
+        <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+            <form className="p-5 rounded-xl border border-slate-200 bg-slate-50/50">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-2">
                     {fields.map((field) => (
                         <div
@@ -113,7 +113,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                                 : 'col-span-1 sm:col-span-1 md:col-span-2'
                             }`}
                         >
-                            <label className="block text-gray-300 font-medium mb-1" htmlFor={field.name}>
+                            <label className="block text-sm font-medium text-ink mb-1" htmlFor={field.name}>
                                 {field.label}
                             </label>
                             {field.type === 'text' ? (
@@ -123,7 +123,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                                     name={field.name}
                                     value={formData.serviceName}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-1 border rounded-md focus:outline-none bg-gray-700 text-gray-200 ${errors.serviceName ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'}`}
+                                    className={`w-full px-4 py-2 text-sm border rounded-lg focus:outline-none bg-white text-ink ${errors.serviceName ? 'border-danger' : 'border-slate-200 hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/30'}`}
                                 />
                             ) : (
                                 <select
@@ -131,7 +131,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                                     name={field.name}
                                     value={formData[field.name as keyof Omit<FormDataState, 'serviceName'>]}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-1 border rounded-md focus:outline-none bg-gray-700 text-gray-200 ${errors[field.name as keyof Omit<FormDataState, 'serviceName'>] ? 'border-rose-500' : 'border-gray-700 hover:border-cyan-500 focus:border-cyan-500'}`}
+                                    className={`w-full px-4 py-2 text-sm border rounded-lg focus:outline-none bg-white text-ink ${errors[field.name as keyof Omit<FormDataState, 'serviceName'>] ? 'border-danger' : 'border-slate-200 hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/30'}`}
                                 >
                                     {field?.options?.map((option, i) => (
                                         <option key={i} value={option}>
@@ -141,7 +141,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                                 </select>
                             )}
                             {errors[field.name as keyof FormErrors] && (
-                                <p className="text-rose-500 text-sm mt-1">{errors[field.name as keyof FormErrors]}</p>
+                                <p className="text-danger text-sm mt-1">{errors[field.name as keyof FormErrors]}</p>
                             )}
                         </div>
                     ))}
@@ -156,8 +156,8 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
             <ActionButtons
                     onCancel={() => navigate("/services")}
                     onSubmit={updateService}
-                    submitText="ACTUALIZAR SERVICIO"
-                    cancelText="REGRESAR"
+                    submitText="Actualizar servicio"
+                    cancelText="Regresar"
                     mode="modal"
                 />
         </div>

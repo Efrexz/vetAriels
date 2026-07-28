@@ -82,21 +82,21 @@ function UserPassword() {
 
     return (
         <div className="flex flex-col w-full">
-            <div className="mt-6 p-4 bg-cyan-900 text-cyan-200 rounded-lg m-3 flex gap-2">
-                <InfoIcon className="w-5 h-5 text-cyan-200" />
-                <p>
-                    Ingresa tu contraseña actual y luego la contraseña nueva por la que quieres cambiarla.
+            <div className="mt-4 p-4 bg-primary text-white rounded-xl mx-4 flex gap-2">
+                <InfoIcon className="w-5 h-5 text-white flex-shrink-0" />
+                <p className="text-sm">
+                    Ingresa tu contrase&ntilde;a actual y luego la contrase&ntilde;a nueva por la que quieres cambiarla.
                 </p>
             </div>
             <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-4 mt-4 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-4 mt-4 mb-8">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-300 mb-1">{field.label}</label>
+                            <label className="block text-sm font-medium text-ink mb-1.5">{field.label}</label>
                             <div className="flex items-center ">
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-800 px-3 py-2 rounded-l-lg">
-                                        <field.icon className="w-5 h-5 text-gray-400" />
+                                    <div className="flex items-center justify-center bg-slate-50 px-3 py-2 rounded-l-lg border border-slate-200 border-r-0">
+                                        <field.icon className="w-5 h-5 text-slate" />
                                     </div>
                                 }
                                 <input
@@ -104,22 +104,22 @@ function UserPassword() {
                                     id={field.id}
                                     value={formData[field.id]}
                                     onChange={handleChange}
-                                    className={`border rounded-r-lg py-1 px-3 w-full hover:border-cyan-500 focus:outline-none focus:border-cyan-500 bg-gray-800 text-gray-200 ${errors[field.id] ? 'border-rose-500' : 'border-gray-700'}`}
+                                    className={`border rounded-r-lg py-2 px-3 w-full text-sm hover:border-primary focus:outline-none focus:border-primary bg-white text-ink ${errors[field.id] ? 'border-danger' : 'border-slate-200'}`}
                                 />
                             </div>
                             {errors[field.id] && (
-                                <p className="text-rose-500 text-sm mt-1">{errors[field.id]}</p>
+                                <p className="text-danger text-xs mt-1">{errors[field.id]}</p>
                             )}
                         </div>
                     ))}
                 </div>
             </div>
-            <div className='flex justify-end items-center bg-gray-900 py-3 px-4 shadow-xl rounded-b-lg border-t border-gray-700 pt-4'>
-                <button className="bg-emerald-600 text-white py-1 px-3 rounded-lg hover:bg-emerald-700 flex items-center gap-3"
+            <div className="flex justify-end items-center py-3 px-4 border-t border-slate-100 pt-4">
+                <button className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 flex items-center gap-2 text-sm font-semibold font-display shadow-sm shadow-primary/25 transition-colors"
                     onClick={updatePassword}
                 >
-                    <PlusIcon className="w-5 h-5" />
-                    GUARDAR CAMBIOS
+                    <PlusIcon className="w-4 h-4" />
+                    Guardar cambios
                 </button>
             </div>
             {

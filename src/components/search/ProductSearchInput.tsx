@@ -74,7 +74,7 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
     return (
         <div className="w-full relative">
             <input
-                className="bg-gray-700 border border-gray-600 rounded-lg w-full py-1 px-4 text-gray-200 placeholder-gray-400 focus:ring-1 focus:ring-cyan-500 focus:outline-none hover:border-cyan-500"
+                className="bg-white border border-slate-200 rounded-lg w-full py-1 px-4 text-ink placeholder-slate focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none hover:border-primary"
                 id="productSearch"
                 type="search"
                 placeholder="Buscar producto o servicio..."
@@ -89,31 +89,31 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
 
             {/*Filtrado de busqueda de productos y servicios */}
             {isFilteredListVisible && filteredItems.length > 0 && (
-                <ul className="bg-gray-800 border border-gray-700 rounded-b-lg shadow-xl max-h-[480px] overflow-y-auto custom-scrollbar absolute top-full right-0 z-40 w-full">
+                <ul className="bg-paper border border-slate-200 rounded-b-lg shadow-xl max-h-[480px] overflow-y-auto custom-scrollbar absolute top-full right-0 z-40 w-full">
                     {filteredItems.map((item) => {
                         const isItemProduct = isProduct(item); // Usamos el type guard para determinar el tipo
                         return (
                             <li
                                 key={isItemProduct ? item.systemCode : item.id}
-                                className="py-2 pl-3 pr-6 h-20 cursor-pointer hover:bg-gray-700 border-b border-gray-700 flex justify-between items-center transition-colors"
+                                className="py-2 pl-3 pr-6 h-20 cursor-pointer hover:bg-slate-50 border-b border-slate-200 flex justify-between items-center transition-colors"
                                 onClick={() => addProductByClient(item)}
                             >
                                 <div className="flex items-center justify-between w-full">
-                                    <span className="font-bold text-cyan-400">
+                                    <span className="font-bold text-primary">
                                         {isItemProduct ? item.productName : item.serviceName}
                                     </span>
                                     <div className="flex items-center gap-3">
-                                        <span className="text-lg font-bold text-gray-200">
+                                        <span className="text-lg font-bold text-ink">
                                             s/{item?.salePrice}
                                         </span>
                                         {
                                             isItemProduct && item.availableStock !== undefined && (
                                                 <div className="text-center">
-                                                    <div className="text-xs text-gray-400">
+                                                    <div className="text-xs text-slate">
                                                         <div>Stock</div>
                                                         <div>Disponible</div>
                                                     </div>
-                                                    <div className={`${item?.availableStock > 0 ? "bg-cyan-500 border-cyan-500" : "bg-red-500 border-red-500"} font-medium w-7 h-6 flex items-center justify-center rounded-full text-white mx-auto border`}>
+                                                    <div className={`${item?.availableStock > 0 ? "bg-primary border-primary" : "bg-danger border-danger"} font-medium w-7 h-6 flex items-center justify-center rounded-full text-white mx-auto border`}>
                                                         {item?.availableStock}
                                                     </div>
                                                 </div>
@@ -125,7 +125,7 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
                         );
                     })}
                     {isFilteredListVisible && searchTerm.length >= 3 && filteredItems.length === 0 && (
-                        <li className="p-3 text-gray-500">No se encontraron coincidencias</li>
+                        <li className="p-3 text-slate">No se encontraron coincidencias</li>
                     )}
                 </ul>
             )}

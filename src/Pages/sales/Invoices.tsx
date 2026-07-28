@@ -94,51 +94,53 @@ const headlinesOptions = [
 ];
 
 function Invoices() {
-    const getStatusColor = (status: InvoiceStatus) => {
+    const getStatusStyle = (status: InvoiceStatus) => {
         switch (status) {
-            case 'PAGADO': return 'bg-green-500';
-            case 'PENDIENTE': return 'bg-yellow-500';
-            case 'ANULADO': return 'bg-red-500';
-            default: return 'bg-gray-500';
+            case 'PAGADO': return 'bg-success/10 text-success';
+            case 'PENDIENTE': return 'bg-amber/10 text-amber';
+            case 'ANULADO': return 'bg-danger/10 text-danger';
+            default: return 'bg-slate-100 text-slate';
         }
     };
     return (
-        <section className="w-full max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 overflow-auto">
-            <h1 className="text-3xl font-medium text-blue-500 mb-4 pb-4 border-b-2 border-gray-100 flex">
-                <FileInvoiceIcon className="w-9 h-9 mr-2" />
-                Comprobantes
-            </h1>
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <div className="flex items-center space-x-4 mb-4">
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded">Comprobantes Emitidos</button>
-                    <button className="bg-transparent text-blue-400 py-2 px-4 rounded hover:bg-gray-100 hover:text-blue-600">Por items</button>
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Comprobantes
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Facturaci&oacute;n
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <div className="flex items-center gap-2 mb-5 border-b border-slate-100 pb-3">
+                    <button className="bg-primary/10 text-primary py-2 px-4 rounded-lg text-sm font-semibold font-display">Comprobantes Emitidos</button>
+                    <button className="text-slate py-2 px-4 rounded-lg text-sm hover:bg-slate-50 transition-colors font-medium">Por items</button>
                 </div>
-                <div className="p-4 rounded-lg mb-2">
-                    {/* Grupo de Inputs */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <div className="p-4 rounded-xl mb-4 border border-slate-200 bg-slate-50/50">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
                         <input
                             type="text"
                             placeholder="Buscar cliente..."
-                            className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                            className="w-full py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                         />
                         <input
                             type="text"
-                            placeholder="Buscar número..."
-                            className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                            placeholder="Buscar n&uacute;mero..."
+                            className="w-full py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                         />
                         <input
                             type="date"
-                            className="w-full py-2 px-4 border-gray-200 border-2 rounded-lg focus:outline-none focus:border-blue-500"
+                            className="w-full py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                         />
                     </div>
 
-                    {/* Grupo de Selects */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {headlinesOptions.map((option, index) => (
                             <div key={index} className="w-full">
                                 <select
                                     name={option.type}
-                                    className="mt-1.5 w-full rounded-lg border-gray-200 border-2 text-gray-700 sm:text-sm p-2 focus:outline-none focus:border-blue-500"
+                                    className="w-full rounded-lg border border-slate-200 bg-white text-sm py-2 px-3 text-slate focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                                 >
                                     <option value="">{option.type}</option>
                                     {option.options.map((option, index) => (
@@ -151,12 +153,12 @@ function Invoices() {
                         ))}
                     </div>
                 </div>
-                <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                    <table className="min-w-full bg-white">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
                         <thead>
-                            <tr>
+                            <tr className="border-b border-slate-200">
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="py-2 px-4 border text-gray-700 text-center">
+                                    <th key={header} className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">
                                         {header}
                                     </th>
                                 ))}
@@ -164,20 +166,20 @@ function Invoices() {
                         </thead>
                         <tbody>
                             {invoicesData.map((invoice) => (
-                                <tr key={invoice.id} className="hover:bg-gray-100 cursor-pointer">
-                                    <td className="py-2 px-4 border-b text-center border ">{invoice.date}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{invoice.comprobante}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{invoice.client}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{invoice.amount}</td>
-                                    <td className="py-2 px-4 border-b text-center border">{invoice.payment}</td>
-                                    <td className="py-2 px-4 text-center">
-                                        <span className={`px-3 py-1 text-sm font-medium rounded-full text-white ${getStatusColor(invoice.status)}`}>
+                                <tr key={invoice.id} className="border-b border-slate-100 hover:bg-slate-50/50 cursor-pointer transition-colors">
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{invoice.date}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-ink font-medium">{invoice.comprobante}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{invoice.client}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-ink font-semibold font-display">{invoice.amount}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{invoice.payment}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusStyle(invoice.status)}`}>
                                             {invoice.status}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-4 border-b text-center">
-                                        <button className="text-green-500 hover:text-green-700">
-                                            <SearchIcon className="w-5 h-5" />
+                                    <td className="py-3 px-4 text-center">
+                                        <button className="p-1.5 rounded-lg text-slate hover:text-primary hover:bg-primary/10 transition-colors">
+                                            <SearchIcon className="w-4 h-4" />
                                         </button>
                                     </td>
                                 </tr>
@@ -185,17 +187,16 @@ function Invoices() {
                         </tbody>
                     </table>
                 </div>
-                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                    <p className="text-gray-600 text-center md:text-left">
-                        Página: 1 de 1 | Registros del 1 al 5 | Total{" "}
-                        5
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-5 gap-4">
+                    <p className="text-slate text-sm">
+                        Registros 1&ndash;5 de 5
                     </p>
-                    <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-2 px-4 border rounded">Primera</button>
-                        <button className="py-2 px-4 border rounded">Anterior</button>
-                        <button className="py-2 px-4 border rounded bg-blue-500 text-white">1</button>
-                        <button className="py-2 px-4 border rounded">Siguiente</button>
-                        <button className="py-2 px-4 border rounded">Última</button>
+                    <div className="flex flex-wrap gap-2">
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Primera</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Anterior</button>
+                        <button className="py-1.5 px-3 rounded-lg text-sm bg-primary text-white font-semibold transition-colors">1</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Siguiente</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">&Uacute;ltima</button>
                     </div>
                 </div>
             </div>

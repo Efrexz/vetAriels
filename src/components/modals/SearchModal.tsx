@@ -10,21 +10,21 @@ function SearchModal ({ onClose }: SearchModalProps)  {
 
     return (
         <div
-            className="fixed inset-0 z-90 flex items-start justify-center pt-20 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-90 flex items-start justify-center pt-20 bg-ink/60 backdrop-blur-sm"
             onClick={onClose}
         >
             <div
-                className="bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg mx-4 z-90 modal-appear border border-gray-700 flex flex-col"
+                className="bg-paper rounded-2xl shadow-sm w-full max-w-lg mx-4 z-90 modal-appear border border-slate-200 flex flex-col"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="flex justify-between items-center px-4 py-3 border-b border-gray-700 flex-shrink-0">
-                    <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                        <SearchIcon className="w-5 h-5 text-cyan-400" />
+                <div className="flex justify-between items-center px-4 py-3 border-b border-slate-200 flex-shrink-0">
+                    <h3 className="text-lg font-semibold text-ink flex items-center gap-2">
+                        <SearchIcon className="w-5 h-5 text-primary" />
                         Buscar Cliente
                     </h3>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-white transition-colors"
+                        className="text-slate hover:text-ink transition-colors"
                     >
                         <span className="sr-only">Cerrar</span>
                         <XIcon className="w-6 h-6" />
@@ -33,16 +33,16 @@ function SearchModal ({ onClose }: SearchModalProps)  {
 
                 <div className="p-4">
 
-                    <div className="flex w-full rounded-lg border border-gray-700 focus-within:border-cyan-400 transition-colors">
-                        <div className="flex items-center justify-center bg-gray-800 px-4">
-                            <SearchIcon className="w-5 h-5 text-gray-400" />
+                    <div className="flex w-full rounded-lg border border-slate-200 focus-within:border-primary transition-colors">
+                        <div className="flex items-center justify-center bg-white px-4">
+                            <SearchIcon className="w-5 h-5 text-slate" />
                         </div>
                         <ClientSearchInput mode={"sales"} />
                     </div>
                 </div>
 
                 <div className="p-4 pt-0 flex-grow overflow-y-auto">
-                    <div className="text-center text-gray-500 text-sm mt-4">
+                    <div className="text-center text-slate text-sm mt-4">
                         <p>Los resultados de la búsqueda aparecerán aquí.</p>
                     </div>
                 </div>

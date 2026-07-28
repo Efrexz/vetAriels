@@ -56,42 +56,47 @@ function Products() {
     };
 
     return (
-        <section className="w-full p-1 md:p-6 overflow-auto">
-            <h1 className="text-xl md:text-2xl font-medium mb-4 pb-4 border-b-2 border-cyan-500 flex items-center gap-2">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Productos</span>
-            </h1>
-            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-                <div className="p-4 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Inventario
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Productos
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <div className="p-4 rounded-xl mb-4 border border-slate-200 bg-slate-50/50">
                     <div className="flex flex-wrap items-center gap-4 mb-4">
-                        <div className="flex w-full sm:w-[350px] border-gray-600 border rounded-lg overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500">
-                            <div className="flex items-center justify-center bg-gray-700 px-2">
-                                <SearchIcon className="w-5 h-5 text-gray-400" />
+                        <div className="flex items-center w-full sm:w-[350px] border border-slate-200 rounded-lg overflow-hidden bg-white focus-within:border-primary">
+                            <div className="flex items-center justify-center px-3">
+                                <SearchIcon className="w-4 h-4 text-slate" />
                             </div>
                             <input
                                 type="text"
                                 placeholder="Buscar por nombre..."
-                                className="w-full py-1 px-2 focus:outline-none focus:ring-0 focus:border-transparent bg-gray-700 text-gray-200"
+                                className="w-full py-2 px-2 focus:outline-none focus:ring-0 bg-white text-sm text-ink placeholder:text-slate/70"
                                 value={searchTerm}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                             />
                         </div>
 
                         <button
-                            className="w-full sm:w-auto border border-gray-700 text-white bg-emerald-600 py-1 px-3 rounded-xl hover:bg-emerald-700 flex items-center gap-2 justify-center transition-colors"
+                            className="ml-auto border border-slate-200 text-white bg-primary py-2 px-5 rounded-xl hover:opacity-90 flex items-center gap-2 justify-center transition-colors font-semibold font-display shadow-sm shadow-primary/25 w-full sm:w-auto"
                             onClick={() => setIsAddModalOpen(true)}
                         >
                             <PlusIcon className="w-5 h-5" />
-                            CREAR NUEVO PRODUCTO
+                            Nuevo producto
                         </button>
                     </div>
 
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-3">
                         {filterOptions.map((filter) => (
-                            <div key={filter.type} className="w-full sm:w-[250px]">
+                            <div key={filter.type} className="w-full sm:w-[220px]">
                                 <select
                                     name={filter.type}
                                     onChange={handleFilterChange}
-                                    className="w-full rounded-lg hover:border-cyan-500 focus-within:border-cyan-500 border-2 border-gray-600 text-gray-400 bg-gray-700 sm:text-sm py-1 px-5"
+                                    className="w-full rounded-lg border border-slate-200 bg-white text-sm py-2 px-3 text-slate focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                                 >
                                     <option value="">{filter.label}</option>
                                     {filter.options.map((option) => (
@@ -103,12 +108,12 @@ function Products() {
                     </div>
                 </div>
 
-                <div className="overflow-x-auto border border-gray-700 rounded-lg">
-                    <table className="min-w-full bg-gray-800 rounded-lg">
-                        <thead className="bg-gray-700 border-b border-gray-600">
-                            <tr>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                        <thead>
+                            <tr className="border-b border-slate-200">
                                 {tableHeaders.map((header) => (
-                                    <th key={header} className="p-1 text-center border-r border-gray-600 font-bold text-sm text-gray-300">
+                                    <th key={header} className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">
                                         {header}
                                     </th>
                                 ))}
@@ -116,41 +121,47 @@ function Products() {
                         </thead>
                         <tbody>
                             {filteredProducts.map((product: Product) => (
-                                <tr key={product.systemCode || product.id} className="hover:bg-gray-700 text-sm">
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 text-gray-400">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
-                                    <td className="py-1.5 px-4 text-left border border-gray-600 text-gray-400">{product?.productName}</td>
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 text-gray-400">{product?.brand}</td>
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 text-gray-400">{product?.provider}</td>
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 text-gray-400">{product?.line}</td>
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 text-gray-400">{product?.salePrice}</td>
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 text-gray-400">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1.5 font-medium leading-none text-xs text-white ${product?.availableStock > 0 ? 'bg-green-600' : 'bg-red-600'} rounded-full`}>
+                                <tr key={product.systemCode || product.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
+                                    <td className="py-3 px-4 text-left text-sm text-ink font-medium">{product?.productName}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{product?.brand}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{product?.provider}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-slate">{product?.line}</td>
+                                    <td className="py-3 px-4 text-center text-sm text-ink font-medium">{product?.salePrice}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${product?.availableStock > 0 ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
                                             {product?.availableStock}
                                         </span>
                                     </td>
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 text-gray-400">
-                                        <span className={`inline-flex items-center justify-center px-2 py-1.5 font-medium leading-none text-xs text-white ${product?.availableStock > 0 ? 'bg-green-600' : 'bg-red-600'} rounded-full`}>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${product?.availableStock > 0 ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
                                             {product?.availableStock}
                                         </span>
                                     </td>
-                                    <td className="py-1.5 px-4 text-center border border-gray-600 ">
+                                    <td className="py-3 px-4 text-center">
                                         <span
-                                            className={`inline-block cursor-pointer w-4 h-4 rounded-full ${product?.status ? "bg-green-600" : "bg-red-600"}`}
+                                            className={`inline-block cursor-pointer w-3 h-3 rounded-full ${product?.status ? "bg-success" : "bg-danger"}`}
                                         />
                                     </td>
-                                    <td className="py-1 px-4 text-center border border-gray-600 ">
-                                        <div className="flex justify-center items-center h-full space-x-2">
-                                            <div className="flex justify-center items-center h-full space-x-2">
-                                                <button aria-label={`Editar ${product.productName}`} onClick={() => navigate(`/products/product/${product.systemCode}/update`)}>
-                                                    <PenIcon className="w-4 h-4 text-cyan-500 hover:text-cyan-400" />
-                                                </button>
-                                                <button aria-label={`Eliminar ${product.productName}`} onClick={() => {
+                                    <td className="py-3 px-4 text-center">
+                                        <div className="flex justify-center items-center gap-1">
+                                            <button
+                                                aria-label={`Editar ${product.productName}`}
+                                                className="p-1.5 rounded-lg text-slate hover:text-ink hover:bg-slate-100 transition-colors"
+                                                onClick={() => navigate(`/products/product/${product.systemCode}/update`)}
+                                            >
+                                                <PenIcon className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                aria-label={`Eliminar ${product.productName}`}
+                                                className="p-1.5 rounded-lg text-slate hover:text-danger hover:bg-danger/10 transition-colors"
+                                                onClick={() => {
                                                     setIsDeleteModalOpen(true);
                                                     setProductToDelete(product);
-                                                }}>
-                                                    <TrashIcon className="w-4 h-4 text-red-500 hover:text-red-400" />
-                                                </button>
-                                            </div>
+                                                }}
+                                            >
+                                                <TrashIcon className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -176,19 +187,18 @@ function Products() {
                         />
                     )
                 }
-                        <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                            <p className="text-gray-400 text-center md:text-left text-sm">
-                                Página: 1 de 1 | Registros del 1 al {productsData.length} | Total{" "}
-                                {productsData.length}
-                            </p>
-                            <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                                <button className="py-1 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
-                                <button className="py-1 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
-                                <button className="py-1 px-4 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
-                                <button className="py-1 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
-                                <button className="py-1 px-4 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
-                            </div>
-                        </div>
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-5 gap-4">
+                    <p className="text-slate text-sm">
+                        Registros 1&ndash;{productsData.length} de {productsData.length}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Primera</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Anterior</button>
+                        <button className="py-1.5 px-3 rounded-lg text-sm bg-primary text-white font-semibold transition-colors">1</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Siguiente</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">&Uacute;ltima</button>
+                    </div>
+                </div>
             </div>
         </section>
     );

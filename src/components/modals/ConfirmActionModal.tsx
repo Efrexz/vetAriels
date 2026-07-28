@@ -22,39 +22,39 @@ type OperationConfig = {
 
 const operationConfig: Record<OperationType, OperationConfig> = {
     medical: {
-        title: "¿Eliminar de la cola médica?",
-        buttonText: "CONFIRMAR ELIMINADO",
-        buttonColor: "bg-red-500 hover:bg-red-600",
+        title: "&iquest;Eliminar de la cola m&eacute;dica?",
+        buttonText: "Confirmar eliminado",
+        buttonColor: "bg-danger hover:opacity-90 shadow-danger/25",
     },
     deleteGrooming: {
-        title: "¿Eliminar de la cola de grooming?",
-        buttonText: "CONFIRMAR ELIMINADO",
-        buttonColor: "bg-red-500 hover:bg-red-600",
+        title: "&iquest;Eliminar de la cola de grooming?",
+        buttonText: "Confirmar eliminado",
+        buttonColor: "bg-danger hover:opacity-90 shadow-danger/25",
     },
     finishGrooming: {
-        title: "¿Marcar como terminado?",
-        buttonText: "CONFIRMAR TERMINADO",
-        buttonColor: "bg-green-500 hover:bg-green-600",
+        title: "&iquest;Marcar como terminado?",
+        buttonText: "Confirmar terminado",
+        buttonColor: "bg-primary hover:opacity-90 shadow-primary/25",
     },
     returnGrooming: {
-        title: "¿Regresar a la cola?",
-        buttonText: "CONFIRMAR REGRESO",
-        buttonColor: "bg-orange-500 hover:bg-orange-600",
+        title: "&iquest;Regresar a la cola?",
+        buttonText: "Confirmar regreso",
+        buttonColor: "bg-amber hover:bg-amber-dark shadow-amber/25",
     },
     deleteUser: {
-        title: "¿Eliminar este usuario?",
-        buttonText: "CONFIRMAR ELIMINADO",
-        buttonColor: "bg-red-500 hover:bg-red-600",
+        title: "&iquest;Eliminar este usuario?",
+        buttonText: "Confirmar eliminado",
+        buttonColor: "bg-danger hover:opacity-90 shadow-danger/25",
     },
     deleteRecordAndNote: {
-        title: "¿Eliminar este registro?",
-        buttonText: "CONFIRMAR ELIMINADO",
-        buttonColor: "bg-red-500 hover:bg-red-600",
+        title: "&iquest;Eliminar este registro?",
+        buttonText: "Confirmar eliminado",
+        buttonColor: "bg-danger hover:opacity-90 shadow-danger/25",
     },
     payments: {
         title: "Confirmar extorno de pago",
-        buttonText: "CONFIRMAR EXTORNO",
-        buttonColor: "bg-red-500 hover:bg-red-600",
+        buttonText: "Confirmar extorno",
+        buttonColor: "bg-danger hover:opacity-90 shadow-danger/25",
         requiresReason: true,
     },
 };
@@ -121,16 +121,16 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
     };
 
     return (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex items-start justify-center z-50 pt-20">
-            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-lg shadow-xl modal-appear mx-4 border border-gray-700">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-medium text-cyan-500">
+        <div className="fixed inset-0 bg-ink/40 flex items-start justify-center z-50 pt-20">
+            <div className="bg-paper rounded-2xl p-6 w-full max-w-lg shadow-sm modal-appear mx-4 border border-slate-200">
+                <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                    <h2 className="text-lg font-semibold font-display text-ink">
                         {config.title}
                     </h2>
                 </div>
                 {config.requiresReason && (
                     <div className="mb-4">
-                        <label htmlFor="reason" className="block text-gray-400 font-medium mb-2">
+                        <label htmlFor="reason" className="block text-slate font-medium mb-2">
                             ¿Cuál es el motivo del extorno?
                         </label>
                         <input
@@ -143,31 +143,31 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                                 setErrorMessage("");
                             }}
                             placeholder="Escribe el motivo aquí"
-                            className={`w-full border rounded-md p-2 bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:border-cyan-500 transition-colors ${
-                                errorMessage ? 'border-rose-500' : 'border-gray-600'
+                            className={`w-full border rounded-lg p-2.5 bg-white text-ink text-sm placeholder:text-slate/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-colors ${
+                                errorMessage ? 'border-danger' : 'border-slate-200'
                             }`}
                             required
                         />
                         {errorMessage && (
-                            <p className="text-rose-500 text-sm mt-1">{errorMessage}</p>
+                            <p className="text-danger text-sm mt-1">{errorMessage}</p>
                         )}
                     </div>
                 )}
-                <div className="flex flex-col sm:flex-row justify-end border-t border-gray-700 pt-4 gap-4">
+                <div className="flex flex-col sm:flex-row justify-end border-t border-slate-100 pt-4 gap-3">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-1 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors w-full md:w-auto"
+                        className="px-4 py-2 bg-white text-slate rounded-xl hover:bg-slate-100 border border-slate-200 transition-colors font-medium w-full md:w-auto"
                     >
                         Cancelar
                     </button>
                     <button
                         type="button"
-                        className={`px-4 py-1 ${config.buttonColor || "bg-red-600 hover:bg-red-700"} text-white rounded-lg flex items-center w-full md:w-auto whitespace-nowrap transition-colors`}
+                        className={`px-5 py-2 ${config.buttonColor || "bg-danger hover:opacity-90"} text-white rounded-xl flex items-center w-full md:w-auto whitespace-nowrap transition-colors font-semibold font-display shadow-sm`}
                         onClick={typeOfOperationConfirm}
                     >
                         <DiskIcon className="w-5 h-5 mr-2" />
-                        {config.buttonText || "CONFIRMAR ELIMINADO"}
+                        {config.buttonText || "Confirmar"}
                     </button>
                 </div>
             </div>

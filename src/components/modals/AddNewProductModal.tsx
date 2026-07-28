@@ -147,24 +147,24 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
 
 
     return (
-        <div className="fixed inset-0 flex justify-center items-start bg-gray-950 bg-opacity-70 z-50 overflow-y-scroll" >
-            <div className="bg-gray-900 border border-gray-700 py-4 px-8 rounded-md w-full h-auto max-w-5xl mt-6 mx-4 modal-appear">
-                <h2 className="text-xl font-bold text-cyan-500 mb-2 border-b border-gray-700 pb-2">
+        <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll" >
+            <div className="bg-paper border border-slate-200 py-4 px-8 rounded-2xl w-full h-auto max-w-5xl mt-6 mx-4 modal-appear">
+                <h2 className="text-xl font-bold text-ink font-display mb-2 border-b border-slate-200 pb-2">
                     Agregar nuevo producto
                 </h2>
-                <form onSubmit={createProduct} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-b border-gray-700 pb-6 mb-4">
+                <form onSubmit={createProduct} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-b border-slate-200 pb-6 mb-4">
                     {formFields.map((field) => (
                         <div
                             key={field.name}
                             className={`${field.fullWidth ? 'lg:col-span-3 sm:col-span-2' : 'col-span-1'}`}
                         >
-                            <label className="block text-sm font-medium text-gray-300 mb-2">{field.label}</label>
+                            <label className="block text-sm font-medium text-ink mb-2">{field.label}</label>
                             {field.type === 'select' ? (
                                 <select
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className={`border border-gray-600 rounded-md p-2 w-full bg-gray-700 text-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 hover:border-cyan-500 ${errors[field.name] ? 'border-red-500' : ''}`}
+                                    className={`border border-slate-200 rounded-md p-2 w-full bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary ${errors[field.name] ? 'border-danger' : ''}`}
                                 >
                                     {field.options?.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
@@ -174,8 +174,8 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                 <div>
                                     <div className="flex w-full rounded-md transition-colors">
                                         {field.icon && (
-                                            <div className="flex items-center justify-center bg-gray-700 px-3">
-                                                <field.icon className="w-5 h-5 text-gray-400" />
+                                            <div className="flex items-center justify-center bg-white px-3">
+                                                <field.icon className="w-5 h-5 text-slate" />
                                             </div>
                                         )}
                                         <input
@@ -184,16 +184,16 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                             placeholder={field.placeholder}
                                             value={formData[field.name]}
                                             onChange={handleChange}
-                                            className={`p-2 w-full bg-gray-700 border border-gray-600 text-gray-200  focus:outline-none hover:border-cyan-500 focus:border-cyan-500 ${errors[field.name] ? 'border-red-500' : ''}`}
+                                            className={`p-2 w-full bg-white border border-slate-200 text-ink  focus:outline-none hover:border-primary focus:border-primary`}
                                         />
                                     </div>
                                     {field.infoMessage && (
-                                        <p className="text-xs text-gray-500 mt-1">{field.infoMessage}</p>
+                                        <p className="text-xs text-slate mt-1">{field.infoMessage}</p>
                                     )}
                                 </div>
                             )}
                             {errors[field.name] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
+                                <p className="text-danger text-sm mt-1">{errors[field.name]}</p>
                             )}
                         </div>
                     ))}
@@ -202,7 +202,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                 <ActionButtons
                     onCancel={onClose}
                     onSubmit={createProduct}
-                    submitText="CREAR NUEVO PRODUCTO"
+                    submitText="Crear producto"
                     mode="modal"
                 />
             </div>

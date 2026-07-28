@@ -122,7 +122,7 @@ function ClientProfile() {
     }
 
     if (!individualClientData) {
-        return <div className="p-6 text-center text-gray-500">Cargando datos del cliente...</div>;
+        return <div className="p-6 text-center text-slate">Cargando datos del cliente...</div>;
     }
 
     const formFields = [
@@ -143,13 +143,13 @@ function ClientProfile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-300 mb-2">{field.label}</label>
+                            <label className="block text-sm font-medium text-ink mb-1.5">{field.label}</label>
                             <div className="flex items-center">
-                                <div className="flex items-center justify-center bg-gray-700 px-3 py-1.5 md:py-2 rounded-l-lg border border-gray-600 border-r-0">
-                                    <field.icon className="w-5 h-5 text-gray-400" />
+                                <div className="flex items-center justify-center bg-white px-3 py-2 rounded-l-lg border border-slate-200 border-r-0">
+                                    <field.icon className="w-5 h-5 text-slate" />
                                 </div>
                                 <input
-                                    className={`border rounded-r-lg px-3 py-1 md:py-1.5 bg-gray-700 w-full focus:outline-none text-gray-200 border-gray-600 transition-colors ${errors[field.id] ? "border-red-500" : "focus:border-cyan-500 hover:border-cyan-500"}`}
+                                    className={`border rounded-r-lg px-3 py-2 bg-white w-full focus:outline-none text-sm text-ink border-slate-200 transition-colors ${errors[field.id] ? "border-danger" : "focus:border-primary hover:border-primary"}`}
                                     type={field.type}
                                     id={field.id}
                                     value={formData[field.id as keyof FormDataState]}
@@ -158,7 +158,7 @@ function ClientProfile() {
                                 />
                             </div>
                             {
-                                errors[field.id] && <p className="text-red-500 text-xs mt-1">{errors[field.id]}</p>
+                                errors[field.id] && <p className="text-danger text-xs mt-1">{errors[field.id]}</p>
                             }
                         </div>
                     ))}
@@ -167,7 +167,7 @@ function ClientProfile() {
             <ActionButtons
                 onCancel={() => navigate(-1)}
                 onSubmit={updateData}
-                submitText="GUARDAR CAMBIOS"
+                submitText="Guardar cambios"
             />
         </div >
     );

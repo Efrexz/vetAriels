@@ -156,35 +156,39 @@ function CreatePetForm() {
     ];
 
     return (
-        <section className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl md:text-2xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
-                <PawIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Mascotas</span>
-            </h1>
-            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl bg-gray-800 border-2 border-cyan-500/30 mb-5">
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Nuevo registro
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Crear mascota
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 mb-4">
                     <div>
-                        <label className="block text-gray-300 font-medium mb-2">Propietario*</label>
+                        <label className="block text-sm font-medium text-ink mb-1.5">Propietario*</label>
                         <div
-                            className={`flex w-full rounded-md  ${errors["owner"] ? "border border-red-500" : "border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500"}`}
+                            className={`flex w-full rounded-lg ${errors["owner"] ? "border border-danger" : "border border-slate-200 hover:border-primary focus-within:border-primary"}`}
                         >
-                            <div className="flex items-center justify-center bg-gray-700 px-3">
-                                <RoleUserIcon className="w-5 h-5 text-gray-400" />
+                            <div className="flex items-center justify-center bg-white px-3 border-r border-slate-200">
+                                <RoleUserIcon className="w-5 h-5 text-slate" />
                             </div>
                             <ClientSearchInput mode={"pets"} />
                         </div>
                         {errors["owner"] && (
-                            <p className="text-red-500 text-sm mt-1">{errors["owner"]}</p>
+                            <p className="text-danger text-xs mt-1">{errors["owner"]}</p>
                         )}
                     </div>
 
                     {formFields.map((field) => (
                         <div key={field.label}>
-                            <label className="block text-gray-300 font-medium mb-2" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full rounded-md overflow-hidden ${errors[field.id as keyof FormDataState] ? 'border border-red-500' : 'border border-gray-700 hover:border-cyan-500 focus-within:border-cyan-500'}`}>
+                            <label className="block text-sm font-medium text-ink mb-1.5" htmlFor={field.id}>{field.label}</label>
+                            <div className={`flex w-full rounded-lg overflow-hidden ${errors[field.id as keyof FormDataState] ? 'border border-danger' : 'border border-slate-200 hover:border-primary focus-within:border-primary'}`}>
                                 {field.icon &&
-                                    <div className="flex items-center justify-center bg-gray-700 px-3 py-1 md:py-1.5 rounded-l-lg border border-gray-600 border-r-1 ">
-                                        <field.icon className="w-5 h-5 text-gray-400" />
+                                    <div className="flex items-center justify-center bg-white px-3 py-1.5 rounded-l-lg border-r border-slate-200">
+                                        <field.icon className="w-5 h-5 text-slate" />
                                     </div>
                                 }
 
@@ -192,7 +196,7 @@ function CreatePetForm() {
                                     <select
                                         id={field.id}
                                         onChange={handleChange}
-                                        className={`w-full bg-gray-700 px-4 py-1 md:py-1.5 border-none focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-700 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
+                                        className={`w-full bg-white px-4 py-2 border-none focus:outline-none focus:ring-0 ${field.disabled ? 'bg-slate-50 cursor-not-allowed text-slate' : 'text-ink'}`}
                                         disabled={field.disabled}
                                     >
                                         {field.options?.map((option, i) => (
@@ -208,12 +212,12 @@ function CreatePetForm() {
                                         value={field.id === 'hc' ? historyCounter.current.toString() : (formData[field.id as keyof FormDataState] as string)}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className={`w-full bg-gray-700 px-4 py-1 md:py-1.5  focus:outline-none focus:ring-0 focus:border-transparent ${field.disabled ? 'bg-gray-600 cursor-not-allowed text-gray-400' : 'text-gray-100'}`}
+                                        className={`w-full bg-white px-4 py-2 focus:outline-none focus:ring-0 ${field.disabled ? 'bg-slate-50 cursor-not-allowed text-slate' : 'text-ink'}`}
                                     />
                                 )}
                             </div>
                             {errors[field.id as keyof FormDataState] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field.id as keyof FormDataState]}</p>
+                                <p className="text-danger text-xs mt-1">{errors[field.id as keyof FormDataState]}</p>
                             )}
                         </div>
                     ))}
@@ -221,7 +225,7 @@ function CreatePetForm() {
                 <ActionButtons
                     onCancel={() => navigate(-1)}
                     onSubmit={createNewPet}
-                    submitText="CREAR NUEVA MASCOTA"
+                    submitText="Crear mascota"
                 />
             </div>
         </section>

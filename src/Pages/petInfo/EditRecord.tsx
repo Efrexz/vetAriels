@@ -96,9 +96,9 @@ function EditRecord() {
     }
 
     return (
-        <div className="w-full max-w-[1300px] mx-auto border border-gray-700 rounded-lg bg-gray-800">
-            <div className="flex items-center justify-start p-4 border-b border-gray-700 bg-gray-900">
-                <h2 className="text-lg font-bold text-cyan-500">
+        <div className="w-full max-w-[1300px] mx-auto border border-slate-200 rounded-2xl bg-paper shadow-sm">
+            <div className="flex items-center justify-start p-5 border-b border-slate-100">
+                <h2 className="text-lg font-semibold font-display text-ink">
                     Editar ficha de consulta
                 </h2>
             </div>
@@ -106,7 +106,7 @@ function EditRecord() {
                 formData={formData}
                 handleChange={handleChange}
                 onSubmit={saveRecord}
-                submitText="GUARDAR CAMBIOS"
+                submitText="Guardar cambios"
             />
         </div>
     );

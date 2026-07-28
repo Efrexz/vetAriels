@@ -146,12 +146,12 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
     ];
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-start z-50 p-4">
-            <div className="bg-gray-900 rounded-lg w-full max-w-2xl max-h-screen overflow-y-auto p-6 modal-appear custom-scrollbar shadow-2xl">
-                <h2 className="text-md font-medium mb-4 pb-4 border-b border-gray-700 text-gray-200">
+        <div className="fixed inset-0 bg-ink/40 flex justify-center items-start z-50 p-4">
+            <div className="bg-paper rounded-2xl w-full max-w-2xl max-h-screen overflow-y-auto p-6 modal-appear custom-scrollbar shadow-sm">
+                <h2 className="text-md font-medium mb-4 pb-4 border-b border-slate-200 text-ink">
                     Crear registro de
                     <span
-                        className={`text-white ${typeOfOperation === 'ENTRADA' ? 'bg-emerald-600' : 'bg-rose-600'} rounded-full px-2 ml-1.5`}
+                        className={`text-white ${typeOfOperation === 'ENTRADA' ? 'bg-primary' : 'bg-rose-600'} rounded-full px-2 ml-1.5`}
                     >
                         {typeOfOperation}
                     </span>
@@ -162,13 +162,13 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
                             className={`${field.fullWidth ? 'col-span-1 sm:col-span-2' : ''}`}
                             key={field.name}
                         >
-                            <label className="block text-sm font-medium text-gray-400 pb-1" htmlFor={field.name}>
+                            <label className="block text-sm font-medium text-slate pb-1" htmlFor={field.name}>
                                 {field.label}
                             </label>
                             <div className="flex">
                                 {field.icon && (
-                                    <div className="flex items-center justify-center bg-gray-800 border-t border-b border-l border-gray-700 rounded-l-md px-3 py-1.5">
-                                        <field.icon className="w-4 h-4 text-gray-400" />
+                                    <div className="flex items-center justify-center bg-white border-t border-b border-l border-slate-200 rounded-l-md px-3 py-1.5">
+                                        <field.icon className="w-4 h-4 text-slate" />
                                     </div>
                                 )}
                                 {field.type === 'select' ? (
@@ -177,23 +177,23 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
                                         id={field.name}
                                         value={formData[field.name as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className={`bg-gray-800 border border-gray-700 rounded-md px-3 py-1.5 w-full text-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 ${errors[field.name as keyof FormDataState]
-                                                ? 'border-rose-500'
-                                                : 'hover:border-cyan-500 focus-within:border-cyan-500'
+                                        className={`bg-white border border-slate-200 rounded-md px-3 py-1.5 w-full text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary ${errors[field.name as keyof FormDataState]
+                                                ? 'border-danger'
+                                                : 'hover:border-primary focus-within:border-primary'
                                             }`}
                                     >
                                         {field.options?.map((option) => (
-                                            <option key={option} value={option} className="bg-gray-800 text-gray-300">
+                                            <option key={option} value={option} className="bg-white text-ink">
                                                 {option}
                                             </option>
                                         ))}
                                     </select>
                                 ) : (
                                     <input
-                                        className={`bg-gray-800 border border-gray-700 py-1.5 ${field.icon ? 'rounded-r-md' : 'rounded-md'
-                                            } p-2 w-full outline-none text-gray-300 ${errors[field.name as keyof FormDataState]
-                                                ? 'border-rose-500'
-                                                : 'hover:border-cyan-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500'
+                                        className={`bg-white border border-slate-200 py-1.5 ${field.icon ? 'rounded-r-md' : 'rounded-md'
+                                            } p-2 w-full outline-none text-ink ${errors[field.name as keyof FormDataState]
+                                                ? 'border-danger'
+                                                : 'hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/30'
                                             }`}
                                         id={field.name}
                                         type={field.type}
@@ -206,18 +206,18 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
                                 )}
                             </div>
                             {errors[field.name as keyof FormDataState] && (
-                                <p className="text-rose-500 text-sm mt-1">
+                                <p className="text-danger text-sm mt-1">
                                     {errors[field.name as keyof FormDataState]}
                                 </p>
                             )}
                         </div>
                     ))}
 
-                    <div className="col-span-1 sm:col-span-2 mt-4 border-t border-gray-700 pt-2">
+                    <div className="col-span-1 sm:col-span-2 mt-4 border-t border-slate-200 pt-2">
                         <ActionButtons
                             mode="modal"
                             onCancel={onClose}
-                            submitText="GENERAR"
+                            submitText="Generar"
                             onSubmit={handleSubmit}
                         />
                     </div>

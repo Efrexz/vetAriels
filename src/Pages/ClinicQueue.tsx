@@ -39,18 +39,18 @@ const headlinesOptions: HeadlineOption[] = [
 const tableHeaders = ["N°", "Fecha de Atención", "Mascota", "Propietario", "Médico Asignado", "Estado", "Alerta", "Opciones"];
 
 // determinar el color de fondo según el estado
-function getStateColor(state: string) {
+function getStateStyle(state: string) {
     switch (state) {
         case "En espera":
-            return "bg-rose-600";
+            return "bg-danger/10 text-danger";
         case "En atención":
-            return "bg-amber-500";
+            return "bg-amber/10 text-amber";
         case "Atendido":
-            return "bg-emerald-600";
+            return "bg-success/10 text-success";
         case "Suspendido":
-            return "bg-red-500";
+            return "bg-slate-100 text-slate";
         default:
-            return "bg-gray-500";
+            return "bg-slate-100 text-slate";
     }
 }
 
@@ -101,45 +101,47 @@ function ClinicQueue() {
     };
 
     return (
-        <section className="w-full p-1 sm:p-6 bg-gray-950 text-gray-200">
-            <h1 className="text-xl md:text-2xl font-medium text-cyan-500 mb-4 pb-4 border-b border-cyan-500 flex items-center">
-                <BookIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Sala de Espera</span>
-            </h1>
-            <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-                <div className="p-3 rounded-xl mb-4 bg-gray-800 border-2 border-cyan-500/30">
-                    <div className="flex flex-col md:flex-row items-center gap-4 mb-2">
-                        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Atenci&oacute;n cl&iacute;nica
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Sala de Espera
+                </h1>
+            </div>
+            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+                <div className="p-4 rounded-xl mb-4 border border-slate-200 bg-slate-50/50">
+                    <div className="flex flex-col md:flex-row items-center gap-3 mb-4">
+                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                             <input
                                 type="text"
                                 value={filters.search}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                                 placeholder="Buscar por nombre..."
-                                className="w-full py-1 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
+                                className="w-full py-2 px-4 bg-white border border-slate-200 rounded-lg text-sm text-ink placeholder:text-slate/70 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
                             />
                             <input
                                 type="date"
-                                // value={filters.dateOfAttention}
                                 name="date"
-                                // onChange={handleFilterChange}
-                                className="w-full py-1 px-5 bg-gray-700 border border-gray-600 rounded-xl text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
+                                className="w-full py-2 px-4 bg-white border border-slate-200 rounded-lg text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
                             />
                         </div>
                         <button
-                            className="w-full sm:w-auto border border-gray-700 text-white bg-emerald-600 py-1 px-4 rounded-xl hover:bg-emerald-700 flex items-center gap-2 justify-center whitespace-nowrap transition-colors"
+                            className="ml-auto border border-slate-200 text-white bg-primary py-2 px-5 rounded-xl hover:opacity-90 flex items-center gap-2 justify-center whitespace-nowrap transition-colors font-semibold font-display shadow-sm shadow-primary/25 w-full sm:w-auto"
                             onClick={() => navigate("/sales/client/no_client")}
                         >
                             <PlusIcon className="w-4 h-4" />
-                            AGREGAR PACIENTE
+                            Agregar paciente
                         </button>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                         {headlinesOptions.map((option, index) => (
                             <div key={index} className="w-full">
                                 <select
                                     name={option.type.includes('Usuario') ? 'Usuario' : 'Estado'}
                                     onChange={handleFilterChange}
-                                    className="w-full mt-1.5 rounded-xl border-2 border-gray-600 bg-gray-700 text-gray-100 sm:text-sm py-1 px-5 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all hover:border-cyan-500"
+                                    className="w-full rounded-lg border border-slate-200 bg-white text-sm py-2 px-3 text-slate focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                                 >
                                     <option value="">{option.type}</option>
                                     {option.options.map((option, idx) => (
@@ -152,17 +154,17 @@ function ClinicQueue() {
                         ))}
                     </div>
                 </div>
-                <div className="overflow-x-auto border border-gray-700 rounded-lg">
-                    <table className="min-w-full bg-gray-800">
-                        <thead className="bg-gray-700 border-b border-gray-600">
-                            <tr>
-                                <th className="py-1 px-4 text-left border-r border-gray-600">
-                                    <input type="checkbox" className="form-checkbox bg-gray-900 border-gray-500 text-blue-500 rounded focus:ring-blue-500" />
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                        <thead>
+                            <tr className="border-b border-slate-200">
+                                <th className="py-3 px-4 text-left w-8">
+                                    <input type="checkbox" className="form-checkbox h-4 w-4 bg-white border-slate-300 rounded focus:ring-primary" />
                                 </th>
                                 {tableHeaders.map((header) => (
                                     <th
                                         key={header}
-                                        className="py-1 px-4 text-center text-xs font-bold text-gray-300 uppercase tracking-wider border-r border-gray-600 last:border-r-0"
+                                        className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate"
                                     >
                                         {header}
                                     </th>
@@ -171,63 +173,71 @@ function ClinicQueue() {
                         </thead>
                         <tbody>
                             {filteredPets.map((petInQueue, index) => (
-                                <tr key={petInQueue.id} className="hover:bg-gray-700 transition-colors duration-200">
-                                    <td className=" px-4 text-center border-b border-r border-gray-600">
-                                        <input type="checkbox" className="form-checkbox bg-gray-900 border-gray-500 text-blue-500 rounded focus:ring-blue-500" />
+                                <tr key={petInQueue.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-3 px-4 text-center">
+                                        <input type="checkbox" className="form-checkbox h-4 w-4 bg-white border-slate-300 rounded focus:ring-primary" />
                                     </td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-600">{index + 1}</td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-600">
-                                        <span className="block">{petInQueue?.dateOfAttention}</span>
-                                        <span className="block text-gray-400 text-sm">
+                                    <td className="py-3 px-4 text-center text-sm font-semibold font-display text-ink">{index + 1}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className="block text-sm text-ink">{petInQueue?.dateOfAttention}</span>
+                                        <span className="block text-xs text-slate">
                                             {petInQueue?.timeOfAttention}
                                         </span>
                                     </td>
-                                    <td className=" px-2 border-b border-r border-gray-600">
+                                    <td className="py-3 px-3">
                                         <Link to={`/pets/pet/${petInQueue?.petData?.id}/update`}>
-                                            <div>{petInQueue?.petData?.petName}</div>
-                                            <div className="text-gray-400 text-sm">
-                                                {petInQueue?.petData?.breed} - {petInQueue?.petData?.species} -{" "}
+                                            <div className="text-sm font-semibold text-ink">{petInQueue?.petData?.petName}</div>
+                                            <div className="text-xs text-slate">
+                                                {petInQueue?.petData?.breed} &middot; {petInQueue?.petData?.species} &middot;{" "}
                                                 {petInQueue?.petData?.sex}
                                             </div>
-                                            <div className="text-gray-400 text-sm italic max-w-[200px] truncate whitespace-nowrap overflow-hidden">
-                                                Notas: {petInQueue?.notes}
-                                            </div>
+                                            {petInQueue?.notes && (
+                                                <div className="text-xs text-slate italic max-w-[200px] truncate whitespace-nowrap overflow-hidden">
+                                                    {petInQueue?.notes}
+                                                </div>
+                                            )}
                                         </Link>
                                     </td>
-                                    <td className="py-1 px-4 text-center border-b border-r border-gray-600">
+                                    <td className="py-3 px-4 text-center">
                                         <Link
-                                            className="text-cyan-500 hover:text-cyan-400 transition-colors cursor-pointer hover:underline"
+                                            className="text-sm text-primary hover:underline cursor-pointer"
                                             to={`/clients/client/${petInQueue?.petData?.ownerId}/update`}
                                         >
                                             {petInQueue?.petData?.ownerName}
                                         </Link>
                                     </td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-600">{petInQueue?.assignedDoctor}</td>
-                                    <td className=" px-4 text-center border-b border-r border-gray-600">
+                                    <td className="py-3 px-4 text-center text-sm text-ink">{petInQueue?.assignedDoctor}</td>
+                                    <td className="py-3 px-4 text-center">
                                         <span
-                                            className={`inline-flex items-center justify-center px-2 py-1 font-medium leading-none text-white ${getStateColor(
+                                            className={`inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer transition-all hover:scale-105 ${getStateStyle(
                                                 petInQueue?.state
-                                            )} rounded-full cursor-pointer transition-all hover:scale-105`}
+                                            )}`}
                                             onClick={() => openEditModal(petInQueue)}
                                         >
                                             {petInQueue?.state}
                                         </span>
                                     </td>
-                                    <td className="py-4 px-8 text-center border-b border-r border-gray-600 ">
-                                        <div className="flex justify-center space-x-2 w-full">
-                                            <Stethoscope className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-400 transition-colors" />
+                                    <td className="py-3 px-4 text-center">
+                                        <div className="flex justify-center">
+                                            <button className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors">
+                                                <Stethoscope className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </td>
-                                    <td className="py-1 px-4 text-center border-b border-r border-gray-600 last:border-r-0">
-                                        <div className="flex justify-center space-x-2">
-                                            <PenIcon
-                                                className="w-4 h-4 text-emerald-500 cursor-pointer hover:text-esmerald-600 transition-colors"
+                                    <td className="py-3 px-4 text-center">
+                                        <div className="flex justify-center gap-1">
+                                            <button
+                                                className="p-1.5 rounded-lg text-slate hover:text-ink hover:bg-slate-100 transition-colors"
                                                 onClick={() => openEditModal(petInQueue)}
-                                            />
-                                            <TrashIcon
-                                                className="w-4 h-4 text-red-500 cursor-pointer hover:text-red-400 transition-colors"
+                                            >
+                                                <PenIcon className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                className="p-1.5 rounded-lg text-slate hover:text-danger hover:bg-danger/10 transition-colors"
                                                 onClick={() => openDeleteModal(petInQueue)}
-                                            />
+                                            >
+                                                <TrashIcon className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -249,17 +259,16 @@ function ClinicQueue() {
                         onClose={() => setIsConfirmActionModalOpen(false)}
                     />
                 )}
-                <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
-                    <p className="text-gray-400 text-center md:text-left text-sm">
-                        Página: 1 de 1 | Registros del 1 al {petsInQueueMedical.length} | Total{" "}
-                        {petsInQueueMedical.length}
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-5 gap-4">
+                    <p className="text-slate text-sm">
+                        Registros 1&ndash;{petsInQueueMedical.length} de {petsInQueueMedical.length}
                     </p>
-                    <div className="flex flex-wrap md:flex-row justify-center space-x-2 md:space-x-4">
-                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Primera</button>
-                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Anterior</button>
-                        <button className="py-1 px-3 border border-gray-600 rounded-lg bg-cyan-600 text-white hover:bg-cyan-500 transition-colors">1</button>
-                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Siguiente</button>
-                        <button className="py-1 px-3 border border-gray-600 rounded-lg text-gray-400 bg-gray-800 hover:bg-gray-700 transition-colors">Última</button>
+                    <div className="flex flex-wrap gap-2">
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Primera</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Anterior</button>
+                        <button className="py-1.5 px-3 rounded-lg text-sm bg-primary text-white font-semibold transition-colors">1</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Siguiente</button>
+                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">&Uacute;ltima</button>
                     </div>
                 </div>
             </div>

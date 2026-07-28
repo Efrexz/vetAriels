@@ -1,45 +1,46 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { NavBar } from "@components/layout/NavBar";
 import { SideBarMenu } from "./SideBarMenu";
 import { useGlobal } from "@context/GlobalContext";
-import BurguerMenuIcon from '@assets/burguerMenuIcon.svg?react';
-import XIcon from '@assets/xIcon.svg?react';
+import { applyThemeColor } from "@utils/theme.utils";
 
 interface LayoutProps {
     children: ReactNode;
 }
 
 function Layout({ children }: LayoutProps) {
-    const { isSidebarOpen, toggleSideMenu } = useGlobal();
+    const { isSidebarOpen, toggleSideMenu, themeColor } = useGlobal();
+
+    useEffect(() => {
+        applyThemeColor(themeColor);
+    }, [themeColor]);
 
     return (
-        <>
-            <NavBar />
-            <main className="flex h-screen w-full bg-gray-950 text-gray-800 relative pt-16">
-                <button
-                    className="lg:hidden absolute top-4 left-4 z-50 p-2 mt-14 rounded-lg shadow-md bg-gray-900 text-cyan-400"
+        <div className="flex h-screen w-full bg-mist text-ink overflow-hidden">
+            {isSidebarOpen && (
+                <div
+                    className="lg:hidden fixed inset-0 bg-black/30 z-30"
                     onClick={toggleSideMenu}
-                >
-                    {isSidebarOpen ? <XIcon className="w-6 h-6" /> : <BurguerMenuIcon className="w-6 h-6" />}
-                </button>
+                />
+            )}
 
-                {/* Sidebar */}
-                <aside
-                    className={`bg-gray-900 w-56 h-full pt-4 overflow-y-auto overflow-x-hidden custom-scrollbar transition-transform duration-300 z-40 fixed lg:relative ${
-                        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                    } lg:translate-x-0`}
-                >
-                    <SideBarMenu toggleSideMenu={toggleSideMenu} />
-                </aside>
+            <aside
+                className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-paper border-r border-slate-200 flex flex-col transition-transform duration-300 ${
+                    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                } lg:translate-x-0`}
+            >
+                <SideBarMenu toggleSideMenu={toggleSideMenu} />
+            </aside>
 
-                {/* Contenido principal */}
-                <section className="flex-1 flex flex-col overflow-auto custom-scrollbar pt-16 lg:pt-0">
-                    <div className="flex-1 p-4 sm:p-6">
+            <div className="flex-1 flex flex-col min-w-0 h-screen">
+                <NavBar />
+                <div className="flex-1 overflow-auto custom-scrollbar">
+                    <div className="p-4 sm:p-6">
                         {children}
                     </div>
-                </section>
-            </main>
-        </>
+                </div>
+            </div>
+        </div>
     );
 }
 

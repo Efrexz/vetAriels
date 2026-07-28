@@ -157,8 +157,8 @@ function UpdateProduct({ productData }: UpdateProductProps) {
 
 
     return (
-        <div className="bg-gray-900 rounded-lg shadow-xl p-4 mb-6 border border-gray-700">
-            <form className="pt-4 bg-gray-900 py-4 px-6 shadow-xl rounded-lg border border-cyan-500/30">
+        <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
+            <form className="p-5 rounded-xl border border-slate-200 bg-slate-50/50">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
                     {fields.map((field) => (
                         <div
@@ -171,13 +171,13 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                 4
                             )} lg:col-span-${field.columsNumber}`}
                         >
-                            <label className="block text-gray-300 font-medium mb-1" htmlFor={field.name}>
+                            <label className="block text-sm font-medium text-ink mb-1" htmlFor={field.name}>
                                 {field.label}
                             </label>
-                            <div className="flex w-full border border-gray-600 rounded-lg overflow-hidden focus-within:border-cyan-500 hover:border-cyan-500 transition-colors">
+                            <div className="flex w-full border border-slate-200 rounded-lg overflow-hidden focus-within:border-primary hover:border-primary transition-colors">
                                 {field.icon && (
-                                    <div className="flex items-center justify-center bg-gray-700 px-3">
-                                        <field.icon className="w-5 h-5 text-gray-400" />
+                                    <div className="flex items-center justify-center bg-white px-3">
+                                        <field.icon className="w-5 h-5 text-slate" />
                                     </div>
                                 )}
                                 {field.type === "text" || field.type === "number" ? (
@@ -188,8 +188,8 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                         value={formData[field.name]}
                                         onChange={handleChange}
                                         disabled={field.disabled}
-                                        className={`w-full px-4 py-1 bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
-                                            ? "border-red-500"
+                                        className={`w-full px-4 py-2 bg-white text-ink text-sm focus:outline-none ${errors[field.name]
+                                            ? "border-danger"
                                             : ""
                                             }`}
                                     />
@@ -199,8 +199,8 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className={`w-full px-4 py-1  bg-gray-700 text-gray-200 focus:outline-none ${errors[field.name]
-                                            ? "border-red-500"
+                                        className={`w-full px-4 py-2  bg-white text-ink text-sm focus:outline-none ${errors[field.name]
+                                            ? "border-danger"
                                             : ""
                                             }`}
                                     >
@@ -213,10 +213,10 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                                 )}
                             </div>
                             {field.tooltip && (
-                                <p className="text-xs text-gray-400 mt-1">{field.tooltip}</p>
+                                <p className="text-xs text-slate mt-1">{field.tooltip}</p>
                             )}
                             {errors[field.name] && (
-                                <p className="text-red-500 text-sm mt-1 whitespace-nowrap">{errors[field.name]}</p>
+                                <p className="text-danger text-xs mt-1 whitespace-nowrap">{errors[field.name]}</p>
                             )}
                         </div>
                     ))}
@@ -228,8 +228,8 @@ function UpdateProduct({ productData }: UpdateProductProps) {
             <ActionButtons
                     onCancel={() => navigate("/products")}
                     onSubmit={updateProduct}
-                    submitText="ACTUALIZAR PRODUCTO"
-                    cancelText="REGRESAR AL LISTADO"
+                    submitText="Actualizar producto"
+                    cancelText="Regresar al listado"
                 />
         </div>
     );

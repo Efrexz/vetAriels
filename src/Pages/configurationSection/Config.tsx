@@ -24,18 +24,19 @@ const formFields = [
 ];
 
 const themeColorList = [
-    { color: 'blue', bgClass: 'bg-blue-400', hoverClass: 'hover:bg-blue-500' },
-    { color: 'red', bgClass: 'bg-red-400', hoverClass: 'hover:bg-red-500' },
-    { color: 'green', bgClass: 'bg-green-400', hoverClass: 'hover:bg-green-500' },
-    { color: 'yellow', bgClass: 'bg-yellow-400', hoverClass: 'hover:bg-yellow-500' },
-    { color: 'purple', bgClass: 'bg-purple-400', hoverClass: 'hover:bg-purple-500' },
-    { color: 'gray', bgClass: 'bg-gray-400', hoverClass: 'hover:bg-gray-500' },
+    { name: 'Teal', color: '#0D9488' },
+    { name: 'Azul', color: '#3B82F6' },
+    { name: 'Verde', color: '#10B981' },
+    { name: 'Ámbar', color: '#D97706' },
+    { name: 'Violeta', color: '#8B5CF6' },
+    { name: 'Coral', color: '#F43F5E' },
+    { name: 'Gris', color: '#64748B' },
 ];
 
 
 function Config() {
 
-    const { companyData, setCompanyData } = useGlobal();
+    const { companyData, setCompanyData, themeColor, setThemeColor } = useGlobal();
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
     console.log(companyData);
 
@@ -74,34 +75,70 @@ function Config() {
         setCompanyData(updatedCompanyData);
     }
 
+    function handleThemeChange(colorName: string) {
+        setThemeColor(colorName);
+    }
+
     return (
-        <div className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
-            <div className="flex justify-between items-center mb-6 border-b border-cyan-500 pb-4">
+        <div className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    General
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Configuraci&oacute;n de la cl&iacute;nica
+                </h1>
+            </div>
+            <div className="mb-5">
                 <HorizontalMenu mode="clinics" />
             </div>
-            <div className="flex flex-col md:flex-row bg-gray-900 shadow-xl rounded-t-lg overflow-hidden border border-gray-700">
-                <div className="w-full md:w-1/4 p-6 bg-gray-800 flex flex-col items-center justify-center border-r border-gray-700">
-                    <div className="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center mb-4">
-                        <RoleUserIcon className="w-16 h-16 text-gray-400" />
+
+            {/* Selector de color de tema */}
+            <div className="bg-paper shadow-sm rounded-2xl p-6 mb-6 border border-slate-200">
+                <h3 className="text-base font-semibold text-ink mb-4 font-display">Color del tema</h3>
+                <div className="flex flex-wrap gap-3">
+                    {themeColorList.map((theme) => (
+                        <button
+                            key={theme.color}
+                            onClick={() => handleThemeChange(theme.name)}
+                            className={`w-10 h-10 rounded-full border-2 transition-all duration-200 hover:scale-110 ${
+                                themeColor === theme.name
+                                    ? 'border-ink shadow-md scale-110'
+                                    : 'border-slate-300 hover:border-slate'
+                            }`}
+                            style={{ backgroundColor: theme.color }}
+                            title={theme.name}
+                        />
+                    ))}
+                </div>
+                <p className="text-slate text-sm mt-3">
+                    Color actual: <span className="font-semibold text-ink">{themeColor}</span>
+                    &mdash; Los cambios se reflejar&aacute;n en una versi&oacute;n futura.
+                </p>
+            </div>
+            <div className="flex flex-col md:flex-row bg-paper shadow-sm rounded-2xl overflow-hidden border border-slate-200">
+                <div className="w-full md:w-1/4 p-6 bg-slate-50/50 flex flex-col items-center justify-center border-r border-slate-200">
+                    <div className="w-24 h-24 bg-primary/10 rounded-2xl flex items-center justify-center mb-3">
+                        <RoleUserIcon className="w-12 h-12 text-primary" />
                     </div>
                 </div>
 
                 <div className="w-full md:w-3/4 p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {formFields.map((field, index) => (
                             <div key={index}>
-                                <label className="block text-gray-400">{field.label}</label>
+                                <label className="block text-sm font-medium text-ink mb-1.5">{field.label}</label>
                                 <div className="flex items-center">
                                     {field.icon &&
-                                        <div className="flex items-center justify-center bg-gray-700 px-3 py-1.5 rounded-l-lg border-y border border-gray-600">
-                                            <field.icon className="w-5 h-5 text-gray-400" />
+                                        <div className="flex items-center justify-center bg-white px-3 py-2 rounded-l-lg border border-slate-200 border-r-0">
+                                            <field.icon className="w-5 h-5 text-slate" />
                                         </div>
                                     }
 
                                     {field.type === 'select' ? (
                                         <select
                                             id={field.id}
-                                            className="border border-gray-700 rounded-lg px-3 py-1 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500"
+                                            className="border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white w-full text-ink focus:outline-none focus:border-primary hover:border-primary"
                                             value={formData[field.id as keyof CompanyData]}
                                             onChange={handleChange}
                                         >
@@ -113,7 +150,7 @@ function Config() {
                                         </select>
                                     ) : (
                                         <input
-                                            className="border rounded-r-lg px-3 py-1 bg-gray-700 w-full text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500 border-y border-r border-gray-700"
+                                            className="border rounded-r-lg px-3 py-2 text-sm bg-white w-full text-ink focus:outline-none focus:border-primary hover:border-primary border-slate-200"
                                             type={field.type}
                                             id={field.id}
                                             value={formData[field.id as keyof CompanyData]}
@@ -127,13 +164,13 @@ function Config() {
                     </div>
                 </div>
             </div>
-            <div className='flex justify-end items-center bg-gray-800 py-3 px-5 shadow-xl rounded-b-lg border border-gray-700'>
+            <div className="flex justify-end items-center py-4 pt-4">
                 <button
-                    className="bg-emerald-600 text-white py-1 px-3 rounded-lg hover:bg-emerald-700 flex items-center gap-3"
+                    className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 flex items-center gap-2 text-sm font-semibold font-display shadow-sm shadow-primary/25 transition-colors"
                     onClick={updateCompanyData}
                 >
-                    <PlusIcon className="w-5 h-5 text-white" />
-                    ACTUALIZAR
+                    <PlusIcon className="w-4 h-4" />
+                    Actualizar
                 </button>
             </div>
             {

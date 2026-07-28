@@ -97,39 +97,43 @@ const sections: ReportSection[] = [
 
 function BalanceReport() {
     return (
-        <section className="w-full p-1 sm:p-6 bg-gray-950 text-gray-50 min-h-screen">
-            <h1 className="text-xl md:text-2xl font-medium text-white mb-4  border-b border-cyan-500 pb-3 flex items-center">
-                <FileInvoiceIcon className="w-8 h-8 sm:w-9 sm:h-9 mr-3 text-cyan-400 drop-shadow-lg" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Cuadre de caja</span>
-            </h1>
-            <div className="flex flex-col sm:flex-row items-center gap-4 py-4 px-6 bg-gray-900 rounded-2xl shadow-xl mb-8 border border-gray-700">
-                <div className="flex items-center w-full md:w-[25%] rounded-xl border-2 border-gray-600 focus-within:border-cyan-500 transition-colors">
-                    <span className="bg-gray-700 p-2 flex items-center justify-center rounded-l-xl">
-                        <CalendarIcon className="w-4 h-4 text-gray-400 group-focus-within:text-cyan-400" />
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Caja
+                </span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Cuadre de caja
+                </h1>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-3 py-4 px-6 bg-paper rounded-2xl shadow-sm mb-8 border border-slate-200">
+                <div className="flex items-center w-full md:w-[25%] rounded-lg border border-slate-200 focus-within:border-primary transition-colors">
+                    <span className="bg-slate-50 p-2 flex items-center justify-center rounded-l-lg border-r border-slate-200">
+                        <CalendarIcon className="w-4 h-4 text-slate" />
                     </span>
                     <input
                         type="date"
-                        className="px-4 py-1 w-full text-base bg-gray-800 text-gray-200 rounded-r-xl focus:outline-none"
+                        className="px-4 py-2 text-sm w-full bg-white text-ink rounded-r-lg focus:outline-none"
                     />
                 </div>
-                <select className="border-2 border-gray-600 rounded-xl py-1 px-3 text-base bg-gray-800 text-gray-200 focus:outline-none focus:border-cyan-500 hover:border-cyan-500 transition-colors w-full md:w-[20%]">
-                    <option className="bg-gray-700" value="">Seleccione empresa</option>
+                <select className="border border-slate-200 rounded-lg py-2 px-3 text-sm bg-white text-ink focus:outline-none focus:border-primary hover:border-primary transition-colors w-full md:w-[20%]">
+                    <option value="">Seleccione empresa</option>
                 </select>
-                <button className="flex items-center gap-2 px-6 py-1 bg-transparent text-white font-bold rounded-xl border-2 border-orange-500 w-full md:w-auto justify-center transition-all shadow-md shadow-orange-500/50 hover:bg-orange-500 hover:text-white hover:shadow-orange-400/80">
-                    HISTORIAL
+                <button className="flex items-center gap-2 px-5 py-2 bg-transparent text-amber font-semibold rounded-lg border border-amber/40 w-full md:w-auto justify-center transition-all hover:bg-amber/10 text-sm">
+                    Historial
                 </button>
             </div>
             {sections.map((section, index) => {
                 return !section.payments ? (
                     (
-                        <div key={index} className="bg-gray-800 shadow-lg rounded-xl px-4 py-2 mb-6 border border-gray-700">
-                            <h2 className="text-md font-medium text-gray-300 mb-4">{section.title}</h2>
+                        <div key={index} className="bg-paper shadow-sm rounded-2xl px-5 py-4 mb-6 border border-slate-200">
+                            <h2 className="text-sm font-semibold font-display text-ink mb-3">{section.title}</h2>
                             {section.data.map((item, i) => (
                                 <div
                                     key={i}
-                                    className={`flex justify-between text-sm py-1 px-4 rounded-lg my-2
-                                    ${item.highlight ? 'text-cyan-400 font-bold bg-gray-700 border-2 border-cyan-500/50' : 'text-gray-200 bg-gray-700 border border-gray-600'}
-                                    hover:bg-gray-700/50 transition-all`}
+                                    className={`flex justify-between text-sm py-1.5 px-4 rounded-lg my-2
+                                    ${item.highlight ? 'text-primary font-semibold bg-primary/5 border border-primary/20' : 'text-ink bg-slate-50/50 border border-slate-200'}
+                                    hover:bg-slate-100/80 transition-all`}
                                 >
                                     <span>{item.label}</span>
                                     <span>{item.value || item.value.toFixed(2)}</span>
@@ -139,19 +143,19 @@ function BalanceReport() {
                     )
                 )
                     : (
-                        <div key={index} className="bg-gray-800 shadow-lg rounded-xl px-4 py-2 mb-6 border border-gray-700">
-                            <h2 className="text-md text-gray-300 font-semibold mb-1">
+                        <div key={index} className="bg-paper shadow-sm rounded-2xl px-5 py-4 mb-6 border border-slate-200">
+                            <h2 className="text-sm text-ink font-semibold font-display mb-2">
                                 Resumen de entradas y salidas de dinero directos de caja (no considera ventas):
                             </h2>
                             {section.data.map((section, index) => (
                                 <div key={index} className="mb-1">
-                                    <div className='flex justify-between items-center px-2 font-bold text-gray-400 mb-1'>
+                                    <div className="flex justify-between items-center px-2 font-bold text-slate text-xs mb-1">
                                         <span>{section?.type}</span>
                                         <span>Monto</span>
                                     </div>
-                                    <div className="grid grid-cols-2 bg-gray-700 rounded-lg text-sm items-center border border-gray-600">
-                                        <span className="py-1 px-4 text-gray-200">EFECTIVO</span>
-                                        <span className="py-1 px-4 text-right text-gray-200 font-bold">
+                                    <div className="grid grid-cols-2 bg-slate-50/50 rounded-lg text-sm items-center border border-slate-200">
+                                        <span className="py-1 px-4 text-ink">EFECTIVO</span>
+                                        <span className="py-1 px-4 text-right text-ink font-bold font-display">
                                             {section?.items[0]?.value}
                                         </span>
                                     </div>
@@ -160,14 +164,14 @@ function BalanceReport() {
                         </div>
                     );
             })}
-            <div className="bg-gray-800 rounded-xl px-4 sm:px-6 py-2 flex flex-col sm:flex-row items-center gap-4 md:gap-8 border border-gray-700">
-                <button className="bg-transparent text-white font-bold py-2 px-2 rounded-xl border-2 border-orange-500 w-full md:w-60 justify-center transition-all shadow-md shadow-orange-500/50 hover:bg-orange-500 hover:text-white hover:shadow-orange-400/80 flex items-center gap-2">
-                    <PDFIcon className="w-6 h-6" />
-                    IMPRIMIR
+            <div className="bg-paper rounded-2xl px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center gap-3 md:gap-8 border border-slate-200">
+                <button className="bg-transparent text-amber font-semibold py-2 px-5 rounded-lg border border-amber/40 w-full md:w-60 justify-center transition-all hover:bg-amber/10 flex items-center gap-2 text-sm">
+                    <PDFIcon className="w-5 h-5" />
+                    Imprimir
                 </button>
-                <button className="bg-transparent text-white font-bold py-2 px-2 rounded-xl border-2 border-green-500 w-full md:w-60 justify-center transition-all shadow-md shadow-green-500/50 hover:bg-green-500 hover:text-white hover:shadow-green-400/80 flex items-center gap-2">
-                    <ExcelIcon className="w-6 h-6" />
-                    EXPORTAR A EXCEL
+                <button className="bg-transparent text-success font-semibold py-2 px-5 rounded-lg border border-success/40 w-full md:w-60 justify-center transition-all hover:bg-success/10 flex items-center gap-2 text-sm">
+                    <ExcelIcon className="w-5 h-5" />
+                    Exportar a Excel
                 </button>
             </div>
         </section>

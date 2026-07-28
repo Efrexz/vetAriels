@@ -60,46 +60,51 @@ function PetInfo() {
     }
 
     return (
-        <main className="p-4 sm:p-6 bg-gray-950 text-gray-200">
-            <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-4 pb-4 border-b border-cyan-500 ">
-                <h1 className="text-xl sm:text-2xl font-medium text-cyan-500">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">Información de la Mascota</span>
-                </h1>
-                <HorizontalMenu mode="pets" />
+        <main>
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+                    Perfil de la mascota
+                </span>
+                <div className="flex flex-col lg:flex-row gap-2 justify-between items-start lg:items-center mb-4">
+                    <h1 className="text-2xl font-bold font-display text-ink">
+                        {individualPetData?.petName}
+                    </h1>
+                    <HorizontalMenu mode="pets" />
+                </div>
             </div>
 
-            <div className="flex flex-col md:flex-row bg-gray-800 border border-gray-700 shadow-lg rounded-lg overflow-hidden">
-                <div className="w-full md:w-1/4 p-6 bg-gray-700 flex flex-col items-center">
-                    <div className="w-32 h-32 bg-gray-600 rounded-full flex items-center justify-center mb-4">
-                        <RoleUserIcon className="w-16 h-16 text-cyan-400" />
+            <div className="flex flex-col md:flex-row bg-paper border border-slate-200 shadow-sm rounded-2xl overflow-hidden">
+                <div className="w-full md:w-1/4 p-6 bg-slate-50/50 flex flex-col items-center">
+                    <div className="w-24 h-24 bg-primary/10 rounded-2xl flex items-center justify-center mb-4">
+                        <RoleUserIcon className="w-12 h-12 text-primary" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-200">{individualPetData?.petName}</h2>
-                    <div className="text-center mt-4 space-y-2">
-                        <p className="text-gray-400">
-                            <strong>N° Historia Clínica: </strong>{individualPetData?.hc}
+                    <h2 className="text-lg font-semibold font-display text-ink">{individualPetData?.petName}</h2>
+                    <div className="text-center mt-3 space-y-1.5">
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">N° HC: </span>{individualPetData?.hc}
                         </p>
-                        <p className="text-gray-400">
-                            <strong>Especie: </strong>{individualPetData?.species}
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">Especie: </span>{individualPetData?.species}
                         </p>
-                        <p className="text-gray-400">
-                            <strong>Raza: </strong>{individualPetData?.breed}
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">Raza: </span>{individualPetData?.breed}
                         </p>
-                        <p className="text-gray-400">
-                            <strong>Sexo: </strong>{individualPetData?.sex}
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">Sexo: </span>{individualPetData?.sex}
                         </p>
-                        <p className="text-gray-400">
-                            <strong>¿Esterilizado?: </strong>{individualPetData?.esterilized ? 'SÍ' : 'NO'}
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">&iquest;Esterilizado?: </span>{individualPetData?.esterilized ? 'S&Iacute;' : 'NO'}
                         </p>
-                        <p className="text-gray-400">
-                            <strong>Fecha de Nacimiento: </strong>{individualPetData?.birthDate}
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">Nacimiento: </span>{individualPetData?.birthDate}
                         </p>
-                        <div className="text-gray-400">
-                            <strong>Edad: </strong>
-                            {petAge.years} {petAge.years === 1 ? "año" : "años"}, {petAge.months} {petAge.months === 1 ? "mes" : "meses"} y {petAge.days} {petAge.days === 1 ? "día" : "días"}
-                        </div>
-                        <p className="text-gray-400">
-                            <strong>Propietario: </strong>
-                            <Link to={`/clients/client/${individualPetData?.ownerId}/update `} className="text-cyan-500 underline">
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">Edad: </span>
+                            {petAge.years} {petAge.years === 1 ? "a&ntilde;o" : "a&ntilde;os"}, {petAge.months} {petAge.months === 1 ? "mes" : "meses"} y {petAge.days} {petAge.days === 1 ? "d&iacute;a" : "d&iacute;as"}
+                        </p>
+                        <p className="text-xs text-slate">
+                            <span className="font-semibold text-ink">Propietario: </span>
+                            <Link to={`/clients/client/${individualPetData?.ownerId}/update `} className="text-primary underline">
                                 {individualPetData?.ownerName}
                             </Link>
                         </p>

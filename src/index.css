@@ -2,24 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilo del scrollbar */
+:root {
+  --c-paper: #FFFFFF;
+  --c-mist: #F4F7F9;
+  --c-ink: #0F172A;
+  --c-slate: #64748B;
+  --c-teal: #0D9488;
+  --c-teal-light: #14B8A6;
+  --c-teal-dark: #0F766E;
+  --c-amber: #D97706;
+  --c-amber-light: #F59E0B;
+  --c-amber-dark: #C26604;
+  --c-success: #059669;
+  --c-danger: #DC2626;
+  --c-warning: #D97706;
+  --c-primary: #3B82F6;
+  --c-primary-rgb: 59 130 246;
+}
+
+html {
+  font-family: "Manrope", sans-serif;
+}
+
+body {
+  background-color: var(--c-mist);
+  color: var(--c-ink);
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px; /* Ancho del scrollbar */
+  width: 8px;
 }
 
-/* Estilo del thumb del scrollbar */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3); /* Color del thumb */
-  border-radius: 10px; /* Radio del borde del thumb */
+  background-color: #94A3B8;
+  border-radius: 10px;
 }
 
-/* Estilo del track del scrollbar */
 .custom-scrollbar::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.1); /* Color del track */
-  border-radius: 10px; /* Radio del borde del track */
+  background-color: #E2E8F0;
+  border-radius: 10px;
 }
 
-/*Animacion para hacer modal aparecer desde arriba*/
 .modal-appear {
   animation: slide-down 0.5s ease forwards;
 }

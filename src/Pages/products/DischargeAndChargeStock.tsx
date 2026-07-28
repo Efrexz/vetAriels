@@ -167,8 +167,8 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
     const tableHeaders = ["Código de Barras", "Producto", "Precio de Compra", "Precio de Venta", `Cantidad a ${typeOfOperation === 'discharge' ? 'Descargar' : 'Cargar'}`, "Opciones"];
 
     return (
-        <section className="w-full p-1 md:p-6 bg-gray-950 text-gray-200">
-            <header className="flex items-center mb-4 border-b-2 border-cyan-500 pb-4">
+        <section className="w-full p-1 md:p-6 bg-mist text-ink">
+            <header className="flex items-center mb-4 border-b-2 border-teal pb-4">
                 <h1 className="text-xl md:text-2xl font-medium flex items-center">
                     {typeOfOperation === 'discharge' ? <DocumentOutIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-rose-500" /> : <DocumentJoinIcon className="w-6 sm:w-9 h-6 sm:h-9 mr-2 text-emerald-500" />}
                     <span className={typeOfOperation === 'discharge' ? 'text-rose-500' : 'text-emerald-500'}>
@@ -177,16 +177,16 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                 </h1>
             </header>
 
-            <div className="gap-4 mb-6 bg-gray-900 p-4 rounded-md border border-gray-700 shadow-xl">
+            <div className="gap-4 mb-6 bg-paper p-4 rounded-md border border-slate-200 shadow-md">
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {formFields.map((field, index) => (
                         <div key={index}>
-                            <label className="block text-gray-300 font-medium mb-1" htmlFor={field.id}>{field.label}</label>
-                            <div className={`flex w-full border rounded-lg overflow-hidden hover:border-cyan-500 focus-within:border-cyan-500 ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-gray-600'}`}>
+                            <label className="block text-ink font-medium mb-1" htmlFor={field.id}>{field.label}</label>
+                            <div className={`flex w-full border rounded-lg overflow-hidden hover:border-teal focus-within:border-teal ${errors[field.id as keyof FormErrors] ? 'border-rose-500' : 'border-slate-300'}`}>
                                 {field.type === 'select' ? (
                                     <select
                                         id={field.id}
-                                        className="w-full px-3 py-1 bg-gray-700 text-gray-200 border-none focus:outline-none focus:ring-0"
+                                        className="w-full px-3 py-1 bg-white text-ink border-none focus:outline-none focus:ring-0"
                                         onChange={handleChange}
                                     >
                                         {field.options?.map((option, i) => (
@@ -201,7 +201,7 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                                         id={field.id}
                                         value={formData[field.id as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className="w-full py-1 px-4 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-transparent"
+                                        className="w-full py-1 px-4 bg-white text-ink focus:outline-none focus:ring-0 focus:border-transparent"
                                     />
                                 )}
                             </div>
@@ -215,24 +215,24 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
 
             {isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />}
 
-            <div className="mb-6 bg-gray-900 p-4 rounded-md border border-gray-700 shadow-xl">
+            <div className="mb-6 bg-paper p-4 rounded-md border border-slate-200 shadow-md">
                 <div className='w-full flex flex-col justify-center mb-4'>
                     <label
                         htmlFor="search"
-                        className="block text-gray-300 mb-2 pl-2">
+                        className="block text-ink mb-2 pl-2">
                         Buscar y agregar productos a la lista:
                     </label>
                     <ProductSearchInput addProductToTable={addProductToTable} mode={typeOfOperation} stockMode={true} />
                     {errors.products && <p className="text-rose-500 text-sm mt-1">{errors.products}</p>}
                 </div>
 
-                <div className="overflow-x-auto border border-gray-700 rounded-lg mb-6 mt-6">
-                    <table className="min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden">
-                        <thead className="bg-gray-700">
+                <div className="overflow-x-auto border border-slate-200 rounded-lg mb-6 mt-6">
+                    <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                        <thead className="bg-slate-100">
                             <tr>
                                 {
                                     tableHeaders.map((header) => (
-                                        <th key={header} className="p-1 border border-gray-600 text-center text-sm font-medium text-gray-300">
+                                        <th key={header} className="p-1 border border-slate-300 text-center text-sm font-medium text-ink">
                                             {header}
                                         </th>
                                     ))
@@ -242,12 +242,12 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                         <tbody>
                             {
                                 selectedProducts.map((product) => (
-                                    <tr key={product.provisionalId} className="hover:bg-gray-700 text-sm">
-                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
-                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-left text-gray-400">{product.productName}</td>
-                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
-                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">{product.salePrice}</td>
-                                        <td className="px-6 whitespace-nowrap border border-gray-600 text-center text-gray-400">
+                                    <tr key={product.provisionalId} className="hover:bg-slate-50 text-sm">
+                                        <td className="px-6 whitespace-nowrap border border-slate-200 text-center text-slate">{product.systemCode?.slice(0, 8).toUpperCase()}</td>
+                                        <td className="px-6 whitespace-nowrap border border-slate-200 text-left text-slate">{product.productName}</td>
+                                        <td className="px-6 whitespace-nowrap border border-slate-200 text-center text-slate">{product.salePrice}</td>
+                                        <td className="px-6 whitespace-nowrap border border-slate-200 text-center text-slate">{product.salePrice}</td>
+                                        <td className="px-6 whitespace-nowrap border border-slate-200 text-center text-slate">
                                             {<QuantityCounter
                                                 itemCount={product.quantity}
                                                 changeQuantity={(newQuantity) => {
@@ -261,7 +261,7 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
                                                 }}
                                             />}
                                         </td>
-                                        <td className="py-3 px-4 text-center border border-gray-600">
+                                        <td className="py-3 px-4 text-center border border-slate-200">
                                             <div className="flex justify-center items-center h-full">
                                                 <TrashIcon
                                                     className="w-4 h-4 text-rose-500 hover:text-rose-600 cursor-pointer"
@@ -299,7 +299,7 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
 
             </div>
 
-            <div className="mt-6 p-4 bg-gray-800 text-gray-400 rounded-lg border border-gray-700">
+            <div className="mt-6 p-4 bg-paper text-slate rounded-lg border border-slate-200">
                 <p>
                     Puedes usar esta herramienta para descargar el stock de productos directamente.
                 </p>
