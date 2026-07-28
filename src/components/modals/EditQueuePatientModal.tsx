@@ -59,7 +59,7 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll p-3">
             <div className="bg-paper rounded-2xl w-full max-w-3xl p-6 shadow-sm border border-slate-200 modal-appear mx-auto space-y-6">
-                <h2 className="text-xl sm:text-2xl font-semibold text-ink font-display mb-4 pb-2 border-b-2 border-slate-200">Generar Consulta</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-ink font-display mb-4 pb-3 border-b border-slate-200">Generar Consulta</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div className="flex flex-col">
                         <label htmlFor="date" className="text-md font-semibold text-slate mb-1">

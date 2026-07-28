@@ -168,7 +168,7 @@ function Sales() {
                     <ClientSearchInput mode={"sales"} />
                     <button
                         className={`flex justify-center items-center text-white font-bold py-1.5 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] transition-all
-                            ${clientData ? "bg-green-600 hover:bg-green-700 shadow-md shadow-green-500/50" : "bg-white text-slate cursor-not-allowed"}`}
+                            ${clientData ? "bg-primary hover:opacity-90 shadow-sm shadow-primary/25" : "bg-white text-slate cursor-not-allowed"}`}
                         type="button"
                         disabled={!clientData}
                         onClick={() => navigate(`/clients/client/${clientData?.id}/update`)}
@@ -176,7 +176,7 @@ function Sales() {
                         <UserPenIcon className="w-5 h-5 mr-2" />
                     </button>
                     <button
-                        className="flex justify-center items-center text-white font-bold py-1.5 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] bg-purple-600 hover:bg-purple-700 transition-all shadow-md shadow-purple-500/50"
+                        className="flex justify-center items-center text-primary text-sm font-semibold py-1.5 px-4 rounded-xl focus:outline-none border border-primary/30 hover:bg-primary/5 transition-all w-full md:w-[200px]"
                         type="button"
                         onClick={() => navigate("/clients/create")}
                     >
@@ -246,7 +246,7 @@ function Sales() {
                         })}
                         {/* Botón para agregar mascotas */}
                         <button
-                            className="py-1 px-3 bg-orange-600 hover:bg-orange-700 flex gap-1 items-center rounded-xl transition-all shadow-md shadow-orange-500/50"
+                            className="py-1 px-3 bg-primary hover:opacity-90 flex gap-1 items-center rounded-xl transition-all text-white text-sm font-semibold shadow-sm shadow-primary/25"
                             onClick={() => navigate(`/pets/create/${clientId}`)}
                         >
                             <PetIcon className="w-5 h-5 text-white" />
@@ -259,7 +259,7 @@ function Sales() {
             <div className="bg-paper rounded-2xl px-4 sm:px-6 md:px-10 py-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 border border-slate-200 shadow-sm">
                 <button
                     className={`text-white font-bold py-2 px-4 sm:px-6 md:px-10 rounded-xl focus:outline-none w-full transition-all
-                    ${petsByOwner.length !== 0 ? "bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/50" : "bg-white text-slate cursor-not-allowed"}`}
+                    ${petsByOwner.length !== 0 ? "bg-primary hover:opacity-90 shadow-sm shadow-primary/25" : "bg-white text-slate cursor-not-allowed"}`}
                     disabled={ petsByOwner.length === 0}
                     onClick={() => setQueueModalOpen(true)}
                 >
@@ -267,7 +267,7 @@ function Sales() {
                 </button>
                 <button
                     className={`text-white font-bold py-2 px-4 sm:px-6 md:px-10 rounded-xl focus:outline-none w-full transition-all
-                    ${petsByOwner.length !== 0 ? "bg-green-600 hover:bg-green-700 shadow-md shadow-green-500/50" : "bg-white text-slate cursor-not-allowed"}`}
+                    ${petsByOwner.length !== 0 ? "bg-teal hover:opacity-90 shadow-sm shadow-teal/25" : "bg-white text-slate cursor-not-allowed"}`}
                     disabled={petsByOwner.length === 0}
                     onClick={() => {
                         //esto para evitar el error que lanza vscode de que clientData puede ser undefined
@@ -449,7 +449,7 @@ function Sales() {
             <div className="bg-paper rounded-2xl px-6 py-3 mt-4 flex justify-center md:justify-end border border-slate-200 shadow-md">
                 <button
                     className={`font-bold py-1.5 px-6 rounded-xl transition-all shadow-md
-                    ${!clientData || selectedProducts.length < 1 ? "bg-green-700 text-slate cursor-not-allowed" : "bg-green-600 hover:bg-green-700 text-white shadow-green-500/50"}`}
+                    ${!clientData || selectedProducts.length < 1 ? "bg-slate-400 text-slate cursor-not-allowed" : "bg-success hover:opacity-90 text-white shadow-sm shadow-success/25"}`}
                     type="button"
                     onClick={() => {
                         if (clientData) {

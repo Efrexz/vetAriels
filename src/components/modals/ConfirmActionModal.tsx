@@ -8,6 +8,9 @@ import { User } from '@t/user.types';
 import { PetRecord } from '@t/client.types';
 import { Payment } from '@t/financial.types';
 import DiskIcon from '@assets/diskIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
+import CheckIcon from '@assets/checkIcon.svg?react';
+import ReturnIcon from '@assets/returnIcon.svg?react';
 
 type OperationType = "medical" | "deleteGrooming" | "finishGrooming" | "returnGrooming" | "deleteUser" | "deleteRecordAndNote" | "payments";
 
@@ -166,7 +169,15 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                         className={`px-5 py-2 ${config.buttonColor || "bg-danger hover:opacity-90"} text-white rounded-xl flex items-center w-full md:w-auto whitespace-nowrap transition-colors font-semibold font-display shadow-sm`}
                         onClick={typeOfOperationConfirm}
                     >
-                        <DiskIcon className="w-5 h-5 mr-2" />
+                        {typeOfOperation === 'deleteGrooming' || typeOfOperation === 'medical' || typeOfOperation === 'deleteUser' || typeOfOperation === 'deleteRecordAndNote' ? (
+                            <TrashIcon className="w-5 h-5 mr-2" />
+                        ) : typeOfOperation === 'returnGrooming' ? (
+                            <ReturnIcon className="w-5 h-5 mr-2" />
+                        ) : typeOfOperation === 'finishGrooming' ? (
+                            <CheckIcon className="w-5 h-5 mr-2" />
+                        ) : (
+                            <DiskIcon className="w-5 h-5 mr-2" />
+                        )}
                         {config.buttonText || "Confirmar"}
                     </button>
                 </div>

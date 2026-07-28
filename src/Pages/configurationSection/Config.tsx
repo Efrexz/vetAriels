@@ -38,7 +38,6 @@ function Config() {
 
     const { companyData, setCompanyData, themeColor, setThemeColor } = useGlobal();
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
-    console.log(companyData);
 
     const [formData, setFormData] = useState<CompanyData>({
         clinicName: companyData.clinicName || '',

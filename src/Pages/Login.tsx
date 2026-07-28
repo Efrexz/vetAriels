@@ -97,7 +97,7 @@ function Login() {
                             <div className="bg-paper/20 p-3 rounded-full backdrop-blur-sm">
                                 <InclinedPaw className="w-10 h-10 text-paper" />
                             </div>
-                            <h1 className="mt-4 text-2xl font-bold font-display text-paper">PetCare Plus</h1>
+                            <h1 className="mt-4 text-2xl font-bold font-display text-paper">Gestor Veterinario</h1>
                             <p className="text-paper/80 text-sm">Portal Veterinario</p>
                         </div>
                     </header>
@@ -228,7 +228,7 @@ function Login() {
                 </div>
 
                 <p className="mt-6 text-center text-sm text-slate">
-                    © 2025 PetCare Plus. Todos los derechos reservados.
+                    © 2025 Gestor Veterinario. Todos los derechos reservados.
                 </p>
             </div>
         </div>
