@@ -104,7 +104,7 @@ function PetInfo() {
                         </p>
                         <p className="text-xs text-slate">
                             <span className="font-semibold text-ink">Propietario: </span>
-                            <Link to={`/clients/client/${individualPetData?.ownerId}/update `} className="text-primary underline">
+                            <Link to={`/clients/client/${individualPetData?.ownerId}/update`} className="text-primary underline">
                                 {individualPetData?.ownerName}
                             </Link>
                         </p>

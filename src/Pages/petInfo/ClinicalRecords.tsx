@@ -62,7 +62,7 @@ function ClinicalRecords() {
                 records.map((record, index) => (
                     <div
                         key={record.id}
-                        className="mb-2 border-b border-slate-100 pb-2"
+                        className="mb-3 bg-paper rounded-xl border border-slate-200 p-4 hover:shadow-sm transition-shadow"
                     >
                         {record.type === 'note' ? (
                             <div className="p-2">

@@ -1,106 +1,163 @@
-import { Service } from "@t/inventory.types";
+import { useState, ChangeEvent } from 'react';
+import { Service } from '@t/inventory.types';
+import { ActionButtons } from '@components/ui/ActionButtons';
+import { FormField } from '@components/ui/FormField';
+import DollarIcon from '@assets/dollarIcon.svg?react';
+import PercentIcon from '@assets/percentIcon.svg?react';
 
 interface EditServicePriceProps {
-    serviceData: Service;
+  serviceData: Service;
+}
+
+interface PriceFormData {
+  valorVenta: string;
+  impuestoPorcentaje: string;
+  impuestoExonerado: boolean;
+  impuestoMonto: string;
+  precioVentaPublico: string;
+  costoServicioSinImpuestos: string;
+  costoServicioConImpuestos: string;
+  porcentajeDescuento: string;
+  margenBruto: string;
+  margenUtilidad: string;
 }
 
 function EditServicePrice({ serviceData }: EditServicePriceProps) {
-    console.log(serviceData);
-    
-    const formFields = [
-        {
-            label: "Valor de venta (no incluye impuestos)",
-            type: "number",
-            id: "valorVenta",
-            placeholder: "$",
-        },
-        {
-            label: "Impuesto a las ventas en porcentaje (%)",
-            type: "number",
-            id: "impuestoPorcentaje",
-            placeholder: "%",
-            extraCheckbox: "¿Exonerado de impuestos?",
-        },
-        {
-            label: "Impuesto a las ventas monto",
-            type: "number",
-            id: "impuestoMonto",
-            placeholder: "$",
-            disabled: true,
-        },
-        {
-            label: "Precio de venta al público (incluido impuestos)",
-            type: "number",
-            id: "precioVentaPublico",
-            placeholder: "$",
-        },
-        {
-            label: "Costo del servicio (no incluye impuestos)",
-            type: "number",
-            id: "costoServicioSinImpuestos",
-            placeholder: "$",
-            extraCheckbox: "¿Exonerado de impuestos?",
-        },
-        {
-            label: "Costo del servicio (incluye impuestos)",
-            type: "number",
-            id: "costoServicioConImpuestos",
-            placeholder: "$",
-        },
-        {
-            label: "Porcentaje máximo de descuento (%)",
-            type: "number",
-            id: "porcentajeDescuento",
-            placeholder: "%",
-        },
-        {
-            label: "Margen bruto",
-            type: "number",
-            id: "margenBruto",
-            placeholder: "$",
-            disabled: true,
-        },
-        {
-            label: "Margen de utilidad porcentual",
-            type: "number",
-            id: "margenUtilidad",
-            placeholder: "%",
-            disabled: true,
-        },
-    ];
+  const [formData, setFormData] = useState<PriceFormData>({
+    valorVenta: String(serviceData.salePrice || ''),
+    impuestoPorcentaje: '18',
+    impuestoExonerado: false,
+    impuestoMonto: serviceData.salePrice ? String(serviceData.salePrice * 0.18) : '',
+    precioVentaPublico: String(serviceData.salePrice || ''),
+    costoServicioSinImpuestos: String(serviceData.cost || ''),
+    costoServicioConImpuestos: '',
+    porcentajeDescuento: '0',
+    margenBruto: '',
+    margenUtilidad: '',
+  });
 
-    return (
-        <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
-            <form className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4">
-                {formFields.map((field, index) => (
-                    <div key={index} className="space-y-1">
-                        <label
-                            htmlFor={field.id}
-                            className="block text-sm font-medium text-ink"
-                        >
-                            {field.label}
-                        </label>
-                        <input
-                            type={field.type}
-                            id={field.id}
-                            placeholder={field.placeholder}
-                            disabled={field.disabled || false}
-                            className="block w-full px-4 py-2 text-sm border border-slate-200 rounded-lg bg-white text-ink hover:border-primary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
-                        />
-                        {field.extraCheckbox && (
-                            <label className="flex items-center space-x-2 mt-2">
-                                <input
-                                    type="checkbox"
-                                    className="h-4 w-4 text-primary border-slate-300 rounded bg-white"
-                                />
-                                <span className="text-sm text-slate">{field.extraCheckbox}</span>
-                            </label>
-                        )}
-                    </div>
-                ))}
-            </form>
+  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  }
+
+  function handleSave() {
+    // Placeholder: future integration with context to update service prices
+  }
+
+  return (
+    <div className="bg-paper rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="p-6 space-y-4">
+        <FormField
+          label="Valor de venta (no incluye impuestos)"
+          id="valorVenta"
+          type="number"
+          icon={DollarIcon}
+          value={formData.valorVenta}
+          onChange={handleChange}
+        />
+
+        <div className="space-y-1">
+          <FormField
+            label="Impuesto a las ventas en porcentaje (%)"
+            id="impuestoPorcentaje"
+            type="number"
+            icon={PercentIcon}
+            value={formData.impuestoPorcentaje}
+            onChange={handleChange}
+          />
+          <label className="flex items-center gap-2 mt-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={formData.impuestoExonerado}
+              onChange={(e) => setFormData({ ...formData, impuestoExonerado: e.target.checked })}
+              className="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+            />
+            <span className="text-sm text-slate">Exonerado de impuestos</span>
+          </label>
         </div>
-    );
+
+        <FormField
+          label="Impuesto a las ventas monto"
+          id="impuestoMonto"
+          type="number"
+          icon={DollarIcon}
+          value={formData.impuestoMonto}
+          onChange={handleChange}
+          disabled
+        />
+
+        <FormField
+          label="Precio de venta al público (incluido impuestos)"
+          id="precioVentaPublico"
+          type="number"
+          icon={DollarIcon}
+          value={formData.precioVentaPublico}
+          onChange={handleChange}
+        />
+
+        <div className="space-y-1">
+          <FormField
+            label="Costo del servicio (no incluye impuestos)"
+            id="costoServicioSinImpuestos"
+            type="number"
+            icon={DollarIcon}
+            value={formData.costoServicioSinImpuestos}
+            onChange={handleChange}
+          />
+          <label className="flex items-center gap-2 mt-2 cursor-pointer">
+            <input type="checkbox" className="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" />
+            <span className="text-sm text-slate">Exonerado de impuestos</span>
+          </label>
+        </div>
+
+        <FormField
+          label="Costo del servicio (incluye impuestos)"
+          id="costoServicioConImpuestos"
+          type="number"
+          icon={DollarIcon}
+          value={formData.costoServicioConImpuestos}
+          onChange={handleChange}
+        />
+
+        <FormField
+          label="Porcentaje máximo de descuento (%)"
+          id="porcentajeDescuento"
+          type="number"
+          icon={PercentIcon}
+          value={formData.porcentajeDescuento}
+          onChange={handleChange}
+        />
+
+        <FormField
+          label="Margen bruto"
+          id="margenBruto"
+          type="number"
+          icon={DollarIcon}
+          value={formData.margenBruto}
+          onChange={handleChange}
+          disabled
+        />
+
+        <FormField
+          label="Margen de utilidad porcentual"
+          id="margenUtilidad"
+          type="number"
+          icon={PercentIcon}
+          value={formData.margenUtilidad}
+          onChange={handleChange}
+          disabled
+        />
+      </div>
+
+      <ActionButtons
+        onCancel={() => window.history.back()}
+        onSubmit={handleSave}
+        submitText="Guardar precios"
+        mode="form"
+      />
+    </div>
+  );
 }
 
 export { EditServicePrice };

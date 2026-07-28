@@ -8,9 +8,10 @@ interface NoteFormProps {
     handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     onSubmit: () => void;
     dateTime: string;
+    error?: string;
 }
 
-function NoteForm({ notes, handleChange, onSubmit, dateTime }: NoteFormProps) {
+function NoteForm({ notes, handleChange, onSubmit, dateTime, error }: NoteFormProps) {
     const navigate = useNavigate();
     return (
         <div className="w-full max-w-[1200px] mx-auto bg-paper shadow-sm rounded-2xl border border-slate-200 flex flex-col min-h-[400px]">
@@ -45,8 +46,11 @@ function NoteForm({ notes, handleChange, onSubmit, dateTime }: NoteFormProps) {
                         id="observations"
                         value={notes}
                         onChange={handleChange}
-                        className="w-full min-h-[200px] px-3 py-2 border border-slate-300 bg-white rounded-lg focus:outline-none text-ink hover:border-primary focus-within:border-primary"
+                        className="w-full min-h-[200px] px-3 py-2 border bg-white rounded-lg focus:outline-none text-ink hover:border-primary focus-within:border-primary"
                     />
+                    {error && (
+                        <p className="text-danger text-xs mt-1">{error}</p>
+                    )}
                 </div>
 
             </div>

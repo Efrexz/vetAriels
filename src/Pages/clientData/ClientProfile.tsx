@@ -83,13 +83,13 @@ function ClientProfile() {
             newErrors.lastName = 'El apellido del cliente debe tener al menos 4 caracteres';
         }
         if (!formData.dni || formData.dni.length < 8) {
-            newErrors.document = 'El número de documento de identidad debe tener al menos 8 caracteres';
+            newErrors.dni = 'El número de documento de identidad debe tener al menos 8 caracteres';
         }
         if (!formData.email || formData.email.length < 6) {
             newErrors.email = 'El correo electrónico del cliente debe tener al menos 6 caracteres';
         }
         if (!formData.phone1 || formData.phone1.length < 9) {
-            newErrors.mobile = 'El número de teléfono móvil del cliente debe tener al menos 9 caracteres';
+            newErrors.phone1 = 'El número de teléfono móvil del cliente debe tener al menos 9 caracteres';
         }
         if (!formData.address || formData.address.length < 4) {
             newErrors.address = 'La dirección del cliente debe tener al menos 4 caracteres';

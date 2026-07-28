@@ -12,14 +12,16 @@ function AddClinicalNote() {
     const { id: petId } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const [notes, setNotes] = useState<string>("");
+    const [notes, setNotes] = useState<string>('');
+    const [error, setError] = useState<string>('');
 
     const now = new Date();
     const dateTime = now.toLocaleString();
 
     function addNote() {
         if (notes.trim() === '') {
-        return;
+            setError('La nota no puede estar vacía');
+            return;
         }
 
         const newNote: NoteRecord  = {
@@ -39,8 +41,9 @@ function AddClinicalNote() {
         <NoteForm
             notes={notes}
             dateTime={dateTime}
-            handleChange={(e) => setNotes(e.target.value)}
+            handleChange={(e) => { setNotes(e.target.value); setError(''); }}
             onSubmit={addNote}
+            error={error}
         />
     )
 }
