@@ -15,6 +15,7 @@ import TrashIcon from '@assets/trashIcon.svg?react';
 import UserGroupIcon from '@assets/userGroupIcon.svg?react';
 import CheckIcon from '@assets/checkIcon.svg?react';
 import BanIcon from '@assets/banIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
 
 function Users() {
   const { users } = useGlobal();
@@ -31,6 +32,8 @@ function Users() {
   }, [users]);
 
   const hasActiveFilters = controls.searchText.trim() !== '';
+
+  function resetFilters() { controls.setSearchText(''); }
 
   return (
     <section className="w-full">
@@ -57,6 +60,7 @@ function Users() {
             <input type="text" placeholder="Buscar por nombre o correo..." value={controls.searchText} onChange={(e) => controls.setSearchText(e.target.value)} className="w-full py-2 pl-2 pr-3 focus:outline-none focus:ring-0 bg-white text-sm text-ink placeholder:text-slate/70" />
             {controls.searchText && <button onClick={() => controls.setSearchText('')} className="pr-3 text-slate/40 hover:text-slate transition-colors"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg></button>}
           </div>
+          {hasActiveFilters && <button onClick={resetFilters} className="flex items-center gap-1.5 text-sm text-primary font-medium hover:underline whitespace-nowrap mt-3"><EraserIcon className="w-4 h-4" />Limpiar filtros</button>}
         </div>
 
         {controls.totalFiltered === 0 ? (
