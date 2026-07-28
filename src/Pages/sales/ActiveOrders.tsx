@@ -1,146 +1,130 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
 import { Client } from '@t/client.types';
-import { PurchasedItem } from '@t/inventory.types';
+import { useTableControls } from '@hooks/useTableControls';
+import { Avatar } from '@components/ui/Avatar';
+import { Pagination } from '@components/ui/Pagination';
+import { EmptyState } from '@components/ui/EmptyState';
+import { RowActionMenu } from '@components/ui/RowActionMenu';
+import { StatsCard } from '@components/ui/StatsCard';
 import SearchIcon from '@assets/searchIcon.svg?react';
-import WhatsAppIcon from '@assets/whatsAppIcon.svg?react';
+import EyeIcon from '@assets/eyeIcon.svg?react';
 import ShoppingCart from '@assets/shoppingCart.svg?react';
+import DollarIcon from '@assets/dollarIcon.svg?react';
+import UserGroupIcon from '@assets/userGroupIcon.svg?react';
+import BoxesIcon from '@assets/boxesIcon.svg?react';
+import EraserIcon from '@assets/eraserIcon.svg?react';
 
-const tableHeaders: string[] = ["Cliente", "Último movimiento", "Items en lista", "Monto", "Opciones"];
+function calculateTotal(client: Client): number {
+  return (
+    client.products?.reduce(
+      (sum, p) => sum + (p.salePrice || 0) * (p.quantity || 0),
+      0
+    ) || 0
+  );
+}
 
 function ActiveOrders() {
+  const { clients } = useClients();
+  const navigate = useNavigate();
 
-    const { clients } = useClients();
-    const navigate = useNavigate();
+  const activeAccounts = useMemo(
+    () => clients.filter((c) => c.products && c.products.length > 0),
+    [clients]
+  );
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [filters, setFilters] = useState<Record<string, string>>({
-            provider: '',
-            line: '',
-            category: '',
-            stock: '',
-        });
+  const controls = useTableControls(activeAccounts, {
+    itemsPerPage: 10,
+    searchFields: ['firstName', 'lastName', 'phone1'],
+  });
 
-    const filteredClients = clients.filter(client => {
-        const matchesSearch = client.firstName?.toLowerCase().includes(searchTerm.toLowerCase());
-    }
-
-    )
-
-    //filtramos los clientes que tengan por lo menos un producto en la cola de ventas
-    const activeAccounts: Client[] = clients.filter(client => client.products && client.products.length > 0);
-
-    const calculateTotal = (products: PurchasedItem[]): string => {
-        const total = products.reduce((accumulator, product) => {
-            return accumulator + (product.salePrice || 0);
-        }, 0);
-        return total.toFixed(2); // 2 decimales para mostrarlo como moneda.
-    };
-    return (
-        <section className="w-full">
-            <div className="mb-6">
-                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
-                    Cuentas
-                </span>
-                <h1 className="text-2xl font-bold font-display text-ink">
-                    Cuentas activas
-                </h1>
-            </div>
-            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
-                <div className="flex flex-col sm:flex-row items-center gap-3 mb-4">
-                    <button className="w-full sm:w-auto bg-primary/10 text-primary py-2 px-4 rounded-xl font-semibold font-display text-sm transition-colors">
-                        Por cliente
-                    </button>
-                    <button className="w-full sm:w-auto bg-paper text-slate py-2 px-4 rounded-xl font-medium text-sm border border-slate-200 hover:bg-slate-50 transition-colors">
-                        Por items
-                    </button>
-                </div>
-                <div className="p-4 rounded-xl mb-4 border border-slate-200 bg-slate-50/50">
-                    <div className="flex flex-col md:flex-row items-center gap-3">
-                        <input
-                            type="text"
-                            placeholder="Buscar cliente..."
-                            className="w-full md:w-[240px] py-2 px-4 bg-white border border-slate-200 rounded-lg text-sm text-ink placeholder:text-slate/70 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
-                        />
-                        <input
-                            type="date"
-                            className="w-full md:w-[240px] py-2 px-4 bg-white border border-slate-200 rounded-lg text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
-                        />
-                    </div>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white">
-                        <thead>
-                            <tr className="border-b border-slate-200">
-                                {tableHeaders.map((header) => (
-                                    <th
-                                        key={header}
-                                        className="py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate px-3"
-                                    >
-                                        {header}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {activeAccounts?.map((account) => (
-                                <tr
-                                    key={account.id}
-                                    className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors cursor-pointer"
-                                    onClick={() => navigate(`/sales/client/${account.id}`)}
-                                >
-                                    <td className="py-3 px-3 text-center text-sm text-ink font-medium">
-                                        {account.firstName} {account.lastName}
-                                    </td>
-                                    <td className="py-3 px-3 text-center text-xs text-slate">
-                                        {account?.products[0].additionDate} {account.products[0].additionTime}
-                                    </td>
-                                    <td className="py-3 px-3 text-center text-sm text-ink font-semibold">
-                                        {account.products.length}
-                                    </td>
-                                    <td className="py-3 px-3 text-center text-success font-bold text-sm font-display">
-                                        <span>S/{calculateTotal(account.products)}</span>
-                                    </td>
-                                    <td className="py-3 px-3 text-center">
-                                        <div className="flex justify-center items-center gap-1">
-                                            <button
-                                                className="p-1.5 rounded-lg text-slate hover:text-primary hover:bg-primary/10 transition-colors"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    navigate(`/sales/client/${account.id}`);
-                                                }}
-                                            >
-                                                <SearchIcon className="w-4 h-4" />
-                                            </button>
-                                            <button
-                                                className="p-1.5 rounded-lg text-slate hover:text-success hover:bg-success/10 transition-colors"
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                <WhatsAppIcon className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="flex flex-col sm:flex-row justify-between items-center mt-5 gap-4">
-                    <p className="text-slate text-sm">
-                        Registros 1&ndash;{activeAccounts.length} de {activeAccounts.length}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Primera</button>
-                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Anterior</button>
-                        <button className="py-1.5 px-3 rounded-lg text-sm bg-primary text-white font-semibold transition-colors">1</button>
-                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">Siguiente</button>
-                        <button className="py-1.5 px-3 border border-slate-200 rounded-lg text-sm text-slate bg-paper hover:bg-slate-50 transition-colors font-medium">&Uacute;ltima</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+  const stats = useMemo(() => {
+    const total = activeAccounts.length;
+    const totalAmount = activeAccounts.reduce(
+      (sum, c) => sum + calculateTotal(c),
+      0
     );
+    const totalItems = activeAccounts.reduce(
+      (sum, c) => sum + (c.products?.length || 0),
+      0
+    );
+    const avgTicket = total > 0 ? Math.round(totalAmount / total) : 0;
+    return { total, totalAmount, totalItems, avgTicket };
+  }, [activeAccounts]);
+
+  const hasActiveFilters = controls.searchText.trim() !== '';
+
+  return (
+    <section className="w-full">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold font-display text-ink">Órdenes Activas</h1>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
+        <StatsCard icon={UserGroupIcon} value={stats.total} label="Cuentas activas" color="#3B82F6" />
+        <StatsCard icon={DollarIcon} value={stats.totalAmount} label="Monto pendiente" color="#059669" />
+        <StatsCard icon={BoxesIcon} value={stats.totalItems} label="Items en lista" color="#D97706" />
+        <StatsCard icon={ShoppingCart} value={stats.avgTicket} label="Ticket promedio (S/)" color="#8B5CF6" />
+      </div>
+
+      <div className="bg-paper rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="p-4 border-b border-slate-100">
+          <div className="flex items-center w-full lg:w-[320px] border border-slate-200 rounded-lg overflow-hidden bg-white focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/30 transition-shadow">
+            <div className="flex items-center justify-center bg-white pl-3"><SearchIcon className="w-4 h-4 text-slate" /></div>
+            <input type="text" placeholder="Buscar por nombre o teléfono..." value={controls.searchText} onChange={(e) => controls.setSearchText(e.target.value)} className="w-full py-2 pl-2 pr-3 focus:outline-none focus:ring-0 bg-white text-sm text-ink placeholder:text-slate/70" />
+            {controls.searchText && <button onClick={() => controls.setSearchText('')} className="pr-3 text-slate/40 hover:text-slate transition-colors"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg></button>}
+          </div>
+        </div>
+
+        {controls.totalFiltered === 0 ? (
+          <EmptyState icon={ShoppingCart} title="Sin órdenes activas" description="No hay cuentas con productos pendientes." />
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider text-slate">Cliente</th>
+                    <th className="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate">Último movimiento</th>
+                    <th className="py-3 px-3 text-center text-xs font-semibold uppercase tracking-wider text-slate">Items</th>
+                    <th className="py-3 px-3 text-right text-xs font-semibold uppercase tracking-wider text-slate">Monto</th>
+                    <th className="py-3 pr-4 pl-2 w-10" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {controls.paginatedData.map((client: Client) => (
+                    <tr key={client.id} onClick={() => navigate(`/sales/client/${client.id}`)} className="border-b border-slate-100 hover:bg-slate-50/60 transition-colors cursor-pointer">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-3">
+                          <Avatar name={`${client.firstName} ${client.lastName}`} size="sm" />
+                          <div>
+                            <div className="text-sm text-ink font-medium">{client.firstName} {client.lastName}</div>
+                            <div className="text-xs text-slate">{client.phone1}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 px-3 text-sm text-slate">{client.date} {client.hour}</td>
+                      <td className="py-3 px-3 text-center">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">{client.products?.length || 0}</span>
+                      </td>
+                      <td className="py-3 px-3 text-right">
+                        <span className="text-sm text-ink font-mono font-semibold">S/ {calculateTotal(client).toFixed(2)}</span>
+                      </td>
+                      <td className="py-3 pr-4 pl-2" onClick={(e) => e.stopPropagation()}>
+                        <RowActionMenu items={[{ label: 'Ver detalle', icon: EyeIcon, onClick: () => navigate(`/sales/client/${client.id}`) }]} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="px-4 pb-4"><Pagination currentPage={controls.currentPage} totalPages={controls.totalPages} onPageChange={controls.setCurrentPage} itemsPerPage={controls.itemsPerPage} onItemsPerPageChange={controls.setItemsPerPage} showingFrom={controls.showingFrom} showingTo={controls.showingTo} totalItems={controls.totalFiltered} /></div>
+          </>
+        )}
+      </div>
+    </section>
+  );
 }
 
 export { ActiveOrders };

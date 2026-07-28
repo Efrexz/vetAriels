@@ -1,79 +1,85 @@
-import ConfigurationIcon from '@assets/configurationIcon.svg?react';
-import EditIcon from '@assets/editIcon.svg?react';
+import { useMemo } from 'react';
+import { useTableControls } from '@hooks/useTableControls';
+import { Pagination } from '@components/ui/Pagination';
+import { EmptyState } from '@components/ui/EmptyState';
+import { StatsCard } from '@components/ui/StatsCard';
+import BuildingShieldIcon from '@assets/buildingShield.svg?react';
 
-const fiscalData = [
-    {
-        date: '29-07-2024 07:33 PM',
-        name: 'VETERINARIA ARIEL`S E.I.R.L',
-        taxRegistrationNumber: '20608438719',
-        address: "Av. Los Proceres Nro. 115 Urb. Condevilla Señor y Valdivieso Et. Dos Sc. Dos LIMA - SAN MARTIN DE PORRES",
-        email: 'Admvetarielscv@outlook.es',
-        establishmentCode: '20608438719',
-        status: 'Activo'
-    },
-];
+interface FiscalEntry {
+  date: string;
+  name: string;
+  ruc: string;
+  address: string;
+  email: string;
+  code: string;
+  status: string;
+}
 
-const tableHeaders = [
-    "Fecha de registro",
-    "Nombre",
-    "Número de Registro Tributario",
-    "Dirección",
-    "Correo",
-    "Cod. establecimiento",
-    "Estado",
-    "Opciones",
+const entries: (FiscalEntry & { id: string })[] = [
+  { id: '1', date: '01-01-2024', name: 'VETERINARIA ARIEL\'S E.I.R.L', ruc: '10723141067', address: 'Av. Principal 456, Cusco', email: 'ariels@vet.com', code: '0001', status: 'Activo' },
 ];
 
 function FiscalData() {
-    return (
-        <section className="w-full">
-            <div className="mb-6">
-                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
-                    Configuraci&oacute;n
-                </span>
-                <h1 className="text-2xl font-bold font-display text-ink">
-                    Datos Fiscales
-                </h1>
+  const controls = useTableControls(entries, { itemsPerPage: 10, searchFields: ['name', 'ruc', 'email'], dateField: 'date' });
+
+  const stats = useMemo(() => ({ total: entries.length }), []);
+
+  return (
+    <section className="w-full">
+      <div className="mb-6">
+        <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">Configuración</span>
+        <h1 className="text-2xl font-bold font-display text-ink">Datos Fiscales</h1>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+        <StatsCard icon={BuildingShieldIcon} value={stats.total} label="Entidades fiscales" color="#3B82F6" />
+      </div>
+
+      <div className="bg-paper rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        {controls.totalFiltered === 0 ? (
+          <EmptyState icon={BuildingShieldIcon} title="Sin datos fiscales" description="No hay datos fiscales registrados." />
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider text-slate">Fecha</th>
+                    <th className="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate">Nombre / RUC</th>
+                    <th className="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate">Dirección</th>
+                    <th className="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate">Correo</th>
+                    <th className="py-3 px-3 text-center text-xs font-semibold uppercase tracking-wider text-slate">Código</th>
+                    <th className="py-3 px-3 text-center text-xs font-semibold uppercase tracking-wider text-slate">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {controls.paginatedData.map((entry: FiscalEntry & { id: string }) => (
+                    <tr key={entry.id} className="border-b border-slate-100 hover:bg-slate-50/60 transition-colors">
+                      <td className="py-3 px-4 text-sm text-slate whitespace-nowrap">{entry.date}</td>
+                      <td className="py-3 px-3">
+                        <div className="text-sm text-ink font-medium">{entry.name}</div>
+                        <div className="text-xs text-slate font-mono">RUC: {entry.ruc}</div>
+                      </td>
+                      <td className="py-3 px-3 text-sm text-slate truncate max-w-[180px]" title={entry.address}>{entry.address}</td>
+                      <td className="py-3 px-3 text-sm text-slate">{entry.email}</td>
+                      <td className="py-3 px-3 text-center text-sm text-ink font-mono">{entry.code}</td>
+                      <td className="py-3 px-3 text-center">
+                        <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${entry.status === 'Activo' ? 'text-success' : 'text-danger'}`}>
+                          <span className={`inline-block w-2 h-2 rounded-full ${entry.status === 'Activo' ? 'bg-success' : 'bg-danger'}`} />
+                          {entry.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div className="bg-paper rounded-2xl shadow-sm p-5 mb-6 border border-slate-200">
-                <div className="overflow-x-auto">
-                    <table className="min-w-full">
-                        <thead>
-                            <tr className="border-b border-slate-200">
-                                {tableHeaders.map((header) => (
-                                    <th key={header} className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">
-                                        {header}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {fiscalData.map((userData, index) => (
-                                <tr key={index} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.date}</td>
-                                    <td className="py-3 px-4 text-center text-sm text-ink font-medium">{userData.name}</td>
-                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.taxRegistrationNumber}</td>
-                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.address}</td>
-                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.email}</td>
-                                    <td className="py-3 px-4 text-center text-sm text-slate">{userData.establishmentCode}</td>
-                                    <td className="py-3 px-4 text-center">
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">
-                                            {userData.status}
-                                        </span>
-                                    </td>
-                                    <td className="py-3 px-4 text-center">
-                                        <button className="p-1.5 rounded-lg text-slate hover:text-ink hover:bg-slate-100 transition-colors">
-                                            <EditIcon className="w-4 h-4" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    );
+            <div className="px-4 pb-4"><Pagination currentPage={controls.currentPage} totalPages={controls.totalPages} onPageChange={controls.setCurrentPage} itemsPerPage={controls.itemsPerPage} onItemsPerPageChange={controls.setItemsPerPage} showingFrom={controls.showingFrom} showingTo={controls.showingTo} totalItems={controls.totalFiltered} /></div>
+          </>
+        )}
+      </div>
+    </section>
+  );
 }
 
 export { FiscalData };
