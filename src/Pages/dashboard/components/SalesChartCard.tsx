@@ -7,8 +7,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { Link } from "react-router-dom";
 import { formatCurrency, formatDelta } from "@utils/dashboard.utils";
 import type { SalesByHour } from "@utils/dashboard.utils";
+import ArrowUpIcon from "@assets/arrowUp.svg?react";
+import ArrowDownIcon from "@assets/arrowDown.svg?react";
 
 interface SalesChartCardProps {
   total: number;
@@ -44,7 +47,7 @@ function SalesChartCard({ total, deltaVsYesterday, byHour }: SalesChartCardProps
   const hasData = byHour.some((h) => h.total > 0);
 
   return (
-    <div className="bg-paper rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full text-primary">
+    <div className="card flex flex-col h-full text-primary">
       <div className="px-5 pt-5 pb-1 flex items-start justify-between">
         <div>
           <p className="text-xs text-slate uppercase tracking-wider font-medium">
@@ -55,15 +58,20 @@ function SalesChartCard({ total, deltaVsYesterday, byHour }: SalesChartCardProps
           </p>
           {hasData && (
             <span
-              className={`inline-block mt-1.5 text-xs font-medium ${
+              className={`pill-badge mt-1.5 ${
                 deltaVsYesterday > 0
-                  ? "text-success"
+                  ? "bg-success/10 text-success"
                   : deltaVsYesterday < 0
-                    ? "text-danger"
-                    : "text-slate"
+                    ? "bg-danger/10 text-danger"
+                    : "bg-slate-100 text-slate"
               }`}
             >
-              {formatDelta(deltaVsYesterday)} respecto a ayer
+              {deltaVsYesterday > 0 ? (
+                <ArrowUpIcon className="w-3 h-3" />
+              ) : deltaVsYesterday < 0 ? (
+                <ArrowDownIcon className="w-3 h-3" />
+              ) : null}
+              <span>{formatDelta(deltaVsYesterday).replace(/^[↑↓]\s?/, "")} vs. ayer</span>
             </span>
           )}
         </div>
@@ -120,6 +128,13 @@ function SalesChartCard({ total, deltaVsYesterday, byHour }: SalesChartCardProps
           </div>
         )}
       </div>
+
+      <Link to="/sales/payments" className="card-footer-btn">
+        Ver todas las ventas
+        <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
     </div>
   );
 }

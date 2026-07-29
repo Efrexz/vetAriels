@@ -20,6 +20,20 @@
   --c-primary-rgb: 59 130 246;
 }
 
+@layer components {
+  .card {
+    @apply bg-paper rounded-2xl border border-[#E2E8F0] shadow-[0_1px_2px_rgb(15_23_42/0.04),0_8px_24px_-12px_rgb(15_23_42/0.08)];
+  }
+
+  .card-footer-btn {
+    @apply flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-medium font-display text-primary border-t border-[#F1F5F9] hover:bg-[#F8FAFC] transition-colors rounded-b-2xl;
+  }
+
+  .pill-badge {
+    @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+}
+
 html {
   font-family: "Manrope", sans-serif;
 }
@@ -70,7 +84,7 @@ body {
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -79,5 +93,22 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.25s ease-out forwards;
+  opacity: 0;
+  animation: fade-in 0.35s ease-out forwards;
+}
+
+.animate-stagger-1 { animation-delay: 0.38s; }
+.animate-stagger-2 { animation-delay: 0.46s; }
+.animate-stagger-3 { animation-delay: 0.54s; }
+.animate-stagger-4 { animation-delay: 0.62s; }
+.animate-stagger-5 { animation-delay: 0.70s; }
+.animate-stagger-6 { animation-delay: 0.78s; }
+.animate-stagger-7 { animation-delay: 0.86s; }
+.animate-stagger-8 { animation-delay: 0.94s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    opacity: 1;
+    animation: none;
+  }
 }

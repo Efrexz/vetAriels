@@ -10,7 +10,7 @@ function AgendaCard({ items }: AgendaCardProps) {
   const displayItems = items.slice(0, 5);
 
   return (
-    <div className="bg-paper rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full">
+    <div className="card flex flex-col h-full">
       <div className="px-5 pt-5 pb-3 flex items-center justify-between">
         <h3 className="font-display font-semibold text-ink text-base">
           Agenda de hoy
@@ -78,14 +78,15 @@ function AgendaCard({ items }: AgendaCardProps) {
         )}
       </div>
 
-      <div className="px-5 pb-4 pt-2">
-        <Link
-          to="/clinic-queue"
-          className="block text-center text-sm text-primary font-medium font-display hover:underline"
-        >
-          Ver todas las citas
-        </Link>
-      </div>
+      <Link
+        to="/clinic-queue"
+        className="card-footer-btn"
+      >
+        Ver agenda completa
+        <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
     </div>
   );
 }

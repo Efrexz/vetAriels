@@ -250,6 +250,26 @@ function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
                     </div>
                 ))}
             </nav>
+
+            <div className="flex-shrink-0 border-t border-slate-100 px-3 py-3">
+                <Link
+                    to="/sales/cash-review"
+                    onClick={toggleSideMenu}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 bg-primary/5 hover:bg-primary/10 transition-colors"
+                >
+                    <span className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <MoneyIcon className="w-4 h-4 text-primary" />
+                    </span>
+                    <div className="leading-tight min-w-0">
+                        <span className="block text-sm font-medium text-ink">Cierra tu d&iacute;a</span>
+                        <span className="block text-[11px] text-slate truncate">Cuadrar caja</span>
+                    </div>
+                </Link>
+            </div>
+
+            <p className="flex-shrink-0 text-center text-[10px] text-slate-400 pb-3 pt-1">
+                &copy; {new Date().getFullYear()} {companyData?.clinicName || "Veterinaria Ariel's"}
+            </p>
         </>
     );
 }

@@ -14,6 +14,7 @@ import Stethoscope from '@assets/stethoscope.svg?react';
 import NewUserIcon from '@assets/newUserIcon.svg?react';
 import BurguerMenuIcon from '@assets/burguerMenuIcon.svg?react';
 import XIcon from '@assets/xIcon.svg?react';
+import AngleDownIcon from '@assets/angleDown.svg?react';
 
 interface PageSection {
     icon: ComponentType<any>;
@@ -81,23 +82,22 @@ function NavBar() {
     const userRole = activeUser?.rol || "";
 
     return (
-        <nav className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 md:px-6 bg-paper/80 backdrop-blur border-b border-slate-200 flex-shrink-0">
-            {/* Left */}
-            <div className="flex items-center gap-3">
-                <button
-                    className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate hover:text-ink transition-colors"
-                    onClick={toggleSideMenu}
-                >
-                    {isSidebarOpen ? <XIcon className="w-5 h-5" /> : <BurguerMenuIcon className="w-5 h-5" />}
-                </button>
+        <nav className="sticky top-0 z-30 flex items-center h-16 px-4 md:px-6 bg-paper/80 backdrop-blur border-b border-slate-200 flex-shrink-0">
+            <button
+                className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate hover:text-ink transition-colors flex-shrink-0"
+                onClick={toggleSideMenu}
+            >
+                {isSidebarOpen ? <XIcon className="w-5 h-5" /> : <BurguerMenuIcon className="w-5 h-5" />}
+            </button>
 
+            <div className="flex-1 flex justify-center px-2 md:px-4">
                 <button
                     onClick={toggleSearchModal}
-                    className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200/80 text-slate rounded-full px-4 py-2 text-sm transition-colors min-w-[180px] md:min-w-[240px]"
+                    className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200/80 text-slate rounded-full px-4 py-2.5 text-sm transition-colors w-full max-w-xl min-w-0"
                 >
                     <SearchIcon className="w-4 h-4 flex-shrink-0" />
-                    <span className="hidden sm:inline truncate">Buscar...</span>
-                    <kbd className="hidden md:inline-flex items-center gap-0.5 ml-auto bg-white border border-slate-200 rounded-md px-1.5 py-0.5 text-[10px] text-slate font-mono leading-none">
+                    <span className="hidden sm:inline truncate">Buscar clientes, mascotas, servicios&hellip;</span>
+                    <kbd className="hidden md:inline-flex items-center gap-0.5 ml-auto bg-white border border-slate-200 rounded-md px-1.5 py-0.5 text-[10px] text-slate font-mono leading-none flex-shrink-0">
                         <span className="text-xs">⌘</span>K
                     </kbd>
                 </button>
@@ -107,25 +107,24 @@ function NavBar() {
                 )}
             </div>
 
-            {/* Right */}
-            <div className="flex items-center gap-1 md:gap-2">
+            <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
                 {pageSections.map((section, index) => (
                     <div key={index} className="relative group">
                         {section.path ? (
                             <Link
                                 to={section.path}
-                                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate hover:text-ink"
+                                className="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 bg-paper hover:border-primary/40 transition-all text-slate hover:text-primary"
                                 onClick={() => setIsSidebarOpen(false)}
                             >
                                 <section.icon className="w-5 h-5" />
                             </Link>
                         ) : (
                             <button
-                                className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors ${
+                                className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${
                                     (activeIcon === 'patients' && section.action === togglePatientList) ||
                                     (activeIcon === 'baths' && section.action === toggleBathList)
-                                        ? 'bg-primary/10 text-primary'
-                                        : 'text-slate hover:bg-slate-100 hover:text-ink'
+                                        ? 'border-primary/40 bg-primary/5 text-primary'
+                                        : 'border-slate-200 bg-paper text-slate hover:border-primary/40 hover:text-primary'
                                 }`}
                                 onClick={section.action}
                             >
@@ -134,7 +133,7 @@ function NavBar() {
                         )}
 
                         {section.count && section.countData !== undefined && section.countData > 0 && (
-                            <span className="absolute -top-0.5 -right-0.5 bg-danger text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold border-2 border-paper px-1 leading-none">
+                            <span className="absolute -top-1 -right-1 bg-danger text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold border-2 border-paper px-1 leading-none z-10">
                                 {section.countData}
                             </span>
                         )}
@@ -162,6 +161,7 @@ function NavBar() {
                             {userRole}
                         </span>
                     </div>
+                    <AngleDownIcon className="w-4 h-4 flex-shrink-0 hidden md:block text-slate" />
                 </button>
             </div>
 

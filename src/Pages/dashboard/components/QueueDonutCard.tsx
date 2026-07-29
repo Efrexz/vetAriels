@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { QueueSegment } from "@utils/dashboard.utils";
 
@@ -10,7 +11,7 @@ function QueueDonutCard({ segments, total }: QueueDonutCardProps) {
   const hasData = total > 0;
 
   return (
-    <div className="bg-paper rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full">
+    <div className="card flex flex-col h-full">
       <div className="px-5 pt-5 pb-1">
         <h3 className="font-display font-semibold text-ink text-base">
           Mascotas en espera
@@ -56,10 +57,11 @@ function QueueDonutCard({ segments, total }: QueueDonutCardProps) {
                 </PieChart>
               </ResponsiveContainer>
 
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="text-xl font-bold font-display text-ink">
                   {total}
                 </span>
+                <span className="text-[10px] text-slate leading-none">Total</span>
               </div>
             </div>
 
@@ -82,6 +84,13 @@ function QueueDonutCard({ segments, total }: QueueDonutCardProps) {
           <p className="text-sm text-slate">Sin mascotas en espera</p>
         )}
       </div>
+
+      <Link to="/clinic-queue" className="card-footer-btn">
+        Ver todas las mascotas
+        <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
     </div>
   );
 }

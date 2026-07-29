@@ -75,7 +75,7 @@ function parseDateStr(raw: string): Date | null {
     /^(\d{1,2})[-/](\d{1,2})[-/](\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)?$/,
   );
   if (matchFull) {
-    let [, d, m, y, h, min, ampm] = matchFull;
+    const [, d, m, y, h, min, ampm] = matchFull;
     let hour = parseInt(h, 10);
     if (ampm && ampm.toLowerCase() === "pm" && hour !== 12) hour += 12;
     if (ampm && ampm.toLowerCase() === "am" && hour === 12) hour = 0;
@@ -380,4 +380,89 @@ export function formatDelta(value: number): string {
   if (value === 0) return "Sin cambios";
   const abs = Math.abs(value).toFixed(1);
   return value > 0 ? `↑ ${value.toFixed(1)}%` : `↓ ${abs}%`;
+}
+
+export function timeAgo(dateStr: string): string {
+  const date = parseDateStr(dateStr);
+  if (!date) return "";
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 1) return "Ahora";
+  if (diffMin < 60) return `Hace ${diffMin} min`;
+  const diffHours = Math.floor(diffMin / 60);
+  if (diffHours < 24) return `Hace ${diffHours} h`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays === 1) return "Hace 1 d&iacute;a";
+  if (diffDays < 30) return `Hace ${diffDays} d&iacute;as`;
+  const diffMonths = Math.floor(diffDays / 30);
+  return `Hace ${diffMonths} mes${diffMonths > 1 ? "es" : ""}`;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Recordatorios                                                      */
+/* ------------------------------------------------------------------ */
+
+export type ReminderUrgency = "urgent" | "warning" | "info";
+
+export interface Reminder {
+  id: string;
+  title: string;
+  subtitle: string;
+  urgency: ReminderUrgency;
+  path?: string;
+}
+
+export const urgencyConfig: Record<
+  ReminderUrgency,
+  { label: string; pillClass: string; iconClass: string }
+> = {
+  urgent: {
+    label: "Urgente",
+    pillClass: "bg-danger/10 text-danger",
+    iconClass: "bg-danger/10 text-danger",
+  },
+  warning: {
+    label: "Atenci&oacute;n",
+    pillClass: "bg-warning/10 text-warning",
+    iconClass: "bg-warning/10 text-warning",
+  },
+  info: {
+    label: "Pendiente",
+    pillClass: "bg-primary/10 text-primary",
+    iconClass: "bg-primary/10 text-primary",
+  },
+};
+
+export function getReminders(
+  clients: Client[],
+  products: Product[],
+): Reminder[] {
+  const reminders: Reminder[] = [];
+
+  const lowStock = getLowStockProducts(products);
+  if (lowStock.length > 0) {
+    reminders.push({
+      id: "low-stock",
+      title: "Productos con stock bajo",
+      subtitle: `${lowStock.length} producto${lowStock.length !== 1 ? "s" : ""} requiere${lowStock.length === 1 ? "" : "n"} reposici&oacute;n`,
+      urgency: lowStock.some((p) => p.availableStock === 0) ? "urgent" : "warning",
+      path: "/products",
+    });
+  }
+
+  const activeAccounts = clients.filter(
+    (c) => c.products && c.products.length > 0,
+  );
+  if (activeAccounts.length > 0) {
+    reminders.push({
+      id: "active-accounts",
+      title: "Cuentas activas sin cobrar",
+      subtitle: `${activeAccounts.length} cliente${activeAccounts.length !== 1 ? "s" : ""} con cuentas pendientes`,
+      urgency: activeAccounts.length > 3 ? "urgent" : "warning",
+      path: "/sales/active-orders",
+    });
+  }
+
+  return reminders;
 }
