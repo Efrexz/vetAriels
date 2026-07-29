@@ -2,8 +2,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProductsAndServices } from "@context/ProductsAndServicesContext";
 import { Service } from "@t/inventory.types";
-import { SuccessModal } from "@components/modals/SuccessModal";
-import { ErrorModal } from "@components/modals/ErrorModal";
+import { useToast } from "@context/ToastContext";
 import { ActionButtons } from "@components/ui/ActionButtons";
 
 interface UpdateServiceProps {
@@ -24,9 +23,7 @@ type FormErrors = Partial<Record<keyof FormDataState, string>>;
 function UpdateService({ serviceData }: UpdateServiceProps) {
     const { updateServiceData } = useProductsAndServices();
     const navigate = useNavigate();
-
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
-    const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+    const { toast } = useToast();
 
     const [formData, setFormData] = useState<FormDataState>({
         serviceName: "",
@@ -77,7 +74,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
 
     function updateService() {
         if (!validateForm()) {
-            setIsErrorModalOpen(true);
+            toast.error("Corrige los errores del formulario");
             return;
         }
         const updatedServiceData: Partial<Service> = {
@@ -89,7 +86,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
             availableForSale: formData.availableForSale === "SI",
             status: formData.status === "ACTIVO",
         };
-        setIsSuccessModalOpen(true);
+        toast.success("Servicio actualizado correctamente");
         updateServiceData(serviceData.id, updatedServiceData);
     }
 
@@ -146,11 +143,6 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                         </div>
                     ))}
                 </div>
-                {
-                    isErrorModalOpen && (
-                        <ErrorModal onClose={() => setIsErrorModalOpen(false)} typeOfError="form" />
-                    )
-                }
             </form>
             <ActionButtons
                     onCancel={() => navigate("/services")}
@@ -159,7 +151,6 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
                     cancelText="Regresar"
                     mode="modal"
                 />
-            {isSuccessModalOpen && <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />}
         </div>
     );
 }

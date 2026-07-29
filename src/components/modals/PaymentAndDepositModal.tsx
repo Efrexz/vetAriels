@@ -148,10 +148,10 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
     return (
         <div className="fixed inset-0 bg-ink/40 flex justify-center items-start z-50 p-4">
             <div className="bg-paper rounded-2xl w-full max-w-2xl max-h-screen overflow-y-auto p-6 modal-appear custom-scrollbar shadow-sm">
-                <h2 className="text-md font-medium mb-4 pb-4 border-b border-slate-200 text-ink">
+                <h2 className="text-lg font-semibold font-display mb-4 pb-4 border-b border-slate-200 text-ink">
                     Crear registro de
                     <span
-                        className={`text-white ${typeOfOperation === 'ENTRADA' ? 'bg-primary' : 'bg-rose-600'} rounded-full px-2 ml-1.5`}
+                        className={`text-white ${typeOfOperation === 'ENTRADA' ? 'bg-primary' : 'bg-danger'} rounded-full px-2 ml-1.5 text-sm`}
                     >
                         {typeOfOperation}
                     </span>
@@ -162,12 +162,12 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
                             className={`${field.fullWidth ? 'col-span-1 sm:col-span-2' : ''}`}
                             key={field.name}
                         >
-                            <label className="block text-sm font-medium text-slate pb-1" htmlFor={field.name}>
+                            <label className="block text-sm font-medium text-ink pb-1.5" htmlFor={field.name}>
                                 {field.label}
                             </label>
                             <div className="flex">
                                 {field.icon && (
-                                    <div className="flex items-center justify-center bg-white border-t border-b border-l border-slate-200 rounded-l-md px-3 py-1.5">
+                                    <div className="flex items-center justify-center bg-white border border-slate-200 rounded-l-xl px-3 py-2">
                                         <field.icon className="w-4 h-4 text-slate" />
                                     </div>
                                 )}
@@ -177,9 +177,9 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
                                         id={field.name}
                                         value={formData[field.name as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className={`bg-white border border-slate-200 rounded-md px-3 py-1.5 w-full text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary ${errors[field.name as keyof FormDataState]
+                                        className={`bg-white border border-slate-200 rounded-xl px-3 py-2 w-full text-ink text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary ${errors[field.name as keyof FormDataState]
                                                 ? 'border-danger'
-                                                : 'hover:border-primary focus-within:border-primary'
+                                                : ''
                                             }`}
                                     >
                                         {field.options?.map((option) => (
@@ -190,11 +190,11 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
                                     </select>
                                 ) : (
                                     <input
-                                        className={`bg-white border border-slate-200 py-1.5 ${field.icon ? 'rounded-r-md' : 'rounded-md'
-                                            } p-2 w-full outline-none text-ink ${errors[field.name as keyof FormDataState]
+                                        className={`bg-white border border-slate-200 py-2 ${field.icon ? 'rounded-r-xl' : 'rounded-xl'
+                                            } px-3 w-full outline-none text-ink text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary ${errors[field.name as keyof FormDataState]
                                                 ? 'border-danger'
-                                                : 'hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/30'
-                                            }`}
+                                                : ''
+                                            } ${field.disabled ? 'bg-slate-50 text-slate/60 cursor-not-allowed' : ''}`}
                                         id={field.name}
                                         type={field.type}
                                         name={field.name}

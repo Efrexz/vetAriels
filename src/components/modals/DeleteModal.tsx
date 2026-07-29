@@ -3,7 +3,7 @@ import { useClients } from '@context/ClientsContext';
 import { useProductsAndServices } from '@context/ProductsAndServicesContext';
 import { Product, Service } from '@t/inventory.types';
 import { Pet, Client } from '@t/client.types';
-import DiskIcon from '@assets/diskIcon.svg?react';
+import TrashIcon from '@assets/trashIcon.svg?react';
 
 type DeleteModalMode = 'products' | 'services' | 'pets' | 'clients';
 
@@ -117,7 +117,7 @@ function DeleteModal({ elementToDelete, onClose, mode }: DeleteModalProps) {
                             className="px-5 py-2 bg-danger text-white rounded-xl hover:opacity-90 flex items-center transition-colors font-semibold font-display shadow-sm shadow-danger/25"
                             onClick={deleteElement}
                         >
-                            <DiskIcon className="w-5 h-5 mr-2" />
+                            <TrashIcon className="w-5 h-5 mr-2" />
                             Confirmar eliminado
                         </button>
                     </div>

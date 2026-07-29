@@ -2,7 +2,7 @@ import { useState, ChangeEvent } from 'react';
 import { useGlobal } from '@context/GlobalContext';
 import { CompanyData } from '@t/user.types';
 import { HorizontalMenu } from '@components/ui/HorizontalMenu';
-import { SuccessModal } from "@components/modals/SuccessModal";
+import { useToast } from '@context/ToastContext';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
 import PhoneIcon from '@assets/phoneIcon.svg?react';
@@ -37,7 +37,7 @@ const themeColorList = [
 function Config() {
 
     const { companyData, setCompanyData, themeColor, setThemeColor } = useGlobal();
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+    const { toast } = useToast();
 
     const [formData, setFormData] = useState<CompanyData>({
         clinicName: companyData.clinicName || '',
@@ -70,7 +70,7 @@ function Config() {
             phone: formData.phone,
             facebook: formData.facebook,
         };
-        setIsSuccessModalOpen(true);
+        toast.success("Datos actualizados con exito");
         setCompanyData(updatedCompanyData);
     }
 
@@ -172,11 +172,6 @@ function Config() {
                     Actualizar
                 </button>
             </div>
-            {
-                isSuccessModalOpen && (
-                    <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
-                )
-            }
         </div>
     );
 }

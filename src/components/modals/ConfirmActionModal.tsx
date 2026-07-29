@@ -146,7 +146,7 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                                 setErrorMessage("");
                             }}
                             placeholder="Escribe el motivo aquí"
-                            className={`w-full border rounded-lg p-2.5 bg-white text-ink text-sm placeholder:text-slate/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-colors ${
+                            className={`w-full border rounded-xl p-2.5 bg-white text-ink text-sm placeholder:text-slate/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-colors ${
                                 errorMessage ? 'border-danger' : 'border-slate-200'
                             }`}
                             required

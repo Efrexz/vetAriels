@@ -2,7 +2,7 @@ import { useState, useEffect, ChangeEvent, ComponentType } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProductsAndServices } from "@context/ProductsAndServicesContext";
 import { Product } from "@t/inventory.types";
-import { ErrorModal } from "@components/modals/ErrorModal";
+import { useToast } from "@context/ToastContext";
 import { ActionButtons } from "@components/ui/ActionButtons";
 import PillsIcon from "@assets/pillsIcon.svg?react";
 import ArrowDown from "@assets/arrowDown.svg?react";
@@ -38,8 +38,8 @@ type FormErrors = Partial<Record<keyof FormDataState, string>>;
 function UpdateProduct({ productData }: UpdateProductProps) {
     const { updateProductData } = useProductsAndServices();
         const navigate = useNavigate();
+    const { toast } = useToast();
 
-    const [isOpenErrorModal, setIsOpenErrorModal] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormDataState>({
         productName: '', brand: '', systemCode: '', unitOfMeasurement: '', presentation: '',
         content: '', provider: '', line: '', category: '', subcategory: '', minStock: 0,
@@ -101,7 +101,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
 
     function updateProduct() {
         if (!validateForm()) {
-            setIsOpenErrorModal(true);
+            toast.error("Corrige los errores del formulario");
             return;
         }
         const updatedProductData: Partial<Product> = {
@@ -220,9 +220,6 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                         </div>
                     ))}
                 </div>
-                {
-                    isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />
-                }
             </form>
             <ActionButtons
                     onCancel={() => navigate("/products")}

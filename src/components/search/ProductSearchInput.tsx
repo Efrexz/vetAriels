@@ -2,7 +2,7 @@ import { useState, useMemo, ChangeEvent } from 'react';
 import { useParams } from "react-router-dom";
 import { useClients } from '@context/ClientsContext';
 import { useProductsAndServices } from '@context/ProductsAndServicesContext';
-import { ErrorModal } from "../modals/ErrorModal";
+import { useToast } from '@context/ToastContext';
 import { generateUniqueId } from "@utils/idGenerator";
 import { Product, Service } from '@t/inventory.types';
 
@@ -26,7 +26,7 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
 
     //estado para saber cuando el input tiene el foco para mostrar la lista de clientes que coinciden con el buscador
     const [isFilteredListVisible, setIsFilteredListVisible] = useState<boolean>(false);
-    const [isOpenErrorModal, setIsOpenErrorModal] = useState<boolean>(false);
+    const { toast } = useToast();
 
     const filteredItems = useMemo((): SearchResultItem[] => {
         if (searchTerm.length < 3) return [];
@@ -57,7 +57,7 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
         // Si el item es un producto y estamos en un modo que consume stock, mostramos un modal de error
         //Confirmamos solo mostrar el error del stock solo en las paginas de ventas y descargas
         if (isProduct(selectedItem) && selectedItem.availableStock !== undefined && selectedItem.availableStock < 1 && (mode === "discharge" || mode === "sales")) {
-            setIsOpenErrorModal(true);
+            toast.error("El producto no tiene stock disponible");
             setSearchTerm('');
             return;
         }
@@ -129,9 +129,6 @@ function ProductSearchInput({ addProductToTable, mode, stockMode }: ProductSearc
                     )}
                 </ul>
             )}
-            {
-                isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="stock" />
-            }
         </div>
     );
 }

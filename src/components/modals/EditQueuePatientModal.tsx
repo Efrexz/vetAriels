@@ -59,29 +59,29 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll p-3">
             <div className="bg-paper rounded-2xl w-full max-w-3xl p-6 shadow-sm border border-slate-200 modal-appear mx-auto space-y-6">
-                <h2 className="text-xl sm:text-2xl font-semibold text-ink font-display mb-4 pb-3 border-b border-slate-200">Generar Consulta</h2>
+                <h2 className="text-lg font-semibold font-display text-ink mb-4 pb-3 border-b border-slate-200">Generar Consulta</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div className="flex flex-col">
-                        <label htmlFor="date" className="text-md font-semibold text-slate mb-1">
+                        <label htmlFor="date" className="text-sm font-medium text-ink mb-1.5">
                             Fecha de atención
                         </label>
                         <div className="relative">
                             <input
                                 type="text"
                                 id="date"
-                                className="border border-slate-200 rounded-md bg-white text-slate p-2 w-full focus-within:border-primary focus:outline-none transition-colors"
+                                className="border border-slate-200 rounded-xl bg-white text-slate p-2 w-full cursor-not-allowed"
                                 value={`${queueData?.dateOfAttention} ${queueData?.timeOfAttention}`}
                                 disabled
                             />
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="doctor" className="text-md font-semibold text-slate mb-1">
+                        <label htmlFor="doctor" className="text-sm font-medium text-ink mb-1.5">
                             Médico asignado
                         </label>
                         <select
                             id="doctor"
-                            className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
+                            className="border border-slate-200 rounded-xl bg-white text-ink p-2 w-full focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                             value={selectedDoctor}
                             onChange={handleSelectChange}
                         >
@@ -90,21 +90,21 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                         </select>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="owner" className="text-md font-semibold text-slate mb-1">
+                        <label htmlFor="owner" className="text-sm font-medium text-ink mb-1.5">
                             Propietario
                         </label>
-                        <div className="flex items-center bg-white p-2 rounded-md border border-slate-200">
+                        <div className="flex items-center bg-white p-2 rounded-xl border border-slate-200">
                             <RoleUserIcon className="w-5 h-5 mr-3 text-primary" />
                             <span className="text-ink">{queueData?.petData?.ownerName}</span>
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="pet" className="text-md font-semibold text-slate mb-1">
+                        <label htmlFor="pet" className="text-sm font-medium text-ink mb-1.5">
                             Mascota:
                         </label>
                         <select
                             id="pet"
-                            className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
+                            className="border border-slate-200 rounded-xl bg-white text-ink p-2 w-full focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                             value={selectedPetId || ''}
                             onChange={handleSelectChange}
                         >
@@ -127,12 +127,12 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                     </label>
                 </div>
                 <div className="flex flex-col mb-3">
-                    <label htmlFor="notes" className="text-sm font-semibold text-slate mb-1">
+                        <label htmlFor="notes" className="text-sm font-medium text-ink mb-1.5">
                         Notas
                     </label>
                     <textarea
                         id="notes"
-                        className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full max-h-60 hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
+                        className="border border-slate-200 rounded-xl bg-white text-ink p-2 w-full max-h-60 focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                         rows={4}
                         placeholder="Escribe las notas aquí..."
                         value={notes}
@@ -140,12 +140,12 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                     ></textarea>
                 </div>
                 <div className="flex flex-col w-full sm:w-[50%] mb-4">
-                    <label htmlFor="status" className="text-md font-semibold text-slate mb-2">
+                    <label htmlFor="status" className="text-sm font-medium text-ink mb-1.5">
                         Estado
                     </label>
                     <select
                         id="status"
-                        className="border border-slate-200 rounded-md bg-white text-ink p-2 w-full hover:border-primary focus-within:border-primary focus:outline-none transition-colors"
+                        className="border border-slate-200 rounded-xl bg-white text-ink p-2 w-full focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                         value={status}
                         onChange={handleSelectChange}
                     >

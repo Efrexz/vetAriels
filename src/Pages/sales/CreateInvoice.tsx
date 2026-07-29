@@ -7,6 +7,7 @@ import {generateUniqueId } from '@utils/idGenerator';
 import FileIcon from '@assets/file-invoice.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import LightbulbIcon from '@assets/lightbulb.svg?react';
+import { useToast } from '@context/ToastContext';
 
 // Tipo base con propiedades comunes a todos los campos
 interface BaseField {
@@ -64,6 +65,7 @@ function CreateInvoice() {
     const { id: clientId } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
+    const { toast } = useToast();
     const clientData = useMemo(() => clients.find(client => client.id === clientId), [clients, clientId]);
 
     const { selectedProducts = [] } = (location.state as LocationState) || {};
@@ -133,7 +135,7 @@ function CreateInvoice() {
 
     function handleAddPayment () {
         if (!methodOfPayment || !paymentAmount || parseFloat(paymentAmount) <= 0) {
-            alert("Por favor, seleccione una forma de pago y un monto válido.");
+            toast.error("Por favor, seleccione una forma de pago y un monto valido.");
             return;
         }
         const newPayment: PaymentMethod = {
@@ -172,7 +174,7 @@ function CreateInvoice() {
                                 <label className="text-sm font-medium text-slate">{data.label}</label>
                                 <div className="flex items-center mt-1">
                                     {data.type === "select" ? (
-                                        <select className="w-full border border-slate-200 rounded-md px-3 py-1 bg-paper text-ink text-sm hover:border-teal focus:border-teal outline-none">
+                                        <select className="w-full border border-slate-200 rounded-xl px-3 py-1 bg-paper text-ink text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none">
                                             {data.options.map((option, index) => (
                                                 <option key={index} value={option}>
                                                     {option}
@@ -184,7 +186,7 @@ function CreateInvoice() {
                                             type={data.type}
                                             value={data.value}
                                             disabled={data.disabled}
-                                            className={`w-full border border-slate-200 rounded-md px-3 py-1 text-sm hover:border-teal focus:border-teal outline-none ${data.disabled ? "bg-white text-slate" : "bg-paper text-ink"
+                                            className={`w-full border border-slate-200 rounded-xl px-3 py-1 text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none ${data.disabled ? "bg-white text-slate" : "bg-paper text-ink"
                                                 }`}
                                         />
                                     )}
@@ -205,7 +207,7 @@ function CreateInvoice() {
                                 <label className="text-sm font-medium text-slate">{data.label}</label>
                                 <div className="flex items-center mt-1">
                                     {data.type === "select" ? (
-                                        <select className="w-full border border-slate-200 rounded-md px-3 py-1 bg-paper text-ink text-sm hover:border-teal focus:border-teal outline-none">
+                                        <select className="w-full border border-slate-200 rounded-xl px-3 py-1 bg-paper text-ink text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none">
                                             {data.options.map((option, idx) => (
                                                 <option key={idx} value={option}>
                                                     {option}
@@ -217,7 +219,7 @@ function CreateInvoice() {
                                             type={data.type}
                                             value={data.value}
                                             readOnly
-                                            className="w-full border border-slate-200 rounded-md px-3 py-1 bg-paper text-ink text-sm hover:border-teal focus:border-teal outline-none"
+                                            className="w-full border border-slate-200 rounded-xl px-3 py-1 bg-paper text-ink text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                                         />
                                     )}
                                 </div>
@@ -235,7 +237,7 @@ function CreateInvoice() {
                                 {tableCategories.map((category) => (
                                     <th
                                         key={category}
-                                        className="py-1 px-4 bg-paper text-ink font-bold uppercase text-xs border-slate-200 border-2"
+                                        className="py-1 px-4 bg-paper text-ink font-bold uppercase text-xs border-slate-200 border"
                                     >
                                         {category}
                                     </th>
@@ -245,25 +247,25 @@ function CreateInvoice() {
                         <tbody>
                             {selectedProducts.map((product) => (
                                 <tr key={product.provisionalId} className="border-b text-ink text-sm">
-                                    <td className="py-1 px-4 border-slate-200 border-2 text-left">
+                                    <td className="py-1 px-4 border-slate-200 border text-left">
                                         {product.productName || product.serviceName}
                                     </td>
-                                    <td className="py-1 px-4 border-slate-200 border-2 text-center">
+                                    <td className="py-1 px-4 border-slate-200 border text-center">
                                         {product.salePrice}
                                     </td>
-                                    <td className="py-1 px-4 border-slate-200 border-2 text-center">
+                                    <td className="py-1 px-4 border-slate-200 border text-center">
                                         {product.quantity}
                                     </td>
-                                    <td className="py-1 px-4 border-slate-200 border-2 text-center">
+                                    <td className="py-1 px-4 border-slate-200 border text-center">
                                         {product.salePrice}
                                     </td>
-                                    <td className="py-1 px-4 border-slate-200 border-2 text-center">
+                                    <td className="py-1 px-4 border-slate-200 border text-center">
                                         0.00
                                     </td>
-                                    <td className="py-1 px-4 border-slate-200 border-2 text-center">
+                                    <td className="py-1 px-4 border-slate-200 border text-center">
                                         0.00
                                     </td>
-                                    <td className="py-1 px-4 border-slate-200 border-2 text-center">
+                                    <td className="py-1 px-4 border-slate-200 border text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
                                 </tr>
@@ -292,7 +294,7 @@ function CreateInvoice() {
                 <div className="p-4">
                     <label className="block text-slate">Observaciones o comentarios para este comprobante</label>
                     <textarea
-                        className="w-full mt-3 border border-slate-200 rounded p-2 bg-paper text-ink max-h-60 min-h-14 hover:border-teal focus:border-teal outline-none"
+                        className="w-full mt-3 border border-slate-200 rounded-xl p-2 bg-paper text-ink max-h-60 min-h-14 focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                         rows={2}
                         placeholder="Añadir observaciones..."
                         value={notes}
@@ -301,7 +303,7 @@ function CreateInvoice() {
                 </div>
             </div>
 
-            <div className="bg-paper p-6 rounded-lg shadow-md mt-4">
+            <div className="bg-paper p-6 rounded-2xl shadow-sm mt-4">
                 {/* Controles de entrada */}
                 <div className="flex flex-wrap gap-4 justify-end mb-4">
                     {paymentData.map((data) => (
@@ -310,7 +312,7 @@ function CreateInvoice() {
                             <div className="flex items-center mt-1">
                                 {data.type === "select" ? (
                                     <select
-                                        className="w-full border border-slate-200 rounded-md px-3 py-1 bg-paper text-ink text-sm hover:border-teal focus:border-teal outline-none"
+                                        className="w-full border border-slate-200 rounded-xl px-3 py-1 bg-paper text-ink text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                                         defaultValue=""
                                         onChange={data.onChange}
                                     >
@@ -325,7 +327,7 @@ function CreateInvoice() {
                                         value={data.value}
                                         onChange={data.onChange}
                                         placeholder={data.placeholder}
-                                        className="w-full border border-slate-200 rounded-md px-3 py-1 bg-paper text-ink text-sm hover:border-teal focus:border-teal outline-none"
+                                        className="w-full border border-slate-200 rounded-xl px-3 py-1 bg-paper text-ink text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                                     />
                                 )}
                             </div>
@@ -333,7 +335,7 @@ function CreateInvoice() {
                     ))}
                     <div className="self-end w-full sm:w-auto">
                         <button
-                            className="w-full sm:w-auto bg-orange-600 text-white font-medium px-4 py-1 rounded-md hover:bg-orange-500"
+                            className="w-full sm:w-auto bg-primary text-white font-semibold font-display text-sm px-4 py-1.5 rounded-xl hover:opacity-90 shadow-sm shadow-primary/25 transition-colors"
                             onClick={handleAddPayment}
                         >
                             + AGREGAR
@@ -343,7 +345,7 @@ function CreateInvoice() {
 
                 {/* Tabla */}
                 <div className="overflow-x-auto">
-                    <table className="w-full text-xs font-bold text-left text-slate border-collapse border-slate-200 border-2">
+                    <table className="w-full text-xs font-bold text-left text-slate border-collapse border-slate-200 border">
                         <thead className="bg-paper">
                             <tr>
                                 <th className="border border-slate-200 px-4 py-1.5">Forma de pago</th>
@@ -401,7 +403,7 @@ function CreateInvoice() {
             <ActionButtons
                 onCancel={() => navigate(-1)}
                 submitText="Generar comprobante"
-                onSubmit= {() => alert('Generando comprobante')}
+                onSubmit= {() => toast.success("Comprobante generado correctamente")}
             />
 
             <div className="mt-6 p-4 bg-primary/10 text-ink rounded-xl m-3 flex gap-2 border border-primary/20">

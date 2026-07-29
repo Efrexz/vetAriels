@@ -18,7 +18,7 @@ function SearchModal ({ onClose }: SearchModalProps)  {
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-center px-4 py-3 border-b border-slate-200 flex-shrink-0">
-                    <h3 className="text-lg font-semibold text-ink flex items-center gap-2">
+                    <h3 className="text-lg font-semibold font-display text-ink flex items-center gap-2">
                         <SearchIcon className="w-5 h-5 text-primary" />
                         Buscar Cliente
                     </h3>
@@ -33,7 +33,7 @@ function SearchModal ({ onClose }: SearchModalProps)  {
 
                 <div className="p-4">
 
-                    <div className="flex w-full rounded-lg border border-slate-200 focus-within:border-primary transition-colors">
+                    <div className="flex w-full rounded-xl overflow-hidden border border-slate-200 focus-within:ring-1 focus-within:ring-primary/30 focus-within:border-primary transition-colors">
                         <div className="flex items-center justify-center bg-white px-4">
                             <SearchIcon className="w-5 h-5 text-slate" />
                         </div>

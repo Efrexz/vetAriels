@@ -9,8 +9,7 @@ import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { PriceModificationModal } from '@components/modals/PriceModificationModal';
 import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
 import { ActionButtons } from '@components/ui/ActionButtons';
-import { SuccessModal } from '@components/modals/SuccessModal';
-import { ErrorModal } from '@components/modals/ErrorModal';
+import { useToast } from '@context/ToastContext';
 import { generateUniqueId } from '@utils/idGenerator';
 import { NotFound } from '@components/ui/NotFound';
 import BathIcon from '@assets/bathIcon.svg?react';
@@ -45,6 +44,7 @@ function EditGroomingOrder() {
     const { petsInQueueGrooming, updatePetInQueueGrooming, clients } = useClients();
     const { id: clientId } = useParams<{ id: string }>();
     const navigate = useNavigate()
+    const { toast } = useToast();
 
     const petInQueueGrommingData : GroomingQueueItem | undefined = petsInQueueGrooming.find((pet) => pet.id === clientId);
 
@@ -53,10 +53,8 @@ function EditGroomingOrder() {
     const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
 
 
-    const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
     const [isPriceModalOpen, setIsPriceModalOpen] = useState<boolean>(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState<boolean>(false);
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
 
     const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
 
@@ -127,7 +125,7 @@ function EditGroomingOrder() {
 
     function updateGroomingOrder() {
         if (selectedProducts.length < 1) {
-            setIsErrorModalOpen(true);
+            toast.error("Debe seleccionar al menos un producto o servicio");
             return;
         }
         const dataToSend: Partial<GroomingQueueItem> = {
@@ -138,7 +136,7 @@ function EditGroomingOrder() {
         };
         if(clientId){
             updatePetInQueueGrooming(clientId, dataToSend);
-            setIsSuccessModalOpen(true);
+            toast.success("Orden de servicio actualizada");
         }
     }
 
@@ -157,7 +155,7 @@ function EditGroomingOrder() {
 
     return (
         <section className=" w-full bg-paper p-6 overflow-auto custom-scrollbar">
-            <div className="mb-4 pb-4 border-b-2 border-slate-200">
+            <div className="mb-4 pb-4 border-b border-slate-200">
                 <p className="text-xs font-semibold uppercase tracking-wide text-amber mb-1">Peluquería</p>
                 <h1 className="text-xl md:text-2xl font-medium text-ink flex items-center">
                     <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-amber mr-2" />
@@ -166,7 +164,7 @@ function EditGroomingOrder() {
             <div className="bg-paper px-4 py-2 rounded-2xl mb-4 border border-slate-200 shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="col-span-2">
-                        <label className="block text-slate mb-1">Propietario</label>
+                        <label className="block text-sm font-medium text-ink mb-1">Propietario</label>
                         <input
                             className="w-full border-slate-200 focus:outline-none"
                             value={petInQueueGrommingData?.ownerName}
@@ -174,7 +172,7 @@ function EditGroomingOrder() {
                         />
                     </div>
                     <div className="col-span-2">
-                        <label className="block text-slate mb-1">Mascota</label>
+                        <label className="block text-sm font-medium text-ink mb-1">Mascota</label>
                         <input
                             className="w-full border-slate-200 focus:outline-none"
                             value={`${petInQueueGrommingData?.petData?.petName} (${petInQueueGrommingData?.petData?.species} | ${petInQueueGrommingData?.petData?.breed} | #HC: ${petInQueueGrommingData?.petData?.hc})`}
@@ -182,7 +180,7 @@ function EditGroomingOrder() {
                         />
                     </div>
                     <div className="col-span-2">
-                        <label className="block text-slate mb-1">Telefonos</label>
+                        <label className="block text-sm font-medium text-ink mb-1">Telefonos</label>
                         <input
                             className="w-full border-slate-200 focus:outline-none"
                             value={`${clientData?.phone1} | ${clientData?.phone2}`}
@@ -191,26 +189,26 @@ function EditGroomingOrder() {
                     </div>
 
                     <div className="col-span-2">
-                        <label className="block text-slate mb-1">Dirección</label>
+                        <label className="block text-sm font-medium text-ink mb-1">Dirección</label>
                         <input
                             value={clientData?.address}
-                            className=" w-full border-slate-200 rounded-lg text-slate py-1 px-4 bg-white focus:outline-none"
+                            className=" w-full border border-slate-200 rounded-xl text-slate py-1 px-4 bg-white focus:outline-none"
                             disabled
                         />
                     </div>
                     <div className='col-span-2'>
-                        <label className="block text-slate mb-1">Referencias</label>
+                        <label className="block text-sm font-medium text-ink mb-1">Referencias</label>
                         <input
                             type="text"
-                            className=" w-full border-slate-200 rounded-lg text-slate py-1 px-4 bg-white focus:outline-none"
+                            className=" w-full border border-slate-200 rounded-xl text-slate py-1 px-4 bg-white focus:outline-none"
                             value={clientData?.reference}
                             disabled
                         />
                     </div>
 
                     <div className='col-span-2'>
-                        <label className="block text-slate mb-1">Empresa</label>
-                        <select className="w-full border border-slate-200 rounded-lg py-1 px-4 bg-white text-ink hover:border-primary focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm">
+                        <label className="block text-sm font-medium text-ink mb-1">Empresa</label>
+                        <select className="w-full border border border-slate-200 rounded-xl py-1 px-4 bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary text-sm">
                             <option>VETERINARIA ARIEL'S E.I.R.L 0000 - 20608438719</option>
                         </select>
                         <span className="text-sm text-slate mt-1">
@@ -223,29 +221,29 @@ function EditGroomingOrder() {
             <div className="bg-paper p-4 rounded-2xl shadow-sm border border-slate-200">
                 <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
                     <div className='w-full md:w-[420px]'>
-                        <label className="block text-slate mb-1">Almacén de origen</label>
-                        <select className="w-full border-slate-200 border rounded-lg py-1 px-4 bg-white text-ink hover:border-primary focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none">
+                        <label className="block text-sm font-medium text-ink mb-1">Almacén de origen</label>
+                        <select className="w-full border border border-slate-200 rounded-xl py-1 px-4 bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary">
                             <option>ALMACEN PRODUCTOS P/VENTAS</option>
                         </select>
                     </div>
                     <div className='w-full'>
-                        <label className="block text-slate mb-1">Buscar y agregar productos y/o servicios:</label>
+                        <label className="block text-sm font-medium text-ink mb-1">Buscar y agregar productos y/o servicios:</label>
                         <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                     </div>
                 </div>
 
                 <div className='overflow-x-auto'>
-                    <table className="w-full border border-slate-200 rounded-lg mt-8">
+                    <table className="min-w-full rounded-xl mt-8">
                         <thead>
-                            <tr className="bg-slate-100 border-b border-slate-200 text-slate py-2 px-4">
-                                <th className="text-center">Concepto</th>
-                                <th className="text-center">Valor Unitario</th>
-                                <th className="text-center">Cantidad</th>
-                                <th className="text-center">Sub Total</th>
-                                <th className="text-center">Impuestos</th>
-                                <th className="text-center">Total</th>
-                                <th className="text-center">Mascota</th>
-                                <th className="text-center">Opciones</th>
+                            <tr className="border-b border-slate-200">
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Concepto</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Valor Unitario</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Cantidad</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Sub Total</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Impuestos</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Total</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Mascota</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -256,7 +254,7 @@ function EditGroomingOrder() {
                                     </td>
                                     <td className='py-2 px-4 text-center'>
                                         <span
-                                            className='border border-slate-200 bg-white px-2 py-1 rounded-lg text-center w-12 cursor-pointer text-primary font-medium'
+                                            className='border border-slate-200 bg-white px-2 py-1 rounded-xl text-center w-12 cursor-pointer text-primary font-medium'
                                             onClick={() => {
                                                 setProductToEdit(product)
                                                 setIsPriceModalOpen(true)
@@ -285,7 +283,7 @@ function EditGroomingOrder() {
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
                                     <td className='py-2 px-4 text-center'>
-                                        <span className='border border-slate-200 bg-white px-2 py-1 rounded-lg text-center w-12 cursor-pointer text-ink'>
+                                        <span className='border border-slate-200 bg-white px-2 py-1 rounded-xl text-center w-12 cursor-pointer text-ink'>
                                             0.00
                                         </span>
                                     </td>
@@ -329,19 +327,6 @@ function EditGroomingOrder() {
                         />
                     )
                 }
-                {
-                    isSuccessModalOpen && (
-                        <SuccessModal
-                            onClose={() => setIsSuccessModalOpen(false)}
-                        />
-                    )
-                }
-
-                {
-                    isErrorModalOpen && (
-                        <ErrorModal onClose={() => setIsErrorModalOpen(false)} typeOfError="emptyList" />
-                    )
-                }
 
                 <div className="bg-paper pt-6 pb-1 rounded-xl mt-4">
                     <div className="w-full lg:w-1/2 ml-auto">
@@ -364,7 +349,7 @@ function EditGroomingOrder() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {healthObservations.map((section, index) => (
                         <div key={index}>
-                            <h3 className="font-semibold text-slate mb-2">{section.title}</h3>
+                            <h3 className="font-semibold text-ink mb-2">{section.title}</h3>
                             <ul className="space-y-2">
                                 {section.items.map((item, idx) => (
                                     <li key={idx} className="flex items-center text-slate text-sm">
@@ -373,7 +358,7 @@ function EditGroomingOrder() {
                                             id={`${section.title}-${item}`}
                                             onChange={() => handleObservationChange(item)}
                                             checked={selectedObservations.includes(item)}
-                                            className="mr-2 h-3 w-3 text-amber bg-white border-slate-200 rounded focus:ring-primary/30 focus:border-primary"
+                                            className="mr-2 h-4 w-4 text-primary bg-white border-slate-200 rounded focus:ring-primary/30 focus:border-primary"
                                         />
                                         <label htmlFor={`${section.title}-${item}`}>{item}</label>
                                     </li>
@@ -385,9 +370,9 @@ function EditGroomingOrder() {
             </div >
 
             <div className='bg-paper px-4 py-2 mb-4 mt-4 rounded-2xl border border-slate-200'>
-                <label className="block text-slate">Observaciones o comentarios de esta orden de servicio</label>
+                <label className="block text-sm font-medium text-ink">Observaciones o comentarios de esta orden de servicio</label>
                 <textarea
-                    className="w-full mt-3 border border-slate-200 rounded-lg p-3 bg-white text-ink placeholder-slate max-h-60 min-h-20 hover:border-primary focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
+                    className="w-full mt-3 border border border-slate-200 rounded-xl p-3 bg-white text-ink placeholder-slate max-h-60 min-h-20 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     rows={3}
                     placeholder="Añadir observaciones..."
                     value={notes}
@@ -402,7 +387,7 @@ function EditGroomingOrder() {
                     <input
                         type="date"
                         id="date"
-                        className="w-full py-1 px-4 mt-1.5 border border-slate-200 rounded-lg bg-white text-ink hover:border-primary focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
+                        className="w-full py-1 px-4 mt-1.5 border border border-slate-200 rounded-xl bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     />
                 </div>
 
@@ -411,7 +396,7 @@ function EditGroomingOrder() {
                     <select
                         name="type"
                         id="typeService"
-                        className="w-full py-1 px-4 mt-1.5 border border-slate-200 rounded-lg bg-white text-ink hover:border-primary focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
+                        className="w-full py-1 px-4 mt-1.5 border border border-slate-200 rounded-xl bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     >
                         <option value="baño">Baño</option>
                     </select>
@@ -422,7 +407,7 @@ function EditGroomingOrder() {
                     <input
                         type="text"
                         placeholder="Anotaciones..."
-                        className="w-full py-1 px-4 mt-1.5 border border-slate-200 rounded-lg bg-white text-ink placeholder-slate hover:border-primary focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
+                        className="w-full py-1 px-4 mt-1.5 border border border-slate-200 rounded-xl bg-white text-ink placeholder-slate focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     />
                 </div>
             </div>

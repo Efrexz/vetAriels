@@ -35,18 +35,18 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
     }
 
     return (
-        <div className="flex items-center justify-center space-x-2">
+        <div className="flex items-center justify-center gap-1.5">
             <button
                 type='button'
-                className="bg-danger text-white px-1 py-1 rounded hover:bg-danger focus:outline-none disabled:bg-red-300 disabled:cursor-not-allowed"
+                className="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate hover:text-danger hover:border-danger/40 hover:bg-danger/5 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 onClick={decreaseQuantity}
                 disabled={isDecreaseDisabled}
             >
-                <MinusIcon className="w-4 h-4" />
+                <MinusIcon className="w-3.5 h-3.5" />
             </button>
 
             <div
-                className="border border-gray-300 bg-white rounded text-center w-6 h-6 cursor-pointer text-black"
+                className="min-w-[28px] h-7 flex items-center justify-center border border-slate-200 bg-white rounded-lg cursor-pointer text-ink text-sm font-medium font-mono tabular-nums hover:border-primary/40 transition-colors"
                 onClick={() => openQuantityModal()}
             >
                 {itemCount}
@@ -54,11 +54,11 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
 
             <button
                 type='button'
-                className="bg-primary text-white px-1 py-1 rounded hover:opacity-90 focus:outline-none disabled:bg-green-300 disabled:cursor-not-allowed"
+                className="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 onClick={increaseQuantity}
                 disabled={isIncreaseDisabled}
             >
-                <PlusIcon className="w-4 h-4" />
+                <PlusIcon className="w-3.5 h-3.5" />
             </button>
         </div>
     );

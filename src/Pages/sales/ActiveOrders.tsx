@@ -60,6 +60,9 @@ function ActiveOrders() {
   return (
     <section className="w-full">
       <div className="mb-6">
+        <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
+          Ventas
+        </span>
         <h1 className="text-2xl font-bold font-display text-ink">Órdenes Activas</h1>
       </div>
 

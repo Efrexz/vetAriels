@@ -2,8 +2,7 @@ import { useState, ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGlobal } from '@context/GlobalContext';
 import { User } from '@t/user.types';
-import { ErrorModal } from '@components/modals/ErrorModal';
-import { SuccessModal } from '@components/modals/SuccessModal';
+import { useToast } from '@context/ToastContext';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import KeyIcon from '@assets/keyIcon.svg?react';
 import InfoIcon from '@assets/infoIcon.svg?react';
@@ -33,9 +32,7 @@ function UserPassword() {
     const [formData, setFormData] = useState<PasswordFormData>({ oldPassword: '', newPassword: '' });
     const [errors, setErrors] = useState<FormErrors>({});
     const navigate = useNavigate();
-    //Modales
-    const [isErrorModalOpen, setErrorModalOpen] = useState<boolean>(false);
-    const [isSuccessModalOpen, setSuccessModalOpen] = useState<boolean>(false);
+    const { toast } = useToast();
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { id, value } = e.target;
@@ -68,7 +65,7 @@ function UserPassword() {
         }
 
         if (formData.oldPassword !== activeUser.password) {
-            setErrorModalOpen(true);
+            toast.error("La contrasena ingresada no es correcta");
             return;
         }
 
@@ -77,7 +74,7 @@ function UserPassword() {
         };
 
         updateUserData(activeUser.id, updatedData);
-        setSuccessModalOpen(true);
+        toast.success("Contrasena actualizada correctamente");
     }
 
     return (
@@ -122,16 +119,6 @@ function UserPassword() {
                     Guardar cambios
                 </button>
             </div>
-            {
-                isErrorModalOpen && (
-                    <ErrorModal onClose={() => setErrorModalOpen(false)} typeOfError="password" />
-                )
-            }
-            {
-                isSuccessModalOpen && (
-                    <SuccessModal onClose={() => setSuccessModalOpen(false)} />
-                )
-            }
         </div>
     );
 }

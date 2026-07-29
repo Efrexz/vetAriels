@@ -49,7 +49,6 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
         cost: "0",
         salePrice: "0",
     });
-    console.log(formData);
 
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -110,30 +109,30 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
 
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll custom-scrollbar">
-            <div className="bg-paper p-8 rounded-2xl border border-slate-200 w-full h-auto max-w-5xl mt-8 mx-4 shadow-sm modal-appear">
+            <div className="bg-paper p-6 rounded-2xl border border-slate-200 w-full h-auto max-w-5xl mt-8 mx-4 shadow-sm modal-appear">
                 <h2 className="text-xl font-bold text-ink font-display border-b border-slate-200 pb-2 mb-4">Agregar nuevo servicio</h2>
-                <form className="grid gird-cols-1 sm:grid-cols-4 gap-4 border-b border-slate-200 pb-6 mb-4">
+                <form className="grid grid-cols-1 sm:grid-cols-4 gap-4 border-b border-slate-200 pb-6 mb-4">
                     {formFields.map((field, index) => (
                         <div
                             key={index}
                             className={`${field.fullWidth ? 'sm:col-span-4' : field.smallWidth ? 'sm:col-span-1' : 'sm:col-span-2'}`}
                         >
-                            <label className="block text-sm font-medium text-slate mb-2">{field.label}</label>
+                            <label className="block text-sm font-medium text-ink mb-2">{field.label}</label>
                             {field.type === 'select' ? (
                                 <select
                                     name={field.name}
                                     value={formData[field.name as keyof FormDataState]}
                                     onChange={handleChange}
-                                    className={`border rounded-lg p-2 w-full bg-white text-ink ${errors[field.name] ? 'border-danger' : 'border-slate-200 hover:border-primary focus-within:border-primary focus:outline-none'}`}
+                                    className={`border border-slate-200 rounded-xl p-2 w-full bg-white text-ink text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary ${errors[field.name] ? 'border-danger' : ''}`}
                                 >
                                     {field.options?.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
                                     ))}
                                 </select>
                             ) : (
-                                <div className="flex w-full rounded-lg border border-slate-200 hover:border-primary focus-within:border-primary">
+                                <div className="flex w-full rounded-xl border border-slate-200 overflow-hidden focus-within:ring-1 focus-within:ring-primary/30 focus-within:border-primary transition-colors bg-white">
                                     {field.icon && (
-                                        <div className="flex items-center justify-center bg-white px-3">
+                                        <div className="flex items-center justify-center bg-white px-3 border-r border-slate-200">
                                             <field.icon className="w-5 h-5 text-slate" />
                                         </div>
                                     )}
@@ -143,7 +142,7 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
                                         placeholder={field.placeholder}
                                         value={formData[field.name as keyof FormDataState]}
                                         onChange={handleChange}
-                                        className={`py-2 px-4 w-full bg-white text-ink focus:outline-none focus:ring-0 focus:border-transparent border-l border-slate-200 ${errors[field.name] ? 'border border-danger' : ''}`}
+                                        className={`py-2 px-4 w-full bg-white text-ink text-sm focus:outline-none ${errors[field.name] ? 'border border-danger rounded-r-xl' : ''}`}
                                     />
                                 </div>
                             )}

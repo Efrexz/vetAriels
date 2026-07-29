@@ -113,10 +113,10 @@ function BalanceReport() {
                     </span>
                     <input
                         type="date"
-                        className="px-4 py-2 text-sm w-full bg-white text-ink rounded-r-lg focus:outline-none"
+                        className="px-4 py-2 text-sm w-full bg-white text-ink rounded-r-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                     />
                 </div>
-                <select className="border border-slate-200 rounded-lg py-2 px-3 text-sm bg-white text-ink focus:outline-none focus:border-primary hover:border-primary transition-colors w-full md:w-[20%]">
+                <select className="border border-slate-200 rounded-lg py-2 px-3 text-sm bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary transition-colors w-full md:w-[20%]">
                     <option value="">Seleccione empresa</option>
                 </select>
                 <button className="flex items-center gap-2 px-5 py-2 bg-transparent text-amber font-semibold rounded-lg border border-amber/40 w-full md:w-auto justify-center transition-all hover:bg-amber/10 text-sm">

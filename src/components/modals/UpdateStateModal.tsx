@@ -38,19 +38,19 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps
         <div className="fixed inset-0 bg-ink/40 flex items-start justify-center z-50 pt-20">
             <div className="bg-paper rounded-2xl p-6 w-full max-w-lg shadow-sm modal-appear border border-slate-200 m-3">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-medium text-ink font-display">
+                    <h2 className="text-lg font-semibold font-display text-ink">
                         Actualizar estado
                     </h2>
                 </div>
 
                 <div className="mb-6 border-t border-slate-200 pt-4">
-                    <label htmlFor="order-status" className="block text-slate font-medium mb-2">
+                    <label htmlFor="order-status" className="block text-ink font-medium mb-2">
                         Estado:
                     </label>
                     <select
                         id="order-status"
                         name="orderStatus"
-                        className="w-full bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary px-4 py-2 text-ink"
+                        className="w-full bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary px-4 py-2 text-ink"
                         value={state}
                         onChange={(e) => setState(e.target.value as QueueItemState)}
                     >
@@ -65,17 +65,17 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps
                     </select>
                 </div>
 
-                <div className="flex justify-end space-x-2 border-t border-slate-200 pt-4 text-sm">
+                <div className="flex justify-end space-x-2 border-t border-slate-200 pt-4">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 bg-white text-ink rounded-lg hover:bg-slate-100 transition-colors"
+                        className="px-4 py-2 border border-slate-200 bg-white text-slate rounded-xl hover:bg-slate-100 transition-colors font-medium text-sm"
                     >
-                        CANCELAR
+                        Cancelar
                     </button>
                     <button
                         type="button"
-                        className="px-4 py-2 bg-primary hover:opacity-90 text-white rounded-lg flex items-center transition-colors"
+                        className="px-5 py-2 bg-primary hover:opacity-90 text-white rounded-xl flex items-center transition-colors text-sm font-semibold font-display shadow-sm shadow-primary/25"
                         onClick={updateState}
                     >
                         <DiskIcon className="w-5 h-5 mr-2" />

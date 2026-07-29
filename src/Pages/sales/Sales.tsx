@@ -167,8 +167,8 @@ function Sales() {
                 <div className="flex flex-col md:flex-row items-center gap-4">
                     <ClientSearchInput mode={"sales"} />
                     <button
-                        className={`flex justify-center items-center text-white font-bold py-1.5 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full md:w-[200px] transition-all
-                            ${clientData ? "bg-primary hover:opacity-90 shadow-sm shadow-primary/25" : "bg-white text-slate cursor-not-allowed"}`}
+                        className={`flex justify-center items-center text-white font-bold py-1.5 px-4 rounded-xl focus:outline-none w-full md:w-[200px] transition-all
+                            ${clientData ? "bg-primary hover:opacity-90 shadow-sm shadow-primary/25" : "bg-slate-100 text-slate/40 cursor-not-allowed"}`}
                         type="button"
                         disabled={!clientData}
                         onClick={() => navigate(`/clients/client/${clientData?.id}/update`)}
@@ -194,7 +194,7 @@ function Sales() {
                                     <button
                                         onMouseEnter={() => setHoveredPetId(pet.id)}
                                         onMouseLeave={() => setHoveredPetId(null)}
-                                        className="py-1 px-4 bg-paper hover:bg-slate-100 text-teal rounded-xl border border-slate-300 focus:outline-none focus:border-teal flex gap-1 items-center w-full md:w-auto transition-all"
+                                        className="py-1 px-4 bg-paper hover:bg-slate-100 text-primary rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary flex gap-1 items-center w-full md:w-auto transition-all"
                                         onClick={() => setActivePetMenu(activePetMenu === pet.id ? null : pet.id)}
                                     >
                                         {pet.petName}
@@ -230,7 +230,7 @@ function Sales() {
 
                                     {/* Información al hacer hover */}
                                     {hoveredPetId === pet.id && (
-                                        <div className="absolute left-0 bottom-full w-[160px] md:w-52 bg-white text-ink p-4 rounded-lg shadow-md mb-2 z-20">
+                                        <div className="absolute left-0 bottom-full w-[160px] md:w-52 bg-white text-ink p-4 rounded-lg shadow-sm mb-2 z-20">
                                             <span className="block text-sm">#HC: {pet.hc}</span>
                                             <span className="block text-sm">
                                                 {petAge.years} {petAge.years === 1 ? "año" : "años"} y{" "}
@@ -259,7 +259,7 @@ function Sales() {
             <div className="bg-paper rounded-2xl px-4 sm:px-6 md:px-10 py-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 border border-slate-200 shadow-sm">
                 <button
                     className={`text-white font-bold py-2 px-4 sm:px-6 md:px-10 rounded-xl focus:outline-none w-full transition-all
-                    ${petsByOwner.length !== 0 ? "bg-primary hover:opacity-90 shadow-sm shadow-primary/25" : "bg-white text-slate cursor-not-allowed"}`}
+                    ${petsByOwner.length !== 0 ? "bg-primary hover:opacity-90 shadow-sm shadow-primary/25" : "bg-slate-100 text-slate/40 cursor-not-allowed"}`}
                     disabled={ petsByOwner.length === 0}
                     onClick={() => setQueueModalOpen(true)}
                 >
@@ -267,7 +267,7 @@ function Sales() {
                 </button>
                 <button
                     className={`text-white font-bold py-2 px-4 sm:px-6 md:px-10 rounded-xl focus:outline-none w-full transition-all
-                    ${petsByOwner.length !== 0 ? "bg-teal hover:opacity-90 shadow-sm shadow-teal/25" : "bg-white text-slate cursor-not-allowed"}`}
+                    ${petsByOwner.length !== 0 ? "bg-teal hover:opacity-90 shadow-sm shadow-teal/25" : "bg-slate-100 text-slate/40 cursor-not-allowed"}`}
                     disabled={petsByOwner.length === 0}
                     onClick={() => {
                         //esto para evitar el error que lanza vscode de que clientData puede ser undefined
@@ -290,7 +290,7 @@ function Sales() {
                 )
             }
 
-            <div className="bg-paper shadow-md rounded-2xl px-4 py-3 border border-slate-200">
+            <div className="bg-paper shadow-sm rounded-2xl px-4 py-3 border border-slate-200">
                 {clientData && (
                     <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-6'>
                         <div className='col-span-1'>
@@ -298,7 +298,7 @@ function Sales() {
                             <select
                                 id='store'
                                 name="store"
-                                className="w-full rounded-xl border-slate-300 border-2 bg-paper text-ink py-1 px-4 hover:border-teal focus:border-teal focus:outline-none transition-colors"
+                                className="w-full rounded-xl border-slate-200 border bg-paper text-ink py-1 px-4 focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none transition-colors"
                             >
                                 <option value="">VET ARIEL</option>
                             </select>
@@ -316,30 +316,30 @@ function Sales() {
                 <div className="overflow-x-auto custom-scrollbar border border-slate-200 rounded-xl">
                     <table className="min-w-full rounded-xl overflow-hidden">
                         <thead>
-                            <tr className="bg-white text-ink uppercase text-xs font-bold">
-                                <th className="py-2 px-3 text-center border-slate-300 border-r">
-                                    <input type="checkbox" className="form-checkbox text-blue-500 rounded-sm focus:ring-blue-500" />
+                            <tr className="border-b border-slate-200">
+                                <th className="py-3 px-3 text-center w-10">
+                                    <input type="checkbox" className="form-checkbox h-4 w-4 rounded border-slate-200 text-primary focus:ring-primary/30" />
                                 </th>
                                 {tableCategories.map((category, index) => (
                                     <th
                                         key={index}
-                                        className="py-2 px-3 text-center font-bold border-r border-slate-300"
+                                        className="py-3 px-3 text-center text-xs font-semibold uppercase tracking-wider text-slate"
                                     >
                                         {category}
                                     </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody className="text-ink text-xs sm:text-sm font-light ">
+                        <tbody className="text-ink text-sm">
                             {selectedProducts.map((product) => (
-                                <tr key={product.provisionalId} className="hover:bg-slate-100 transition-colors border-b border-slate-200">
-                                    <td className="py-2 px-3 text-center border-x border-slate-200">
-                                        <input type="checkbox" className="form-checkbox text-blue-500 rounded-sm focus:ring-blue-500" />
+                                <tr key={product.provisionalId} className="hover:bg-slate-50/60 transition-colors border-b border-slate-100">
+                                    <td className="py-2 px-3 text-center">
+                                        <input type="checkbox" className="form-checkbox h-4 w-4 rounded border-slate-200 text-primary focus:ring-primary/30" />
                                     </td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center whitespace-nowrap">{product.productName || product.serviceName}</td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center ">
+                                    <td className="py-2 px-3 text-center whitespace-nowrap">{product.productName || product.serviceName}</td>
+                                    <td className="py-2 px-3 text-center">
                                         <span
-                                            className='inline-block bg-paper border border-slate-300 px-2 py-1 rounded-lg cursor-pointer hover:border-teal transition-colors text-xs'
+                                            className='inline-block bg-paper border border-slate-200 px-2 py-1 rounded-lg cursor-pointer hover:border-primary transition-colors text-xs'
                                             onClick={() => {
                                                 setProductToEdit(product)
                                                 setIsPriceModalOpen(true)
@@ -349,7 +349,7 @@ function Sales() {
                                             {product.salePrice}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center">
+                                    <td className="py-2 px-3 text-center">
                                         <QuantityCounter
                                             itemCount={product.quantity}
                                             changeQuantity={(newQuantity) => {
@@ -363,19 +363,19 @@ function Sales() {
                                                 setProductToEdit(product)
                                             }} />
                                     </td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center">
+                                    <td className="py-2 px-3 text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                                        <span className='inline-block bg-paper border border-slate-300 px-2 py-1 rounded-lg text-xs'>
+                                    <td className="py-2 px-3 text-center">
+                                        <span className='inline-block bg-paper border border-slate-200 px-2 py-1 rounded-lg text-xs'>
                                             0.00
                                         </span>
                                     </td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center">
+                                    <td className="py-2 px-3 text-center">
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center">
-                                        <select className="bg-paper border border-slate-300 rounded-lg p-1 text-sm focus:outline-none focus:border-teal transition-colors">
+                                    <td className="py-2 px-3 text-center">
+                                        <select className="bg-paper border border-slate-200 rounded-lg p-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary transition-colors">
                                             {
                                                 petsByOwner.map((pet, index) => (
                                                     <option key={index} value={pet.petName}>{pet.petName}</option>
@@ -383,13 +383,13 @@ function Sales() {
                                             }
                                         </select>
                                     </td>
-                                    <td className="py-2 px-3 border-r border-slate-200 text-center">
+                                    <td className="py-2 px-3 text-center">
                                         <div className="flex justify-center items-center space-x-2">
-                                            <button className="text-orange-400 hover:text-orange-500 transition-colors">
+                                            <button className="text-amber hover:text-amber-dark transition-colors">
                                                 <GiftIcon className='w-4 h-4 cursor-pointer' />
                                             </button>
                                             <button
-                                                className="text-danger hover:text-red-600 transition-colors"
+                                                className="text-danger hover:text-danger/70 transition-colors"
                                                 onClick={() => {
                                                     if (clientId) {
                                                         removeProductFromClient(clientId, product.provisionalId);
@@ -446,10 +446,10 @@ function Sales() {
                     </div>
                 </div>
 
-            <div className="bg-paper rounded-2xl px-6 py-3 mt-4 flex justify-center md:justify-end border border-slate-200 shadow-md">
+            <div className="bg-paper rounded-2xl px-6 py-3 mt-4 flex justify-center md:justify-end border border-slate-200 shadow-sm">
                 <button
-                    className={`font-bold py-1.5 px-6 rounded-xl transition-all shadow-md
-                    ${!clientData || selectedProducts.length < 1 ? "bg-slate-400 text-slate cursor-not-allowed" : "bg-success hover:opacity-90 text-white shadow-sm shadow-success/25"}`}
+                    className={`font-bold py-1.5 px-6 rounded-xl transition-all shadow-sm
+                    ${!clientData || selectedProducts.length < 1 ? "bg-slate-200 text-slate/50 cursor-not-allowed" : "bg-success hover:opacity-90 text-white shadow-sm shadow-success/25"}`}
                     type="button"
                     onClick={() => {
                         if (clientData) {

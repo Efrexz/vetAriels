@@ -148,7 +148,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
 
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll" >
-            <div className="bg-paper border border-slate-200 py-4 px-8 rounded-2xl w-full h-auto max-w-5xl mt-6 mx-4 modal-appear">
+            <div className="bg-paper border border-slate-200 p-6 rounded-2xl w-full h-auto max-w-5xl mt-6 mx-4 shadow-sm modal-appear">
                 <h2 className="text-xl font-bold text-ink font-display mb-2 border-b border-slate-200 pb-2">
                     Agregar nuevo producto
                 </h2>
@@ -164,7 +164,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
-                                    className={`border border-slate-200 rounded-md p-2 w-full bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary ${errors[field.name] ? 'border-danger' : ''}`}
+                                    className={`border border-slate-200 rounded-xl p-2 w-full bg-white text-ink text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary ${errors[field.name] ? 'border-danger' : ''}`}
                                 >
                                     {field.options?.map((option, i) => (
                                         <option key={i} value={option}>{option}</option>
@@ -172,9 +172,9 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                 </select>
                             ) : (
                                 <div>
-                                    <div className="flex w-full rounded-md transition-colors">
+                                    <div className="flex w-full rounded-xl border border-slate-200 overflow-hidden focus-within:ring-1 focus-within:ring-primary/30 focus-within:border-primary transition-colors bg-white">
                                         {field.icon && (
-                                            <div className="flex items-center justify-center bg-white px-3">
+                                            <div className="flex items-center justify-center bg-white px-3 border-r border-slate-200">
                                                 <field.icon className="w-5 h-5 text-slate" />
                                             </div>
                                         )}
@@ -184,7 +184,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                                             placeholder={field.placeholder}
                                             value={formData[field.name]}
                                             onChange={handleChange}
-                                            className={`p-2 w-full bg-white border border-slate-200 text-ink  focus:outline-none hover:border-primary focus:border-primary`}
+                                            className={`p-2 w-full bg-white text-ink text-sm focus:outline-none ${errors[field.name] ? 'border border-danger' : ''}`}
                                         />
                                     </div>
                                     {field.infoMessage && (

@@ -2,6 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { NavBar } from "@components/layout/NavBar";
 import { SideBarMenu } from "./SideBarMenu";
 import { useGlobal } from "@context/GlobalContext";
+import { ToastContainer } from "@components/ui/Toast";
 import { applyThemeColor } from "@utils/theme.utils";
 
 interface LayoutProps {
@@ -35,11 +36,13 @@ function Layout({ children }: LayoutProps) {
             <div className="flex-1 flex flex-col min-w-0 h-screen">
                 <NavBar />
                 <div className="flex-1 overflow-auto custom-scrollbar">
-                    <div className="p-4 sm:p-6">
+                    <div className="p-4 sm:p-6 animate-fade-in">
                         {children}
                     </div>
                 </div>
             </div>
+
+            <ToastContainer />
         </div>
     );
 }

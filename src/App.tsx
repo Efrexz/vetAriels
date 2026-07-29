@@ -4,9 +4,9 @@ import { ClientsProvider } from './context/ClientsContext';
 import { ProductsAndServicesProvider } from './context/ProductsAndServicesContext';
 import { FinancialProvider } from './context/FinancialContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ToastProvider } from './context/ToastContext';
 import { DashBoard } from './Pages/dashboard/DashBoard';
 import { Login } from './Pages/Login';
-import {RegisterForm} from './Pages/Register';
 import { Sales } from './Pages/sales/Sales';
 import { ActiveOrders } from './Pages/sales/ActiveOrders';
 import { Invoices } from './Pages/sales/Invoices';
@@ -54,9 +54,10 @@ function App() {
 
   return (
     <GlobalProvider>
-      <FinancialProvider>
-        <ClientsProvider>
-          <ProductsAndServicesProvider>
+      <ToastProvider>
+        <FinancialProvider>
+          <ClientsProvider>
+            <ProductsAndServicesProvider>
             {/* Solo renderizar Layout si no estamos en la ruta de login */}
             {location.pathname !== '/login' ? (
               <Layout>
@@ -117,6 +118,7 @@ function App() {
           </ProductsAndServicesProvider>
         </ClientsProvider>
       </FinancialProvider>
+      </ToastProvider>
     </GlobalProvider>
   );
 }

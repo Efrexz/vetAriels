@@ -7,12 +7,12 @@ import { User } from "@t/user.types";
 import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { ProductSearchInput } from '@components/search/ProductSearchInput';
 import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
-import { ErrorModal } from '@components/modals/ErrorModal';
 import { generateUniqueId } from '@utils/idGenerator';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { FormField } from '@components/ui/FormField';
 import { InfoBanner } from '@components/ui/InfoBanner';
 import { StatsCard } from '@components/ui/StatsCard';
+import { useToast } from '@context/ToastContext';
 import DocumentOutIcon from '@assets/documentOutIcon.svg?react';
 import DocumentJoinIcon from '@assets/documentJoinIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -40,12 +40,12 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
   const { users, activeUser } = useGlobal();
   const navigate = useNavigate();
   const isRestock = typeOfOperation === 'restock';
+  const { toast } = useToast();
 
   const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
   const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isOpenErrorModal, setIsOpenErrorModal] = useState(false);
 
   const userOptions = users.map((user: User) => `${user.name} ${user.lastName}`);
 
@@ -98,7 +98,7 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
   }
 
   function submitOrder() {
-    if (!validateForm()) { setIsOpenErrorModal(true); return; }
+    if (!validateForm()) { toast.error("Corrige los errores del formulario"); return; }
     const now = new Date();
     const newOrder: InventoryOperation = {
       id: generateUniqueId(),
@@ -260,7 +260,6 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
         mode="modal"
       />
 
-      {isOpenErrorModal && <ErrorModal onClose={() => setIsOpenErrorModal(false)} typeOfError="form" />}
       {isQuantityModalOpen && productToEdit && (
         <QuantityModificationModal
           quantity={productToEdit.quantity}

@@ -2,7 +2,7 @@ import { ChangeEvent,useState, useEffect } from 'react';
 import { useGlobal } from '@context/GlobalContext';
 import { User } from '@t/user.types';
 import { useParams } from 'react-router-dom';
-import { SuccessModal } from '@components/modals/SuccessModal';
+import { useToast } from '@context/ToastContext';
 import PlusIcon from '@assets/plusIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import phoneIcon from '@assets/phoneIcon.svg?react';
@@ -21,9 +21,7 @@ type FormErrors = Partial<Record<keyof Omit<FormDataState, 'email' | 'role'>, st
 function UserProfile() {
     const { activeUser, updateUserData } = useGlobal();
     const { id } = useParams<{ id: string }>();
-
-    //Modal
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const { toast } = useToast();
 
     const [formData, setFormData] = useState<FormDataState>({
         email: activeUser?.email || '',
@@ -73,7 +71,7 @@ function UserProfile() {
             lastName: formData.lastName.trim(),
         };
         updateUserData(id, updatedUserData);
-        setIsModalOpen(true)
+        toast.success("Perfil actualizado correctamente");
     }
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -176,11 +174,6 @@ function UserProfile() {
                     Guardar cambios
                 </button>
             </div>
-            {
-                isModalOpen && (
-                    <SuccessModal onClose={() => setIsModalOpen(false)} />
-                )
-            }
         </div>
     );
 }

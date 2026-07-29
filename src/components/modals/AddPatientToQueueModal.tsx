@@ -53,18 +53,18 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatient
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll p-3">
             <div className="bg-paper rounded-2xl border border-slate-200 w-full max-w-3xl p-6 shadow-sm modal-appear mx-auto space-y-6">
-                <h2 className="text-xl font-semibold text-ink font-display border-b border-slate-200 pb-2">Generar Consulta</h2>
+                <h2 className="text-lg font-semibold font-display text-ink border-b border-slate-200 pb-2">Generar Consulta</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col">
-                        <label htmlFor="date" className="text-sm font-medium mb-1 text-slate">
+                        <label htmlFor="date" className="text-sm font-medium mb-1 text-ink">
                             Fecha de atención
                         </label>
                         <div className="relative">
                             <input
                                 type="text"
                                 id="date"
-                                className="border border-slate-200 rounded-lg p-2 w-full bg-white text-ink cursor-not-allowed"
+                                className="border border-slate-200 rounded-xl p-2 w-full bg-white text-ink cursor-not-allowed"
                                 value={`${currentDate} ${currentTime}`}
                                 disabled
                             />
@@ -72,12 +72,12 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatient
                     </div>
 
                     <div className="flex flex-col">
-                        <label htmlFor="doctor" className="text-sm font-medium mb-1 text-slate">
+                        <label htmlFor="doctor" className="text-sm font-medium mb-1 text-ink">
                             Médico asignado
                         </label>
                         <select
                             id="doctor"
-                            className="border border-slate-200 rounded-lg p-2 w-full bg-white text-ink hover:border-primary focus-within:border-primary focus:outline-none"
+                            className="border border-slate-200 rounded-xl p-2 w-full bg-white text-ink focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                             onChange={(e) => setSelectedDoctor(e.target.value)}
                         >
                             <option>Médico 1</option>
@@ -86,22 +86,22 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatient
                     </div>
 
                     <div className="flex flex-col">
-                        <label htmlFor="owner" className="text-sm font-medium mb-1 text-slate">
+                        <label htmlFor="owner" className="text-sm font-medium mb-1 text-ink">
                             Propietario
                         </label>
-                        <div className="flex items-center bg-white p-2 rounded-lg text-ink">
+                        <div className="flex items-center bg-white p-2 rounded-xl text-ink">
                             <RoleUserIcon className="w-5 h-5 mr-3 text-primary" />
                             <span>{clientData.firstName} {clientData.lastName}</span>
                         </div>
                     </div>
 
                     <div className="flex flex-col">
-                        <label htmlFor="pet" className="text-sm font-medium mb-1 text-slate">
+                        <label htmlFor="pet" className="text-sm font-medium mb-1 text-ink">
                             Mascota:
                         </label>
                         <select
                             id="pet"
-                            className={`border rounded-lg p-2 w-full bg-white text-ink ${isPetDataMissing ? "border-danger outline-none" : "border-slate-200 hover:border-primary focus-within:border-primary focus:outline-none"}`}
+                            className={`border rounded-xl p-2 w-full bg-white text-ink ${isPetDataMissing ? "border-danger outline-none" : "border-slate-200 focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"}`}
                             onChange={(e) => setSelectedPetId(e.target.value)}
                         >
                             {petsByOwner?.map((pet) => (
@@ -118,20 +118,20 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatient
                     <input
                         type="checkbox"
                         id="emergency"
-                        className="mr-2 h-4 w-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500"
+                        className="mr-2 h-4 w-4 text-primary bg-white border-slate-200 rounded focus:ring-primary/30 focus:border-primary"
                     />
-                    <label htmlFor="emergency" className="text-sm text-slate">
+                    <label htmlFor="emergency" className="text-sm text-ink">
                         Indicar atención como emergencia
                     </label>
                 </div>
 
                 <div className="flex flex-col border-b border-slate-200 pb-4">
-                    <label htmlFor="notes" className="text-sm font-medium mb-1 text-slate">
+                    <label htmlFor="notes" className="text-sm font-medium mb-1 text-ink">
                         Notas
                     </label>
                     <textarea
                         id="notes"
-                        className="border border-slate-200 rounded-lg p-2 w-full max-h-60 bg-white text-ink hover:border-primary focus-within:border-primary focus:outline-none"
+                        className="border border-slate-200 rounded-xl p-2 w-full max-h-60 bg-white text-ink focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
                         rows={4}
                         placeholder="Escribe las notas aquí..."
                         onChange={(e) => setNotes(e.target.value)}

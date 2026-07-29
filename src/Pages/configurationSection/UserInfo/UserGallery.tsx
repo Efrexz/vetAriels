@@ -16,7 +16,6 @@ function UserGallery() {
 
     const handleUpload = () => {
         if (selectedFile) {
-            console.log('Archivo seleccionado:', selectedFile);
         }
     };
 

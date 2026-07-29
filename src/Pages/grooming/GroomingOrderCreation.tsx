@@ -10,7 +10,7 @@ import { PriceModificationModal } from '@components/modals/PriceModificationModa
 import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
 import { ClientSearchInput } from '@components/search/ClientSearchInput';
 import { ActionButtons } from '@components/ui/ActionButtons';
-import { ErrorModal } from '@components/modals/ErrorModal';
+import { useToast } from '@context/ToastContext';
 import { generateUniqueId } from '@utils/idGenerator';
 import BathIcon from '@assets/bathIcon.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -21,10 +21,9 @@ function GroomingOrderCreation() {
     const { clients, petsData, addPetToQueueGrooming, petsInQueueGrooming } = useClients();
     const navigate = useNavigate();
     const { id: clientId } = useParams<{ id: string }>();
+    const { toast } = useToast();
 
     const [selectedProducts, setSelectedProducts] = useState<PurchasedItem[]>([]);
-
-    const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
 
     const [productToEdit, setProductToEdit] = useState<PurchasedItem | null>(null);
 
@@ -102,7 +101,7 @@ function GroomingOrderCreation() {
 
     function sendInfoToQueueGrooming() {
         if (selectedProducts.length < 1) {
-            setIsErrorModalOpen(true);
+            toast.error("Debe seleccionar al menos un producto o servicio");
             return;
         }
         const petSelectedData = petsData.find(pet => pet.petName === petSelectedName);
@@ -133,25 +132,25 @@ function GroomingOrderCreation() {
     }
 
     return (
-        <section className="bg-mist p-1 md:p-6 overflow-auto custom-scrollbar rounded-2xl">
-            <div className="mb-4 pb-4 border-b-2 border-slate-200">
-                <p className="text-xs font-semibold uppercase tracking-wide text-amber mb-1">Peluquería</p>
-                <h1 className="text-xl md:text-2xl font-medium text-ink flex items-center">
-                    <BathIcon className="w-6 sm:w-9 h-6 sm:h-9 text-amber mr-2" />
+        <section className="w-full">
+            <div className="mb-6">
+                <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">Peluquería</span>
+                <h1 className="text-2xl font-bold font-display text-ink">
+                    Nueva orden de servicio
                 </h1>
             </div>
             <div className="bg-paper px-4 py-3 rounded-2xl mb-4 border border-slate-200 shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="col-span-2">
-                        <label className="block text-slate mb-2">Propietario</label>
+                        <label className="block text-sm font-medium text-ink mb-2">Propietario</label>
                         <ClientSearchInput mode={"grooming"} />
                     </div>
                     <div className="col-span-2 ">
-                        <label className="block text-slate">Mascota</label>
+                        <label className="block text-sm font-medium text-ink">Mascota</label>
                         {
                             clientData ? (
                                 <select
-                                    className="w-full mt-2 bg-white border-slate-200 border rounded-lg py-1 px-4 text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
+                                    className="w-full mt-2 bg-white border border-slate-200 rounded-xl py-1 px-4 text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                                     value={petSelectedName}
                                     onChange={(e: ChangeEvent<HTMLSelectElement>) => setPetSelectedName(e.target.value)}
                                 >
@@ -166,7 +165,7 @@ function GroomingOrderCreation() {
                             ) :
                                 (
                                     <input
-                                        className="w-full mt-2 border-slate-200 border rounded-lg py-1 px-4 bg-white text-slate hover:border-primary"
+                                        className="w-full mt-2 border border-slate-200 rounded-xl py-1 px-4 bg-white text-slate hover:border-primary/60"
                                         value=""
                                         disabled
                                     />
@@ -175,26 +174,26 @@ function GroomingOrderCreation() {
                     </div>
 
                     <div className="col-span-2">
-                        <label className="block text-slate">Dirección</label>
+                        <label className="block text-sm font-medium text-ink">Dirección</label>
                         <input
                             value={clientData ? `${clientData.address}, ${clientData.district} ` : ''}
-                            className="mt-2 w-full border-slate-200 border rounded-lg py-1 px-4 bg-white text-slate"
+                            className="mt-2 w-full border border-slate-200 rounded-xl py-1 px-4 bg-white text-slate"
                             disabled
                         />
                     </div>
                     <div className='col-span-2'>
-                        <label className="block text-slate">Referencias</label>
+                        <label className="block text-sm font-medium text-ink">Referencias</label>
                         <input
                             type="text"
-                            className="mt-2 w-full border-slate-200 border rounded-lg py-1 px-4 bg-white text-slate"
+                            className="mt-2 w-full border border-slate-200 rounded-xl py-1 px-4 bg-white text-slate"
                             value={clientData ? `${clientData.reference}` : ''}
                             disabled
                         />
                     </div>
 
                     <div className='col-span-2'>
-                        <label className="block text-slate">Empresa</label>
-                        <select className="w-full mt-2 border border-slate-200 rounded-lg py-1 px-3  bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary">
+                        <label className="block text-sm font-medium text-ink">Empresa</label>
+                        <select className="w-full mt-2 border border-slate-200 rounded-xl py-1 px-3  bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary">
                             <option>VETERINARIA ARIEL`S E.I.R.L 0000 - 20608438719</option>
                         </select>
                         <span className="text-sm text-slate mt-1">
@@ -207,28 +206,28 @@ function GroomingOrderCreation() {
             <div className="bg-paper px-4 py-3 rounded-2xl shadow-sm border border-slate-200">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     <div className="col-span-1">
-                        <label className="block text-slate mb-2">Almacén de origen</label>
+                        <label className="block text-sm font-medium text-ink mb-2">Almacén de origen</label>
                         {clientData ? (
-                            <select className="w-full bg-white border-slate-200 border rounded-lg py-1 px-4 text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary">
+                            <select className="w-full bg-white border border-slate-200 rounded-xl py-1 px-4 text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary">
                                 <option>ALMACEN PRODUCTOS P/VENTAS</option>
                             </select>
                         ) : (
                             <input
-                                className="w-full bg-white border-slate-200 rounded-lg py-1 px-4 text-slate"
+                                className="w-full bg-white border border-slate-200 rounded-xl py-1 px-4 text-slate"
                                 value="ALMACEN PRODUCTOS P/VENTAS"
                                 disabled
                             />
                         )}
                     </div>
                     <div className="col-span-1 md:col-span-3">
-                        <label className="block text-slate mb-2">
+                        <label className="block text-sm font-medium text-ink mb-2">
                             Buscar y agregar productos y/o servicios:
                         </label>
                         {clientData ? (
                             <ProductSearchInput addProductToTable={addProductToTable} mode="sales" />
                         ) : (
                             <input
-                                className="w-full bg-white border-slate-200 rounded-lg py-1 px-4 text-slate"
+                                className="w-full bg-white border border-slate-200 rounded-xl py-1 px-4 text-slate"
                                 value=""
                                 disabled
                             />
@@ -239,15 +238,15 @@ function GroomingOrderCreation() {
                 <div className='overflow-x-auto rounded-xl'>
                     <table className="min-w-full bg-white rounded-xl mt-2">
                         <thead>
-                            <tr className="bg-slate-100 border-b border-slate-200 text-sm">
-                                <th className="py-1 px-4 text-center text-slate">Concepto</th>
-                                <th className="px-4 text-center text-slate">Valor Unitario</th>
-                                <th className="px-4 text-center text-slate">Cantidad</th>
-                                <th className="px-4 text-center text-slate">Sub Total</th>
-                                <th className="px-4 text-center text-slate">Impuestos</th>
-                                <th className="px-4 text-center text-slate">Total</th>
-                                <th className="px-4 text-center text-slate">Mascota</th>
-                                <th className="px-4 text-center text-slate">Opciones</th>
+                            <tr className="border-b border-slate-200">
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Concepto</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Valor Unitario</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Cantidad</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Sub Total</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Impuestos</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Total</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Mascota</th>
+                                <th className="py-2 px-4 text-center text-xs font-semibold uppercase tracking-wider text-slate">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -258,7 +257,7 @@ function GroomingOrderCreation() {
                                     </td>
                                     <td className='py-2 px-4 text-center text-ink'>
                                         <span
-                                            className='border border-slate-200 bg-paper px-2 py-1 rounded-lg text-center w-12 cursor-pointer text-ink hover:border-primary'
+                                            className='border border-slate-200 bg-paper px-2 py-1 rounded-xl text-center w-12 cursor-pointer text-ink hover:border-primary/60'
                                             onClick={() => {
                                                 setProductToEdit(product)
                                                 setIsPriceModalOpen(true)
@@ -286,7 +285,7 @@ function GroomingOrderCreation() {
                                         {(product.salePrice || 0) * product.quantity}
                                     </td>
                                     <td className='py-3 px-3 text-center text-ink'>
-                                        <span className='border border-slate-200 bg-paper px-2 py-1 rounded-lg text-center w-12 cursor-pointer hover:border-primary'>
+                                        <span className='border border-slate-200 bg-paper px-2 py-1 rounded-xl text-center w-12 cursor-pointer hover:border-primary/60'>
                                             0.00
                                         </span>
                                     </td>
@@ -325,9 +324,9 @@ function GroomingOrderCreation() {
             </div>
 
             <div className='bg-paper px-4 py-3 mb-4 mt-4 rounded-2xl shadow-sm border border-slate-200'>
-                <label htmlFor="note" className="block text-slate">Observaciones o comentarios de esta orden de servicio</label>
+                <label htmlFor="note" className="block text-sm font-medium text-ink">Observaciones o comentarios de esta orden de servicio</label>
                 <textarea
-                    className="w-full mt-3 border border-slate-200 rounded-lg p-3 bg-white text-ink placeholder-slate max-h-60 min-h-20 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
+                    className="w-full mt-3 border border-slate-200 rounded-xl p-3 bg-white text-ink placeholder-slate max-h-60 min-h-20 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     id="note"
                     rows={3}
                     placeholder="Añadir observaciones..."
@@ -338,31 +337,31 @@ function GroomingOrderCreation() {
 
             <div className="bg-paper px-4 py-3 mb-4 mt-1 rounded-2xl shadow-sm flex flex-col md:flex-row items-center gap-4 border border-slate-200">
                 <div className="w-full">
-                    <label htmlFor="date" className="block text-slate">Fecha de próximo servicio</label>
+                    <label htmlFor="date" className="block text-sm font-medium text-ink">Fecha de próximo servicio</label>
                     <input
                         type="date"
                         id="date"
-                        className="w-full py-1 px-4 mt-1.5 bg-white border-slate-200 border rounded-lg text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
+                        className="w-full py-1 px-4 mt-1.5 bg-white border border-slate-200 rounded-xl text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     />
                 </div>
 
                 <div className="w-full">
-                    <label htmlFor="typeService" className="block text-slate">Tipo de evento</label>
+                    <label htmlFor="typeService" className="block text-sm font-medium text-ink">Tipo de evento</label>
                     <select
                         name="type"
                         id="typeService"
-                        className="w-full py-1 px-4 mt-1.5 bg-white border-slate-200 border rounded-lg text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
+                        className="w-full py-1 px-4 mt-1.5 bg-white border border-slate-200 rounded-xl text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     >
                         <option className="bg-white" value="baño">Baño</option>
                     </select>
                 </div>
 
                 <div className="w-full">
-                    <label htmlFor="client" className="block text-slate">Anotaciones</label>
+                    <label htmlFor="client" className="block text-sm font-medium text-ink">Anotaciones</label>
                     <input
                         type="text"
                         placeholder="Anotaciones..."
-                        className="w-full py-1 px-4 mt-1.5 bg-white border-slate-200 border rounded-lg text-ink placeholder-slate focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary hover:border-primary"
+                        className="w-full py-1 px-4 mt-1.5 bg-white border border-slate-200 rounded-xl text-ink placeholder-slate focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
                     />
                 </div>
 
@@ -389,11 +388,6 @@ function GroomingOrderCreation() {
                     )
                 }
 
-                {
-                    isErrorModalOpen && (
-                        <ErrorModal onClose={() => setIsErrorModalOpen(false)} typeOfError="emptyList" />
-                    )
-                }
             </div>
 
             <ActionButtons

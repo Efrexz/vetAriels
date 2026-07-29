@@ -39,17 +39,17 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
 
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 pt-20">
-            <div className="bg-paper p-6 rounded-xl w-full h-auto max-w-md modal-appear mx-4 border border-slate-200">
-                <h2 className="text-xl font-medium text-ink font-display mb-4 border-b-2 pb-4 border-slate-200">Modificar Cantidad</h2>
+            <div className="bg-paper p-6 rounded-2xl w-full h-auto max-w-md shadow-sm modal-appear mx-4 border border-slate-200">
+                <h2 className="text-lg font-semibold font-display text-ink mb-4 border-b border-slate-200 pb-4">Modificar Cantidad</h2>
                 <div className="flex flex-col gap-4 pb-8 border-b border-slate-200">
                     <div>
-                        <label className="block text-sm font-medium text-slate mb-2">Cantidad</label>
+                        <label className="block text-sm font-medium text-ink mb-2">Cantidad</label>
                         <input
                             name="quantity"
                             type="number"
                             value={itemQuantity}
                             onChange={handleChange}
-                            className={`border ${errorMessage ? "border-danger" : "border-slate-200"} rounded-lg py-2 px-4 w-full bg-white text-ink placeholder:text-slate/50 focus:outline-none focus:ring-2 ${errorMessage ? "focus:ring-danger" : "focus:ring-primary/30 focus:border-primary"} text-center`}
+                            className={`border ${errorMessage ? "border-danger" : "border-slate-200"} rounded-xl py-2 px-4 w-full bg-white text-ink placeholder:text-slate/50 focus:outline-none focus:ring-1 ${errorMessage ? "focus:ring-danger/30 focus:border-danger" : "focus:ring-primary/30 focus:border-primary"} text-center`}
                             autoFocus
                         />
                         {
@@ -60,17 +60,17 @@ function QuantityModificationModal({ onClose, quantity, changeQuantity, maxQuant
                     </div>
                 </div>
 
-                <div className="flex flex-col xs:flex-row justify-end mt-4 gap-4 text-sm">
+                <div className="flex flex-col xs:flex-row justify-end mt-4 gap-4">
                     <button
-                        className="bg-white text-ink py-2 px-4 rounded-lg hover:bg-slate-100 flex items-center gap-3 transition-colors"
+                        className="border border-slate-200 bg-white text-slate py-2 px-4 rounded-xl hover:bg-slate-100 flex items-center gap-3 transition-colors font-medium text-sm"
                         onClick={onClose}
                         type='button'
                     >
-                        <ReturnIcon className="w-4 h-4 text-ink" />
-                        CANCELAR
+                        <ReturnIcon className="w-4 h-4" />
+                        Cancelar
                     </button>
                     <button
-                        className="bg-primary text-white py-2 px-4 rounded-lg hover:opacity-90 flex items-center gap-3 transition-colors"
+                        className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 flex items-center gap-3 transition-colors text-sm font-semibold font-display shadow-sm shadow-primary/25"
                         onClick={editQuantity}
                         type='button'
                     >

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
 
 type Mode = 'clients' | 'pets' | 'services' | 'products' | 'user' | 'restock' | 'discharge' | 'clinics';
 
@@ -13,7 +13,15 @@ interface Tab {
 }
 
 function HorizontalMenu({ mode }: HorizontalMenuProps) {
-    const [selectedTab, setSelectedTab] = useState<string>(() => {
+    const location = useLocation();
+
+    const selectedTab = useMemo(() => {
+        const segments = location.pathname.split('/');
+        const currentSection = segments[segments.length - 1];
+        const tabs = tabsConfig[mode] || [];
+        const match = tabs.find((tab) => tab.url === currentSection);
+        if (match) return match.name;
+
         switch (mode) {
             case 'user':
                 return 'Datos personales';
@@ -25,11 +33,9 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
             default:
                 return 'Editar';
         }
-    });
+    }, [location.pathname, mode]);
 
-    function handleTabClick (tabName : string) {
-        setSelectedTab(tabName);
-    };
+    const { id } = useParams<{ id: string }>();
 
     const tabsConfig: Record<Mode, Tab[]> = {
         clients: [
@@ -73,8 +79,6 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
         ],
     };
 
-    const { id } = useParams<{ id: string }>();
-
     // Determina la URL base según el modo
     const baseUrl: Record<Mode, string>  = {
         clients: `/clients/client/${id}`,
@@ -99,7 +103,6 @@ function HorizontalMenu({ mode }: HorizontalMenuProps) {
                                 ? "bg-primary text-white shadow-sm shadow-primary/25"
                                 : "text-slate border border-slate-200 hover:bg-primary/10 hover:text-primary hover:border-primary/20"
                             }`}
-                        onClick={() => handleTabClick(tab.name)}
                     >
                         {tab.name}
                     </Link>
