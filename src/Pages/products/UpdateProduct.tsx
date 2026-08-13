@@ -77,7 +77,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
     function handleChange (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>){
         const { name, value } = e.target;
         setFormData(prevState => ({ ...prevState, [name]: value }));
-    };
+    }
 
     // Validación de los campos
     function validateForm() {

@@ -121,7 +121,7 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                 break;
         }
         onClose();
-    };
+    }
 
     return (
         <div className="fixed inset-0 bg-ink/40 flex items-start justify-center z-50 pt-20">

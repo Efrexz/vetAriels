@@ -15,7 +15,7 @@ interface FormDataState {
     category: string;
     availableForSale: "SI" | "NO";
     status: "ACTIVO" | "INACTIVO";
-};
+}
 
 type FormErrors = Partial<Record<keyof FormDataState, string>>;
 

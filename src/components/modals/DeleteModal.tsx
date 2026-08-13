@@ -47,13 +47,12 @@ function DeleteModal({ elementToDelete, onClose, mode }: DeleteModalProps) {
                     operationName: `${(elementToDelete as Client).firstName} ${(elementToDelete as Client).lastName}`,
                     deleteFn: () => removeClient(elementToDelete.id),
                 };
-            default:
-                // Esto ayuda a TypeScript a detectar si falta un caso.
-                // Si 'mode' tuviera más opciones y no las cubrimos, TypeScript daría un error.
+            default: {
                 const exhaustiveCheck: never = mode;
                 return exhaustiveCheck;
+            }
         }
-    };
+    }
 
     const { typeName, operationName, deleteFn } = getElementDetails();
 

@@ -209,7 +209,7 @@ function EditGroomingOrder() {
                     <div className='col-span-2'>
                         <label className="block text-sm font-medium text-ink mb-1">Empresa</label>
                         <select className="w-full border border border-slate-200 rounded-xl py-1 px-4 bg-white text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary text-sm">
-                            <option>VETERINARIA ARIEL'S E.I.R.L 0000 - 20608438719</option>
+                            <option>{"VETERINARIA ARIEL'S E.I.R.L 0000 - 20608438719"}</option>
                         </select>
                         <span className="text-sm text-slate mt-1">
                             Los datos de la empresa seleccionada se utilizarán en el ticket de la orden de servicio.

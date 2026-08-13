@@ -83,7 +83,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
             ...prevState,
             [name]: value,
         }));
-    };
+    }
 
 
     // Validación de los campos

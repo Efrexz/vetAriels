@@ -30,7 +30,7 @@ function Login() {
         } else {
             setError('Email o contraseña incorrectos');
         }
-    };
+    }
 
     function handleRegister() {
         if (password !== confirmPassword) {
@@ -62,11 +62,11 @@ function Login() {
 
     function handleEmailChange (e: ChangeEvent<HTMLInputElement>) {
         setEmail(e.target.value);
-    };
+    }
 
     function handlePasswordChange (e: ChangeEvent<HTMLInputElement>) {
         setPassword(e.target.value);
-    };
+    }
 
     function handleConfirmPasswordChange(e: ChangeEvent<HTMLInputElement>) {
         setConfirmPassword(e.target.value);
@@ -84,7 +84,7 @@ function Login() {
         } else {
             handleLogin(email, password);
         }
-    };
+    }
 
 
     return (

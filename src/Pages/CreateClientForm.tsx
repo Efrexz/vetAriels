@@ -87,7 +87,7 @@ function CreateClientForm() {
             ...prevState,
             [id]: value
         }));
-    };
+    }
 
     function createNewClient() {
         if (!validateForm()) {

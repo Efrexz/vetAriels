@@ -70,7 +70,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
     function logout() {
         setActiveUser(null);
         localStorage.removeItem('activeUser');
-    };
+    }
 
     //sideBarMenu
     //estado para saber cuando esta abierto el menu y poder aplicar el responsive
@@ -91,14 +91,14 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         setShowBathList(false);
         setShowUserOptions(false);
         setActiveIcon(showPatientList ? null : 'patients');
-    };
+    }
 
     function toggleBathList() {
         setShowBathList(!showBathList);
         setShowPatientList(false);
         setShowUserOptions(false);
         setActiveIcon(showBathList ? null : 'baths');
-    };
+    }
 
     function toggleUserOptions() {
         setShowUserOptions(!showUserOptions);
@@ -106,7 +106,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         setShowBathList(false);
         setShowPatientList(false);
         setActiveIcon(showUserOptions ? null : 'user');
-    };
+    }
 
     function toggleSideMenu() {
         setIsSidebarOpen(!isSidebarOpen);
@@ -181,7 +181,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
     //users
     function addUser (newUser: User) {
         setUsers(prev => [...prev, newUser]);
-    };
+    }
 
     function updateUserData(id: string, newData: Partial<User>) {
         setUsers(prev => prev.map(user => user.id === id ? { ...user, ...newData } : user));
@@ -261,6 +261,6 @@ function GlobalProvider({ children }: GlobalProviderProps) {
         throw new Error('useGlobal debe ser usado dentro de un GlobalProvider');
     }
     return context;
-    };
+    }
 
 export { GlobalContext, GlobalProvider };

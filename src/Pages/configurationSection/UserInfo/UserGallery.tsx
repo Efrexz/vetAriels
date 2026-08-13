@@ -16,6 +16,7 @@ function UserGallery() {
 
     const handleUpload = () => {
         if (selectedFile) {
+          // TODO: implementar subida de imagen
         }
     };
 

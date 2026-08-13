@@ -113,19 +113,19 @@ function Sales() {
     function updateProductPriceInTable (updatedProduct: PurchasedItem){
         const updatedList = selectedProducts.map(product => product.provisionalId === updatedProduct.provisionalId ? updatedProduct : product);
         setSelectedProducts(updatedList);
-    };
+    }
 
     function updateProductQuantity (id: string, newQuantity: number) {
         const updatedList = selectedProducts.map(product => product.provisionalId === id ? { ...product, quantity: newQuantity } : product);
         setSelectedProducts(updatedList);
-    };
+    }
 
     function removeProductFromTable (provisionalId: string) {
         setSelectedProducts(prev => prev.filter(product => product.provisionalId !== provisionalId));
         if (clientData) {
             removeProductFromClient(clientData.id, provisionalId);
         }
-    };
+    }
 
     const totalPrice = useMemo(() =>
         selectedProducts.reduce((acc, product) => acc + (product.salePrice || 0) * product.quantity, 0),

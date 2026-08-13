@@ -59,7 +59,7 @@ function PetProfile({ petData }: PetProfileProps) {
             ...prevState,
             [id]: value,
         }));
-    };
+    }
 
     // Validación de los campos
     function validateForm(){

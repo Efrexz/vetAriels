@@ -26,7 +26,7 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
         if (!isIncreaseDisabled) {
             changeQuantity(itemCount + 1);
         }
-    };
+    }
 
     function decreaseQuantity() {
         if (!isDecreaseDisabled) {
@@ -62,6 +62,6 @@ function QuantityCounter ({ openQuantityModal, itemCount, changeQuantity, maxQua
             </button>
         </div>
     );
-};
+}
 
 export { QuantityCounter };

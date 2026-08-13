@@ -178,6 +178,6 @@ export function useProductsAndServices (): ProductsAndServicesContextType {
         throw new Error('useProductsAndServices debe ser usado dentro de un ProductsAndServicesProvider');
     }
     return context;
-};
+}
 
 export { ProductsAndServicesContext, ProductsAndServicesProvider };

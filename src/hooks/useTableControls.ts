@@ -34,7 +34,7 @@ function parseDateString(dateStr: string): Date | null {
   let d = new Date(dateStr);
   if (!isNaN(d.getTime())) return d;
 
-  const parts = dateStr.split(/[-\/]/);
+  const parts = dateStr.split(new RegExp('[-/]'));
   if (parts.length === 3) {
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;

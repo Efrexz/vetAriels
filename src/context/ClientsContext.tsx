@@ -241,6 +241,6 @@ function ClientsProvider({ children }: ClientsProviderProps) {
             throw new Error('useClients debe ser usado dentro de un ClientsProvider');
         }
         return context;
-    };
+    }
 
 export { ClientsContext, ClientsProvider };

@@ -17,7 +17,7 @@ function NotFound({ entityName, searchId, returnPath }: NotFoundProps) {
                     {entityName} no Encontrado
                 </h1>
                 <p className="text-lg text-slate mb-6 leading-relaxed">
-                    No se encontró ningún {entityName.toLowerCase()} con el ID "<strong className="text-primary">{searchId}</strong>".
+                    No se encontró ningún {entityName.toLowerCase()} con el ID &quot;<strong className="text-primary">{searchId}</strong>&quot;.
                     Por favor, verifica el identificador.
                 </p>
                 <div className="border-t border-slate-200 pt-6 mt-6">

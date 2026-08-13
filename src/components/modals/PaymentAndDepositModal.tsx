@@ -27,7 +27,7 @@ interface FormDataState {
     amount: string;
     methodOfPayment: MethodOfPayment;
     tag: string;
-};
+}
 
 type FormErrors = Partial<Record<keyof FormDataState, string>>;
 

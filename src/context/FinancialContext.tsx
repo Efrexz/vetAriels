@@ -56,6 +56,6 @@ function FinancialProvider({ children }: FinancialProviderProps) {
             throw new Error('useFinancial debe ser usado dentro de un FinancialProvider');
         }
         return context;
-    };
+    }
 
 export { FinancialContext, FinancialProvider };

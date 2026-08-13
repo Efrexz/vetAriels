@@ -148,7 +148,7 @@ function CreateInvoice() {
         setMethodsOfPaymentList(prev => [...prev, newPayment]);
         setPaymentAmount("");
         setPaymentNote("");
-    };
+    }
 
     if (!clientData) {
         return <div className="p-6">Error: Cliente no encontrado. Por favor, vuelva a la página de ventas.</div>;

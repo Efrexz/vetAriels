@@ -54,7 +54,7 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                 setStatus(value as QueueState);
                 break;
         }
-    };
+    }
 
     return (
         <div className="fixed inset-0 flex justify-center items-start bg-ink/40 z-50 overflow-y-scroll p-3">

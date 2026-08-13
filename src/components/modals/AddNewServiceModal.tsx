@@ -59,7 +59,7 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
             ...prevState,
             [name]: value,
         }));
-    };
+    }
 
     // Validación de los campos
     function validateForm(): boolean {

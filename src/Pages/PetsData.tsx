@@ -27,7 +27,7 @@ const MONTHS = [
 function parseDate(dateStr: string): Date | null {
   let d = new Date(dateStr);
   if (!isNaN(d.getTime())) return d;
-  const parts = dateStr.split(/[-\/]/);
+  const parts = dateStr.split(new RegExp('[-/]'));
   if (parts.length === 3) {
     d = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
     if (!isNaN(d.getTime())) return d;

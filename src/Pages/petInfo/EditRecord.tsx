@@ -16,7 +16,7 @@ interface FormDataState  {
         oxygenSaturation: string;
     };
     clinicalExam: string;
-};
+}
 
 function EditRecord() {
     const { updateRecord, petsData } = useClients();
@@ -62,7 +62,7 @@ function EditRecord() {
                 [id as keyof Omit<FormDataState, 'physiologicalConstants'>]: value,
             }));
         }
-    };
+    }
 
     function saveRecord() {
         if (!formData || !recordData) {

@@ -72,7 +72,7 @@ function ClientProfile() {
             ...prevState,
             [id]: value,
         }));
-    };
+    }
 
     function validateForm(): boolean {
         const newErrors: Record<string, string> = {};
