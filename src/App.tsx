@@ -5,6 +5,7 @@ import { ProductsAndServicesProvider } from './context/ProductsAndServicesContex
 import { FinancialProvider } from './context/FinancialContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ToastProvider } from './context/ToastContext';
+import { QueryProvider } from './providers/QueryProvider';
 import { DashBoard } from './Pages/dashboard/DashBoard';
 import { Login } from './Pages/Login';
 import { Sales } from './Pages/sales/Sales';
@@ -54,16 +55,17 @@ function App() {
 
   return (
     <GlobalProvider>
-      <ToastProvider>
-        <FinancialProvider>
-          <ClientsProvider>
-            <ProductsAndServicesProvider>
-            {/* Solo renderizar Layout si no estamos en la ruta de login */}
-            {location.pathname !== '/login' ? (
-              <Layout>
-                <ScrollToTop />
-                <ProtectedRoute>
-                  <Routes>
+      <QueryProvider>
+        <ToastProvider>
+          <FinancialProvider>
+            <ClientsProvider>
+              <ProductsAndServicesProvider>
+              {/* Solo renderizar Layout si no estamos en la ruta de login */}
+              {location.pathname !== '/login' ? (
+                <Layout>
+                  <ScrollToTop />
+                  <ProtectedRoute>
+                    <Routes>
                     <Route path="/" element={<DashBoard />} />
                     <Route path="/sales/client/:id" element={<Sales />} />
                     <Route path="/sales/active-orders" element={<ActiveOrders />} />
@@ -118,7 +120,8 @@ function App() {
           </ProductsAndServicesProvider>
         </ClientsProvider>
       </FinancialProvider>
-      </ToastProvider>
+        </ToastProvider>
+      </QueryProvider>
     </GlobalProvider>
   );
 }

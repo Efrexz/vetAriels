@@ -3,13 +3,13 @@ import { Client, Pet, PetRecord } from '@t/client.types';
 import { MedicalQueueItem, GroomingQueueItem } from '@t/clinical.types';
 import { PurchasedItem } from '@t/inventory.types';
 import { generateUniqueId } from '@utils/idGenerator';
-import { getClients as fetchClientsFromSupabase } from '../services/clientsService';
+import { useClientsQuery } from '../hooks/useClientsQuery';
 
 interface ClientsContextType {
     // Clientes
     clients: Client[];
     isLoadingClients: boolean;
-    clientsError: string | null;
+    clientsError: Error | null;
     addClient: (newClient: Client) => void;
     updateClientData: (id: string, newData: Partial<Client>) => void;
     removeClient: (id: string) => void;
@@ -53,32 +53,12 @@ interface ClientsProviderProps {
 
 function ClientsProvider({ children }: ClientsProviderProps) {
 
-    //clients Data — cargado desde Supabase con fallback a localStorage
-    const [clients, setClients] = useState<Client[]>(() => {
-        const saved = localStorage.getItem('clients');
-        return saved ? (JSON.parse(saved) as Client[]) : [];
-    });
-    const [isLoadingClients, setIsLoadingClients] = useState<boolean>(true);
-    const [clientsError, setClientsError] = useState<string | null>(null);
+    //clients Data — cacheado y revalidado automáticamente por React Query
+    const { data: clients = [], isLoading: isLoadingClients, error: clientsError, refetch } = useClientsQuery();
 
-    async function loadClients() {
-        setIsLoadingClients(true);
-        setClientsError(null);
-        try {
-            const data = await fetchClientsFromSupabase();
-            setClients(data);
-        } catch (err) {
-            const message = err instanceof Error ? err.message : 'Error desconocido';
-            setClientsError(message);
-            console.error('No se pudieron cargar clientes de Supabase:', message);
-        } finally {
-            setIsLoadingClients(false);
-        }
+    async function refreshClients() {
+        await refetch();
     }
-
-    useEffect(() => {
-        loadClients();
-    }, []);
 
     //Pets Data
     const [petsData, setPetsData] = useState<Pet[]>(() => {
@@ -126,10 +106,7 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     });
 
     // Guardar en localStorage cada vez que cambien los estados
-    useEffect(() => {
-        localStorage.setItem('clients', JSON.stringify(clients));
-    }, [clients]);
-
+    // (Nota: clients ya NO se persiste aquí — lo maneja React Query + Supabase)
     useEffect(() => {
         localStorage.setItem('petsData', JSON.stringify(petsData));
     }, [petsData]);
@@ -146,29 +123,26 @@ function ClientsProvider({ children }: ClientsProviderProps) {
         localStorage.setItem('petsInQueueMedical', JSON.stringify(petsInQueueMedical));
     }, [petsInQueueMedical]);
 
-    //clients
-    function addClient(newClient: Client) {
-        setClients(prev => [newClient, ...prev]);
+    //clients — escritura pendiente de migrar a Supabase (fase 1G).
+    //Por ahora estos stubs avisan por consola. Los reads ya usan Supabase.
+    function addClient(_newClient: Client) {
+        console.warn('addClient: pendiente de migrar a Supabase. Se implementa en la fase 1G.');
     }
 
-    function updateClientData(id: string, newData: Partial<Client>) {
-        setClients(prev => prev.map(client => client.id === id ? { ...client, ...newData } : client));
+    function updateClientData(_id: string, _newData: Partial<Client>) {
+        console.warn('updateClientData: pendiente de migrar a Supabase. Se implementa en la fase 1G.');
     }
 
-    function removeClient(id: string) {
-        setClients(prev => prev.filter(client => client.id !== id));
+    function removeClient(_id: string) {
+        console.warn('removeClient: pendiente de migrar a Supabase. Se implementa en la fase 1G.');
     }
 
-    function addProductToClient(clientId: string, product: PurchasedItem){
-        setClients(prev => prev.map(client =>
-            client.id === clientId ? { ...client, products: [...(client.products || []), product] } : client
-        ));
+    function addProductToClient(_clientId: string, _product: PurchasedItem){
+        console.warn('addProductToClient: pendiente de migrar a Supabase. Se implementa en la fase 1G.');
     }
 
-    function removeProductFromClient(clientId: string, provisionalId: string) {
-        setClients(prev => prev.map(client =>
-            client.id === clientId ? { ...client, products: (client.products || []).filter(p => p.provisionalId !== provisionalId) } : client
-        ));
+    function removeProductFromClient(_clientId: string, _provisionalId: string) {
+        console.warn('removeProductFromClient: pendiente de migrar a Supabase. Se implementa en la fase 1G.');
     }
 
     //pets data
@@ -245,7 +219,7 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     }
 
     const contextValue: ClientsContextType = {
-        clients, isLoadingClients, clientsError, refreshClients: loadClients,
+        clients, isLoadingClients, clientsError, refreshClients,
         addClient, updateClientData, removeClient, addProductToClient, removeProductFromClient,
         petsData, addPet, updatePetData, removePet, historyCounter,
         addRecord, updateRecord, removeRecord,

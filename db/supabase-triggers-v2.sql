@@ -1,0 +1,329 @@
+-- ============================================================================
+-- Triggers v2 — VetAriel (multi-tenant, atomicidad, auditoria)
+-- ============================================================================
+-- Cada trigger resuelve un problema concreto del producto:
+--
+--   1. handle_new_user:      crea el profile automaticamente al registrar
+--                            un usuario en Supabase Auth. Asi el usuario
+--                            siempre tiene perfil al iniciar sesion.
+--   2. set_updated_at:       mantiene updated_at al dia en cada UPDATE.
+--   3. update_product_stock: mantiene products.stock al insertar/eliminar
+--                            items de movimientos (atomico, sin race condition).
+--   4. assign_invoice_correlative: asigna el siguiente correlativo por
+--                            empresa+serie desde company_counters.
+--   5. assign_grooming_turn: asigna el turno diario de grooming.
+--   6. assign_pet_hc:        asigna el HC (historia clinica) por empresa.
+--
+-- Patron atomico para contadores:
+--   INSERT INTO company_counters (...) VALUES (...) ON CONFLICT DO NOTHING;
+--   SELECT current_value FROM company_counters WHERE ...
+--     FOR UPDATE;  -- toma lock
+--   UPDATE company_counters SET current_value = current_value + 1 WHERE ...;
+--   RETURNING current_value;
+-- El FOR UPDATE bloquea la fila hasta que termine la transaccion, evitando
+-- que dos queries simultaneas obtengan el mismo numero.
+-- ============================================================================
+
+-- ----------------------------------------------------------------------------
+-- Helper: leer el company_id del usuario actual desde su profile.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.current_company_id()
+RETURNS UUID
+LANGUAGE sql
+STABLE
+SECURITY DEFINER  -- ejecuta con permisos del dueño de la funcion, no del usuario
+SET search_path = public
+AS $$
+  SELECT company_id FROM public.profiles WHERE id = auth.uid()
+$$;
+
+COMMENT ON FUNCTION public.current_company_id() IS 'Devuelve la empresa del usuario autenticado. Usado en policies y triggers.';
+
+-- ----------------------------------------------------------------------------
+-- 1. handle_new_user: crea profile al registrarse en Supabase Auth
+-- ----------------------------------------------------------------------------
+-- IMPORTANTE: el usuario nuevo llega SIN empresa asignada. El trigger lo crea
+-- con company_id NULL... pero profiles.company_id es NOT NULL. Solucion:
+-- el admin crea el usuario desde el dashboard de Supabase o desde una Edge
+-- Function (Paso 3), y ahi asigna la empresa. Mientras tanto, el usuario
+-- NO puede hacer nada (no tiene profile activo).
+--
+-- Estrategia: el trigger crea el profile solo si el usuario tiene
+-- 'company_id' en su app_metadata (que solo el admin puede setear).
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_company_id UUID;
+  v_role       TEXT;
+  v_first_name TEXT;
+  v_last_name  TEXT;
+BEGIN
+  -- El admin asigna empresa/rol via app_metadata (que el usuario NO puede editar).
+  v_company_id := (NEW.raw_app_meta_data ->> 'company_id')::UUID;
+  v_role       := COALESCE(NEW.raw_app_meta_data ->> 'role', 'RECEPCIONISTA');
+  v_first_name := COALESCE(NEW.raw_app_meta_data ->> 'first_name', '');
+  v_last_name  := COALESCE(NEW.raw_app_meta_data ->> 'last_name',  '');
+
+  -- Si no tiene empresa asignada, no creamos profile. El admin debe asignarlo.
+  IF v_company_id IS NULL THEN
+    -- Log para que el admin lo vea. El usuario queda sin perfil y sin acceso.
+    RAISE LOG 'handle_new_user: usuario % sin company_id en app_metadata', NEW.id;
+    RETURN NEW;
+  END IF;
+
+  INSERT INTO public.profiles (id, company_id, role, first_name, last_name)
+  VALUES (NEW.id, v_company_id, v_role, v_first_name, v_last_name)
+  ON CONFLICT (id) DO NOTHING;
+
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_new_user();
+
+COMMENT ON FUNCTION public.handle_new_user() IS 'Crea profile al registrarse un usuario en Auth. Requiere company_id en app_metadata.';
+
+-- ----------------------------------------------------------------------------
+-- 2. set_updated_at: mantiene updated_at en cada UPDATE
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.updated_at := NOW();
+  RETURN NEW;
+END;
+$$;
+
+-- Aplicamos a todas las tablas que tienen updated_at (no las de solo INSERT).
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.profiles;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.profiles
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.clients;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.clients
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.pets;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.pets
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.products;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.products
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.services;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.services
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.invoices;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.invoices
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.clinic_queue;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.clinic_queue
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_set_updated_at ON public.grooming_queue;
+CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.grooming_queue
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+-- ----------------------------------------------------------------------------
+-- 3. update_product_stock: stock atomico al insertar/eliminar items
+-- ----------------------------------------------------------------------------
+-- Antes (en localStorage) dos usuarios podian corromper el stock.
+-- Ahora: trigger BEFORE INSERT valida que hay stock suficiente (descarga),
+-- AFTER INSERT/DELETE actualiza el stock. Todo dentro de una transaccion.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.update_product_stock_on_insert()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_movement_type TEXT;
+BEGIN
+  SELECT type INTO v_movement_type FROM public.inventory_movements WHERE id = NEW.movement_id;
+
+  IF v_movement_type = 'CARGA' THEN
+    UPDATE public.products SET stock = stock + NEW.quantity WHERE id = NEW.product_id;
+  ELSIF v_movement_type = 'DESCARGA' THEN
+    -- Validar stock suficiente ANTES de actualizar.
+    IF (SELECT stock FROM public.products WHERE id = NEW.product_id) < NEW.quantity THEN
+      RAISE EXCEPTION 'Stock insuficiente para producto % (necesita %, hay %)',
+        NEW.product_id, NEW.quantity, (SELECT stock FROM public.products WHERE id = NEW.product_id);
+    END IF;
+    UPDATE public.products SET stock = stock - NEW.quantity WHERE id = NEW.product_id;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.update_product_stock_on_delete()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_movement_type TEXT;
+BEGIN
+  SELECT type INTO v_movement_type FROM public.inventory_movements WHERE id = OLD.movement_id;
+
+  IF v_movement_type = 'CARGA' THEN
+    -- Si borramos una carga, restamos del stock.
+    IF (SELECT stock FROM public.products WHERE id = OLD.product_id) < OLD.quantity THEN
+      RAISE EXCEPTION 'No se puede eliminar la carga: stock (%) menor que cantidad a restar (%)',
+        (SELECT stock FROM public.products WHERE id = OLD.product_id), OLD.quantity;
+    END IF;
+    UPDATE public.products SET stock = stock - OLD.quantity WHERE id = OLD.product_id;
+  ELSIF v_movement_type = 'DESCARGA' THEN
+    -- Si borramos una descarga, devolvemos al stock.
+    UPDATE public.products SET stock = stock + OLD.quantity WHERE id = OLD.product_id;
+  END IF;
+
+  RETURN OLD;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_stock_after_insert ON public.inventory_movement_items;
+CREATE TRIGGER trg_stock_after_insert
+  AFTER INSERT ON public.inventory_movement_items
+  FOR EACH ROW EXECUTE FUNCTION public.update_product_stock_on_insert();
+
+DROP TRIGGER IF EXISTS trg_stock_after_delete ON public.inventory_movement_items;
+CREATE TRIGGER trg_stock_after_delete
+  AFTER DELETE ON public.inventory_movement_items
+  FOR EACH ROW EXECUTE FUNCTION public.update_product_stock_on_delete();
+
+COMMENT ON FUNCTION public.update_product_stock_on_insert() IS 'Mantiene products.stock al insertar items de movimientos (atomico).';
+COMMENT ON FUNCTION public.update_product_stock_on_delete() IS 'Revierte el stock al eliminar items de movimientos.';
+
+-- ----------------------------------------------------------------------------
+-- 4. assign_invoice_correlative: correlativo unico por empresa+serie
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.assign_invoice_correlative()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_counter_type TEXT;
+  v_next_value  INTEGER;
+BEGIN
+  v_counter_type := CASE
+    WHEN NEW.tipo_comprobante = 'BOLETA'  THEN 'INVOICE_BOLETA'
+    WHEN NEW.tipo_comprobante = 'FACTURA' THEN 'INVOICE_FACTURA'
+  END;
+
+  -- Asegurar fila del contador para hoy.
+  INSERT INTO public.company_counters (company_id, counter_type, counter_date, current_value)
+  VALUES (NEW.company_id, v_counter_type, CURRENT_DATE, 0)
+  ON CONFLICT (company_id, counter_type, counter_date) DO NOTHING;
+
+  -- Lock + incrementar (atomico).
+  SELECT current_value + 1 INTO v_next_value
+  FROM public.company_counters
+  WHERE company_id   = NEW.company_id
+    AND counter_type = v_counter_type
+    AND counter_date = CURRENT_DATE
+  FOR UPDATE;
+
+  UPDATE public.company_counters
+  SET current_value = current_value + 1
+  WHERE company_id   = NEW.company_id
+    AND counter_type = v_counter_type
+    AND counter_date = CURRENT_DATE;
+
+  NEW.correlativo := v_next_value;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_invoice_correlative ON public.invoices;
+CREATE TRIGGER trg_invoice_correlative
+  BEFORE INSERT ON public.invoices
+  FOR EACH ROW EXECUTE FUNCTION public.assign_invoice_correlative();
+
+COMMENT ON FUNCTION public.assign_invoice_correlative() IS 'Asigna correlativo unico por empresa+serie+fecha (atomico).';
+
+-- ----------------------------------------------------------------------------
+-- 5. assign_grooming_turn: turno diario por empresa
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.assign_grooming_turn()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_next_value INTEGER;
+BEGIN
+  INSERT INTO public.company_counters (company_id, counter_type, counter_date, current_value)
+  VALUES (NEW.company_id, 'GROOMING_TURN_DAILY', CURRENT_DATE, 0)
+  ON CONFLICT (company_id, counter_type, counter_date) DO NOTHING;
+
+  SELECT current_value + 1 INTO v_next_value
+  FROM public.company_counters
+  WHERE company_id   = NEW.company_id
+    AND counter_type = 'GROOMING_TURN_DAILY'
+    AND counter_date = CURRENT_DATE
+  FOR UPDATE;
+
+  UPDATE public.company_counters
+  SET current_value = current_value + 1
+  WHERE company_id   = NEW.company_id
+    AND counter_type = 'GROOMING_TURN_DAILY'
+    AND counter_date = CURRENT_DATE;
+
+  NEW.turn := v_next_value;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_grooming_turn ON public.grooming_queue;
+CREATE TRIGGER trg_grooming_turn
+  BEFORE INSERT ON public.grooming_queue
+  FOR EACH ROW EXECUTE FUNCTION public.assign_grooming_turn();
+
+-- ----------------------------------------------------------------------------
+-- 6. assign_pet_hc: historia clinica unica por empresa
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.assign_pet_hc()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_next_value INTEGER;
+BEGIN
+  INSERT INTO public.company_counters (company_id, counter_type, counter_date, current_value)
+  VALUES (NEW.company_id, 'PET_HC', CURRENT_DATE, 0)
+  ON CONFLICT (company_id, counter_type, counter_date) DO NOTHING;
+
+  SELECT current_value + 1 INTO v_next_value
+  FROM public.company_counters
+  WHERE company_id   = NEW.company_id
+    AND counter_type = 'PET_HC'
+    AND counter_date = CURRENT_DATE
+  FOR UPDATE;
+
+  UPDATE public.company_counters
+  SET current_value = current_value + 1
+  WHERE company_id   = NEW.company_id
+    AND counter_type = 'PET_HC'
+    AND counter_date = CURRENT_DATE;
+
+  NEW.hc := LPAD(v_next_value::TEXT, 6, '0');
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_pet_hc ON public.pets;
+CREATE TRIGGER trg_pet_hc
+  BEFORE INSERT ON public.pets
+  FOR EACH ROW EXECUTE FUNCTION public.assign_pet_hc();
