@@ -3,15 +3,19 @@ import { Client, Pet, PetRecord } from '@t/client.types';
 import { MedicalQueueItem, GroomingQueueItem } from '@t/clinical.types';
 import { PurchasedItem } from '@t/inventory.types';
 import { generateUniqueId } from '@utils/idGenerator';
+import { getClients as fetchClientsFromSupabase } from '../services/clientsService';
 
 interface ClientsContextType {
     // Clientes
     clients: Client[];
+    isLoadingClients: boolean;
+    clientsError: string | null;
     addClient: (newClient: Client) => void;
     updateClientData: (id: string, newData: Partial<Client>) => void;
     removeClient: (id: string) => void;
     addProductToClient: (clientId: string, product: PurchasedItem) => void;
     removeProductFromClient: (clientId: string, provisionalId: string) => void;
+    refreshClients: () => Promise<void>;
 
     // Mascotas
     petsData: Pet[];
@@ -49,11 +53,32 @@ interface ClientsProviderProps {
 
 function ClientsProvider({ children }: ClientsProviderProps) {
 
-    //clients Data
+    //clients Data — cargado desde Supabase con fallback a localStorage
     const [clients, setClients] = useState<Client[]>(() => {
         const saved = localStorage.getItem('clients');
         return saved ? (JSON.parse(saved) as Client[]) : [];
     });
+    const [isLoadingClients, setIsLoadingClients] = useState<boolean>(true);
+    const [clientsError, setClientsError] = useState<string | null>(null);
+
+    async function loadClients() {
+        setIsLoadingClients(true);
+        setClientsError(null);
+        try {
+            const data = await fetchClientsFromSupabase();
+            setClients(data);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Error desconocido';
+            setClientsError(message);
+            console.error('No se pudieron cargar clientes de Supabase:', message);
+        } finally {
+            setIsLoadingClients(false);
+        }
+    }
+
+    useEffect(() => {
+        loadClients();
+    }, []);
 
     //Pets Data
     const [petsData, setPetsData] = useState<Pet[]>(() => {
@@ -220,7 +245,8 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     }
 
     const contextValue: ClientsContextType = {
-        clients, addClient, updateClientData, removeClient, addProductToClient, removeProductFromClient,
+        clients, isLoadingClients, clientsError, refreshClients: loadClients,
+        addClient, updateClientData, removeClient, addProductToClient, removeProductFromClient,
         petsData, addPet, updatePetData, removePet, historyCounter,
         addRecord, updateRecord, removeRecord,
         petsInQueueMedical, addPetToQueueMedical, updatePetInQueueMedical, removePetFromQueueMedical,

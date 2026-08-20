@@ -18,6 +18,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
     "@tailwindcss/forms": "^0.5.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
