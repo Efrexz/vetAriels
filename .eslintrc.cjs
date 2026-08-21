@@ -8,7 +8,15 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'vitest.config.ts', '*.css'],
+  ignorePatterns: [
+    'dist',
+    '.eslintrc.cjs',
+    'vitest.config.ts',
+    '*.css',
+    // Edge Functions corren en Deno runtime, no Node, y usan APIs distintas.
+    // Se lintean y testean por separado (deno lint, deno test).
+    'supabase/functions/**',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },

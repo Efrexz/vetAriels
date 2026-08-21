@@ -15,3 +15,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Expone el cliente en window para tests manuales desde la consola del navegador
+// (ej. validar RLS, probar triggers). Seguro porque la anon key ya es publica.
+// Si te molesta, puedes comentar este bloque.
+if (typeof window !== 'undefined') {
+  (window as any).supabase = supabase;
+}

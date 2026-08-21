@@ -8,3 +8,4 @@ Documentación técnica del proyecto organizada por micro-fases.
   facturación peruana.
 - [Paso 2 — Seguridad de roles](./PASO_2_SEGURIDAD.md) — triggers anti-escalación
   y anti-lockout.
+- [Paso 3 — Edge Functions + Users](./PASO_3.md) — admin-users y password reset.

@@ -2,6 +2,12 @@ import { createContext, useEffect, useState, ReactNode, useContext } from 'react
 import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import { Role, CompanyData, User } from '@t/user.types';
 import { getSession, signOut, onAuthStateChange } from '../services/authService';
+import {
+  createUser as adminCreateUser,
+  deactivateUser as adminDeactivateUser,
+  type CreateUserInput,
+  type UserRole,
+} from '../services/adminUsersService';
 
 type ActiveIconType = 'patients' | 'baths' | 'user' | null;
 
@@ -44,9 +50,9 @@ interface GlobalContextType {
   activeUser: User | null;
   setActiveUser: (user: User | null) => void;
   users: User[];
-  addUser: (newUser: User) => void;
-  updateUserData: (id: string, newData: Partial<User>) => void;
-  removeUser: (id: string) => void;
+  addUser: (newUser: User) => Promise<void>;
+  updateUserData: (id: string, newData: Partial<User>) => Promise<void>;
+  removeUser: (id: string) => Promise<void>;
 
   // Roles (siguen en localStorage hasta fase 1G)
   roles: Role[];
@@ -147,24 +153,42 @@ function GlobalProvider({ children }: GlobalProviderProps) {
   // Esto se reimplementa en la fase 1G usando admin API.
   const users: User[] = [];
 
-  function addUser(_newUser: User) {
-    console.warn(
-      'addUser: pendiente de migrar a Supabase. Se implementa en la fase 1G.',
-    );
+  /**
+   * Crea un usuario nuevo en la empresa actual. Delega a la Edge Function
+   * admin-users que usa service_role. El trigger handle_new_user crea el
+   * profile automaticamente.
+   */
+  async function addUser(newUser: User): Promise<void> {
+    const input: CreateUserInput = {
+      email: newUser.email,
+      password: newUser.password ?? '123123', // fallback si el form no lo manda
+      first_name: newUser.name,
+      last_name: newUser.lastName,
+      phone: newUser.phone,
+      role: (newUser.rol as UserRole) ?? 'RECEPCIONISTA',
+    };
+    await adminCreateUser(input);
   }
 
-  function updateUserData(id: string, newData: Partial<User>) {
-    console.warn(
-      'updateUserData: pendiente de migrar a Supabase. Se implementa en la fase 1G.',
-      { id, newData },
-    );
+  /**
+   * Actualiza datos del usuario. Solo permite cambiar rol y desactivar.
+   * La edicion de nombre/telefono se hace via UPDATE profiles directo
+   * (no requiere service_role).
+   */
+  async function updateUserData(id: string, newData: Partial<User>): Promise<void> {
+    if (newData.rol) {
+      const { changeUserRole } = await import('../services/adminUsersService');
+      await changeUserRole(id, newData.rol as UserRole);
+    }
+    if (newData.status === 'INACTIVO') {
+      await adminDeactivateUser(id);
+    }
+    // Edicion de first_name/last_name/phone via profiles (cuando lo usemos)
+    // queda pendiente para una fase posterior.
   }
 
-  function removeUser(id: string) {
-    console.warn(
-      'removeUser: pendiente de migrar a Supabase. Se implementa en la fase 1G.',
-      { id },
-    );
+  async function removeUser(id: string): Promise<void> {
+    await adminDeactivateUser(id);
   }
 
   //sideBarMenu

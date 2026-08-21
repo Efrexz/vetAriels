@@ -40,6 +40,20 @@ export async function signOut(): Promise<void> {
 }
 
 /**
+ * Envia un email de recuperacion de contrasena al usuario.
+ * El link lleva al usuario a una pantalla donde define una nueva contrasena.
+ */
+export async function resetPassword(email: string): Promise<void> {
+  const redirectTo = `${window.location.origin}/reset-password`;
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo,
+  });
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+/**
  * Obtiene la sesión activa (si existe).
  * Útil para saber si el usuario sigue logueado al recargar la página.
  */

@@ -1,0 +1,95 @@
+// ============================================================================
+// Servicio: invocacion de la Edge Function admin-users
+// ============================================================================
+import { supabase } from './supabaseClient';
+
+// ============================================================================
+// Tipos (deben coincidir con la Edge Function)
+// ============================================================================
+
+export type UserRole = 'ADMIN' | 'VETERINARIO' | 'RECEPCIONISTA' | 'GROOMER';
+
+export interface AdminUser {
+  id: string;
+  email: string | null;
+  first_name: string;
+  last_name: string;
+  phone: string | null;
+  role: UserRole;
+  active: boolean;
+  created_at: string;
+}
+
+export interface ListUsersResult {
+  users: AdminUser[];
+}
+
+export interface CreateUserInput {
+  email: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  phone?: string;
+  role: UserRole;
+}
+
+export interface CreateUserResult {
+  success: true;
+  user_id: string;
+  message: string;
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+async function invokeAdmin<T>(
+  body: Record<string, unknown>
+): Promise<T> {
+  const { data, error } = await supabase.functions.invoke<T>('admin-users', {
+    body,
+  });
+
+  if (error) {
+    throw new Error(error.message ?? 'Error invocando la funcion admin-users');
+  }
+  if (!data) {
+    throw new Error('Respuesta vacia de la funcion admin-users');
+  }
+  // La Edge Function envuelve errores con { error: '...' } y status 4xx/5xx.
+  if ((data as unknown as { error?: string }).error) {
+    throw new Error((data as unknown as { error: string }).error);
+  }
+  return data as T;
+}
+
+// ============================================================================
+// API
+// ============================================================================
+
+export async function listUsers(): Promise<AdminUser[]> {
+  const result = await invokeAdmin<ListUsersResult>({ action: 'list' });
+  return result.users;
+}
+
+export async function createUser(input: CreateUserInput): Promise<CreateUserResult> {
+  return invokeAdmin<CreateUserResult>({ action: 'create', ...input });
+}
+
+export async function deactivateUser(userId: string): Promise<void> {
+  await invokeAdmin<{ success: true }>({
+    action: 'deactivate',
+    user_id: userId,
+  });
+}
+
+export async function changeUserRole(
+  userId: string,
+  newRole: UserRole
+): Promise<void> {
+  await invokeAdmin<{ success: true }>({
+    action: 'change_role',
+    user_id: userId,
+    new_role: newRole,
+  });
+}
