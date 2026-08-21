@@ -18,7 +18,7 @@ export interface ClientRow {
   phone1: string;
   phone2: string | null;
   address: string;
-  registration_date: string;
+  created_at: string;
 }
 
 /**
@@ -33,8 +33,8 @@ export function rowToClient(row: ClientRow): Client {
     lastName: row.last_name,
     email: row.email ?? '',
     dni: '',
-    date: row.registration_date.slice(0, 10),
-    hour: row.registration_date.slice(11, 19),
+    date: row.created_at.slice(0, 10),
+    hour: row.created_at.slice(11, 19),
     phone1: row.phone1,
     phone2: row.phone2 ?? '',
     address: row.address,
@@ -52,13 +52,13 @@ export function rowToClient(row: ClientRow): Client {
 
 /**
  * Obtiene todos los clientes de la tabla `clients`.
- * Equivalente a: SELECT * FROM clients
+ * Equivalente a: SELECT * FROM clients ORDER BY created_at DESC
  */
 export async function getClients(): Promise<Client[]> {
   const { data, error } = await supabase
     .from('clients')
     .select('*')
-    .order('registration_date', { ascending: false });
+    .order('created_at', { ascending: false });
 
   if (error) {
     throw new Error(`Error al obtener clientes: ${error.message}`);

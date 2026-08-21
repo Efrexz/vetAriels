@@ -6,3 +6,5 @@ Documentación técnica del proyecto organizada por micro-fases.
   proyecto en Supabase y dejarlo listo para conectar la app.
 - [Paso 1 — Schema v2](./PASO_1_SCHEMA_V2.md) — multi-tenant, roles seguros,
   facturación peruana.
+- [Paso 2 — Seguridad de roles](./PASO_2_SEGURIDAD.md) — triggers anti-escalación
+  y anti-lockout.

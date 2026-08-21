@@ -360,8 +360,10 @@ COMMENT ON COLUMN public.grooming_queue.turn    IS 'Turno diario por empresa (re
 
 CREATE INDEX idx_grooming_queue_company_state ON public.grooming_queue(company_id, state, created_at DESC);
 -- Turno unico por empresa por dia.
-CREATE UNIQUE INDEX uq_grooming_company_day_turn
-  ON public.grooming_queue(company_id, DATE(created_at), turn);
+-- La unicidad del turno se garantiza en el trigger assign_grooming_turn
+-- via FOR UPDATE sobre company_counters (lock pesimista atomico).
+-- No usamos unique index porque DATE(timestamptz) es STABLE, no IMMUTABLE,
+-- y Postgres rechaza expresiones no-inmutables en indices.
 
 CREATE TABLE public.grooming_queue_items (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
