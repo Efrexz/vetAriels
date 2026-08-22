@@ -11,6 +11,7 @@ interface ActionButtonsProps {
   submitText?: string;
   mode?: Mode;
   customIcon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 function ActionButtons({
@@ -20,6 +21,7 @@ function ActionButtons({
   submitText = 'Guardar',
   mode,
   customIcon,
+  disabled = false,
 }: ActionButtonsProps) {
   return (
     <div
@@ -43,7 +45,8 @@ function ActionButtons({
       )}
       <button
         type="button"
-        className="bg-primary text-sm text-white py-2 px-5 rounded-xl hover:opacity-90 transition-colors flex items-center gap-2 font-semibold font-display shadow-sm shadow-primary/25 w-full md:w-auto"
+        disabled={disabled}
+        className="bg-primary text-sm text-white py-2 px-5 rounded-xl hover:opacity-90 transition-colors flex items-center gap-2 font-semibold font-display shadow-sm shadow-primary/25 w-full md:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
         onClick={onSubmit}
       >
         {customIcon ||

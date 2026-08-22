@@ -1,8 +1,6 @@
 import { useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGlobal } from '@context/GlobalContext';
-import { User } from '@t/user.types';
-import { generateUniqueId } from '@utils/idGenerator';
+import { useUsersMutations } from '@hooks/useUsersQuery';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { FormField } from '@components/ui/FormField';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
@@ -21,10 +19,16 @@ interface FormDataState {
 
 type FormErrors = Partial<Record<keyof FormDataState, string>>;
 
+const ROLE_OPTIONS = [
+  { value: 'ADMIN', label: 'Administrador' },
+  { value: 'VETERINARIO', label: 'Veterinario' },
+  { value: 'RECEPCIONISTA', label: 'Recepcionista' },
+  { value: 'GROOMER', label: 'Groomer' },
+];
+
 function CreateUser() {
-  const { addUser, roles } = useGlobal();
+  const { create } = useUsersMutations();
   const navigate = useNavigate();
-  const roleNames = roles.map((role) => role.name);
 
   const [formData, setFormData] = useState<FormDataState>({
     email: '',
@@ -32,10 +36,11 @@ function CreateUser() {
     name: '',
     lastName: '',
     phone: '',
-    rol: roleNames[0] || '',
+    rol: 'RECEPCIONISTA',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function validateForm(): boolean {
     const newErrors: FormErrors = {};
@@ -46,13 +51,13 @@ function CreateUser() {
       newErrors.lastName = 'El apellido debe tener al menos 3 caracteres';
     }
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'El correo electrónico no es válido';
+      newErrors.email = 'El correo electronico no es valido';
     }
     if (!formData.password || formData.password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
+      newErrors.password = 'La contrasena debe tener al menos 6 caracteres';
     }
     if (!/^\d{9}$/.test(formData.phone)) {
-      newErrors.phone = 'El teléfono debe tener 9 dígitos';
+      newErrors.phone = 'El telefono debe tener 9 digitos';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -63,35 +68,33 @@ function CreateUser() {
     setFormData({ ...formData, [name]: value });
   }
 
-  function createNewUser() {
+  async function createNewUser() {
     if (!validateForm()) return;
-    const now = new Date();
-    const newUser: User = {
-      id: generateUniqueId(),
-      email: formData.email,
-      password: formData.password,
-      name: formData.name,
-      lastName: formData.lastName,
-      userName: `${formData.lastName.toUpperCase()} ${formData.name.toUpperCase()}`,
-      phone: formData.phone,
-      rol: formData.rol || roleNames[0],
-      registrationDate: now.toLocaleDateString(),
-      registrationTime: now.toLocaleTimeString(),
-      status: 'ACTIVO',
-    };
-    addUser(newUser);
-    navigate('/config/user-subsidiaries');
+    setSubmitError(null);
+
+    try {
+      await create.mutateAsync({
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.name,
+        last_name: formData.lastName,
+        phone: formData.phone,
+        role: formData.rol as 'ADMIN' | 'VETERINARIO' | 'RECEPCIONISTA' | 'GROOMER',
+      });
+      navigate('/config/user-subsidiaries');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Error al crear usuario';
+      setSubmitError(msg);
+    }
   }
 
   return (
     <section className="w-full">
       <div className="mb-6">
         <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
-          Configuraci&oacute;n
+          Configuracion
         </span>
-        <h1 className="text-2xl font-bold font-display text-ink">
-          Crear Usuario
-        </h1>
+        <h1 className="text-2xl font-bold font-display text-ink">Crear Usuario</h1>
       </div>
 
       <div className="bg-paper rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
@@ -118,7 +121,7 @@ function CreateUser() {
               placeholder="Apellido del usuario"
             />
             <FormField
-              label="Correo electrónico"
+              label="Correo electronico"
               id="email"
               type="email"
               icon={EmailIcon}
@@ -129,7 +132,7 @@ function CreateUser() {
               placeholder="usuario@clinica.com"
             />
             <FormField
-              label="Contraseña"
+              label="Contrasena"
               id="password"
               type="password"
               icon={PadLockIcon}
@@ -137,10 +140,10 @@ function CreateUser() {
               onChange={handleChange}
               error={errors.password}
               required
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Minimo 6 caracteres"
             />
             <FormField
-              label="Teléfono móvil"
+              label="Telefono"
               id="phone"
               type="tel"
               icon={PhoneIcon}
@@ -158,16 +161,23 @@ function CreateUser() {
               value={formData.rol}
               onChange={handleChange}
               error={errors.rol}
-              options={roleNames.map((n) => ({ value: n, label: n }))}
+              options={ROLE_OPTIONS}
             />
           </div>
+
+          {submitError && (
+            <p className="text-danger text-sm mt-4" role="alert">
+              {submitError}
+            </p>
+          )}
         </div>
 
         <ActionButtons
           onCancel={() => navigate(-1)}
           onSubmit={createNewUser}
-          submitText="Crear usuario"
+          submitText={create.isPending ? 'Creando...' : 'Crear usuario'}
           mode="form"
+          disabled={create.isPending}
         />
       </div>
     </section>

@@ -14,7 +14,15 @@ import ReturnIcon from '@assets/returnIcon.svg?react';
 
 type OperationType = "medical" | "deleteGrooming" | "finishGrooming" | "returnGrooming" | "deleteUser" | "deleteRecordAndNote" | "payments";
 
-type ElementDataType = MedicalQueueItem | GroomingQueueItem | User | PetRecord | Payment;
+import type { AdminUser } from '../../services/adminUsersService';
+
+type ElementDataType =
+  | MedicalQueueItem
+  | GroomingQueueItem
+  | User
+  | PetRecord
+  | Payment
+  | AdminUser;
 
 type OperationConfig = {
     title: string;
@@ -66,10 +74,16 @@ interface ConfirmActionModalProps {
     elementData: ElementDataType;
     onClose: () => void;
     typeOfOperation: OperationType;
+    /**
+     * Callback opcional. Si se pasa, el modal NO ejecuta su accion interna
+     * (removeUser, removePet, etc.) y en su lugar delega en este callback.
+     * Util cuando queremos manejar la operacion con React Query / Edge Function.
+     */
+    onConfirm?: () => void | Promise<void>;
 }
 
 
-function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmActionModalProps){
+function ConfirmActionModal({ elementData, onClose, typeOfOperation, onConfirm } : ConfirmActionModalProps){
 
     const { id: petId } = useParams<{ id: string }>();
     const { removePetFromQueueMedical,removePetFromQueueGrooming,addPetInQueueGroomingHistory,returnPetToQueueGrooming,removeRecord} = useClients();
@@ -88,6 +102,15 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation } : ConfirmA
                 setErrorMessage("El motivo debe tener al menos 4 caracteres.");
                 return;
             }
+        }
+
+        // Si el consumidor del modal provee un callback externo,
+        // delegamos toda la logica en el (React Query / Edge Function).
+        if (onConfirm) {
+            void Promise.resolve(onConfirm()).catch((err) => {
+                setErrorMessage(err instanceof Error ? err.message : 'Error');
+            });
+            return;
         }
 
         switch (typeOfOperation) {

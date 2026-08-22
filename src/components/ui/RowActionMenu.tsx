@@ -6,6 +6,7 @@ interface RowActionMenuItem {
   icon: ComponentType<React.SVGProps<SVGSVGElement>>;
   onClick: () => void;
   danger?: boolean;
+  disabled?: boolean;
 }
 
 interface RowActionMenuDivider {
@@ -81,6 +82,7 @@ function RowActionMenu({ items }: RowActionMenuProps) {
             ) : (
               <button
                 key={entry.label}
+                disabled={entry.disabled}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleItemClick(entry);
@@ -89,7 +91,7 @@ function RowActionMenu({ items }: RowActionMenuProps) {
                   entry.danger
                     ? 'text-danger hover:bg-danger/5'
                     : 'text-slate hover:bg-slate-50 hover:text-ink'
-                }`}
+                } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent`}
               >
                 <entry.icon className="w-4 h-4" />
                 {entry.label}
