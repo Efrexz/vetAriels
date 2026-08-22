@@ -83,8 +83,17 @@ function CreateUser() {
       });
       navigate('/config/user-subsidiaries');
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Error al crear usuario';
-      setSubmitError(msg);
+      const raw = err instanceof Error ? err.message : 'Error al crear usuario';
+      // Mapeamos errores tecnicos de Supabase a mensajes en espanol claros.
+      let userMessage = raw;
+      if (/already registered|already exists/i.test(raw)) {
+        userMessage = `Ya existe un usuario con el correo "${formData.email}". Usa otro correo o desactiva el usuario existente.`;
+      } else if (/password/i.test(raw) && /short|6/i.test(raw)) {
+        userMessage = 'La contrasena debe tener al menos 6 caracteres.';
+      } else if (/email/i.test(raw) && /invalid/i.test(raw)) {
+        userMessage = 'El formato del correo electronico no es valido.';
+      }
+      setSubmitError(userMessage);
     }
   }
 

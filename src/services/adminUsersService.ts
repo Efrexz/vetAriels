@@ -1,6 +1,7 @@
 // ============================================================================
 // Servicio: invocacion de la Edge Function admin-users
 // ============================================================================
+import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from './supabaseClient';
 
 // ============================================================================
@@ -50,16 +51,38 @@ async function invokeAdmin<T>(
     body,
   });
 
+  // SupabaseJS descarta el body en errores 4xx/5xx. Hay que leerlo
+  // manualmente via error.context para obtener el mensaje real
+  // que envio nuestra Edge Function.
+  if (error instanceof FunctionsHttpError) {
+    try {
+      const errorBody = (await error.context.json()) as { error?: string };
+      if (errorBody.error) {
+        throw new Error(errorBody.error);
+      }
+    } catch (innerErr) {
+      // Si es un error nuestro (throw anterior), propagalo.
+      // Si es fallo de parseo del JSON, lanza el mensaje generico.
+      if (innerErr instanceof Error && innerErr.message) {
+        throw innerErr;
+      }
+    }
+  }
+
   if (error) {
     throw new Error(error.message ?? 'Error invocando la funcion admin-users');
   }
+
   if (!data) {
     throw new Error('Respuesta vacia de la funcion admin-users');
   }
-  // La Edge Function envuelve errores con { error: '...' } y status 4xx/5xx.
+
+  // La Edge Function puede envolver errores con { error: '...' } y status 2xx
+  // tambien (defense in depth).
   if ((data as unknown as { error?: string }).error) {
     throw new Error((data as unknown as { error: string }).error);
   }
+
   return data as T;
 }
 

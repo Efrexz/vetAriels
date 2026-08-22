@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUsersQuery, useUsersMutations } from '@hooks/useUsersQuery';
 import type { AdminUser } from '../../services/adminUsersService';
@@ -22,6 +22,13 @@ function Users() {
   const { data: users = [], isLoading, error, refetch } = useUsersQuery();
   const { deactivate } = useUsersMutations();
   const [confirmTarget, setConfirmTarget] = useState<AdminUser | null>(null);
+
+  // Refetch cada vez que el usuario vuelve a esta pantalla.
+  // Sin esto, el cache de React Query sirve datos viejos aunque hayas
+  // creado un usuario nuevo y navegues de vuelta.
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const controls = useTableControls(users, {
     itemsPerPage: 10,
