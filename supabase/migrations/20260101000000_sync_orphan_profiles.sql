@@ -33,3 +33,10 @@ SELECT
 FROM auth.users u
 LEFT JOIN public.profiles p ON p.id = u.id
 ORDER BY u.created_at;
+
+-- ============================================================================
+-- Este script es IDEMPOTENTE: se puede correr multiples veces sin problema.
+-- Si tras crear un usuario nuevo no aparece en la lista, corre este script
+-- para sincronizar profiles huerfanos. Cuando el trigger handle_new_user
+-- funcione bien, no sera necesario.
+-- ============================================================================

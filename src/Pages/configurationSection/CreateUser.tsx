@@ -84,15 +84,37 @@ function CreateUser() {
       navigate('/config/user-subsidiaries');
     } catch (err) {
       const raw = err instanceof Error ? err.message : 'Error al crear usuario';
+      const lower = raw.toLowerCase();
+
       // Mapeamos errores tecnicos de Supabase a mensajes en espanol claros.
+      // El usuario final no deberia ver terminos como "duplicate key value" o "23505".
       let userMessage = raw;
-      if (/already registered|already exists/i.test(raw)) {
-        userMessage = `Ya existe un usuario con el correo "${formData.email}". Usa otro correo o desactiva el usuario existente.`;
-      } else if (/password/i.test(raw) && /short|6/i.test(raw)) {
+
+      if (
+        (lower.includes('already') && lower.includes('registered')) ||
+        lower.includes('already exists') ||
+        lower.includes('duplicate key') ||
+        lower.includes('users_email_key') ||
+        lower.includes('users_phone_key')
+      ) {
+        userMessage =
+          'Ya existe un usuario con ese correo o telefono. Usa datos diferentes o desactiva el usuario existente.';
+      } else if (lower.includes('password') && (lower.includes('6') || lower.includes('short'))) {
         userMessage = 'La contrasena debe tener al menos 6 caracteres.';
-      } else if (/email/i.test(raw) && /invalid/i.test(raw)) {
+      } else if (lower.includes('email') && lower.includes('invalid')) {
         userMessage = 'El formato del correo electronico no es valido.';
+      } else if (lower.includes('phone') && lower.includes('invalid')) {
+        userMessage = 'El telefono debe tener 9 digitos numericos.';
+      } else if (lower.includes('check constraint')) {
+        userMessage = 'Uno de los valores enviados no es valido (revisa rol y campos).';
+      } else if (lower.includes('rls') || lower.includes('row level security')) {
+        userMessage = 'No tienes permisos para realizar esta accion.';
+      } else if (lower.includes('network') || lower.includes('fetch')) {
+        userMessage = 'Error de conexion. Verifica tu internet e intenta de nuevo.';
+      } else if (lower.includes('non-2xx')) {
+        userMessage = `No se pudo crear el usuario. Detalle: ${raw}`;
       }
+
       setSubmitError(userMessage);
     }
   }
