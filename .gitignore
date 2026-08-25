@@ -17,6 +17,11 @@ dist-ssr
 db/*.db
 db/*.sqlite
 
+# Documentos locales (no se suben al repo, son de uso personal)
+# PROJECT_CONTEXT.md es un handover entre chats; vive solo en tu maquina
+docs/PROJECT_CONTEXT.md
+PROJECT_CONTEXT.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

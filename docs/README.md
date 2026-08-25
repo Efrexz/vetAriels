@@ -9,3 +9,6 @@ Documentación técnica del proyecto organizada por micro-fases.
 - [Paso 2 — Seguridad de roles](./PASO_2_SEGURIDAD.md) — triggers anti-escalación
   y anti-lockout.
 - [Paso 3 — Edge Functions + Users](./PASO_3.md) — admin-users y password reset.
+
+> **Nota local**: existe un archivo `docs/PROJECT_CONTEXT.md` que es un handover
+> entre sesiones de chat. Está en `.gitignore` y solo vive en tu máquina.

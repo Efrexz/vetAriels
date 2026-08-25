@@ -40,16 +40,20 @@ $$;
 COMMENT ON FUNCTION public.current_company_id() IS 'Devuelve la empresa del usuario autenticado. Usado en policies y triggers.';
 
 -- ----------------------------------------------------------------------------
--- 1. handle_new_user: crea profile al registrarse en Supabase Auth
+-- 1. handle_new_user: crea profile al registrarse en Supabase Auth (v3)
 -- ----------------------------------------------------------------------------
--- IMPORTANTE: el usuario nuevo llega SIN empresa asignada. El trigger lo crea
--- con company_id NULL... pero profiles.company_id es NOT NULL. Solucion:
--- el admin crea el usuario desde el dashboard de Supabase o desde una Edge
--- Function (Paso 3), y ahi asigna la empresa. Mientras tanto, el usuario
--- NO puede hacer nada (no tiene profile activo).
+-- NOTA IMPORTANTE: GoTrue (Supabase Auth) inserta al usuario en auth.users
+-- con raw_app_meta_data casi vacio (solo provider/providers), y luego aplica
+-- el app_metadata que le pasamos al admin.createUser() en un UPDATE
+-- posterior. Por eso este trigger escucha TANTO INSERT como UPDATE de
+-- raw_app_meta_data. Si la metadata llega en el UPDATE, crea el profile
+-- ahi. Es IDEMPOTENTE (ON CONFLICT DO NOTHING): si dispara dos veces
+-- (INSERT + UPDATE) no duplica nada.
 --
--- Estrategia: el trigger crea el profile solo si el usuario tiene
--- 'company_id' en su app_metadata (que solo el admin puede setear).
+-- Sin la app_metadata (company_id NULL), sale silenciosamente.
+-- Eso permite el caso normal del dashboard donde no se pasa app_metadata.
+-- La Edge Function admin-users SIEMPRE pasa company_id, asi que el
+-- UPDATE con metadata SIEMPRE llegara despues y creara el profile.
 -- ----------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
@@ -69,10 +73,9 @@ BEGIN
   v_first_name := COALESCE(NEW.raw_app_meta_data ->> 'first_name', '');
   v_last_name  := COALESCE(NEW.raw_app_meta_data ->> 'last_name',  '');
 
-  -- Si no tiene empresa asignada, no creamos profile. El admin debe asignarlo.
+  -- Sin empresa asignada: salir silenciosamente. GoTrue hara un UPDATE
+  -- con la metadata que re-dispara este trigger.
   IF v_company_id IS NULL THEN
-    -- Log para que el admin lo vea. El usuario queda sin perfil y sin acceso.
-    RAISE LOG 'handle_new_user: usuario % sin company_id en app_metadata', NEW.id;
     RETURN NEW;
   END IF;
 
@@ -86,7 +89,7 @@ $$;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
+  AFTER INSERT OR UPDATE OF raw_app_meta_data ON auth.users
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
 

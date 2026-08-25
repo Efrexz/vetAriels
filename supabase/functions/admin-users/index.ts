@@ -225,6 +225,16 @@ async function handleCreate(
     return jsonResponse({ error: 'La contrasena debe tener al menos 6 caracteres' }, 400);
   }
 
+  // Defensa en profundidad: si por algun motivo ctx.companyId no esta
+  // disponible, abortamos ANTES de crear el usuario. Asi no quedan
+  // usuarios huerfanos en auth.users sin profile.
+  if (!ctx.companyId) {
+    return jsonResponse(
+      { error: 'El admin no tiene empresa asignada. Contacta soporte.' },
+      500
+    );
+  }
+
   // Crear usuario con service_role, asignando metadata con company_id.
   // email_confirm: true evita que Supabase envie un email de verificacion.
   const { data: created, error: createError } =
@@ -250,7 +260,37 @@ async function handleCreate(
     );
   }
 
-  // El trigger handle_new_user crea el profile automaticamente.
+  // Defense in depth: GoTrue inserta al usuario con raw_app_meta_data VACIO
+  // y aplica el app_metadata en un UPDATE posterior. El trigger
+  // handle_new_user v3 escucha INSERT y UPDATE, pero por si acaso el trigger
+  // no se creo o fallo, aseguramos que el profile exista usando upsert
+  // con service_role (bypassa RLS).
+  const { error: profileError } = await supabaseAdmin.from('profiles').upsert(
+    {
+      id: created.user.id,
+      company_id: ctx.companyId,
+      role: body.role,
+      first_name: body.first_name,
+      last_name: body.last_name,
+    },
+    { onConflict: 'id' }
+  );
+
+  if (profileError) {
+    // El usuario se creo pero el profile fallo. Lo logueamos y devolvemos
+    // el error para que el admin sepa que algo anda mal (en vez de un
+    // success silencioso con un usuario huerfano).
+    console.error('admin-users: fallo al crear/actualizar profile', profileError);
+    return jsonResponse(
+      {
+        error:
+          'Usuario creado en Auth pero no se pudo crear su profile. Contacta soporte.',
+        user_id: created.user.id,
+      },
+      500
+    );
+  }
+
   return jsonResponse({
     success: true,
     user_id: created.user.id,
