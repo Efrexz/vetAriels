@@ -295,8 +295,17 @@ CREATE TRIGGER trg_grooming_turn
   FOR EACH ROW EXECUTE FUNCTION public.assign_grooming_turn();
 
 -- ----------------------------------------------------------------------------
--- 6. assign_pet_hc: historia clinica unica por empresa
+-- 6. assign_pet_hc: historia clinica unica por empresa (monotonico)
 -- ----------------------------------------------------------------------------
+-- IMPORTANTE: este contador usa una fecha fija (1970-01-01) para mantener
+-- una unica fila por empresa. Si usamos CURRENT_DATE, el trigger crea una
+-- fila nueva del contador cada dia empezando en 0 -> choca con el indice
+-- UNIQUE uq_pets_company_hc al dia siguiente.
+--
+-- PET_HC debe ser monotónico por empresa (la HC no se reinicia cada dia).
+-- GROOMING_TURN_DAILY (funcion anterior) si se reinicia cada dia -- ese si
+-- usa CURRENT_DATE. La PK compuesta (company_id, counter_type, counter_date)
+-- exige que los dos counters se distingan por su counter_date.
 CREATE OR REPLACE FUNCTION public.assign_pet_hc()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -305,21 +314,21 @@ DECLARE
   v_next_value INTEGER;
 BEGIN
   INSERT INTO public.company_counters (company_id, counter_type, counter_date, current_value)
-  VALUES (NEW.company_id, 'PET_HC', CURRENT_DATE, 0)
+  VALUES (NEW.company_id, 'PET_HC', DATE '1970-01-01', 0)
   ON CONFLICT (company_id, counter_type, counter_date) DO NOTHING;
 
   SELECT current_value + 1 INTO v_next_value
   FROM public.company_counters
   WHERE company_id   = NEW.company_id
     AND counter_type = 'PET_HC'
-    AND counter_date = CURRENT_DATE
+    AND counter_date = DATE '1970-01-01'
   FOR UPDATE;
 
   UPDATE public.company_counters
   SET current_value = current_value + 1
   WHERE company_id   = NEW.company_id
     AND counter_type = 'PET_HC'
-    AND counter_date = CURRENT_DATE;
+    AND counter_date = DATE '1970-01-01';
 
   NEW.hc := LPAD(v_next_value::TEXT, 6, '0');
   RETURN NEW;
