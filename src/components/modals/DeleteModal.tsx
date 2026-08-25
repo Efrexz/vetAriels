@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useClients } from '@context/ClientsContext';
 import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { useToast } from '@context/ToastContext';
 import { Product, Service } from '@t/inventory.types';
 import { Pet, Client } from '@t/client.types';
 import TrashIcon from '@assets/trashIcon.svg?react';
@@ -18,8 +19,10 @@ interface DeleteModalProps {
 function DeleteModal({ elementToDelete, onClose, mode }: DeleteModalProps) {
     const { removeProduct, removeService } = useProductsAndServices();
     const { removePet, removeClient } = useClients();
+    const { toast } = useToast();
     const [itemValue, setItemValue] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     function getElementDetails() {
         switch (mode) {
@@ -57,14 +60,23 @@ function DeleteModal({ elementToDelete, onClose, mode }: DeleteModalProps) {
     const { typeName, operationName, deleteFn } = getElementDetails();
 
 
-    function deleteElement() {
+    async function deleteElement() {
         if (itemValue.toLowerCase() !== operationName.toLowerCase()) {
             setErrorMessage('El nombre ingresado no coincide. Por favor, verifica.');
             return;
         }
 
-        deleteFn();
-        onClose();
+        setIsSubmitting(true);
+        try {
+            await deleteFn();
+            toast.success(`${typeName} eliminado correctamente.`);
+            onClose();
+        } catch (err) {
+            const message = err instanceof Error ? err.message : `No se pudo eliminar el ${typeName.toLowerCase()}.`;
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
 
@@ -113,11 +125,12 @@ function DeleteModal({ elementToDelete, onClose, mode }: DeleteModalProps) {
                         </button>
                         <button
                             type="button"
-                            className="px-5 py-2 bg-danger text-white rounded-xl hover:opacity-90 flex items-center transition-colors font-semibold font-display shadow-sm shadow-danger/25"
+                            className="px-5 py-2 bg-danger text-white rounded-xl hover:opacity-90 flex items-center transition-colors font-semibold font-display shadow-sm shadow-danger/25 disabled:opacity-60 disabled:cursor-not-allowed"
                             onClick={deleteElement}
+                            disabled={isSubmitting}
                         >
                             <TrashIcon className="w-5 h-5 mr-2" />
-                            Confirmar eliminado
+                            {isSubmitting ? 'Eliminando...' : 'Confirmar eliminado'}
                         </button>
                     </div>
                 </form>

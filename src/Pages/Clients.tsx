@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
 import { DeleteModal } from '@components/modals/DeleteModal';
 import { useTableControls } from '@hooks/useTableControls';
 import { Avatar } from '@components/ui/Avatar';
@@ -52,6 +53,7 @@ function getClientName(client: Client): string {
 
 function Clients() {
   const { clients, removeClient } = useClients();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const [quickFilter, setQuickFilter] = useState('todos');
@@ -124,10 +126,32 @@ function Clients() {
     return () => document.removeEventListener('mousedown', handler);
   }, [openMenuId]);
 
-  function handleBulkDelete() {
-    controls.selectedIds.forEach((id: string) => removeClient(id));
-    controls.clearSelection();
+  async function handleBulkDelete() {
+    const ids = [...controls.selectedIds];
     setShowBulkConfirm(false);
+    let successCount = 0;
+    let errorCount = 0;
+    for (const id of ids) {
+      try {
+        await removeClient(id);
+        successCount += 1;
+      } catch (err) {
+        errorCount += 1;
+        console.error('Error al eliminar cliente:', err);
+      }
+    }
+    controls.clearSelection();
+    if (errorCount === 0) {
+      toast.success(
+        successCount === 1
+          ? 'Cliente eliminado correctamente.'
+          : `${successCount} clientes eliminados correctamente.`
+      );
+    } else if (successCount === 0) {
+      toast.error('No se pudieron eliminar los clientes.');
+    } else {
+      toast.warning(`${successCount} eliminados, ${errorCount} con error.`);
+    }
   }
 
   function resetFilters() {

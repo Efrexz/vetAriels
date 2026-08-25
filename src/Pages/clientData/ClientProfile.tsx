@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
 import { Client } from '@t/client.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
@@ -26,12 +27,14 @@ interface FormDataState {
 function ClientProfile() {
 
     const { updateClientData, clients } = useClients();
+    const { toast } = useToast();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
 
     const individualClientData = clients.find(client => client.id === id);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
     const [formData, setFormData] = useState<FormDataState>({
@@ -99,7 +102,7 @@ function ClientProfile() {
     }
 
 
-    function updateData() {
+    async function updateData() {
         if (!validateForm() || !individualClientData) {
             return;
         }
@@ -117,8 +120,17 @@ function ClientProfile() {
             observations: formData.observations,
         };
 
-        updateClientData(individualClientData.id, updatedClient);
-        navigate(`/clients`);
+        setIsSubmitting(true);
+        try {
+            await updateClientData(individualClientData.id, updatedClient);
+            toast.success('Cliente actualizado correctamente.');
+            navigate(`/clients`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo actualizar el cliente.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     if (!individualClientData) {
@@ -167,7 +179,8 @@ function ClientProfile() {
             <ActionButtons
                 onCancel={() => navigate(-1)}
                 onSubmit={updateData}
-                submitText="Guardar cambios"
+                submitText={isSubmitting ? 'Guardando...' : 'Guardar cambios'}
+                disabled={isSubmitting}
             />
         </div >
     );

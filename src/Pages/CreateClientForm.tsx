@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
 import { Client } from '@t/client.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { generateUniqueId } from '@utils/idGenerator';
@@ -50,6 +51,7 @@ const formFields: FormField[] = [
 
 function CreateClientForm() {
     const { addClient } = useClients();
+    const { toast } = useToast();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<FormDataState>({
@@ -65,6 +67,7 @@ function CreateClientForm() {
         observations: ''
     });
     const [errors, setErrors] = useState<FormErrors>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Validación de los campos
     function validateForm() {
@@ -89,13 +92,10 @@ function CreateClientForm() {
         }));
     }
 
-    function createNewClient() {
+    async function createNewClient() {
         if (!validateForm()) {
             return;
         }
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newClient : Client = {
             id: generateUniqueId(),
@@ -103,8 +103,8 @@ function CreateClientForm() {
             lastName: formData.lastName,
             email: formData.email,
             dni: formData.document,
-            date: currentDate,
-            hour: currentTime,
+            date: '',
+            hour: '',
             phone1: formData.phone1,
             phone2: formData.phone2,
             address: formData.address,
@@ -115,8 +115,17 @@ function CreateClientForm() {
             products: []
         };
 
-        addClient(newClient);
-        navigate(`/clients/client/${newClient.id}/update`);
+        setIsSubmitting(true);
+        try {
+            const created = await addClient(newClient);
+            toast.success(`Cliente "${created.firstName} ${created.lastName}" creado correctamente.`);
+            navigate(`/clients/client/${created.id}/update`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo crear el cliente.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
 
@@ -174,7 +183,8 @@ function CreateClientForm() {
                 <ActionButtons
                     onCancel={() => navigate(-1)}
                     onSubmit={createNewClient}
-                    submitText="Crear cliente"
+                    submitText={isSubmitting ? 'Creando...' : 'Crear cliente'}
+                    disabled={isSubmitting}
                 />
             </div>
         </section>
