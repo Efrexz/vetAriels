@@ -339,3 +339,62 @@ DROP TRIGGER IF EXISTS trg_pet_hc ON public.pets;
 CREATE TRIGGER trg_pet_hc
   BEFORE INSERT ON public.pets
   FOR EACH ROW EXECUTE FUNCTION public.assign_pet_hc();
+
+-- ----------------------------------------------------------------------------
+-- 7. set_company_id_from_current: auto-rellena company_id en INSERT
+-- ----------------------------------------------------------------------------
+-- El frontend no debe conocer su propio company_id (es dato interno de
+-- multi-tenant), asi que los INSERTs llegan SIN company_id. El RLS policy
+-- de cada tabla exige `company_id = current_company_id()`, asi que sin
+-- company_id el INSERT falla con 'row-level security policy violated'.
+--
+-- Solucion: este trigger BEFORE INSERT en cada tabla de negocio rellena
+-- company_id con current_company_id() si llega NULL. Si el INSERT ya trae
+-- company_id (caso del script de migracion con service_role), se respeta.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.set_company_id_from_current()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NEW.company_id IS NULL THEN
+    NEW.company_id := public.current_company_id();
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+COMMENT ON FUNCTION public.set_company_id_from_current()
+  IS 'Auto-rellena company_id con current_company_id() si llega NULL en INSERT. Mantiene multi-tenant sin que el frontend tenga que conocer su company_id.';
+
+-- Aplica el trigger a cada tabla de negocio. DROP IF EXISTS + CREATE
+-- garantiza idempotencia: se puede re-ejecutar sin error.
+DO $$
+DECLARE
+  t TEXT;
+BEGIN
+  FOREACH t IN ARRAY ARRAY[
+    'clients',
+    'pets',
+    'pet_records',
+    'products',
+    'services',
+    'inventory_movements',
+    'invoices',
+    'payments',
+    'clinic_queue',
+    'grooming_queue'
+  ]
+  LOOP
+    EXECUTE format(
+      'DROP TRIGGER IF EXISTS trg_set_company_id ON public.%1$I;
+       CREATE TRIGGER trg_set_company_id
+         BEFORE INSERT ON public.%1$I
+         FOR EACH ROW EXECUTE FUNCTION public.set_company_id_from_current();',
+      t
+    );
+  END LOOP;
+END
+$$;
