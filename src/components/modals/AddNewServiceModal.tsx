@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProductsAndServices } from '@context/ProductsAndServicesContext';
-import { generateUniqueId } from '@utils/idGenerator';
+import { useToast } from '@context/ToastContext';
 import { Service } from '@t/inventory.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import MoneyIcon from '@assets/moneyIcon.svg?react';
@@ -41,6 +41,7 @@ const formFields : FormFieldConfig[] = [
 function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
     const navigate = useNavigate();
     const { addNewService } = useProductsAndServices();
+    const { toast } = useToast();
 
     const [formData, setFormData] = useState<FormDataState>({
         serviceName: '',
@@ -52,6 +53,7 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
 
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     function handleChange (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const { name, value } = e.target;
@@ -82,29 +84,36 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
     }
 
 
-    function createService() {
+    async function createService() {
         if (!validateForm()) {
             return;
         }
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
 
         const newService: Service = {
-            id: generateUniqueId(),
+            id: '',
             serviceName: formData.serviceName,
             line: formData.line,
             category: formData.category,
             cost: Number(formData.cost),
             salePrice: Number(formData.salePrice),
-            registrationDate: currentDate,
-            registrationTime: currentTime,
+            registrationDate: '',
+            registrationTime: '',
             status: true,
             availableForSale: true,
         };
-        addNewService(newService);
-        onClose();
-        navigate(`/services`);
+
+        setIsSubmitting(true);
+        try {
+            const created = await addNewService(newService);
+            toast.success(`Servicio "${created.serviceName}" creado correctamente.`);
+            onClose();
+            navigate(`/services`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo crear el servicio.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -156,8 +165,9 @@ function AddNewServiceModal({ onClose }: AddNewServiceModalProps) {
                 <ActionButtons
                     onCancel={onClose}
                     onSubmit={() => createService()}
-                    submitText="Crear servicio"
+                    submitText={isSubmitting ? 'Creando...' : 'Crear servicio'}
                     mode="modal"
+                    disabled={isSubmitting}
                 />
             </div>
         </div>

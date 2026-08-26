@@ -48,6 +48,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
     });
 
     const [errors, setErrors] = useState<FormErrors>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (productData) {
@@ -65,10 +66,10 @@ function UpdateProduct({ productData }: UpdateProductProps) {
                 minStock: productData.minStock || 0,
                 currentStock: productData.availableStock,
                 status: productData.status ? "ACTIVO" : "INACTIVO",
-                maxStock: 0, // Suponiendo que no viene en productData
-                availableForSales: "SI", // Suponiendo
-                frequency: 0, // Suponiendo
-                icbperTax: "NO", // Suponiendo
+                maxStock: 0,
+                availableForSales: "SI",
+                frequency: 0,
+                icbperTax: "NO",
             });
             setErrors({});
         }
@@ -99,7 +100,7 @@ function UpdateProduct({ productData }: UpdateProductProps) {
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
     }
 
-    function updateProduct() {
+    async function updateProduct() {
         if (!validateForm()) {
             toast.error("Corrige los errores del formulario");
             return;
@@ -119,8 +120,17 @@ function UpdateProduct({ productData }: UpdateProductProps) {
             status: formData.status === "ACTIVO",
         };
         if (productData.systemCode) {
-            updateProductData(productData.systemCode, updatedProductData);
-            navigate("/products");
+            setIsSubmitting(true);
+            try {
+                await updateProductData(productData.systemCode, updatedProductData);
+                toast.success("Producto actualizado correctamente.");
+                navigate("/products");
+            } catch (err) {
+                const message = err instanceof Error ? err.message : "No se pudo actualizar el producto.";
+                toast.error(message);
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     }
 
@@ -224,8 +234,9 @@ function UpdateProduct({ productData }: UpdateProductProps) {
             <ActionButtons
                     onCancel={() => navigate("/products")}
                     onSubmit={updateProduct}
-                    submitText="Actualizar producto"
+                    submitText={isSubmitting ? 'Actualizando...' : 'Actualizar producto'}
                     cancelText="Regresar al listado"
+                    disabled={isSubmitting}
                 />
         </div>
     );

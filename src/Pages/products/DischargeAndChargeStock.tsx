@@ -97,23 +97,34 @@ function DischargeAndChargeStock({ typeOfOperation }: DischargeAndChargeStockPro
     return Object.keys(newErrors).length === 0;
   }
 
-  function submitOrder() {
-    if (!validateForm()) { toast.error("Corrige los errores del formulario"); return; }
-    const now = new Date();
-    const newOrder: InventoryOperation = {
-      id: generateUniqueId(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString(),
-      reason: formData.reason.trim(),
-      responsible: formData.requestor,
-      registeredBy: `${activeUser?.name} ${activeUser?.lastName}` || 'Usuario Desconocido',
-      operationType: formData.operationType,
-      store: formData.store,
-      products: selectedProducts,
-    };
-    if (isRestock) { addRestock(newOrder); navigate('/charges'); }
-    else { addDischarge(newOrder); navigate('/discharges'); }
-  }
+async function submitOrder() {
+        if (!validateForm()) { toast.error("Corrige los errores del formulario"); return; }
+        const newOrder: InventoryOperation = {
+            id: '',
+            date: '',
+            time: '',
+            reason: formData.reason.trim(),
+            responsible: formData.requestor,
+            registeredBy: `${activeUser?.name} ${activeUser?.lastName}` || 'Usuario Desconocido',
+            operationType: isRestock ? 'CARGA' : 'DESCARGA',
+            store: formData.store,
+            products: selectedProducts,
+        };
+        try {
+            if (isRestock) {
+                await addRestock(newOrder);
+                toast.success('Stock cargado correctamente.');
+                navigate('/charges');
+            } else {
+                await addDischarge(newOrder);
+                toast.success('Stock descargado correctamente.');
+                navigate('/discharges');
+            }
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo registrar la operacion.';
+            toast.error(message);
+        }
+    }
 
   const headerColor = isRestock ? '#059669' : '#E11D48';
   const HeaderIcon = isRestock ? DocumentJoinIcon : DocumentOutIcon;

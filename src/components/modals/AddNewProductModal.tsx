@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { useToast } from '@context/ToastContext';
 import { Product } from '@t/inventory.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { generateUniqueId } from '@utils/idGenerator';
@@ -59,6 +60,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
     const navigate = useNavigate();
 
     const { addProduct } = useProductsAndServices();
+    const { toast } = useToast();
     const [formData, setFormData] = useState<FormDataState>({
         productName: '',
         brand: '',
@@ -76,6 +78,7 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     function handleChange (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>)  {
         const { name, value } = e.target;
@@ -110,18 +113,14 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
     }
 
 
-    function createProduct() {
+    async function createProduct() {
         if (!validateForm()) {
             return;
         }
 
-        const now = new Date();
-        const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-        const currentTime = now.toLocaleTimeString(); //  "07:43 PM"
-
-        const newService: Product = {
+        const newProduct: Product = {
             systemCode: generateUniqueId(),
-            id: generateUniqueId(),
+            id: '',
             productName: formData.productName,
             brand: formData.brand,
             unitOfMeasurement: formData.unitOfMeasurement,
@@ -136,13 +135,23 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
             availableStock: 0,
             cost: Number(formData.cost),
             salePrice: Number(formData.salePrice),
-            registrationDate: currentDate,
-            registrationTime: currentTime,
+            registrationDate: '',
+            registrationTime: '',
             status: true
         };
-        addProduct(newService);
-        onClose();
-        navigate("/products");
+
+        setIsSubmitting(true);
+        try {
+            const created = await addProduct(newProduct.systemCode, newProduct);
+            toast.success(`Producto "${created.productName}" creado correctamente.`);
+            onClose();
+            navigate("/products");
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo crear el producto.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
 
@@ -202,8 +211,9 @@ function AddNewProductModal({ onClose }: AddNewProductModalProps) {
                 <ActionButtons
                     onCancel={onClose}
                     onSubmit={createProduct}
-                    submitText="Crear producto"
+                    submitText={isSubmitting ? 'Creando...' : 'Crear producto'}
                     mode="modal"
+                    disabled={isSubmitting}
                 />
             </div>
         </div >

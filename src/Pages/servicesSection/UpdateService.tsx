@@ -33,6 +33,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
         status: "INACTIVO",
     });
     const [errors, setErrors] = useState<FormErrors>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (serviceData) {
@@ -72,7 +73,7 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
         }));
     }
 
-    function updateService() {
+    async function updateService() {
         if (!validateForm()) {
             toast.error("Corrige los errores del formulario");
             return;
@@ -82,12 +83,20 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
             serviceName: formData.serviceName.trim(),
             line: formData.line,
             category: formData.category,
-            // Devolvemos un valor booleano dependiendo lo que seleccione
             availableForSale: formData.availableForSale === "SI",
             status: formData.status === "ACTIVO",
         };
-        toast.success("Servicio actualizado correctamente");
-        updateServiceData(serviceData.id, updatedServiceData);
+        setIsSubmitting(true);
+        try {
+            await updateServiceData(serviceData.id, updatedServiceData);
+            toast.success("Servicio actualizado correctamente");
+            navigate("/services");
+        } catch (err) {
+            const message = err instanceof Error ? err.message : "No se pudo actualizar el servicio.";
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     const fields = [
@@ -147,9 +156,10 @@ function UpdateService({ serviceData }: UpdateServiceProps) {
             <ActionButtons
                     onCancel={() => navigate("/services")}
                     onSubmit={updateService}
-                    submitText="Actualizar servicio"
+                    submitText={isSubmitting ? 'Actualizando...' : 'Actualizar servicio'}
                     cancelText="Regresar"
                     mode="modal"
+                    disabled={isSubmitting}
                 />
         </div>
     );
