@@ -81,20 +81,23 @@ function friendly(message: string): string {
 }
 
 function translateClientError(message: string): string {
-  const m = message.toLowerCase();
-  if (m.includes('duplicate key') && m.includes('clients_company_id_dni')) {
-    return 'Ya existe un cliente con ese numero de documento en tu empresa.';
-  }
-  if (m.includes('violates row-level security')) {
-    return 'No tienes permisos para realizar esta accion. Verifica tu rol.';
-  }
-  if (m.includes('null value') && m.includes('phone1')) {
-    return 'El telefono movil es obligatorio.';
-  }
-  if (m.includes('null value') && m.includes('address')) {
-    return 'La direccion es obligatoria.';
-  }
-  return friendly(message);
+    const m = message.toLowerCase();
+    if (m.includes('duplicate key') && m.includes('clients_company_id_dni')) {
+        return 'Ya existe un cliente con ese numero de documento en tu empresa.';
+    }
+    if (m.includes('violates row-level security')) {
+        return 'No tienes permisos para realizar esta accion. Verifica tu rol.';
+    }
+    if (m.includes('null value') && m.includes('phone1')) {
+        return 'El telefono movil es obligatorio.';
+    }
+    if (m.includes('null value') && m.includes('address')) {
+        return 'La direccion es obligatoria.';
+    }
+    if (m.includes('null value') && m.includes('company_id')) {
+        return 'No se pudo asociar el cliente a tu empresa. Cierra sesion y vuelve a entrar.';
+    }
+    return friendly(message);
 }
 
 // ============================================================================

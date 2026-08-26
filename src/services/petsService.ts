@@ -199,6 +199,11 @@ function translatePetError(message: string): string {
     if (m.includes('foreign key') && m.includes('owner_id')) {
         return 'El propietario seleccionado no existe.';
     }
+    if (m.includes('null value') && m.includes('company_id')) {
+        return 'No se pudo asociar la mascota a tu empresa. Cierra sesion y vuelve a entrar.';
+    }
+    // Para cualquier otro error no catalogado devolvemos el mensaje crudo:
+    // en desarrollo es mas util ver el error real de Supabase que un texto generico.
     return message;
 }
 

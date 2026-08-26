@@ -213,6 +213,9 @@ COMMENT ON FUNCTION public.update_product_stock_on_delete() IS 'Revierte el stoc
 -- ----------------------------------------------------------------------------
 -- 4. assign_invoice_correlative: correlativo unico por empresa+serie
 -- ----------------------------------------------------------------------------
+-- IMPORTANTE: usa public.current_company_id() directamente en vez de
+-- NEW.company_id. Asi es independiente del orden de BEFORE triggers y
+-- del payload del INSERT (el frontend no envia company_id).
 CREATE OR REPLACE FUNCTION public.assign_invoice_correlative()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -220,6 +223,7 @@ AS $$
 DECLARE
   v_counter_type TEXT;
   v_next_value  INTEGER;
+  v_company_id  UUID := public.current_company_id();
 BEGIN
   v_counter_type := CASE
     WHEN NEW.tipo_comprobante = 'BOLETA'  THEN 'INVOICE_BOLETA'
@@ -228,20 +232,20 @@ BEGIN
 
   -- Asegurar fila del contador para hoy.
   INSERT INTO public.company_counters (company_id, counter_type, counter_date, current_value)
-  VALUES (NEW.company_id, v_counter_type, CURRENT_DATE, 0)
+  VALUES (v_company_id, v_counter_type, CURRENT_DATE, 0)
   ON CONFLICT (company_id, counter_type, counter_date) DO NOTHING;
 
   -- Lock + incrementar (atomico).
   SELECT current_value + 1 INTO v_next_value
   FROM public.company_counters
-  WHERE company_id   = NEW.company_id
+  WHERE company_id   = v_company_id
     AND counter_type = v_counter_type
     AND counter_date = CURRENT_DATE
   FOR UPDATE;
 
   UPDATE public.company_counters
   SET current_value = current_value + 1
-  WHERE company_id   = NEW.company_id
+  WHERE company_id   = v_company_id
     AND counter_type = v_counter_type
     AND counter_date = CURRENT_DATE;
 
@@ -260,27 +264,29 @@ COMMENT ON FUNCTION public.assign_invoice_correlative() IS 'Asigna correlativo u
 -- ----------------------------------------------------------------------------
 -- 5. assign_grooming_turn: turno diario por empresa
 -- ----------------------------------------------------------------------------
+-- IMPORTANTE: usa public.current_company_id() directamente (ver seccion 4).
 CREATE OR REPLACE FUNCTION public.assign_grooming_turn()
-RETURNS TRIGGER
+RETURTS TRIGGER
 LANGUAGE plpgsql
 AS $$
 DECLARE
   v_next_value INTEGER;
+  v_company_id UUID := public.current_company_id();
 BEGIN
   INSERT INTO public.company_counters (company_id, counter_type, counter_date, current_value)
-  VALUES (NEW.company_id, 'GROOMING_TURN_DAILY', CURRENT_DATE, 0)
+  VALUES (v_company_id, 'GROOMING_TURN_DAILY', CURRENT_DATE, 0)
   ON CONFLICT (company_id, counter_type, counter_date) DO NOTHING;
 
   SELECT current_value + 1 INTO v_next_value
   FROM public.company_counters
-  WHERE company_id   = NEW.company_id
+  WHERE company_id   = v_company_id
     AND counter_type = 'GROOMING_TURN_DAILY'
     AND counter_date = CURRENT_DATE
   FOR UPDATE;
 
   UPDATE public.company_counters
   SET current_value = current_value + 1
-  WHERE company_id   = NEW.company_id
+  WHERE company_id   = v_company_id
     AND counter_type = 'GROOMING_TURN_DAILY'
     AND counter_date = CURRENT_DATE;
 
@@ -306,27 +312,31 @@ CREATE TRIGGER trg_grooming_turn
 -- GROOMING_TURN_DAILY (funcion anterior) si se reinicia cada dia -- ese si
 -- usa CURRENT_DATE. La PK compuesta (company_id, counter_type, counter_date)
 -- exige que los dos counters se distingan por su counter_date.
+--
+-- Tambien usa public.current_company_id() directamente (ver seccion 4)
+-- para evitar problemas de orden de triggers BEFORE INSERT.
 CREATE OR REPLACE FUNCTION public.assign_pet_hc()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
 DECLARE
   v_next_value INTEGER;
+  v_company_id UUID := public.current_company_id();
 BEGIN
   INSERT INTO public.company_counters (company_id, counter_type, counter_date, current_value)
-  VALUES (NEW.company_id, 'PET_HC', DATE '1970-01-01', 0)
+  VALUES (v_company_id, 'PET_HC', DATE '1970-01-01', 0)
   ON CONFLICT (company_id, counter_type, counter_date) DO NOTHING;
 
   SELECT current_value + 1 INTO v_next_value
   FROM public.company_counters
-  WHERE company_id   = NEW.company_id
+  WHERE company_id   = v_company_id
     AND counter_type = 'PET_HC'
     AND counter_date = DATE '1970-01-01'
   FOR UPDATE;
 
   UPDATE public.company_counters
   SET current_value = current_value + 1
-  WHERE company_id   = NEW.company_id
+  WHERE company_id   = v_company_id
     AND counter_type = 'PET_HC'
     AND counter_date = DATE '1970-01-01';
 
