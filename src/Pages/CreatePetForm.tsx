@@ -1,6 +1,8 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
+import { useNextPetHcQuery } from '@hooks/usePetsQuery';
 import { Pet } from '@t/client.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { ClientSearchInput } from '@components/search/ClientSearchInput';
@@ -18,11 +20,14 @@ type FormDataState = Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'registra
 type FormErrors = Partial<Record<keyof FormDataState, string>>;
 
 function CreatePetForm() {
-    const { clients, addPet, historyCounter } = useClients();
+    const { clients, addPet } = useClients();
+    const { toast } = useToast();
+    const nextHcQuery = useNextPetHcQuery();
     const { id: ownerId } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState<FormErrors>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const individualClientData = ownerId !== 'no_client'
         ? clients.find(client => client.id === ownerId)
@@ -69,15 +74,14 @@ function CreatePetForm() {
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
     }
 
-    function createNewPet() {
+    async function createNewPet() {
         if (!validateForm()) {
             return;
         }
 
-        const now = new Date();
         const newPetDataForAdd:  Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'owner'> = {
-            registrationDate: now.toLocaleDateString(),
-            registrationTime: now.toLocaleTimeString(),
+            registrationDate: '',
+            registrationTime: '',
             petName: formData.petName,
             birthDate: formData.birthDate,
             microchip: formData.microchip,
@@ -88,9 +92,17 @@ function CreatePetForm() {
             esterilized: formData.esterilized,
             records: [],
         };
-        if (ownerId){
-            addPet(newPetDataForAdd, ownerId, formData.owner);
+        if (!ownerId) return;
+        setIsSubmitting(true);
+        try {
+            const created = await addPet(newPetDataForAdd, ownerId, formData.owner);
+            toast.success(`Mascota "${created.petName}" creada con HC ${created.hc}.`);
             navigate(`/pets`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo crear la mascota.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -128,7 +140,7 @@ function CreatePetForm() {
             label: 'Especie',
             id: 'species',
             type: 'select',
-            options: ['CANINO', 'FELINO', 'CONEJO', 'HAMSTER', 'ERIZO', 'EXOTICO'],
+            options: ['CANINO', 'FELINO'],
             disabled: ownerId !== "no_client" ? false : true
         },
         {
@@ -209,7 +221,7 @@ function CreatePetForm() {
                                     <input
                                         type={field.type}
                                         id={field.id}
-                                        value={field.id === 'hc' ? historyCounter.current.toString() : (formData[field.id as keyof FormDataState] as string)}
+                                        value={field.id === 'hc' ? (nextHcQuery.data ?? '...') : (formData[field.id as keyof FormDataState] as string)}
                                         onChange={handleChange}
                                         disabled={field.disabled}
                                         className={`w-full bg-white px-4 py-2 focus:outline-none focus:ring-0 ${field.disabled ? 'bg-slate-50 cursor-not-allowed text-slate' : 'text-ink'}`}
@@ -225,7 +237,8 @@ function CreatePetForm() {
                 <ActionButtons
                     onCancel={() => navigate(-1)}
                     onSubmit={createNewPet}
-                    submitText="Crear mascota"
+                    submitText={isSubmitting ? 'Creando...' : 'Crear mascota'}
+                    disabled={isSubmitting}
                 />
             </div>
         </section>

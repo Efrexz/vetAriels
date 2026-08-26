@@ -9,9 +9,11 @@ interface NoteFormProps {
     onSubmit: () => void;
     dateTime: string;
     error?: string;
+    submitText?: string;
+    disabled?: boolean;
 }
 
-function NoteForm({ notes, handleChange, onSubmit, dateTime, error }: NoteFormProps) {
+function NoteForm({ notes, handleChange, onSubmit, dateTime, error, submitText, disabled }: NoteFormProps) {
     const navigate = useNavigate();
     return (
         <div className="w-full max-w-[1200px] mx-auto bg-paper shadow-sm rounded-2xl border border-slate-200 flex flex-col min-h-[400px]">
@@ -55,11 +57,12 @@ function NoteForm({ notes, handleChange, onSubmit, dateTime, error }: NoteFormPr
 
             </div>
             <div className="mt-auto">
-                <ActionButtons
-                    onCancel={() => navigate(-1)}
-                    onSubmit={onSubmit}
-                    submitText="Guardar cambios"
-                />
+<ActionButtons
+                onCancel={() => navigate(-1)}
+                onSubmit={onSubmit}
+                submitText={submitText ?? 'Guardar cambios'}
+                disabled={disabled}
+            />
             </div>
         </div>
     );

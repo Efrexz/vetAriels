@@ -1,6 +1,6 @@
 import type { PurchasedItem } from './inventory.types'; 
 
-type PhysiologicalConstants = {
+export type PhysiologicalConstants = {
     temperature: string;
     heartRate: string;
     weight: string;

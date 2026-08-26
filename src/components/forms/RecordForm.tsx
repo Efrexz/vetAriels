@@ -10,13 +10,15 @@ interface RecordFormProps {
     handleChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onSubmit: () => void;
     submitText?: string;
+    disabled?: boolean;
 }
 
 function RecordForm({
     formData,
     handleChange,
     onSubmit,
-    submitText
+    submitText,
+    disabled
 }: RecordFormProps) {
     const navigate = useNavigate();
 
@@ -112,6 +114,7 @@ return (
             submitText={submitText}
             onCancel={() => navigate(-1)}
             onSubmit={onSubmit}
+            disabled={disabled}
         />
     </form>
   )

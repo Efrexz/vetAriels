@@ -1,6 +1,7 @@
 import { useState, ComponentType, } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
 import { PetRecord } from '@t/client.types';
 import { NotFound } from '@components/ui/NotFound';
@@ -24,7 +25,8 @@ const physiologicalIcons: Icons = {
 };
 
 function ClinicalRecords() {
-    const { petsData } = useClients();
+    const { petsData, removeRecord } = useClients();
+    const { toast } = useToast();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
@@ -32,6 +34,19 @@ function ClinicalRecords() {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [elementToDelete, setElementToDelete] = useState<PetRecord | null>(null);
+
+    async function handleDeleteRecord() {
+        if (!id || !elementToDelete) return;
+        try {
+            await removeRecord(id, elementToDelete.id);
+            toast.success('Registro eliminado correctamente.');
+            setIsModalOpen(false);
+            setElementToDelete(null);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo eliminar el registro.';
+            toast.error(message);
+        }
+    }
 
     if (!individualPetData) {
         return <NotFound entityName="Mascota" searchId={id!} returnPath="/pets" />;
@@ -196,6 +211,7 @@ function ClinicalRecords() {
                         elementData={elementToDelete}
                         typeOfOperation="deleteRecordAndNote"
                         onClose={() => setIsModalOpen(false)}
+                        onConfirm={handleDeleteRecord}
                     />
                 )
             }

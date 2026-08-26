@@ -4,6 +4,11 @@ import { MedicalQueueItem, GroomingQueueItem } from '@t/clinical.types';
 import { PurchasedItem } from '@t/inventory.types';
 import { generateUniqueId } from '@utils/idGenerator';
 import { useClientsQuery, useClientsMutations } from '../hooks/useClientsQuery';
+import {
+    usePetsQuery,
+    usePetsMutations,
+    usePetRecordsMutations,
+} from '../hooks/usePetsQuery';
 
 interface ClientsContextType {
     // Clientes
@@ -19,15 +24,19 @@ interface ClientsContextType {
 
     // Mascotas
     petsData: Pet[];
-    addPet: (newPet: Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'owner'>, ownerId: string, ownerName: string) => void;
-    updatePetData: (id: string, newData: Partial<Pet>) => void;
-    removePet: (id: string) => void;
+    addPet: (
+        newPet: Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'owner'>,
+        ownerId: string,
+        ownerName: string
+    ) => Promise<Pet>;
+    updatePetData: (id: string, newData: Partial<Pet>) => Promise<void>;
+    removePet: (id: string) => Promise<void>;
     historyCounter: React.MutableRefObject<number>;
 
     // Historial Clínico de Mascotas
-    addRecord: (petId: string, newRecord: PetRecord) => void;
-    updateRecord: (petId: string, recordId: string, updatedRecord: PetRecord) => void;
-    removeRecord: (petId: string, recordId: string) => void;
+    addRecord: (petId: string, newRecord: PetRecord) => Promise<PetRecord>;
+    updateRecord: (petId: string, recordId: string, updatedRecord: PetRecord) => Promise<void>;
+    removeRecord: (petId: string, recordId: string) => Promise<void>;
 
     // Colas de Atención
     petsInQueueMedical: MedicalQueueItem[];
@@ -57,35 +66,24 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     const { data: clients = [], isLoading: isLoadingClients, error: clientsError, refetch } = useClientsQuery();
     const { create: createClientMutation, update: updateClientMutation, remove: removeClientMutation } = useClientsMutations();
 
+    // petsData — cacheado por React Query contra Supabase. Los records
+    // clinicos vienen embebidos via join (SELECT pet_records(*)) para que
+    // ClinicalRecords y demas paginas sigan leyendo pet.records sin cambios.
+    const { data: petsData = [], refetch: refetchPets } = usePetsQuery();
+    const {
+        create: createPetMutation,
+        update: updatePetMutation,
+        remove: removePetMutation,
+    } = usePetsMutations();
+    const {
+        createConsultation: createConsultationMutation,
+        createNoteRecord: createNoteMutation,
+        update: updateRecordMutation,
+        remove: removeRecordMutation,
+    } = usePetRecordsMutations();
+
     async function refreshClients() {
-        await refetch();
-    }
-
-    //Pets Data
-    const [petsData, setPetsData] = useState<Pet[]>(() => {
-        const saved = localStorage.getItem('petsData');
-        return saved ? (JSON.parse(saved) as Pet[]) : [];
-    });
-
-    //agregar nuevo record de consulta por mascota
-    function addRecord(petId: string, newRecord: PetRecord) {
-        setPetsData(prev => prev.map(pet =>
-            pet.id === petId ? { ...pet, records: [newRecord, ...(pet.records || [])] } : pet
-        ));
-    }
-
-    //editar record de consulta por mascota
-    function updateRecord(petId: string, recordId: string, updatedRecord: PetRecord) {
-        setPetsData(prev => prev.map(pet =>
-            pet.id === petId ? { ...pet, records: pet.records?.map(record => record.id === recordId ? updatedRecord : record) } : pet
-        ));
-    }
-
-    //Eliminar record de consulta por mascota
-    function removeRecord(petId: string, recordId: string){
-        setPetsData(prev => prev.map(pet =>
-            pet.id === petId ? { ...pet, records: pet.records?.filter(record => record.id !== recordId) } : pet
-        ));
+        await Promise.all([refetch(), refetchPets()]);
     }
 
     //Mascotas en cola de espera
@@ -106,12 +104,7 @@ function ClientsProvider({ children }: ClientsProviderProps) {
         return saved ? (JSON.parse(saved) as GroomingQueueItem[]) : [];
     });
 
-    // Guardar en localStorage cada vez que cambien los estados
-    // (Nota: clients ya NO se persiste aquí — lo maneja React Query + Supabase)
-    useEffect(() => {
-        localStorage.setItem('petsData', JSON.stringify(petsData));
-    }, [petsData]);
-
+    // Persistimos solo lo que sigue en localStorage (colas, Paso 6 los migra).
     useEffect(() => {
         localStorage.setItem('petsInQueueGrooming', JSON.stringify(petsInQueueGrooming));
     }, [petsInQueueGrooming]);
@@ -125,11 +118,8 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     }, [petsInQueueMedical]);
 
     // Clientes — escritura real contra Supabase.
-    // Mapeamos el Client "UI" (camelCase + date/hour + pets/products) al input
-    // que espera el servicio, y resolvemos con la fila real devuelta por la DB
-    // (asi el id es el UUID generado por Postgres, no uno local).
     async function addClient(newClient: Client): Promise<Client> {
-        const created = await createClientMutation.mutateAsync({
+        return createClientMutation.mutateAsync({
             firstName: newClient.firstName,
             lastName: newClient.lastName,
             dni: newClient.dni,
@@ -141,7 +131,6 @@ function ClientsProvider({ children }: ClientsProviderProps) {
             reference: newClient.reference,
             observations: newClient.observations,
         });
-        return created;
     }
 
     async function updateClientData(id: string, newData: Partial<Client>) {
@@ -175,32 +164,106 @@ function ClientsProvider({ children }: ClientsProviderProps) {
         console.warn('removeProductFromClient: pendiente de migrar a Supabase. Se implementa en el Paso 5.');
     }
 
-    //pets data
-    const historyCounter = useRef<number>(
-        parseInt(localStorage.getItem('historyCounter') || '100', 10)
-    );
-
-    function addPet(newPet: Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'owner'>, ownerId: string, ownerName: string){
-        const hcString = historyCounter.current.toString();
-        const newPetData: Pet = {
-        ...newPet,
-        ownerId,
-        ownerName,
-        owner: ownerName,
-        hc: hcString,
-        id: generateUniqueId(),
-        };
-        setPetsData(prev => [newPetData, ...prev]);
-        historyCounter.current++;
-        localStorage.setItem('historyCounter', historyCounter.current.toString());
+    // Mascotas — escritura real contra Supabase. El id, hc y created_at
+    // los asigna la DB (id por gen_random_uuid, hc por el trigger
+    // assign_pet_hc, created_at por default). Devolvemos la mascota
+    // persistida con su id real para que el caller navegue correctamente.
+    async function addPet(
+        newPet: Omit<Pet, 'id' | 'hc' | 'ownerId' | 'ownerName' | 'owner'>,
+        ownerId: string,
+        _ownerName: string
+    ): Promise<Pet> {
+        return createPetMutation.mutateAsync({
+            ownerId,
+            petName: newPet.petName,
+            birthDate: newPet.birthDate,
+            microchip: newPet.microchip,
+            species: newPet.species,
+            breed: newPet.breed,
+            sex: newPet.sex,
+            esterilized: newPet.esterilized,
+            active: newPet.active ?? true,
+        });
     }
 
-    function updatePetData(id: string, newData: Partial<Pet>){
-        setPetsData(prev => prev.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+    async function updatePetData(id: string, newData: Partial<Pet>) {
+        const changes: {
+            petName?: string;
+            birthDate?: string;
+            microchip?: string;
+            species?: Pet['species'];
+            breed?: string;
+            sex?: Pet['sex'];
+            esterilized?: Pet['esterilized'];
+            active?: boolean;
+        } = {};
+        if (newData.petName !== undefined) changes.petName = newData.petName;
+        if (newData.birthDate !== undefined) changes.birthDate = newData.birthDate;
+        if (newData.microchip !== undefined) changes.microchip = newData.microchip;
+        if (newData.species !== undefined) changes.species = newData.species;
+        if (newData.breed !== undefined) changes.breed = newData.breed;
+        if (newData.sex !== undefined) changes.sex = newData.sex;
+        if (newData.esterilized !== undefined) changes.esterilized = newData.esterilized;
+        if (newData.active !== undefined) changes.active = newData.active;
+        await updatePetMutation.mutateAsync({ id, changes });
     }
 
-    function removePet(id: string){
-        setPetsData(prev => prev.filter(pet => pet.id !== id));
+    async function removePet(id: string) {
+        await removePetMutation.mutateAsync(id);
+    }
+
+    /**
+     * Contador de HC legado. Se conserva por compatibilidad con la firma
+     * del contexto (CreatePetForm lo lee), pero su valor ya no se usa:
+     * el HC lo asigna el trigger assign_pet_hc en la DB. El componente
+     * CreatePetForm ahora prefiere useNextPetHcQuery() para el preview.
+     */
+    const historyCounter = useRef<number>(100);
+
+    // Historial clinico
+    async function addRecord(petId: string, newRecord: PetRecord): Promise<PetRecord> {
+        if (newRecord.type === 'note') {
+            return createNoteMutation.mutateAsync({ petId, content: newRecord.content });
+        }
+        return createConsultationMutation.mutateAsync({
+            petId,
+            input: {
+                reason: newRecord.reason,
+                anamnesis: newRecord.anamnesis,
+                temperature: newRecord.physiologicalConstants.temperature,
+                heartRate: newRecord.physiologicalConstants.heartRate,
+                weight: newRecord.physiologicalConstants.weight,
+                oxygenSaturation: newRecord.physiologicalConstants.oxygenSaturation,
+                clinicalExam: newRecord.clinicalExam,
+            },
+        });
+    }
+
+    async function updateRecord(petId: string, recordId: string, updatedRecord: PetRecord) {
+        if (updatedRecord.type === 'note') {
+            await updateRecordMutation.mutateAsync({
+                recordId,
+                input: { content: updatedRecord.content },
+            });
+        } else {
+            await updateRecordMutation.mutateAsync({
+                recordId,
+                input: {
+                    reason: updatedRecord.reason,
+                    anamnesis: updatedRecord.anamnesis,
+                    temperature: updatedRecord.physiologicalConstants.temperature,
+                    heartRate: updatedRecord.physiologicalConstants.heartRate,
+                    weight: updatedRecord.physiologicalConstants.weight,
+                    oxygenSaturation: updatedRecord.physiologicalConstants.oxygenSaturation,
+                    clinicalExam: updatedRecord.clinicalExam,
+                },
+            });
+        }
+        void petId; // no usado en la DB (la fila ya tiene pet_id)
+    }
+
+    async function removeRecord(_petId: string, recordId: string) {
+        await removeRecordMutation.mutateAsync(recordId);
     }
 
     //Mascotas en cola de espera clinica

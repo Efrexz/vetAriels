@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import CakeIcon from '@assets/cakeIcon.svg?react';
 import PawIcon from '@assets/pawIcon.svg?react';
@@ -18,7 +19,8 @@ type FormDataType = Omit<Pet, 'id' | 'ownerId' | 'ownerName' | 'records' | 'acti
 
 
 function PetProfile({ petData }: PetProfileProps) {
-    const { updatePetData } = useClients()
+    const { updatePetData } = useClients();
+    const { toast } = useToast();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<FormDataType>({
@@ -34,6 +36,7 @@ function PetProfile({ petData }: PetProfileProps) {
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     //Para solucionar el problema de que no se actualiza el formulario al cambiar de mascota
     useEffect(() => {
@@ -74,8 +77,7 @@ function PetProfile({ petData }: PetProfileProps) {
         return Object.keys(newErrors).length === 0;
     }
 
-    function updateData() {
-        // Validar el formulario antes de enviar
+    async function updateData() {
         if (!validateForm()) {
             return;
         }
@@ -90,8 +92,17 @@ function PetProfile({ petData }: PetProfileProps) {
             esterilized: formData.esterilized ? 'SI' : 'NO',
         };
 
-        updatePetData(petData.id, updatedPetInfo);
-        navigate(`/pets`);
+        setIsSubmitting(true);
+        try {
+            await updatePetData(petData.id, updatedPetInfo);
+            toast.success('Mascota actualizada correctamente.');
+            navigate(`/pets`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo actualizar la mascota.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     const formFields = [
@@ -207,7 +218,8 @@ function PetProfile({ petData }: PetProfileProps) {
             <ActionButtons
                 onCancel={() => navigate(-1)}
                 onSubmit={updateData}
-                submitText="Guardar cambios"
+                submitText={isSubmitting ? 'Guardando...' : 'Guardar cambios'}
+                disabled={isSubmitting}
             />
         </div>
     );

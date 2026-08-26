@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
 import { RecordForm } from '@components/forms/RecordForm';
 import { ConsultationRecord } from '@t/client.types';
 import { NotFound } from '@components/ui/NotFound';
@@ -20,10 +21,12 @@ interface FormDataState  {
 
 function EditRecord() {
     const { updateRecord, petsData } = useClients();
+    const { toast } = useToast();
     const { id: petId, recordId } = useParams<{ id: string, recordId: string }>();
     const navigate = useNavigate();
 
-    const pet = petsData.find(pet => pet.id === petId)
+    const pet = petsData.find(pet => pet.id === petId);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     //buscamos el registro por id
     const recordData: ConsultationRecord | undefined = pet?.records
@@ -64,19 +67,26 @@ function EditRecord() {
         }
     }
 
-    function saveRecord() {
-        if (!formData || !recordData) {
+    async function saveRecord() {
+        if (!formData || !recordData || !petId || !recordId) {
             console.error("No se pueden guardar los cambios");
             return;
         }
-        
+
         const updatedRecord: ConsultationRecord = {
             ...recordData,
             ...formData,
         };
-        if (formData && petId && recordId) {
-            updateRecord(petId, recordId, updatedRecord);
+        setIsSubmitting(true);
+        try {
+            await updateRecord(petId, recordId, updatedRecord);
+            toast.success('Registro clinico actualizado correctamente.');
             navigate(`/pets/pet/${petId}/clinical-records`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo actualizar el registro.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -106,7 +116,8 @@ function EditRecord() {
                 formData={formData}
                 handleChange={handleChange}
                 onSubmit={saveRecord}
-                submitText="Guardar cambios"
+                submitText={isSubmitting ? 'Guardando...' : 'Guardar cambios'}
+                disabled={isSubmitting}
             />
         </div>
     );

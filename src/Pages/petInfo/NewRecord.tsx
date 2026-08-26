@@ -1,21 +1,18 @@
 import { useState, ChangeEvent, } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useClients } from '@context/ClientsContext'; // PASO 1: Usar hooks personalizados
-import { useGlobal } from '@context/GlobalContext';
+import { useClients } from '@context/ClientsContext';
+import { useToast } from '@context/ToastContext';
 import { ConsultationRecord } from '@t/client.types';
 import { RecordForm } from '@components/forms/RecordForm';
-import { generateUniqueId } from '@utils/idGenerator';
 
 function NewRecord() {
     const { addRecord } = useClients();
-    const { activeUser } = useGlobal();
+    const { toast } = useToast();
     const { id: petId } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const now = new Date();
-
     const [formData, setFormData] = useState<Omit<ConsultationRecord, "id" | "type" | "createdBy">>({
-        dateTime: now.toLocaleString(),
+        dateTime: '',
         reason: 'Consulta',
         anamnesis: '',
         physiologicalConstants: {
@@ -26,6 +23,8 @@ function NewRecord() {
         },
         clinicalExam: '',
     });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { id, value } = e.target;
@@ -46,17 +45,24 @@ function NewRecord() {
         }
     }
 
-    function saveRecord() {
+    async function saveRecord() {
+        if (!petId) return;
         const newRecord: ConsultationRecord = {
-            id: generateUniqueId(),
-            //deberia estar siempre activeUser porque si no lo redirige al login
-            createdBy: `${activeUser?.name} ${activeUser?.lastName}`,
+            id: '',
             type : 'consultation',
+            createdBy: '',
             ...formData,
-        }
-        if (petId) {
-            addRecord(petId, newRecord);
+        };
+        setIsSubmitting(true);
+        try {
+            await addRecord(petId, newRecord);
+            toast.success('Registro clinico guardado correctamente.');
             navigate(`/pets/pet/${petId}/clinical-records`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo guardar el registro.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -74,7 +80,8 @@ function NewRecord() {
                 formData={formData}
                 handleChange={handleChange}
                 onSubmit={saveRecord}
-                submitText="Guardar cambios"
+                submitText={isSubmitting ? 'Guardando...' : 'Guardar cambios'}
+                disabled={isSubmitting}
             />
         </div>
     );
