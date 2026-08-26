@@ -1,7 +1,8 @@
 # AGENTS.md
 
 Project: VetAriel / "Gestor Veterinario" — React 18 + TypeScript + Vite 6 SPA for
-veterinary clinic management. Deployed to Vercel.
+veterinary clinic management. Deployed to Vercel. Backend: Supabase (Postgres +
+Auth + RLS + Edge Functions) + `@tanstack/react-query` en el cliente.
 
 ## Commands
 
@@ -16,6 +17,9 @@ veterinary clinic management. Deployed to Vercel.
 - `npm run test:run` — Vitest single run (CI).
 - `npm run test:coverage` — Vitest with coverage report.
 - `npm run preview` — serve the built `dist/`.
+- `npx supabase <cmd>` — Supabase CLI v2 (instalado como devDep). Solo se
+  usa contra el proyecto linkeado. Para cambios de schema usar el
+  SQL editor del dashboard hasta definir el flujo de envs (Paso 9).
 
 Pre-commit hook (Husky + lint-staged): runs ESLint on staged JS/TS files and
 Prettier on staged CSS/JSON files. Use `npm run format` for explicit source
@@ -23,24 +27,85 @@ formatting; the existing source is not yet fully formatted.
 
 ## Architecture / data layer
 
-- **No backend. All persistence is `localStorage`.** Four React contexts
-  (`GlobalContext`, `ClientsContext`, `ProductsAndServicesContext`,
-  `FinancialContext` in `src/context/`) read/write localStorage keys
-  (`activeUser`, `users`, `roles`, `clients`, `petsData`, `productsData`,
-  `servicesData`, `restockData`, `dischargesData`, `paymentsData`,
-  `petsInQueue*`, `historyCounter`, `companyData`, `themeColor`, ...). To reset
-  the app during dev, clear site data / localStorage.
-- Auth: `src/components/ProtectedRoute.tsx` gates every route except `/login`.
-  The active session is `localStorage['activeUser']`. App.tsx renders the
-  `Layout` + `ProtectedRoute` tree only when `pathname !== '/login'`, otherwise
-  a bare `/login` route. Default demo creds are documented in `README.md`.
-- Routing: `react-router-dom` v6, declared in `src/App.tsx`. SPA fallback is
-  handled by `vercel.json` (rewrite everything to `/`).
+### Estado actual de la migración
+
+| Capa | Estado |
+|---|---|
+| Identidad (Supabase Auth + `profiles` + `companies`) | ✅ Migrado |
+| Edge Function `admin-users` (CRUD usuarios) | ✅ Migrado |
+| Clientes (`clients`) | ✅ Migrado (read en Paso 1C, escrituras en Paso 4.1) |
+| Mascotas + historial clínico (`pets`, `pet_records`) | ✅ Migrado (Paso 4.2) |
+| Productos + servicios (`products`, `services`) | ⏳ Pendiente (Paso 4.3) |
+| Movimientos de inventario (`inventory_movements`, `items`) | ⏳ Pendiente (Paso 4.4) |
+| Colas clínica + grooming (`clinic_queue`, `grooming_queue`) | ⏳ Pendiente (Paso 6) |
+| Ventas / comprobantes / pagos (`invoices`, `payments`) | ⏳ Pendiente (Paso 5) |
+| `addProductToClient` / `removeProductFromClient` (carrito en cliente) | ⏳ Pendiente (Paso 5) |
+| Colas en localStorage (`petsInQueueMedical`, `petsInQueueGrooming*`) | 🟡 Aún localStorage (Paso 6) |
+
+### Convención por entidad: `services/` + `hooks/`
+
+Para cada tabla de negocio existe una pareja:
+
+- `src/services/<entity>Service.ts` — única capa que sabe hablar con Supabase.
+  Funciones `async` con snake_case `<Entity>Row`, mapeo a camelCase UI
+  (`rowToX`), y errores traducidos al español (`translateXError`).
+  El servicio es la fuente del formato: ahí se decide si los joins embeben
+  clientes, productos, etc.
+- `src/hooks/use<Entity>Query.ts` — React Query.
+  - `<entity>Key` constante para el `queryKey` (compartido).
+  - `use<Entity>Query()` para listas / `use<Entity>Query(id)` para detalle.
+  - `use<Entity>Mutations()` con `create/update/remove`. Cada mutación
+    invalida `<entity>Key`; `update` también hace `setQueryData` para el
+    detalle cacheado.
+
+Ejemplos ya en producción: `clientsService.ts` + `useClientsQuery.ts`,
+`petsService.ts` + `usePetsQuery.ts`, `adminUsersService.ts` (Edge Function) +
+`useUsersQuery.ts`.
+
+### Contexts como fachada (no como source of truth)
+
+Los contextos (`ClientsContext`, `ProductsAndServicesContext`,
+`GlobalContext`, `FinancialContext`, `ToastContext`) ya **no** son dueñas del
+estado: lo son los hooks de React Query. El contexto envuelve los hooks y
+expone una API estable (`petsData`, `addPet`, `updatePetData`, …) para no
+tocar ~15 consumidores cuando migramos.
+
+Reglas:
+- Las funciones que antes eran síncronas ahora devuelven `Promise`.
+- Las firmas se mantienen idénticas siempre que sea posible.
+- Lo que aún vive en localStorage se queda en `useState` + `useEffect`
+  dentro del contexto hasta que se migra (Paso 5/6).
+
+### Patrón de mutación en páginas (UX consistente)
+
+Toda página que escribe contra Supabase sigue este flujo:
+
+1. `const { toast } = useToast()`.
+2. `const [isSubmitting, setIsSubmitting] = useState(false)`.
+3. `async function handler() { setIsSubmitting(true); try { await mutation(); toast.success(msg); navigate(...); } catch (e) { toast.error(e.message); } finally { setIsSubmitting(false); } }`.
+4. `<ActionButtons submitText={isSubmitting ? '…' : '…'} disabled={isSubmitting} onSubmit={handler} />`.
+
+`RecordForm` y `NoteForm` aceptan ahora `submitText` + `disabled` para
+encadenar este patrón en formularios del historial clínico.
+
+### Auth y rutas
+
+- `src/components/ProtectedRoute.tsx` envuelve cada ruta salvo `/login`.
+- Sesión: `supabase.auth` (no `localStorage['activeUser']` — eso es legacy).
+- `src/App.tsx` renderiza `Layout` + `ProtectedRoute` salvo en `/login`.
+- `vercel.json` reescribe todo a `/` para SPA fallback.
+
+### Datos restantes en localStorage
+
+Solo dos categorías persisten aún ahí:
+- **UI state** (no de negocio): `themeColor`, `roles`, `companyData`.
+- **Colas** que se migran en Paso 6: `petsInQueueMedical`, `petsInQueueGrooming`,
+  `petsInQueueGroomingHistory`.
 
 ## Path aliases / imports
 
-Aliases are defined in **both** `tsconfig.json` and `vite.config.js`; keep them
-in sync:
+Aliases definidos en **ambos** `tsconfig.json` y `vite.config.js` (mantenerlos
+en sync):
 
 - `@assets/*` → `src/assets/*`
 - `@components/*` → `src/components/*`
@@ -86,3 +151,54 @@ Vite resolves it — do not "fix" this without verifying.
   than hardcoding colors.
 - UI text and README are in Spanish; commit messages are in Spanish. Match the
   existing language when editing.
+
+## Database facts worth knowing
+
+- **Multi-tenant desde el día 1**: TODA tabla de negocio lleva
+  `company_id UUID → companies(id)`. El filtro se hace en la policy RLS
+  usando `public.current_company_id()`.
+- **Roles** viven en `profiles.role` (no en `auth.user_metadata`).
+  Policies leen `public.current_role()` y conceden por rol.
+- **Soft delete**: `deleted_at TIMESTAMPTZ NULL` en entidades principales.
+  Queries filtran `WHERE deleted_at IS NULL`. Removes desde la UI son
+  `UPDATE deleted_at = now()` (no DELETE), para que recepcionistas también
+  puedan “eliminar” sin chocar con la policy DELETE (solo admin).
+- **HC de mascotas** lo asigna el trigger `assign_pet_hc` con
+  `LPAD(current_value, 6, '0')`. El contador vive en
+  `company_counters(company_id, 'PET_HC', DATE '1970-01-01')` —
+  fecha fija para evitar que el índice único `uq_pets_company_hc`
+  choque al día siguiente (ver `supabase/migrations/20260825000000_fix_pet_hc_counter.sql`).
+  Preview en formularios: `useNextPetHcQuery()` lee ese contador y suma 1.
+- **`pets.species`** tiene CHECK `IN ('CANINO', 'FELINO')`. La UI no debe
+  ofrecer otras especies.
+- **`pets.esterilized`** tiene CHECK `IN ('SI', 'NO')` (string, no boolean).
+- **`pet_records.type`** tiene CHECK `IN ('CONSULTA', 'NOTA')`. Las
+  constantes fisiológicas son columnas planas en DB (`temperature`,
+  `heart_rate`, `weight`, `oxygen_saturation`); el servicio las mapea a
+  `physiologicalConstants` (objeto anidado) para la UI.
+- **Stock de productos** lo mantiene el trigger `update_product_stock_on_insert/delete`
+  sobre `inventory_movement_items`. **El frontend NUNCA calcula stock**
+  — solo lee `products.stock` y escribe vía movimientos (Paso 4.4).
+- **`invoices.correlativo`** y **`grooming_queue.turn`** se asignan atómicamente
+  via `company_counters` + `SELECT … FOR UPDATE` en sus triggers.
+
+## Migraciones SQL
+
+- **Fuente de verdad**: `db/*.sql` (re-ejecutables, idempotentes).
+- **Migraciones incrementales** ya desplegadas: `supabase/migrations/<timestamp>_*.sql`.
+- Cada nueva migración debe:
+  1. Usar timestamp `YYYYMMDDHHmmss`.
+  2. Ser idempotente (`CREATE OR REPLACE`, `DROP IF EXISTS`).
+  3. Actualizar también el archivo en `db/` para mantenerlo como fuente de verdad.
+  4. Comentarios en español.
+
+## Convenciones de aprendizaje
+
+El usuario es frontend puro aprendiendo backend. Cada tecnología nueva se introdujo con:
+1. Qué es y qué problema resuelve
+2. Por qué la usamos aquí
+3. Alternativas y por qué elegimos esta
+4. Cuándo se usa en proyectos reales
+5. Qué parte del proyecto cambia
+
+Mantener este estilo pedagógico en pasos futuros (ver `docs/PASO_*.md`).
