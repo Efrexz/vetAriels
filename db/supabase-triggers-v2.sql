@@ -213,12 +213,14 @@ COMMENT ON FUNCTION public.update_product_stock_on_delete() IS 'Revierte el stoc
 -- ----------------------------------------------------------------------------
 -- 4. assign_invoice_correlative: correlativo unico por empresa+serie
 -- ----------------------------------------------------------------------------
--- IMPORTANTE: usa public.current_company_id() directamente en vez de
--- NEW.company_id. Asi es independiente del orden de BEFORE triggers y
--- del payload del INSERT (el frontend no envia company_id).
+-- SECURITY DEFINER para poder escribir en company_counters (la tabla solo
+-- tiene policy de SELECT). Mantiene public.current_company_id() directo
+-- para no depender de NEW.company_id ni del orden de triggers.
 CREATE OR REPLACE FUNCTION public.assign_invoice_correlative()
 RETURNS TRIGGER
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_counter_type TEXT;
@@ -264,10 +266,13 @@ COMMENT ON FUNCTION public.assign_invoice_correlative() IS 'Asigna correlativo u
 -- ----------------------------------------------------------------------------
 -- 5. assign_grooming_turn: turno diario por empresa
 -- ----------------------------------------------------------------------------
--- IMPORTANTE: usa public.current_company_id() directamente (ver seccion 4).
+-- SECURITY DEFINER para escribir en company_counters. Usa
+-- public.current_company_id() directamente (ver seccion 4).
 CREATE OR REPLACE FUNCTION public.assign_grooming_turn()
-RETURTS TRIGGER
+RETURNS TRIGGER
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_next_value INTEGER;
@@ -303,6 +308,9 @@ CREATE TRIGGER trg_grooming_turn
 -- ----------------------------------------------------------------------------
 -- 6. assign_pet_hc: historia clinica unica por empresa (monotonico)
 -- ----------------------------------------------------------------------------
+-- SECURITY DEFINER para escribir en company_counters. Usa
+-- public.current_company_id() directamente (ver seccion 4).
+--
 -- IMPORTANTE: este contador usa una fecha fija (1970-01-01) para mantener
 -- una unica fila por empresa. Si usamos CURRENT_DATE, el trigger crea una
 -- fila nueva del contador cada dia empezando en 0 -> choca con el indice
@@ -312,12 +320,11 @@ CREATE TRIGGER trg_grooming_turn
 -- GROOMING_TURN_DAILY (funcion anterior) si se reinicia cada dia -- ese si
 -- usa CURRENT_DATE. La PK compuesta (company_id, counter_type, counter_date)
 -- exige que los dos counters se distingan por su counter_date.
---
--- Tambien usa public.current_company_id() directamente (ver seccion 4)
--- para evitar problemas de orden de triggers BEFORE INSERT.
 CREATE OR REPLACE FUNCTION public.assign_pet_hc()
 RETURNS TRIGGER
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_next_value INTEGER;
