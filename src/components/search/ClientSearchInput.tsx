@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useClients } from '@context/ClientsContext';
 import { Client } from '@t/client.types';
@@ -89,10 +89,10 @@ function ClientSearchInput({ mode }: ClientSearchInputProps) {
                                 key={client.id}
                                 className="p-3 cursor-pointer hover:bg-slate-50 border-b border-slate-200 transition-colors"
                                 onClick={(e) => {
-                                    e.preventDefault();// Evita que React Router intercepte la navegación.
+                                    e.preventDefault();
                                     setSearchTerm(`${client.firstName} ${client.lastName}`);
-                                    setIsFilteredListVisible(false); // Ocultar dropdown al seleccionar
-                                    window.location.href = `${baseUrl[mode]}/${client.id}`;//Usamos el window.location en vez del navigate para poder recargar la pagina al seleccionar un cliente para evitar el error que teniamos que quedaba el nombre del antiguo usuario en el input de busqueda
+                                    setIsFilteredListVisible(false);
+                                    navigate(`${baseUrl[mode]}/${client.id}`);
                                 }}
                             >
                                 <div className="font-bold text-primary">{`${client.firstName} ${client.lastName}`}</div>

@@ -224,7 +224,7 @@ function PetsData() {
                         <RowActionMenu
                           items={[
                             { label: 'Ver mascota', icon: EyeIcon, onClick: () => navigate(`/pets/pet/${pet.id}/update`) },
-                            { label: 'Historial cl&iacute;nico', icon: Stethoscope, onClick: () => {} },
+                            { label: 'Historial cl&iacute;nico', icon: Stethoscope, onClick: () => navigate(`/pets/pet/${pet.id}/clinical-records`) },
                             { divider: true },
                             { label: 'Eliminar', icon: TrashIcon, danger: true, onClick: () => setDeleteTarget(pet) },
                           ]}
