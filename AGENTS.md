@@ -35,12 +35,11 @@ formatting; the existing source is not yet fully formatted.
 | Edge Function `admin-users` (CRUD usuarios) | ✅ Migrado |
 | Clientes (`clients`) | ✅ Migrado (read en Paso 1C, escrituras en Paso 4.1) |
 | Mascotas + historial clínico (`pets`, `pet_records`) | ✅ Migrado (Paso 4.2) |
-| Productos + servicios (`products`, `services`) | ⏳ Pendiente (Paso 4.3) |
-| Movimientos de inventario (`inventory_movements`, `items`) | ⏳ Pendiente (Paso 4.4) |
-| Colas clínica + grooming (`clinic_queue`, `grooming_queue`) | ⏳ Pendiente (Paso 6) |
-| Ventas / comprobantes / pagos (`invoices`, `payments`) | ⏳ Pendiente (Paso 5) |
-| `addProductToClient` / `removeProductFromClient` (carrito en cliente) | ⏳ Pendiente (Paso 5) |
-| Colas en localStorage (`petsInQueueMedical`, `petsInQueueGrooming*`) | 🟡 Aún localStorage (Paso 6) |
+| Productos + servicios (`products`, `services`) | ✅ Migrado (Paso 4.3/4.4) |
+| Movimientos de inventario (`inventory_movements`, `items`) | ✅ Migrado (Paso 4.4) |
+| Ventas / comprobantes / pagos (`invoices`, `invoice_items`, `payments`) | ✅ Migrado (Paso 5) |
+| Colas clínica + grooming (`clinic_queue`, `grooming_queue`) | ✅ Migrado (Paso 6, polling 30s) |
+| Config UI-local (metodos de pago, roles list, themeColor) | 🟡 UI state, no negocio |
 
 ### Convención por entidad: `services/` + `hooks/`
 
@@ -58,9 +57,11 @@ Para cada tabla de negocio existe una pareja:
     invalida `<entity>Key`; `update` también hace `setQueryData` para el
     detalle cacheado.
 
-Ejemplos ya en producción: `clientsService.ts` + `useClientsQuery.ts`,
-`petsService.ts` + `usePetsQuery.ts`, `adminUsersService.ts` (Edge Function) +
-`useUsersQuery.ts`.
+Ejemplos en producción: `clientsService`, `petsService`, `productsService`,
+`servicesService`, `inventoryService`, `invoicesService`, `paymentsService`
+(mapea UI ENTRADA/SALIDA <-> DB INGRESO/EGRESO), `queueService` (mapea
+estados de cola DB mayusculas <-> UI espanol), `profilesService`, y
+`adminUsersService` (Edge Function).
 
 ### Contexts como fachada (no como source of truth)
 
