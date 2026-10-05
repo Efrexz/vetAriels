@@ -116,6 +116,36 @@ export async function signIn(email: string, password: string): Promise<Session> 
 }
 
 /**
+ * Cambia la contrasena del usuario autenticado.
+ * Verifica la contrasena actual re-autenticando (signInWithPassword);
+ * si es incorrecta lanza error claro. Luego asigna la nueva via
+ * auth.updateUser (requiere sesion activa, que la re-autenticacion
+ * acaba de refrescar).
+ */
+export async function changePassword(oldPassword: string, newPassword: string): Promise<void> {
+    const { data: userData } = await supabase.auth.getUser();
+    const email = userData.user?.email;
+
+    if (!email) {
+        throw new Error('No hay una sesion activa.');
+    }
+
+    // Re-autenticar NO invalida la sesion actual; solo valida credenciales.
+    const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email,
+        password: oldPassword,
+    });
+    if (verifyError) {
+        throw new Error('La contrasena actual no es correcta.');
+    }
+
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+        throw new Error(translateAuthError(error.message));
+    }
+}
+
+/**
  * Cierra la sesión del usuario actual.
  */
 export async function signOut(): Promise<void> {

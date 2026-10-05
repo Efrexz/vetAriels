@@ -8,6 +8,7 @@ import { ToastProvider } from './context/ToastContext';
 import { QueryProvider } from './providers/QueryProvider';
 import { DashBoard } from './Pages/dashboard/DashBoard';
 import { Login } from './Pages/Login';
+import { ResetPasswordPage } from './Pages/ResetPasswordPage';
 import { Sales } from './Pages/sales/Sales';
 import { ActiveOrders } from './Pages/sales/ActiveOrders';
 import { Invoices } from './Pages/sales/Invoices';
@@ -54,14 +55,14 @@ function App() {
   const location = useLocation();
 
   return (
-    <GlobalProvider>
-      <QueryProvider>
+    <QueryProvider>
+      <GlobalProvider>
         <ToastProvider>
           <FinancialProvider>
             <ClientsProvider>
               <ProductsAndServicesProvider>
-              {/* Solo renderizar Layout si no estamos en la ruta de login */}
-              {location.pathname !== '/login' ? (
+              {/* Solo renderizar Layout si no estamos en rutas publicas */}
+              {location.pathname !== '/login' && location.pathname !== '/reset-password' ? (
                 <Layout>
                   <ScrollToTop />
                   <ProtectedRoute>
@@ -111,9 +112,10 @@ function App() {
                 </ProtectedRoute>
               </Layout>
             ) : (
-              // Solo renderizar la página de Login sin el Layout
+              // Rutas publicas (login / reset-password) sin Layout ni ProtectedRoute
               <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             )}
@@ -121,8 +123,8 @@ function App() {
         </ClientsProvider>
       </FinancialProvider>
         </ToastProvider>
-      </QueryProvider>
-    </GlobalProvider>
+      </GlobalProvider>
+    </QueryProvider>
   );
 }
 

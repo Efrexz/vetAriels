@@ -1,14 +1,26 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGlobal } from '@context/GlobalContext';
+import { useToast } from '@context/ToastContext';
 import { User } from '@t/user.types';
 import { NotFound } from '@components/ui/NotFound';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { FormField } from '@components/ui/FormField';
 import { InfoBanner } from '@components/ui/InfoBanner';
+import { ROLES_FROM_ES } from '../../services/profilesService';
 import EmailIcon from '@assets/emailIcon.svg?react';
 import PhoneIcon from '@assets/phoneIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
+
+// Opciones de rol de la DB (UserRole) con etiquetas en espanol.
+// NO se usan los roles de localStorage: la DB solo acepta el enum
+// ('ADMIN' | 'VETERINARIO' | 'RECEPCIONISTA' | 'GROOMER').
+const ROL_OPTIONS = [
+  { value: 'ADMIN', label: 'Administrador' },
+  { value: 'VETERINARIO', label: 'Veterinario' },
+  { value: 'RECEPCIONISTA', label: 'Recepcionista' },
+  { value: 'GROOMER', label: 'Groomer' },
+];
 
 interface FormDataState {
   email: string;
@@ -22,10 +34,11 @@ interface FormDataState {
 type FormErrors = Partial<Record<keyof FormDataState, string>>;
 
 function EditUser() {
-  const { users, updateUserData, roles } = useGlobal();
+  const { users, updateUserData } = useGlobal();
+  const { toast } = useToast();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const rolNames = roles.map((role) => role.name);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const individualUserData = users.find((user) => user.id === id);
 
@@ -47,7 +60,9 @@ function EditUser() {
         name: individualUserData.name || '',
         lastName: individualUserData.lastName || '',
         phone: individualUserData.phone || '',
-        rol: individualUserData.rol || '',
+        // individualUserData.rol llega como etiqueta espanol
+        // ("Administrador"); el select guarda el enum de la DB.
+        rol: ROLES_FROM_ES[individualUserData.rol] || individualUserData.rol,
         status: individualUserData.status || 'INACTIVO',
       });
     }
@@ -79,7 +94,7 @@ function EditUser() {
     setFormData({ ...formData, [id]: value });
   }
 
-  function updateUserInfo() {
+  async function updateUserInfo() {
     if (!validateForm() || !id) return;
     const updateData: Partial<User> = {
       email: formData.email,
@@ -89,8 +104,17 @@ function EditUser() {
       rol: formData.rol,
       status: formData.status,
     };
-    updateUserData(id, updateData);
-    navigate('/config/user-subsidiaries');
+    setIsSubmitting(true);
+    try {
+      await updateUserData(id, updateData);
+      toast.success('Usuario actualizado correctamente.');
+      navigate('/config/user-subsidiaries');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'No se pudo actualizar el usuario.';
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (!individualUserData) {
@@ -173,7 +197,7 @@ function EditUser() {
               value={formData.rol}
               onChange={handleChange}
               error={errors.rol}
-              options={rolNames.map((n) => ({ value: n, label: n }))}
+              options={ROL_OPTIONS}
             />
           </div>
         </div>
@@ -181,8 +205,9 @@ function EditUser() {
         <ActionButtons
           onCancel={() => navigate(-1)}
           onSubmit={updateUserInfo}
-          submitText="Guardar cambios"
+          submitText={isSubmitting ? 'Guardando...' : 'Guardar cambios'}
           mode="form"
+          disabled={isSubmitting}
         />
       </div>
     </section>

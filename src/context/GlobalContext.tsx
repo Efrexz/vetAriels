@@ -8,6 +8,14 @@ import {
   type CreateUserInput,
   type UserRole,
 } from '../services/adminUsersService';
+import {
+  getOwnProfile,
+  getOwnCompany,
+  updateProfileData,
+  adminUserToUser,
+  ownProfileToUser,
+} from '../services/profilesService';
+import { useUsersQuery } from '../hooks/useUsersQuery';
 
 type ActiveIconType = 'patients' | 'baths' | 'user' | null;
 
@@ -44,9 +52,6 @@ interface GlobalContextType {
   logout: () => Promise<void>;
 
   // Adaptadores de la API anterior (User / users[]) para no romper componentes
-  // ----------------------------------------------------------------
-  // ATTENTION: estos campos son temporales durante la migracion.
-  // Se eliminaran en la fase 1G cuando todos los componentes usen Supabase directo.
   activeUser: User | null;
   setActiveUser: (user: User | null) => void;
   users: User[];
@@ -54,7 +59,7 @@ interface GlobalContextType {
   updateUserData: (id: string, newData: Partial<User>) => Promise<void>;
   removeUser: (id: string) => Promise<void>;
 
-  // Roles (siguen en localStorage hasta fase 1G)
+  // Roles (siguen en localStorage: son configuracion de UI, no datos de negocio)
   roles: Role[];
   addRole: (newRole: Role) => void;
   updateRoleData: (id: string, newData: Partial<Role>) => void;
@@ -114,54 +119,59 @@ function GlobalProvider({ children }: GlobalProviderProps) {
   }
 
   // ---------------------------------------------------------------------------
-  // ADAPTADORES TEMPORALES (fase 1D)
+  // activeUser: la fuente real es la tabla profiles (RLS: cada usuario ve
+  // su propia fila). El rol viene de profiles.role — la fuente segura —
+  // NUNCA de user_metadata (esa el usuario podria editarla).
   // ---------------------------------------------------------------------------
-  // Mientras migramos componentes a Supabase, estos adaptadores mantienen
-  // la API anterior (`activeUser`, `users`, `addUser`, etc.) para no romper
-  // el build. Seran reemplazados en la fase 1G cuando cada componente use
-  // el servicio de Supabase correspondiente.
-  // ---------------------------------------------------------------------------
+  const [ownProfile, setOwnProfile] = useState<Awaited<ReturnType<typeof getOwnProfile>>>(null);
 
-  // activeUser: toma el currentUser de Supabase y lo mapea al tipo User.
-  // El `name` viene de user_metadata (configurado al crear el usuario).
-  const activeUser: User | null = currentUser
-    ? {
-        id: currentUser.id,
-        name:
-          (currentUser.user_metadata?.['name'] as string | undefined) ??
-          currentUser.email?.split('@')[0] ??
-          '',
-        email: currentUser.email ?? '',
-        lastName: (currentUser.user_metadata?.['lastName'] as string | undefined) ?? '',
-        phone: (currentUser.user_metadata?.['phone'] as string | undefined) ?? '',
-        registrationDate: currentUser.created_at.split('T')[0] ?? '',
-        registrationTime: currentUser.created_at.split('T')[1]?.slice(0, 8) ?? '',
-        rol: (currentUser.user_metadata?.['rol'] as string | undefined) ?? 'Administrador',
-        status: 'ACTIVO',
-      }
-    : null;
+  const sessionUserId = session?.user?.id ?? null;
+
+  useEffect(() => {
+    let mounted = true;
+    if (sessionUserId) {
+      getOwnProfile()
+        .then((profile) => {
+          if (mounted) setOwnProfile(profile);
+        })
+        .catch((err) => {
+          console.error('Error al leer el perfil del usuario:', err);
+          if (mounted) setOwnProfile(null);
+        });
+    } else {
+      setOwnProfile(null);
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [sessionUserId]);
+
+  const activeUser: User | null = ownProfile ? ownProfileToUser(ownProfile) : null;
 
   // setActiveUser ya no tiene sentido en la nueva arquitectura (la sesion
-  // la controla Supabase), pero lo exponemos para no romper componentes.
-  // Solo actua en modo local para evitar logout real.
+  // la controla Supabase), pero se expone como no-op para no romper componentes.
   function setActiveUser(_user: User | null) {
     // No-op: la sesion la controla onAuthStateChange.
   }
 
-  // users: ahora viene de Supabase Auth. Como la lista de usuarios completa
-  // requiere service_role key, exponemos un array vacio con un placeholder.
-  // Esto se reimplementa en la fase 1G usando admin API.
-  const users: User[] = [];
+  // users: lista real via Edge Function admin-users (service_role).
+  // Antes era `const users = []` — eso dejaba EditUser muerto y los
+  // selects de "Responsable" vacios en movimientos/pagos.
+  const { data: usersData = [] } = useUsersQuery();
+  const users: User[] = usersData.map(adminUserToUser);
 
   /**
    * Crea un usuario nuevo en la empresa actual. Delega a la Edge Function
    * admin-users que usa service_role. El trigger handle_new_user crea el
    * profile automaticamente.
+   *
+   * El rol DEBE ser un UserRole real de la DB (la DB no acepta los nombres
+   * en espanol de la lista vieja de roles); CreateUser ahora manda el enum.
    */
-  async function addUser(newUser: User): Promise<void> {
+  async function addUser(newUser: User & { rol: UserRole | string }): Promise<void> {
     const input: CreateUserInput = {
       email: newUser.email,
-      password: newUser.password ?? '123123', // fallback si el form no lo manda
+      password: newUser.password ?? '123123',
       first_name: newUser.name,
       last_name: newUser.lastName,
       phone: newUser.phone,
@@ -171,11 +181,33 @@ function GlobalProvider({ children }: GlobalProviderProps) {
   }
 
   /**
-   * Actualiza datos del usuario. Solo permite cambiar rol y desactivar.
-   * La edicion de nombre/telefono se hace via UPDATE profiles directo
-   * (no requiere service_role).
+   * Actualiza datos de un usuario.
+   * - name/lastName/phone -> UPDATE profiles (RLS: propio o admin).
+   * - rol/status -> via Edge Function (service_role + triggers de seguridad).
    */
   async function updateUserData(id: string, newData: Partial<User>): Promise<void> {
+    const profileChanges: { firstName?: string; lastName?: string; phone?: string } = {};
+    let hasProfileChanges = false;
+    if (newData.name !== undefined) {
+      profileChanges.firstName = newData.name;
+      hasProfileChanges = true;
+    }
+    if (newData.lastName !== undefined) {
+      profileChanges.lastName = newData.lastName;
+      hasProfileChanges = true;
+    }
+    if (newData.phone !== undefined) {
+      profileChanges.phone = newData.phone;
+      hasProfileChanges = true;
+    }
+    if (hasProfileChanges) {
+      await updateProfileData(id, profileChanges);
+      // Si me edi to a mi mismo, refreso el perfil en cache
+      if (ownProfile && ownProfile.id === id) {
+        const refreshed = await getOwnProfile();
+        setOwnProfile(refreshed);
+      }
+    }
     if (newData.rol) {
       const { changeUserRole } = await import('../services/adminUsersService');
       await changeUserRole(id, newData.rol as UserRole);
@@ -183,8 +215,6 @@ function GlobalProvider({ children }: GlobalProviderProps) {
     if (newData.status === 'INACTIVO') {
       await adminDeactivateUser(id);
     }
-    // Edicion de first_name/last_name/phone via profiles (cuando lo usemos)
-    // queda pendiente para una fase posterior.
   }
 
   async function removeUser(id: string): Promise<void> {
@@ -252,7 +282,8 @@ function GlobalProvider({ children }: GlobalProviderProps) {
     setActiveIcon(null);
   }
 
-  // Roles (siguen en localStorage hasta fase 1G)
+  // Roles (siguen en localStorage: extension de UI, no datos de negocio).
+  // NOTA: el ALTA de usuarios usa el enum UserRole de la DB, no esta lista.
   const [roles, setRoles] = useState<Role[]>(() => {
     const saved = localStorage.getItem('roles');
     const defaultRoles: Role[] = [
@@ -261,7 +292,11 @@ function GlobalProvider({ children }: GlobalProviderProps) {
       { id: '3', name: 'Médico', access: 'NO' },
       { id: '4', name: 'Recepcionista', access: 'SI' },
     ];
-    return saved ? (JSON.parse(saved) as Role[]) : defaultRoles;
+    try {
+      return saved ? (JSON.parse(saved) as Role[]) : defaultRoles;
+    } catch {
+      return defaultRoles;
+    }
   });
 
   useEffect(() => {
@@ -277,30 +312,71 @@ function GlobalProvider({ children }: GlobalProviderProps) {
   }
 
   function removeRole(id: string) {
-    setRoles(prev => prev.filter(role => role.id !== id));
+    setRoles(prev => prev.filter(role => (role.id !== id)));
   }
 
   const [themeColor, setThemeColor] = useState<string>(localStorage.getItem('themeColor') || 'blue');
 
-  // Company Data
-  const [companyData, setCompanyData] = useState<CompanyData>(() => {
-    const saved = localStorage.getItem('companyData');
-    const defaultCompanyData: CompanyData = {
-      clinicName: "VETERINARIA ARIEL´S EIRL",
-      email: 'vetariel@gmail.com',
-      department: 'LIMA',
-      province: 'LIMA',
-      district: 'LIMA',
-      address: 'Av. de la Constitución, No. 100, Lima',
-      phone: '917104426',
-      facebook: 'https://www.facebook.com/vetariel/',
+  // Company Data: la fuente real es la tabla companies (multi-tenant).
+  // Los campos que la DB no tiene (department/province/district/facebook)
+  // viven en un OVERLAY de localStorage namesaceado por empresa
+  // (companyData:<companyId>, antes compartian el mismo key todos
+  // los tenants del mismo navegador).
+  function mapCompany(db: Awaited<ReturnType<typeof getOwnCompany>>): CompanyData {
+    const companyId = db?.id ?? 'default';
+    let extras: Partial<CompanyData> = {};
+    try {
+      const saved = localStorage.getItem(`companyData:${companyId}`);
+      if (saved) extras = JSON.parse(saved) as Partial<CompanyData>;
+    } catch {
+      extras = {};
+    }
+    return {
+      clinicName: db?.name ?? 'Mi Clinica',
+      email: db?.email ?? '',
+      department: extras.department ?? 'LIMA',
+      province: extras.province ?? 'LIMA',
+      district: extras.district ?? 'LIMA',
+      address: db?.address ?? '',
+      phone: db?.phone ?? '',
+      facebook: extras.facebook ?? '',
     };
-    return saved ? (JSON.parse(saved) as CompanyData) : defaultCompanyData;
+  }
+
+  const [companyData, setCompanyDataState] = useState<CompanyData>({
+    clinicName: '', email: '', department: '', province: '',
+    district: '', address: '', phone: '', facebook: '',
   });
 
   useEffect(() => {
-    localStorage.setItem('companyData', JSON.stringify(companyData));
-  }, [companyData]);
+    let mounted = true;
+    if (sessionUserId) {
+      getOwnCompany()
+        .then((db) => {
+          if (mounted) setCompanyDataState(mapCompany(db));
+        })
+        .catch((err) => {
+          console.error('Error al leer los datos de la clinica:', err);
+        });
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [sessionUserId]);
+
+  function setCompanyData(data: CompanyData) {
+    setCompanyDataState(data);
+    // Solo guardamos el overlay (los campos que la DB no cubre). El resto
+    // viene de companies y se relee del servidor al recargar.
+    const companyId = ownProfile?.companyId ?? 'default';
+    const extras: Partial<CompanyData> = {
+      department: data.department,
+      province: data.province,
+      district: data.district,
+      facebook: data.facebook,
+    };
+    localStorage.setItem(`companyData:${companyId}`, JSON.stringify(extras));
+  }
 
   useEffect(() => {
     localStorage.setItem('themeColor', themeColor);
@@ -348,7 +424,11 @@ function GlobalProvider({ children }: GlobalProviderProps) {
     setShowBathList,
   };
 
-  return <GlobalContext.Provider value={contextValue}>{children}</GlobalContext.Provider>;
+  return (
+    <GlobalContext.Provider value={contextValue}>
+      {children}
+    </GlobalContext.Provider>
+  );
 }
 
 export function useGlobal(): GlobalContextType {

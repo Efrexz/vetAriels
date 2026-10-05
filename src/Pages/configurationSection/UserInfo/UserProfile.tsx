@@ -1,9 +1,9 @@
-import { ChangeEvent,useState, useEffect } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useGlobal } from '@context/GlobalContext';
 import { User } from '@t/user.types';
-import { useParams } from 'react-router-dom';
 import { useToast } from '@context/ToastContext';
-import PlusIcon from '@assets/plusIcon.svg?react';
+import SaveIcon from '@assets/diskIcon.svg?react';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 import phoneIcon from '@assets/phoneIcon.svg?react';
 import EmailIcon from '@assets/emailIcon.svg?react';
@@ -22,6 +22,7 @@ function UserProfile() {
     const { activeUser, updateUserData } = useGlobal();
     const { id } = useParams<{ id: string }>();
     const { toast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [formData, setFormData] = useState<FormDataState>({
         email: activeUser?.email || '',
@@ -45,10 +46,8 @@ function UserProfile() {
         }
     }, [activeUser]);
 
-    // Validación de los campos
     function validateForm() {
         const newErrors: FormErrors = {};
-        //Validamos si todos los campos son válidos
         if (!/^\d{9}$/.test(formData.mobile)) {
             newErrors.mobile = 'El número de teléfono debe tener 9 caracteres';
         } if (formData.name.trim().length < 3) {
@@ -57,11 +56,10 @@ function UserProfile() {
             newErrors.lastName = 'El apellido debe tener al menos 3 caracteres';
         }
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
+        return Object.keys(newErrors).length === 0;
     }
 
-
-    function updateData() {
+    async function updateData() {
         if (!validateForm() || !id) {
             return;
         }
@@ -70,8 +68,19 @@ function UserProfile() {
             name: formData.name.trim(),
             lastName: formData.lastName.trim(),
         };
-        updateUserData(id, updatedUserData);
-        toast.success("Perfil actualizado correctamente");
+        setIsSubmitting(true);
+        try {
+            // updateUserData (GlobalContext) decide: name/lastName/phone van
+            // via profiles (RLS), rol/status via Edge Function. Aqui solo
+            // pasamos los campos no-sensibles.
+            await updateUserData(id, updatedUserData);
+            toast.success('Perfil actualizado correctamente');
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo actualizar el perfil.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -101,7 +110,7 @@ function UserProfile() {
             disabled: true
         },
         {
-            label: "Télefono Móvil",
+            label: 'Teléfono Móvil',
             id: 'mobile',
             type: 'text',
             value: formData.mobile,
@@ -109,7 +118,7 @@ function UserProfile() {
             required: true,
         },
         {
-            label: "Nombre",
+            label: 'Nombre',
             id: 'name',
             type: 'text',
             value: formData.name,
@@ -117,7 +126,7 @@ function UserProfile() {
             required: true,
         },
         {
-            label: "Apellido",
+            label: 'Apellido',
             id: 'lastName',
             type: 'text',
             value: formData.lastName,
@@ -125,7 +134,7 @@ function UserProfile() {
             required: true,
         },
         {
-            label: "Rol en esta clinica",
+            label: 'Rol en esta clinica',
             id: 'role',
             type: 'text',
             value: formData.role,
@@ -150,7 +159,7 @@ function UserProfile() {
                                 <input
                                     type={field.type}
                                     id={field.id}
-                                    value={formData[field.id as keyof FormDataState]}
+                                    value={field.value}
                                     onChange={handleChange}
                                     disabled={field.disabled}
                                     className={`border rounded-r-lg py-2 px-3 w-full focus:outline-none text-sm bg-white text-ink ${errors[field.id as keyof FormErrors] ? 'border-danger' : 'border-slate-200 hover:border-primary focus:border-primary'} `}
@@ -167,11 +176,12 @@ function UserProfile() {
             </div>
             <div className="flex justify-center sm:justify-end items-center py-3 px-4 border-t border-slate-100 pt-4">
                 <button
-                    className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto text-sm font-semibold font-display shadow-sm shadow-primary/25"
+                    className="bg-primary text-white py-2 px-5 rounded-xl hover:opacity-90 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto text-sm font-semibold font-display shadow-sm shadow-primary/25 disabled:opacity-60 disabled:cursor-not-allowed"
                     onClick={updateData}
+                    disabled={isSubmitting}
                 >
-                    <PlusIcon className="w-4 h-4" />
-                    Guardar cambios
+                    <SaveIcon className="w-4 h-4" />
+                    {isSubmitting ? 'Guardando...' : 'Guardar cambios'}
                 </button>
             </div>
         </div>
