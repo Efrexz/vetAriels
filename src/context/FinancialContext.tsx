@@ -1,11 +1,12 @@
-import { createContext, useEffect, useState , ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
 
 import { Payment } from '@t/financial.types';
+import { usePaymentsQuery, usePaymentsMutations } from '../hooks/usePaymentsQuery';
 
 interface FinancialContextType {
     paymentsData: Payment[];
-    addNewPayment: (newPayment: Payment) => void;
-    removePayment: (id: string) => void;
+    addNewPayment: (newPayment: Omit<Payment, 'id' | 'date'>) => Promise<Payment>;
+    removePayment: (payment: Payment) => Promise<Payment>;
 }
 
 const FinancialContext = createContext<FinancialContextType | undefined>(undefined);
@@ -15,41 +16,28 @@ interface FinancialProviderProps {
 }
 
 function FinancialProvider({ children }: FinancialProviderProps) {
+    const { data: paymentsData = [] } = usePaymentsQuery();
+    const { create, extorn } = usePaymentsMutations();
 
-    // Datos de ejemplo MINIMOS para que la caja no este vacia en la
-    // demostracion inicial. En la FASE 5 (Paso 5) paymentsData pasa a
-    // leerse de la tabla payments de Supabase y esto desaparece.
-    const initialPaymentsData : Payment[] = [
-        { id: '300EBFEA', date: '31-07-2024 07:43 AM', description: 'APERTURA ANGELLY', paymentMethod: 'EFECTIVO', income: '2,084.00', expense: null, docRef: '', movementType: 'ENTRADA' },
-        { id: 'FD12A67B', date: '30-07-2024 10:05 PM', description: 'Compra de camaras', paymentMethod: 'EFECTIVO', income: null, expense: '150.00', docRef: '', movementType: 'SALIDA' },
-        { id: 'AB4801FD', date: '30-07-2024 10:00 PM', description: '', paymentMethod: 'VISA', income: '475.00', expense: null, docRef: 'BV01-0003571', movementType: 'VENTA' },
-    ];
-
-
-    const [paymentsData, setPaymentsData] = useState<Payment[]>(() => {
-        try {
-            const savedData = localStorage.getItem('paymentsData');
-            return savedData ? (JSON.parse(savedData) as Payment[]) : initialPaymentsData;
-        } catch {
-            // localStorage corrompido no debe tumbar toda la app
-            return initialPaymentsData;
-        }
-    });
-
-    // Guardar en localStorage cada vez que cambien los estados
-    useEffect(() => {
-        localStorage.setItem('paymentsData', JSON.stringify(paymentsData));
-    }, [paymentsData]);
-
-    //agregar nuevo ingreso o egreso
-    function addNewPayment(newPayment: Payment) {
-        setPaymentsData([newPayment, ...paymentsData]);
+    /**
+     * Registra un ingreso/egreso de caja. El id y la fecha los asigna la
+     * DB; el servicio traduce movementType UI (ENTRADA/SALIDA) a DB
+     * (INGRESO/EGRESO).
+     */
+    async function addNewPayment(newPayment: Omit<Payment, 'id' | 'date'>): Promise<Payment> {
+        return create.mutateAsync({
+            movementType: newPayment.movementType as 'ENTRADA' | 'SALIDA',
+            description: newPayment.description,
+            paymentMethod: newPayment.paymentMethod,
+            amount: Number(newPayment.income ?? newPayment.expense ?? 0),
+            docRef: newPayment.docRef || '',
+        });
     }
 
-    function removePayment(id: string) {
-        setPaymentsData(paymentsData.filter(payment => (payment.id !== id)));
+    /** Extorno: crea el movimiento contrario (no borra: fuero contable). */
+    async function removePayment(payment: Payment): Promise<Payment> {
+        return extorn.mutateAsync(payment);
     }
-
 
     return (
         <FinancialContext.Provider value={{ paymentsData, addNewPayment, removePayment }}>

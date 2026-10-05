@@ -1,5 +1,7 @@
-import { InfoBanner } from '@components/ui/InfoBanner';
-import FileInvoiceIcon from '@assets/file-invoice.svg?react';
+import { useFinancial } from '@context/FinancialContext';
+import { useInvoicesQuery } from '@hooks/useInvoicesQuery';
+import type { Payment } from '@t/financial.types';
+import type { UiInvoice } from '../../services/invoicesService';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
 import ExcelIcon from '@assets/fileExcelIcon.svg?react';
@@ -41,69 +43,86 @@ interface PaymentsReportSection {
 type ReportSection = StandardReportSection | PaymentsReportSection;
 
 
-const sections: ReportSection[] = [
+function buildReportSections(payments: Payment[], invoices: UiInvoice[]): ReportSection[] {
+  return [
     {
         title: 'Resumen de comprobantes generados en el periodo',
         data: [
-            { label: 'Sumatoria montos facturados de todos los comprobantes (no toma en cuenta notas de crédito)', value: 526.00 },
+            { label: 'Sumatoria montos facturados de todos los comprobantes (no toma en cuenta notas de crédito)', value: invoices.reduce((sum, i) => sum + i.amount, 0) },
             { label: 'Sumatoria de notas de crédito aplicadas a comprobantes del periodo', value: 0.00 },
-            { label: 'Facturación neta por ventas', value: 526.00 },
+            { label: 'Facturación neta por ventas', value: invoices.filter((i) => i.status !== 'ANULADA').reduce((sum, i) => sum + i.amount, 0) },
         ],
     },
     {
         title: 'Resumen de pagos de comprobantes',
-        data: [
-            { label: 'Sumatoria de pagos recibidos por comprobantes emitidos en el periodo (cualquier metodo de pago)', value: 526.00 },
-            { label: 'Sumatoria de pagos pendientes de comprobantes emitidos al crédito en el periodo', value: 0.00, highlight: true },
-            { label: 'Cobro de deudas (click aquí para ver el detalle de comprobantes)', value: 0.00, highlight: true },
-            { label: 'Total', value: 526.00 },
-        ],
+        data: (() => {
+            const ventaPayments = payments.filter((p) => p.movementType === 'VENTA');
+            const received = ventaPayments.reduce((sum, p) => sum + parseFloat(p.income || '0'), 0);
+            return [
+                { label: 'Sumatoria de pagos recibidos por comprobantes emitidos en el periodo (cualquier metodo de pago)', value: received },
+                { label: 'Sumatoria de pagos pendientes de comprobantes emitidos al crédito en el periodo', value: 0.00, highlight: true },
+                { label: 'Cobro de deudas (pendiente)', value: 0.00, highlight: true },
+                { label: 'Total', value: received },
+            ];
+        })(),
     },
     {
         title: 'Pagos recibidos por comprobantes emitidos en el periodo (cualquier medio de pago)',
-        data: [
-            { label: 'PLIN', value: 526.00 },
-            { label: 'VISA', value: 410.00 },
-            { label: 'EFECTIVO', value: 450.00 },
-            { label: 'AMERICAN EXPRESS', value: 100.00 },
-            { label: 'Sumatoria de pagos recibidos por comprobantes emitidos en el periodo (cualquier medio de pago)', value: 4000.00, highlight: true },
-        ],
+        data: (() => {
+            const ventaPayments = payments.filter((p) => p.movementType === 'VENTA');
+            const byMethod = new Map<string, number>();
+            for (const p of ventaPayments) {
+                byMethod.set(p.paymentMethod, (byMethod.get(p.paymentMethod) || 0) + parseFloat(p.income || '0'));
+            }
+            const rows: ReportDataItem[] = Array.from(byMethod.entries()).map(([method, total]) => ({ label: method, value: total }));
+            const grand = ventaPayments.reduce((sum, p) => sum + parseFloat(p.income || '0'), 0);
+            rows.push({ label: 'Sumatoria de pagos recibidos por comprobantes emitidos en el periodo (cualquier medio de pago)', value: grand, highlight: true });
+            return rows;
+        })(),
     },
     {
         title: 'Resumen de entradas de dinero directos de caja (no considera ventas):',
         payments: true,
-        data: [
-            {
-                type: 'Entradas',
-                items: [{ label: 'EFECTIVO', value: 474.7 }],
-            },
-            {
-                type: 'Salidas',
-                items: [{ label: 'EFECTIVO', value: 254.0 }],
-            },
-        ]
+        data: (() => {
+            const ent = payments.filter((p) => p.movementType === 'ENTRADA');
+            const sal = payments.filter((p) => p.movementType === 'SALIDA');
+            return [
+                { type: 'Entradas' as const, items: ent.map((p) => ({ label: p.paymentMethod, value: parseFloat(p.income || '0') })) },
+                { type: 'Salidas' as const, items: sal.map((p) => ({ label: p.paymentMethod, value: parseFloat(p.expense || '0') })) },
+            ];
+        })()
     },
     {
         title: 'Cierre de caja del periodo (Agrupado por método de pago)',
-        data: [
-            { label: 'EFECTIVO (Suma de entradas)', value: 713.20 },
-            { label: 'PLIN (Suma de entradas)', value: 410.00 },
-            { label: 'VISA (Suma de entradas)', value: 660.50 },
-            { label: 'EFECTIVO (Suma de salidas)', value: -250.00 },
-            { label: 'AMERICAN EXPRESS (Suma de entradas)', value: 261.00 },
-            { label: 'Saldo en efectivo (en caja)', value: 4000.00, highlight: true },
-        ],
+        data: (() => {
+            const rows: ReportDataItem[] = [];
+            const saldo = new Map<string, number>();
+            for (const p of payments) {
+                const isIn = p.movementType !== 'SALIDA';
+                const amount = parseFloat((p.income ?? p.expense) || '0');
+                const suffix = isIn ? ' (Suma de entradas)' : ' (Suma de salidas)';
+                const key = `${p.paymentMethod}${suffix}`;
+                // Entradas suman, salidas restauran
+                const sign = isIn ? 1 : -1;
+                rows.push({ label: key, value: amount * (isIn ? 1 : 1) * sign });
+                saldo.set(p.paymentMethod, (saldo.get(p.paymentMethod) || 0) + sign * amount);
+            }
+            const totalCaja = Array.from(saldo.values()).reduce((a, b) => a + b, 0);
+            rows.push({ label: 'Saldo en caja (todas las formas de pago)', value: totalCaja, highlight: true });
+            return rows;
+        })(),
     },
 ];
 
+}
+
 function BalanceReport() {
+    const { paymentsData } = useFinancial();
+    const { data: invoices = [] } = useInvoicesQuery();
+    const sections = buildReportSections(paymentsData, invoices);
+
     return (
     <>
-    <div className="mb-4">
-      <InfoBanner type="warning">
-        Este cuadre muestra datos de ejemplo. Se calcular&aacute; autom&aacute;tico desde los pagos de Supabase en la pr&oacute;xima fase.
-      </InfoBanner>
-    </div>
         <section className="w-full">
             <div className="mb-6">
                 <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">

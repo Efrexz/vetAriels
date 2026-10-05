@@ -1,10 +1,11 @@
 import { useState, useMemo , ChangeEvent} from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
+import { useGlobal } from '@context/GlobalContext';
+import { useInvoicesMutations } from '@hooks/useInvoicesQuery';
 import { PurchasedItem } from '@t/inventory.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import {generateUniqueId } from '@utils/idGenerator';
-import FileIcon from '@assets/file-invoice.svg?react';
 import TrashIcon from '@assets/trashIcon.svg?react';
 import LightbulbIcon from '@assets/lightbulb.svg?react';
 import { useToast } from '@context/ToastContext';
@@ -49,26 +50,36 @@ interface LocationState {
 
 const tableCategories: string[] = ["Concepto", "Valor Unitario", "Cantidad", "SubTotal", "Descuento", "Impuestos", "Total"];
 
-const invoiceData: FormField[] = [
-    { label: 'Fecha de emisión', value: new Date().toLocaleString(), type: "text", disabled: true },
-    { label: 'Emisor', value: 'VETERINARIA ARIEL S E.I.R.L', type: "text", disabled: true },
-    { label: 'Tipo de comprobante', type: "select", options: ["BOLETA DE VENTA ELECTRÓNICA", "RECIBO", "FACTURA ELECTRONICA"] },
-    { label: 'Fecha de vencimiento', value: new Date().toLocaleDateString(), type: "text", disabled: true },
-    { label: 'Serie de comprobante', value: 'BV01', type: "text", disabled: true },
-    { label: 'Número de comprobante', value: '0004246', type: "text", disabled: true },
-]
-
 
 function CreateInvoice() {
 
     const { clients } = useClients();
+    const { create: createInvoiceMutation } = useInvoicesMutations();
     const { id: clientId } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
     const { toast } = useToast();
+    const { companyData } = useGlobal();
     const clientData = useMemo(() => clients.find(client => client.id === clientId), [clients, clientId]);
 
-    const { selectedProducts = [] } = (location.state as LocationState) || {};
+    // El carrito via a sessionStorage (lo escribe Sales). location.state
+    // queda como fallback para compatibilidad (deep links antiguos).
+    const selectedProducts: PurchasedItem[] = useMemo(() => {
+        try {
+            const saved = clientId
+                ? sessionStorage.getItem(`vetArielCart:${clientId}`)
+                : null;
+            if (saved) return JSON.parse(saved) as PurchasedItem[];
+        } catch { // storage corrupto: estado vacio
+        }
+        return (location.state as LocationState | null)?.selectedProducts ?? [];
+    }, [clientId, location.state]);
+    // Tipo de comprobante: BOLETA/FACTURA mapean 1:1 a la DB. RECIBO se
+    // emite como BOLETA (legalmente equivalente).
+    const [tipoComprobante, setTipoComprobante] = useState<'BOLETA' | 'FACTURA'>('BOLETA');
+    const [clienteDocTipo, setClienteDocTipo] = useState<'DNI' | 'RUC'>('DNI');
+    const [clienteDocNumero, setClienteDocNumero] = useState(clientData?.dni || '');
+
     //observaciones del comprobante
     const [notes, setNotes] = useState<string>('');
     const [paymentNote, setPaymentNote] = useState<string>('');
@@ -125,9 +136,21 @@ function CreateInvoice() {
         },
     ]
 
+    // Datos del comprobante (dependen de company/companyData y del tipo
+    // elegido; por eso viven dentro del componente).
+    const invoiceData: FormField[] = [
+        { label: 'Fecha de emisión', value: new Date().toLocaleString(), type: "text", disabled: true },
+        { label: 'Emisor', value: companyData?.clinicName || 'Mi clinica', type: "text", disabled: true },
+        { label: 'Tipo de comprobante', type: "select", options: ["BOLETA DE VENTA ELECTRÓNICA", "RECIBO", "FACTURA ELECTRONICA"], onChange: (e: { target: { value: string } }) => { const v = e.target.value; setTipoComprobante(v.includes('FACTURA') ? 'FACTURA' : 'BOLETA'); } },
+        { label: 'Fecha de vencimiento', value: new Date().toLocaleDateString(), type: "text", disabled: true },
+        { label: 'Serie de comprobante', value: tipoComprobante === 'FACTURA' ? 'F001' : 'B001', type: "text", disabled: true },
+        { label: 'Número de comprobante', value: 'Se asigna al emitir', type: "text", disabled: true },
+    ]
+
     const clientInfo: FormField[] = [
         { label: 'Tipo de documento de identidad',type: "select", options: ["(DNI)","NÚMERO TRIBUTARIO (RUC)","CARNET DE EXTRANJERIA","PASAPORTE",]},
-        { label: 'Número de documento', value: clientData?.dni, type: "text" },
+        { label: 'Número de documento', value: clienteDocNumero, type: "text", onChange: (e: { target: { value: string } }) => setClienteDocNumero(e.target.value) },
+        { label: 'Tipo de documento de identidad', type: "select", options: ["(DNI)","NÚMERO TRIBUTARIO (RUC)","CARNET DE EXTRANJERIA","PASAPORTE",], onChange: (e: { target: { value: string } }) => { setClienteDocTipo(e.target.value.includes('RUC') ? 'RUC' : 'DNI'); } },
         { label: 'Cliente', value: clientData ? `${clientData.firstName} ${clientData.lastName}` : 'N/A', type: "text" },
         { label: 'Email', value: clientData?.email || 'N/A', type: "email" },
         { label: 'Dirección', value: clientData?.address, type: "text", fullWidth: true },
@@ -148,6 +171,49 @@ function CreateInvoice() {
         setMethodsOfPaymentList(prev => [...prev, newPayment]);
         setPaymentAmount("");
         setPaymentNote("");
+    }
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    async function handleGenerateInvoice() {
+        if (!clientData || !clientId) return;
+        if (selectedProducts.length === 0) {
+            toast.error('No hay items en el comprobante.');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const created = await createInvoiceMutation.mutateAsync({
+                clientId,
+                tipoComprobante,
+                clienteDocTipo,
+                clienteDocNumero: clienteDocNumero || clientData.dni || '00000000',
+                items: selectedProducts.map((item) => ({
+                    itemType: item.productName !== undefined ? 'PRODUCTO' as const : 'SERVICIO' as const,
+                    productId: item.productName !== undefined ? item.id : undefined,
+                    serviceId: item.productName !== undefined ? undefined : item.id,
+                    description: item.productName ?? item.serviceName ?? '',
+                    quantity: item.quantity,
+                    unitPrice: item.salePrice || 0,
+                })),
+                payments: methodsOfPaymentList.map((pm) => ({
+                    paymentMethod: (pm.label === 'MASTERCARD' || pm.label === 'AMEX' || pm.label === 'DINERS CLUB'
+                        ? 'VISA'      // la DB solo acepta VISA como tarjeta
+                        : pm.label) as 'EFECTIVO' | 'VISA' | 'YAPE' | 'PLIN' | 'TRANSFERENCIA' | 'OTRO',
+                    amount: pm.amount,
+                    description: pm.description || `Cobro de venta`,
+                })),
+            });
+            toast.success(`Comprobante ${created.comprobante} emitido por S/ ${created.total.toFixed(2)}.`);
+            try { sessionStorage.removeItem(`vetArielCart:${clientId}`); } catch { /* noop */ }
+            navigate('/sales/invoices');
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo generar el comprobante.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     if (!clientData) {
@@ -402,8 +468,9 @@ function CreateInvoice() {
 
             <ActionButtons
                 onCancel={() => navigate(-1)}
-                submitText="Generar comprobante"
-                onSubmit= {() => toast.success("Comprobante generado correctamente")}
+                submitText={isSubmitting ? 'Generando...' : 'Generar comprobante'}
+                disabled={isSubmitting}
+                onSubmit={handleGenerateInvoice}
             />
 
             <div className="mt-6 p-4 bg-primary/10 text-ink rounded-xl m-3 flex gap-2 border border-primary/20">

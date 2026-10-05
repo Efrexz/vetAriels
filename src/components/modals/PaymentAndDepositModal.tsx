@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { useFinancial } from '@context/FinancialContext';
 import { useGlobal } from '@context/GlobalContext';
+import { useToast } from '@context/ToastContext';
 import { Payment } from '@t/financial.types';
 import { User } from '@t/user.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
@@ -35,6 +36,7 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
 
     const { addNewPayment } = useFinancial();
     const { activeUser, companyData, users } = useGlobal();
+    const { toast } = useToast();
 
     const [errors, setErrors] = useState<FormErrors>({});
 
@@ -68,13 +70,11 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
         return Object.keys(newErrors).length === 0; // Si no hay errores, el formulario es válido
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!validateForm()) {
             return;
         }
-        const newPayment: Payment = {
-            id: generateUniqueId(),
-            date: formData.date,
+        const newPayment: Omit<Payment, 'id' | 'date'> = {
             description: formData.reason.trim(),
             paymentMethod: formData.methodOfPayment,
             income: typeOfOperation === 'ENTRADA' ? Number(formData.amount).toFixed(2) : null,
@@ -82,8 +82,14 @@ function PaymentAndDepositModal({ onClose, typeOfOperation }: PaymentAndDepositM
             docRef: formData.tag,
             movementType: typeOfOperation
         };
-        addNewPayment(newPayment);
-        onClose();
+        try {
+            await addNewPayment(newPayment);
+            toast.success('Movimiento registrado correctamente.');
+            onClose();
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo registrar el movimiento.';
+            toast.error(message);
+        }
     }
 
     const userOptions = users.map((user: User) => `${user.name} ${user.lastName}`);

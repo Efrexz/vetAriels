@@ -115,7 +115,11 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation, onConfirm }
 
         switch (typeOfOperation) {
             case "payments":
-                removePayment(elementData.id);
+                // removePayment (extorno) recibe el Payment completo: crea
+                // el movimiento contrario en la DB.
+                void Promise.resolve(removePayment(elementData as Payment)).catch((err) => {
+                    setErrorMessage(err instanceof Error ? err.message : 'Error al extornar');
+                });
                 break;
             case "medical":
                 removePetFromQueueMedical(elementData.id);

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTableControls } from '@hooks/useTableControls';
-import { InfoBanner } from '@components/ui/InfoBanner';
+import { useInvoicesQuery } from '@hooks/useInvoicesQuery';
 import { Pagination } from '@components/ui/Pagination';
 import { EmptyState } from '@components/ui/EmptyState';
 import { StatsCard } from '@components/ui/StatsCard';
@@ -19,14 +19,15 @@ interface Invoice {
   status: 'PAGADO' | 'PENDIENTE' | 'ANULADO';
 }
 
-const invoicesData: Invoice[] = [
-  { id: '1', date: '29-07-2024 07:33 PM', comprobante: 'BOLETA DE VENTA ELECTRÓNICA: BV01 - 0003560', client: 'Juan Pérez', amount: 120.00, payment: 'EFECTIVO', status: 'PAGADO' },
-  { id: '2', date: '28-07-2024 03:15 PM', comprobante: 'FACTURA ELECTRONICA: FE01 - 0001245', client: 'María García', amount: 250.50, payment: 'VISA', status: 'PAGADO' },
-  { id: '3', date: '27-07-2024 11:00 AM', comprobante: 'BOLETA DE VENTA ELECTRÓNICA: BV01 - 0003561', client: 'Carlos López', amount: 80.00, payment: 'YAPE', status: 'PENDIENTE' },
-  { id: '4', date: '26-07-2024 05:45 PM', comprobante: 'RECIBO: RC01 - 0000089', client: 'Ana Torres', amount: 45.00, payment: 'EFECTIVO', status: 'ANULADO' },
-  { id: '5', date: '25-07-2024 09:30 AM', comprobante: 'FACTURA ELECTRONICA: FE01 - 0001246', client: 'Luis Ramírez', amount: 320.00, payment: 'TRANSFERENCIA', status: 'PAGADO' },
-  { id: '6', date: '24-07-2024 02:00 PM', comprobante: 'BOLETA DE VENTA ELECTRÓNICA: BV01 - 0003562', client: 'Sofía Mendoza', amount: 150.00, payment: 'PLIN', status: 'PENDIENTE' },
-];
+type InvoiceForTable = Omit<Invoice, 'date'> & { date: string; status: 'PAGADO' | 'PENDIENTE' | 'ANULADO' };
+
+const INVOICES_MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+function formatDateShort(iso: string): string {
+  const match = iso.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return iso;
+  return `${Number(match[3])} ${INVOICES_MONTHS[Number(match[2]) - 1]} ${match[1]}`;
+}
 
 function getStatusBadge(status: string) {
   if (status === 'PAGADO') return 'bg-success/10 text-success';
@@ -35,14 +36,30 @@ function getStatusBadge(status: string) {
 }
 
 function Invoices() {
-  const controls = useTableControls(invoicesData, { itemsPerPage: 10, searchFields: ['client', 'comprobante'], dateField: 'date' });
+  const { data: invoicesData = [], isLoading } = useInvoicesQuery();
+
+  // UiInvoice -> fila de tabla. date() es created_at ISO; se muestra
+  // 'dd mmm yyyy' con el util para evitar formato crudo de DB.
+  const tableData = useMemo((): InvoiceForTable[] =>
+    invoicesData.map((inv) => ({
+      id: inv.id,
+      comprobante: inv.comprobante,
+      client: inv.client,
+      amount: inv.amount,
+      payment: inv.paidWith || '—',
+      date: formatDateShort(inv.date),
+      status: inv.status === 'ANULADA' ? 'ANULADO' : inv.status,
+    })),
+  [invoicesData]);
+
+  const controls = useTableControls(tableData, { itemsPerPage: 10, searchFields: ['client', 'comprobante'], dateField: 'date' });
 
   const stats = useMemo(() => {
     const total = invoicesData.length;
     const paid = invoicesData.filter((i) => i.status === 'PAGADO').length;
     const totalAmount = invoicesData.reduce((s, i) => s + i.amount, 0);
     return { total, paid, totalAmount };
-  }, []);
+  }, [invoicesData]);
 
   const hasActiveFilters = controls.searchText.trim() !== '' || controls.dateFrom !== '' || controls.dateTo !== '';
 
@@ -54,11 +71,6 @@ function Invoices() {
 
   return (
     <>
-    <div className="mb-4">
-      <InfoBanner type="warning">
-        Los comprobantes que ves son datos de ejemplo. Esta tabla se conectar&aacute; a Supabase cuando el flujo de ventas quede migrado en el siguiente paso.
-      </InfoBanner>
-    </div>
     <section className="w-full">
       <div className="mb-6">
         <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">Facturación</span>
@@ -85,7 +97,10 @@ function Invoices() {
           </div>
         </div>
 
-        {controls.totalFiltered === 0 ? (
+        {isLoading ? (
+            <div className="py-10 text-center text-slate text-sm">Cargando comprobantes...</div>
+          ) :
+        controls.totalFiltered === 0 ? (
           hasActiveFilters ? <EmptyState icon={SearchIcon} title="Sin resultados" description="No se encontraron comprobantes con estos filtros." actionLabel="Limpiar filtros" onAction={resetFilters} />
           : <EmptyState icon={FileInvoiceIcon} title="Sin comprobantes" description="No hay comprobantes emitidos." />
         ) : (
@@ -103,7 +118,7 @@ function Invoices() {
                   </tr>
                 </thead>
                 <tbody>
-                  {controls.paginatedData.map((invoice: Invoice) => (
+                  {controls.paginatedData.map((invoice: InvoiceForTable) => (
                     <tr key={invoice.id} className="border-b border-slate-100 hover:bg-slate-50/60 transition-colors">
                       <td className="py-3 px-4 text-sm text-slate whitespace-nowrap">{invoice.date}</td>
                       <td className="py-3 px-3 text-sm text-ink font-medium truncate max-w-[240px]" title={invoice.comprobante}>{invoice.comprobante}</td>

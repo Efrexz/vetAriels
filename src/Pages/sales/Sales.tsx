@@ -62,18 +62,31 @@ function Sales() {
     const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 
-    // Inicializa el carrito SOLO cuando cambia el cliente, nunca en cada
-    // refetch. Antes este efecto resincronizaba con clientData.products
-    // (que ahora es SIEMPRE [] tras la migracion), asi que cada refetch
-
-    // de React Query borraba el carrito a mitad de venta.
-    // TODO (Paso 5): persistir el carrito (Supabase o sessionStorage).
+    // El carrito vive en sessionStorage (key por cliente): sobrevive a la
+    // navegacion Sales<->CreateInvoice, al refetch de React Query y al F5
+    // (location.state se pierde con F5, sessionStorage no). Solo persiste
+    // mientras la pestana este abierta: al salir de la app se limpia,
+    // que es lo esperado para un POS.
     const initializedCartForClientId = useRef<string | null>(null);
     useEffect(() => {
         if (initializedCartForClientId.current === clientId) return;
-        initializedCartForClientId.current = null;
-        setSelectedProducts([]);
+        initializedCartForClientId.current = clientId ?? null;
+        try {
+            const saved = sessionStorage.getItem(`vetArielCart:${clientId}`);
+            setSelectedProducts(saved ? (JSON.parse(saved) as PurchasedItem[]) : []);
+        } catch {
+            setSelectedProducts([]);
+        }
     }, [clientId]);
+
+    useEffect(() => {
+        if (!clientId) return;
+        try {
+            sessionStorage.setItem(`vetArielCart:${clientId}`, JSON.stringify(selectedProducts));
+        } catch {
+            // storage lleno/desabilitado: el carrito sigue en memoria
+        }
+    }, [selectedProducts, clientId]);
 
 
     //calcular la edad de la mascotas
