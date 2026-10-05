@@ -185,12 +185,28 @@ Vite resolves it — do not "fix" this without verifying.
 ## Migraciones SQL
 
 - **Fuente de verdad**: `db/*.sql` (re-ejecutables, idempotentes).
+  EXCEPTUO los archivos en `db/legacy/` (1C/1E) — NEVER ejecutarlos.
 - **Migraciones incrementales** ya desplegadas: `supabase/migrations/<timestamp>_*.sql`.
 - Cada nueva migración debe:
   1. Usar timestamp `YYYYMMDDHHmmss`.
   2. Ser idempotente (`CREATE OR REPLACE`, `DROP IF EXISTS`).
   3. Actualizar también el archivo en `db/` para mantenerlo como fuente de verdad.
   4. Comentarios en español.
+
+## Utilidades de fecha
+
+- SIEMPRE parsear fechas textuales con `@utils/date.ts` (`parseDateSafe`,
+  `isWithinRange`, `isSameDay/Month...`). Las fechas ISO de Supabase
+  ('yyyy-mm-dd') se parsean en hora LOCAL (nunca `new Date(string)`, el
+  shift UTC rompe filtros en Lima UTC-5). No re-implementar parsers: es un
+  solo util para toda la app.
+- Para guardar fechas nuevas (movimientos, pagos) preferir created_at de
+  la DB; la UI usa registrationDate/Time derivados en rowToX.
+
+## Scripts npm
+
+- `npm run migrate:localstorage` — script de migracion de datos (ver docs/PASO_4.md);
+  requiere ADMIN_EMAIL/ADMIN_PASSWORD en `.env`. Idempotente.
 
 ## Convenciones de aprendizaje
 
