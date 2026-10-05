@@ -14,6 +14,7 @@ interface ClientsContextType {
     // Clientes
     clients: Client[];
     isLoadingClients: boolean;
+    isLoadingPets: boolean;
     clientsError: Error | null;
     addClient: (newClient: Client) => Promise<Client>;
     updateClientData: (id: string, newData: Partial<Client>) => Promise<void>;
@@ -69,7 +70,7 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     // petsData — cacheado por React Query contra Supabase. Los records
     // clinicos vienen embebidos via join (SELECT pet_records(*)) para que
     // ClinicalRecords y demas paginas sigan leyendo pet.records sin cambios.
-    const { data: petsData = [], refetch: refetchPets } = usePetsQuery();
+    const { data: petsData = [], refetch: refetchPets, isLoading: isLoadingPets } = usePetsQuery();
     const {
         create: createPetMutation,
         update: updatePetMutation,
@@ -312,7 +313,7 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     }
 
     const contextValue: ClientsContextType = {
-        clients, isLoadingClients, clientsError, refreshClients,
+        clients, isLoadingClients, isLoadingPets, clientsError, refreshClients,
         addClient, updateClientData, removeClient, addProductToClient, removeProductFromClient,
         petsData, addPet, updatePetData, removePet, historyCounter,
         addRecord, updateRecord, removeRecord,

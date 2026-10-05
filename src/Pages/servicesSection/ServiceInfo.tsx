@@ -8,11 +8,15 @@ import { NotFound } from "@components/ui/NotFound";
 import PillsIcon from "@assets/pillsIcon.svg?react";
 
 function ServiceInfo() {
-    const { servicesData } = useProductsAndServices();
+    const { servicesData, isLoadingServices } = useProductsAndServices();
 
     const { section = 'update', id } = useParams<{ id: string; section?: string }>();
 
     const serviceData: Service | undefined = servicesData.find(service => service.id === id);
+
+    if (isLoadingServices) {
+        return <div className="p-6 text-center text-slate">Cargando servicio...</div>;
+    }
 
     if (!serviceData) {
         return (

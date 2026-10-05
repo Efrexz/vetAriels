@@ -1,4 +1,7 @@
 import { useState, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { useToast } from '@context/ToastContext';
 import { Product } from '@t/inventory.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { FormField } from '@components/ui/FormField';
@@ -23,6 +26,10 @@ interface PriceFormData {
 }
 
 function EditProductPrice({ productData }: EditProductPriceProps) {
+  const { updateProductData } = useProductsAndServices();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<PriceFormData>({
     valorVenta: String(productData.salePrice || ''),
     impuestoPorcentaje: '18',
@@ -41,8 +48,23 @@ function EditProductPrice({ productData }: EditProductPriceProps) {
     setFormData({ ...formData, [id]: value });
   }
 
-  function handleSave() {
-    // Placeholder: future integration with context to update product prices
+  async function handleSave() {
+    // Persistiendo: salePrice en DB es 'incluido impuestos' (igual que el
+    // form: precioVentaPublico), y cost es 'sin impuestos'.
+    setIsSubmitting(true);
+    try {
+      await updateProductData(productData.systemCode, {
+        cost: Number(formData.costoServicioSinImpuestos) || 0,
+        salePrice: Number(formData.precioVentaPublico) || 0,
+      });
+      toast.success('Precios actualizados correctamente.');
+      window.history.back();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'No se pudo actualizar los precios.';
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -153,8 +175,9 @@ function EditProductPrice({ productData }: EditProductPriceProps) {
       <ActionButtons
         onCancel={() => window.history.back()}
         onSubmit={handleSave}
-        submitText="Guardar precios"
+        submitText={isSubmitting ? 'Guardando...' : 'Guardar precios'}
         mode="form"
+        disabled={isSubmitting}
       />
     </div>
   );

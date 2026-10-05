@@ -147,7 +147,7 @@ function PetProfile({ petData }: PetProfileProps) {
             label: 'Especie',
             id: 'species',
             type: 'select',
-            options: ['CANINO', 'FELINO', 'CONEJO', 'HAMSTER', 'ERIZO', 'EXOTICO']
+            options: ['CANINO', 'FELINO']
         },
         {
             label: 'Raza',

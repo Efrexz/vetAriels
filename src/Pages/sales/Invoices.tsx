@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useTableControls } from '@hooks/useTableControls';
+import { InfoBanner } from '@components/ui/InfoBanner';
 import { Pagination } from '@components/ui/Pagination';
 import { EmptyState } from '@components/ui/EmptyState';
 import { StatsCard } from '@components/ui/StatsCard';
@@ -52,6 +53,12 @@ function Invoices() {
   }
 
   return (
+    <>
+    <div className="mb-4">
+      <InfoBanner type="warning">
+        Los comprobantes que ves son datos de ejemplo. Esta tabla se conectar&aacute; a Supabase cuando el flujo de ventas quede migrado en el siguiente paso.
+      </InfoBanner>
+    </div>
     <section className="w-full">
       <div className="mb-6">
         <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">Facturación</span>
@@ -116,6 +123,7 @@ function Invoices() {
         )}
       </div>
     </section>
+    </>
   );
 }
 

@@ -11,12 +11,15 @@ import { buildMovementFromForm } from '../services/inventoryService';
 interface ProductsAndServicesContextType {
     // Productos
     productsData: Product[];
+    isLoadingProducts: boolean;
+    isLoadingServices: boolean;
+
+    // Servicios
+    servicesData: Service[];
     addProduct: (systemCode: string, product: Omit<Product, 'id' | 'systemCode'>) => Promise<Product>;
     updateProductData: (systemCode: string, newData: Partial<Product>) => Promise<void>;
     removeProduct: (systemCode: string) => Promise<void>;
 
-    // Servicios
-    servicesData: Service[];
     addNewService: (service: Omit<Service, 'id'>) => Promise<Service>;
     updateServiceData: (id: string, newData: Partial<Service>) => Promise<void>;
     removeService: (id: string) => Promise<void>;
@@ -36,11 +39,11 @@ interface ProductsAndServicesProviderProps {
 
 function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderProps) {
     // Productos
-    const { data: productsData = [] } = useProductsQuery();
+    const { data: productsData = [], isLoading: isLoadingProducts } = useProductsQuery();
     const { create: createProductMutation, update: updateProductMutation, remove: removeProductMutation } = useProductsMutations();
 
     // Servicios
-    const { data: servicesData = [] } = useServicesQuery();
+    const { data: servicesData = [], isLoading: isLoadingServices } = useServicesQuery();
     const { create: createServiceMutation, update: updateServiceMutation, remove: removeServiceMutation } = useServicesMutations();
 
     // Movimientos de inventario
@@ -187,6 +190,8 @@ function ProductsAndServicesProvider({ children }: ProductsAndServicesProviderPr
 
     const contextValue: ProductsAndServicesContextType = {
         productsData,
+        isLoadingProducts,
+        isLoadingServices,
         addProduct,
         updateProductData,
         removeProduct,

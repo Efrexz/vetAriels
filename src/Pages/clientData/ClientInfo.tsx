@@ -18,10 +18,14 @@ interface ClientInfoParams extends Record<string, string | undefined> {
 
 function ClientInfo() {
 
-    const { clients } = useClients();
+    const { clients, isLoadingClients } = useClients();
     const { id, section } = useParams<ClientInfoParams>();
 
     const individualClientData = clients.find(client => client.id === id);
+
+    if (isLoadingClients) {
+        return <div className="p-6 text-center text-slate">Cargando cliente...</div>;
+    }
 
     if (!individualClientData) {
         return (

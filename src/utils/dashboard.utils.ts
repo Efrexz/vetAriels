@@ -1,3 +1,4 @@
+import { parseDateSafe } from '@utils/date';
 import type { Payment } from "@t/financial.types";
 import type { Client } from "@t/client.types";
 import type { Product } from "@t/inventory.types";
@@ -68,26 +69,18 @@ export function formatTime(): string {
 /*  Parsers                                                            */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Parser de fechas del dashboard. Debega en @utils/date.ts (parseDateSafe):
+ * acepta ISO de Supabase ('yyyy-mm-dd'), dd/mm/yyyy y el formato con hora
+ * de los pagos. El parseo es LOCAL: el shift UTC de new Date(string)
+ * hacia que "clientes nuevos hoy" diera 0 en Lima (UTC-5).
+ */
 function parseDateStr(raw: string): Date | null {
   const cleaned = raw.trim();
-  // "31-07-2024 07:43 AM"  (payment date)
-  const matchFull = cleaned.match(
-    /^(\d{1,2})[-/](\d{1,2})[-/](\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)?$/,
-  );
-  if (matchFull) {
-    const [, d, m, y, h, min, ampm] = matchFull;
-    let hour = parseInt(h, 10);
-    if (ampm && ampm.toLowerCase() === "pm" && hour !== 12) hour += 12;
-    if (ampm && ampm.toLowerCase() === "am" && hour === 12) hour = 0;
-    return new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10), hour, parseInt(min, 10));
-  }
-  // "31-07-2024"  (client date / registrationDate)
-  const matchDateOnly = cleaned.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
-  if (matchDateOnly) {
-    const [, d, m, y] = matchDateOnly;
-    return new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10));
-  }
-  return null;
+  // Con hora incluida ("31-07-2024 07:43 AM", "29/9/2026, 10:05:23"),
+  // extraemos solo la parte de fecha y computamos medianoche local.
+  const dateOnly = cleaned.split(/[ T]/)[0].replace(",", "");
+  return parseDateSafe(dateOnly);
 }
 
 export function parseMoney(raw: string | null | undefined): number {

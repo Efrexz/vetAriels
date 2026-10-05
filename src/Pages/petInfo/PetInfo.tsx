@@ -41,12 +41,18 @@ function calculateAge(birthDate: string | undefined) {
 
 function PetInfo() {
 
-    const { petsData } = useClients();
+    const { petsData, isLoadingPets } = useClients();
     const { id, section = 'update' } = useParams<{ id: string; section?: string }>();
 
     const individualPetData: Pet | undefined = petsData.find(pet => pet.id === id);
 
     const petAge = calculateAge(individualPetData?.birthDate);
+
+    // Mientras carga la lista, no mostrar NotFound: un acceso directo
+    // por URL renderizaba "No encontrado" un instante antes de los datos.
+    if (isLoadingPets) {
+        return <div className="p-6 text-center text-slate">Cargando mascota...</div>;
+    }
 
     // Si no se encuentra la mascota, mostrar un mensaje de error
     if (!individualPetData) {

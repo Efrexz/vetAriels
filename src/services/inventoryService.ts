@@ -143,6 +143,16 @@ function translateMovementError(message: string): string {
     if (m.includes('check constraint') && m.includes('stock')) {
         return 'No hay stock suficiente para registrar esta descarga.';
     }
+    // RAISE EXCEPTION del trigger update_product_stock_on_insert:
+    // 'Stock insuficiente para producto <uuid> (necesita N, hay M)'.
+    // No es un CHECK constraint, es un error custom del trigger.
+    if (m.includes('stock insuficiente')) {
+        const need = m.match(/necesita (\d+), hay (\d+)/);
+        if (need) {
+            return `Stock insuficiente: pediste ${need[1]} y solo hay ${need[2]}.`;
+        }
+        return 'No hay stock suficiente para registrar esta descarga.';
+    }
     if (m.includes('check constraint') && m.includes('quantity')) {
         return 'La cantidad debe ser mayor a 0.';
     }

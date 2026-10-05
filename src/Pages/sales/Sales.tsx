@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo} from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
 import { Client, Pet} from '@t/client.types';
@@ -62,10 +62,18 @@ function Sales() {
     const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 
-    // sincroniza el estado local selectedProducts con los datos del cliente cuando el clientId cambia.
+    // Inicializa el carrito SOLO cuando cambia el cliente, nunca en cada
+    // refetch. Antes este efecto resincronizaba con clientData.products
+    // (que ahora es SIEMPRE [] tras la migracion), asi que cada refetch
+
+    // de React Query borraba el carrito a mitad de venta.
+    // TODO (Paso 5): persistir el carrito (Supabase o sessionStorage).
+    const initializedCartForClientId = useRef<string | null>(null);
     useEffect(() => {
-        setSelectedProducts(clientData?.products || []);
-    }, [clientData]);
+        if (initializedCartForClientId.current === clientId) return;
+        initializedCartForClientId.current = null;
+        setSelectedProducts([]);
+    }, [clientId]);
 
 
     //calcular la edad de la mascotas
@@ -391,9 +399,7 @@ function Sales() {
                                             <button
                                                 className="text-danger hover:text-danger/70 transition-colors"
                                                 onClick={() => {
-                                                    if (clientId) {
-                                                        removeProductFromClient(clientId, product.provisionalId);
-                                                    }
+                                                    removeProductFromTable(product.provisionalId);
                                                 }}
                                             >
                                                 <TrashIcon className="w-4 h-4" />

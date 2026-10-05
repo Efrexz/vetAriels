@@ -5,7 +5,7 @@ import DiskIcon from '@assets/diskIcon.svg?react';
 
 type ModalMode = "history" | "grooming";
 
-type QueueItemState = 'Pendiente' | 'Terminado' | 'En espera' | 'En Atención' | 'Suspendido' | 'Entregado';
+type QueueItemState = 'Pendiente' | 'Terminado' | 'En espera' | 'En atención' | 'Suspendido' | 'Entregado';
 
 
 interface UpdateStateModalProps {
@@ -55,7 +55,7 @@ function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps
                         onChange={(e) => setState(e.target.value as QueueItemState)}
                     >
                         <option className="bg-white" value="Pendiente">Pendiente</option>
-                        <option className="bg-white" value="En Atención">En atención</option>
+                        <option className="bg-white" value="En atención">En atención</option>
                         <option className="bg-white" value="Terminado">Terminado</option>
                         {
                             mode === "history" && (

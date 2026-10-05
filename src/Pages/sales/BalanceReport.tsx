@@ -1,3 +1,4 @@
+import { InfoBanner } from '@components/ui/InfoBanner';
 import FileInvoiceIcon from '@assets/file-invoice.svg?react';
 import CalendarIcon from '@assets/calendarIcon.svg?react';
 import PDFIcon from '@assets/pdfIcon.svg?react';
@@ -97,6 +98,12 @@ const sections: ReportSection[] = [
 
 function BalanceReport() {
     return (
+    <>
+    <div className="mb-4">
+      <InfoBanner type="warning">
+        Este cuadre muestra datos de ejemplo. Se calcular&aacute; autom&aacute;tico desde los pagos de Supabase en la pr&oacute;xima fase.
+      </InfoBanner>
+    </div>
         <section className="w-full">
             <div className="mb-6">
                 <span className="block text-xs font-semibold uppercase tracking-[0.15em] text-slate mb-1">
@@ -175,6 +182,7 @@ function BalanceReport() {
                 </button>
             </div>
         </section>
+    </>
     );
 }
 

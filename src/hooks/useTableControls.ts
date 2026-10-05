@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { isWithinRange } from '@utils/date';
 
 interface UseTableControlsOptions {
   itemsPerPage?: number;
@@ -30,20 +31,19 @@ interface UseTableControlsReturn<T extends { id: string }> {
   selectedCount: number;
 }
 
-function parseDateString(dateStr: string): Date | null {
-  let d = new Date(dateStr);
-  if (!isNaN(d.getTime())) return d;
-
-  const parts = dateStr.split(new RegExp('[-/]'));
-  if (parts.length === 3) {
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-    d = new Date(year, month, day);
-    if (!isNaN(d.getTime())) return d;
+/**
+ * Lee un campo de un item. Soporta paths anidados con punto
+ * ('petData.petName') para las colas, cuyo item guarda snapshot de la
+ * mascota en una propiedad.
+ */
+function getField(item: unknown, field: string): unknown {
+  const segments = field.split('.');
+  let current: unknown = item;
+  for (const segment of segments) {
+    if (current === null || typeof current !== 'object') return undefined;
+    current = (current as Record<string, unknown>)[segment];
   }
-
-  return null;
+  return current;
 }
 
 export function useTableControls<T extends { id: string }>(
@@ -79,21 +79,23 @@ export function useTableControls<T extends { id: string }>(
       const lower = debouncedText.toLowerCase();
       result = result.filter((item) =>
         searchFields.some((field) => {
-          const value = (item as Record<string, unknown>)[field];
-          return typeof value === 'string' && value.toLowerCase().includes(lower);
+          const value = getField(item, field);
+          // Strings y numeros (un hc "000105" matchea por includes);
+          // undefined/null(gr) no matchean.
+          if (typeof value === 'string') return value.toLowerCase().includes(lower);
+          if (typeof value === 'number') return String(value).includes(lower);
+          return false;
         })
       );
     }
 
     if (dateField && (dateFrom || dateTo)) {
       result = result.filter((item) => {
-        const rawDate = (item as Record<string, unknown>)[dateField];
+        const rawDate = getField(item, dateField);
         if (typeof rawDate !== 'string') return true;
-        const parsed = parseDateString(rawDate);
-        if (!parsed) return true;
-        if (dateFrom && parsed < new Date(dateFrom + 'T00:00:00')) return false;
-        if (dateTo && parsed > new Date(dateTo + 'T23:59:59')) return false;
-        return true;
+        // isWithinRange compara por calendario LOCAL: ya no pierde el
+        // dia exacto por el shift UTC (era un bug en Lima UTC-5).
+        return isWithinRange(rawDate, dateFrom, dateTo);
       });
     }
 

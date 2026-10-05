@@ -1,4 +1,6 @@
 import { useState, ChangeEvent } from 'react';
+import { useProductsAndServices } from '@context/ProductsAndServicesContext';
+import { useToast } from '@context/ToastContext';
 import { Service } from '@t/inventory.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { FormField } from '@components/ui/FormField';
@@ -23,6 +25,9 @@ interface PriceFormData {
 }
 
 function EditServicePrice({ serviceData }: EditServicePriceProps) {
+  const { updateServiceData } = useProductsAndServices();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<PriceFormData>({
     valorVenta: String(serviceData.salePrice || ''),
     impuestoPorcentaje: '18',
@@ -41,8 +46,21 @@ function EditServicePrice({ serviceData }: EditServicePriceProps) {
     setFormData({ ...formData, [id]: value });
   }
 
-  function handleSave() {
-    // Placeholder: future integration with context to update service prices
+  async function handleSave() {
+    setIsSubmitting(true);
+    try {
+      await updateServiceData(serviceData.id, {
+        cost: Number(formData.costoServicioSinImpuestos) || 0,
+        salePrice: Number(formData.precioVentaPublico) || 0,
+      });
+      toast.success('Precios actualizados correctamente.');
+      window.history.back();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'No se pudo actualizar los precios.';
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -153,8 +171,9 @@ function EditServicePrice({ serviceData }: EditServicePriceProps) {
       <ActionButtons
         onCancel={() => window.history.back()}
         onSubmit={handleSave}
-        submitText="Guardar precios"
+        submitText={isSubmitting ? 'Guardando...' : 'Guardar precios'}
         mode="form"
+        disabled={isSubmitting}
       />
     </div>
   );

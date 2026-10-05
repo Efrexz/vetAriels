@@ -32,7 +32,7 @@ function GroomingOrderCreation() {
     function addProductToTable(item: Product | Service) {
         const newProduct: PurchasedItem = {
             ...item,
-            petSelected: petSelectedName,
+            petSelected: petSelectedId,
             provisionalId: generateUniqueId(),
             quantity: 1,
             additionDate: new Date().toLocaleDateString(),
@@ -81,13 +81,15 @@ function GroomingOrderCreation() {
 
     useEffect(() => {
         if (petsByOwner.length > 0) {
-            setPetSelectedName(petsByOwner[0].petName);
+            setPetSelectedId(petsByOwner[0].id);
         } else {
-            setPetSelectedName('');
+            setPetSelectedId('');
         }
     }, [petsByOwner]);
 
-    const [petSelectedName, setPetSelectedName] = useState<string>('');
+    // Guardamos el ID real, no el nombre: dos mascotas homonimas en
+    // distintos clientes harian que la orden se case con la equivocada.
+    const [petSelectedId, setPetSelectedId] = useState<string>('');
 
     const [notes, setNotes] = useState<string>('');
 
@@ -104,7 +106,7 @@ function GroomingOrderCreation() {
             toast.error("Debe seleccionar al menos un producto o servicio");
             return;
         }
-        const petSelectedData = petsData.find(pet => pet.petName === petSelectedName);
+        const petSelectedData = petsByOwner.find(pet => pet.id === petSelectedId);
 
         if (!petSelectedData || !clientData) {
             console.error("No se encontró el cliente o la mascota seleccionada");
@@ -151,12 +153,12 @@ function GroomingOrderCreation() {
                             clientData ? (
                                 <select
                                     className="w-full mt-2 bg-white border border-slate-200 rounded-xl py-1 px-4 text-ink focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary"
-                                    value={petSelectedName}
-                                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setPetSelectedName(e.target.value)}
+                                    value={petSelectedId}
+                                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setPetSelectedId(e.target.value)}
                                 >
                                     {petsByOwner.length > 0 ? (
                                         petsByOwner.map((pet) => (
-                                            <option key={pet.id} value={pet.petName}>{pet.petName}</option>
+                                            <option key={pet.id} value={pet.id}>{pet.petName}</option>
                                         ))
                                     ) : (
                                         <option value="">No hay mascotas para este cliente</option>

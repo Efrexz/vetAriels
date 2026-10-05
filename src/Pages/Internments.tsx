@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useTableControls } from '@hooks/useTableControls';
+import { InfoBanner } from '@components/ui/InfoBanner';
 import { Avatar } from '@components/ui/Avatar';
 import { Pagination } from '@components/ui/Pagination';
 import { EmptyState } from '@components/ui/EmptyState';
@@ -87,6 +88,12 @@ function Internments() {
   }
 
   return (
+    <>
+    <div className="mb-4">
+      <InfoBanner type="warning">
+        El m&oacute;dulo de internamientos es la pr&oacute;xima fase: lo que ves son registros demo y el bot&oacute;n de nuevo internamiento a&uacute;n no est&aacute; activo.
+      </InfoBanner>
+    </div>
     <section className="w-full">
       <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
@@ -222,6 +229,7 @@ function Internments() {
         )}
       </div>
     </section>
+    </>
   );
 }
 

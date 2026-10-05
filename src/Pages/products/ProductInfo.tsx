@@ -8,11 +8,15 @@ import { NotFound } from "@components/ui/NotFound";
 
 function ProductInfo() {
 
-    const { productsData } = useProductsAndServices();
+    const { productsData, isLoadingProducts } = useProductsAndServices();
 
     const { section = 'update', id } = useParams<{ id: string; section?: string }>();
 
     const product: Product | undefined = productsData.find(product => product.systemCode === id);
+
+    if (isLoadingProducts) {
+        return <div className="p-6 text-center text-slate">Cargando producto...</div>;
+    }
 
     if (!product) {
         return (
