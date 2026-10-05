@@ -1,3 +1,9 @@
+-- ===============================================================
+-- ARCHIVO LEGADO (NO EJECUTAR). Reemplazado por db/supabase-rls-v2.sql.
+-- Leia el rol desde user_metadata (editable por el usuario: escalacion
+-- de privilegios). Se conserva como referencia historica de la 1E.
+-- ===============================================================
+
 -- ============================================================================
 -- Políticas RLS reales para VetAriel (Micro-fase 1E)
 -- ============================================================================

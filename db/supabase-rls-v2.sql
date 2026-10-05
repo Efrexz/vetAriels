@@ -65,6 +65,13 @@ CREATE POLICY "Users can read own profile" ON public.profiles
   FOR SELECT TO authenticated
   USING (id = auth.uid());
 
+-- NOTA (Paso 4.5 hardening): current_role(), is_admin() y
+-- current_company_id() exigen profiles.active = TRUE: un usuario
+-- desactivado pierde TODO acceso a datos aunque conserve JWT.
+-- Las policies SELECT de clients/pets/products/services filtran
+-- deleted_at IS NULL (la "papelera" ya no es legible por API).
+-- Ver supabase/migrations/20260825100000_rls_hardening.sql.
+
 CREATE POLICY "Admins can read all profiles in their company" ON public.profiles
   FOR SELECT TO authenticated
   USING (

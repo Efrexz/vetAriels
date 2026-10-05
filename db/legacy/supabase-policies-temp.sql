@@ -1,3 +1,10 @@
+-- ===============================================================
+-- ARCHIVO LEGADO (NO EJECUTAR). Movido a db/legacy/ por la auditoria
+-- del Paso 4.5: crea policies que abren clientes/mascotas a usuarios
+-- anonimos (TO anon USING true). Se conserva solo como referencia
+-- historica de la micro-fase 1C. Nunca correr en la DB.
+-- ===============================================================
+
 -- ============================================================================
 -- Políticas RLS TEMPORALES para desarrollo (Micro-fase 1C)
 -- ============================================================================

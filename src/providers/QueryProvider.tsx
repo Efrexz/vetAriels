@@ -35,7 +35,9 @@ export function QueryProvider({ children }: QueryProviderProps) {
   return (
     <QueryClientProvider client={client}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* Devtools solo en desarrollo: en produccion exponen el cache
+          (emails, clientes) a quien abra los devtools. */}
+      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

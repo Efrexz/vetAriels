@@ -221,6 +221,9 @@ async function handleCreate(
       400
     );
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
+    return jsonResponse({ error: 'El email no tiene un formato valido' }, 400);
+  }
   if (body.password.length < 6) {
     return jsonResponse({ error: 'La contrasena debe tener al menos 6 caracteres' }, 400);
   }
@@ -339,6 +342,19 @@ async function handleDeactivate(
       400
     );
   }
+
+  // Defense in depth: ademas de active=false (que corta el acceso via RLS
+  // porque current_role()/current_company_id() exigen active), revocamos
+  // TODAS las sesiones activas del usuario en GoTrue. Best-effort: si
+  // falla (la API de sesiones no esta disponible en tu version de GoTrue),
+  // la desactivacion igual quedo hecha — el RLS ya niega el acceso.
+  // @ts-ignore: Deno runtime
+  try {
+    await supabaseAdmin.auth.admin.signOut(body.user_id, { scope: 'global' });
+  } catch (revokeErr) {
+    console.error('admin-users: no se pudieron revocar sesiones:', revokeErr);
+  }
+
   return jsonResponse({ success: true });
 }
 

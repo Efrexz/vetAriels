@@ -16,9 +16,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Expone el cliente en window para tests manuales desde la consola del navegador
-// (ej. validar RLS, probar triggers). Seguro porque la anon key ya es publica.
-// Si te molesta, puedes comentar este bloque.
-if (typeof window !== 'undefined') {
-  (window as any).supabase = supabase;
+// Expone el cliente en window SOLO en desarrollo, para tests manuales desde
+// la consola del navegador (ej. validar RLS, probar triggers).
+// En produccion no se expone: un cliente con sesion activa en window seria
+// un amplificador de cualquier XSS o extension malintencionada.
+if (typeof window !== 'undefined' && import.meta.env.DEV) {
+  (window as unknown as Record<string, unknown>).supabase = supabase;
 }
