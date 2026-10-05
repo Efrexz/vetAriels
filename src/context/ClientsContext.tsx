@@ -1,14 +1,26 @@
-import { createContext, useEffect, useState, ReactNode, useRef, useContext  } from 'react';
+import { createContext, useRef, ReactNode, useContext } from 'react';
 import { Client, Pet, PetRecord } from '@t/client.types';
-import { MedicalQueueItem, GroomingQueueItem } from '@t/clinical.types';
+import { MedicalQueueItem, GroomingQueueItem, QueueState } from '@t/clinical.types';
 import { PurchasedItem } from '@t/inventory.types';
-import { generateUniqueId } from '@utils/idGenerator';
 import { useClientsQuery, useClientsMutations } from '../hooks/useClientsQuery';
 import {
     usePetsQuery,
     usePetsMutations,
     usePetRecordsMutations,
 } from '../hooks/usePetsQuery';
+import {
+    useClinicQueueQuery,
+    useGroomingQueueQuery,
+    useGroomingHistoryQuery,
+    useClinicQueueMutations,
+    useGroomingQueueMutations,
+} from '../hooks/useQueuesQuery';
+
+/**
+ * Los items de cola que envia la UI pueden pasar assignedDoctorId (el id
+ * del profile del vet) ademas del nombre para mostrar. La DB guarda el id.
+ */
+type QueueItemPayload<T> = T & { assignedDoctorId?: string | null };
 
 interface ClientsContextType {
     // Clientes
@@ -39,21 +51,21 @@ interface ClientsContextType {
     updateRecord: (petId: string, recordId: string, updatedRecord: PetRecord) => Promise<void>;
     removeRecord: (petId: string, recordId: string) => Promise<void>;
 
-    // Colas de Atención
+    // Colas de Atención (ya en Supabase; ver docs/PASO_4.md fase colas)
     petsInQueueMedical: MedicalQueueItem[];
-    addPetToQueueMedical: (newPetInQueue: MedicalQueueItem) => void;
-    updatePetInQueueMedical: (id: string, newData: Partial<MedicalQueueItem>) => void;
-    removePetFromQueueMedical: (id: string ) => void;
+    addPetToQueueMedical: (newPetInQueue: QueueItemPayload<MedicalQueueItem>) => Promise<void>;
+    updatePetInQueueMedical: (id: string, newData: QueueItemPayload<Partial<MedicalQueueItem>>) => Promise<void>;
+    removePetFromQueueMedical: (id: string) => Promise<void>;
 
     petsInQueueGrooming: GroomingQueueItem[];
-    addPetToQueueGrooming: (newPetInQueue: GroomingQueueItem) => void;
-    updatePetInQueueGrooming: (id: string , newData: Partial<GroomingQueueItem>) => void;
-    removePetFromQueueGrooming: (id: string ) => void;
+    addPetToQueueGrooming: (newPetInQueue: GroomingQueueItem) => Promise<void>;
+    updatePetInQueueGrooming: (id: string, newData: Partial<GroomingQueueItem>) => Promise<void>;
+    removePetFromQueueGrooming: (id: string) => Promise<void>;
 
     petsInQueueGroomingHistory: GroomingQueueItem[];
-    addPetInQueueGroomingHistory: (petInHistory: GroomingQueueItem) => void;
-    updatePetInQueueGroomingHistory: (id: string, newData: Partial<GroomingQueueItem>) => void;
-    returnPetToQueueGrooming: (petToReturn: GroomingQueueItem) => void;
+    addPetInQueueGroomingHistory: (petInHistory: GroomingQueueItem) => Promise<void>;
+    updatePetInQueueGroomingHistory: (id: string, newData: Partial<GroomingQueueItem>) => Promise<void>;
+    returnPetToQueueGrooming: (petToReturn: GroomingQueueItem) => Promise<void>;
 }
 const ClientsContext = createContext<ClientsContextType | undefined>(undefined);
 
@@ -86,37 +98,6 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     async function refreshClients() {
         await Promise.all([refetch(), refetchPets()]);
     }
-
-    //Mascotas en cola de espera
-    const [petsInQueueMedical, setPetsInQueueMedical] = useState<MedicalQueueItem[]>(() => {
-        const saved = localStorage.getItem('petsInQueueMedical');
-        return saved ? (JSON.parse(saved) as MedicalQueueItem[]) : [];
-    });
-
-    //Mascotas en cola grooming actual
-    const [petsInQueueGrooming, setPetsInQueueGrooming] = useState<GroomingQueueItem[]>(() => {
-        const saved = localStorage.getItem('petsInQueueGrooming');
-        return saved ? (JSON.parse(saved) as GroomingQueueItem[]) : [];
-    });
-
-    //Mascotas en cola de  grooming historial
-    const [petsInQueueGroomingHistory, setPetsInQueueGroomingHistory] = useState<GroomingQueueItem[]>(() => {
-        const saved = localStorage.getItem('petsInQueueGroomingHistory');
-        return saved ? (JSON.parse(saved) as GroomingQueueItem[]) : [];
-    });
-
-    // Persistimos solo lo que sigue en localStorage (colas, Paso 6 los migra).
-    useEffect(() => {
-        localStorage.setItem('petsInQueueGrooming', JSON.stringify(petsInQueueGrooming));
-    }, [petsInQueueGrooming]);
-
-    useEffect(() => {
-        localStorage.setItem('petsInQueueGroomingHistory', JSON.stringify(petsInQueueGroomingHistory));
-    }, [petsInQueueGroomingHistory]);
-
-    useEffect(() => {
-        localStorage.setItem('petsInQueueMedical', JSON.stringify(petsInQueueMedical));
-    }, [petsInQueueMedical]);
 
     // Clientes — escritura real contra Supabase.
     async function addClient(newClient: Client): Promise<Client> {
@@ -156,13 +137,15 @@ function ClientsProvider({ children }: ClientsProviderProps) {
         await removeClientMutation.mutateAsync(id);
     }
 
-    // Pendiente Paso 5 (van con el flujo de ventas).
-    function addProductToClient(_clientId: string, _product: PurchasedItem){
-        console.warn('addProductToClient: pendiente de migrar a Supabase. Se implementa en el Paso 5.');
+    // El carrito de ventas ahora vive en sessionStorage (ver Sales.tsx):
+    // estos hooks quedan como no-ops para no romper los call sites que
+    // quedan (ProductSearchInput tiene el bloque comentado).
+    function addProductToClient(_clientId: string, _product: PurchasedItem) {
+        // No-op: el carrito es session-local; no se persiste en el cliente.
     }
 
     function removeProductFromClient(_clientId: string, _provisionalId: string) {
-        console.warn('removeProductFromClient: pendiente de migrar a Supabase. Se implementa en el Paso 5.');
+        // No-op (idem arriba).
     }
 
     // Mascotas — escritura real contra Supabase. El id, hc y created_at
@@ -214,10 +197,8 @@ function ClientsProvider({ children }: ClientsProviderProps) {
     }
 
     /**
-     * Contador de HC legado. Se conserva por compatibilidad con la firma
-     * del contexto (CreatePetForm lo lee), pero su valor ya no se usa:
-     * el HC lo asigna el trigger assign_pet_hc en la DB. El componente
-     * CreatePetForm ahora prefiere useNextPetHcQuery() para el preview.
+     * Contador de HC legado. Ya no se usa (el HC lo asigna el trigger
+     * assign_pet_hc); expuesto por compatibilidad de firma.
      */
     const historyCounter = useRef<number>(100);
 
@@ -267,49 +248,102 @@ function ClientsProvider({ children }: ClientsProviderProps) {
         await removeRecordMutation.mutateAsync(recordId);
     }
 
-    //Mascotas en cola de espera clinica
-    function addPetToQueueMedical(newPetInQueue: MedicalQueueItem) {
-        setPetsInQueueMedical(prev => [...prev, newPetInQueue]);
+    // ---------------------------------------------------------------------------
+    // COLAS — tablas reales (clinic_queue / grooming_queue) con React Query y
+    // polling (30s). Las mismas firmas; ahora devuelven Promise. El trigger
+    // assign_grooming_turn asigna el turno diario atomico.
+    // ---------------------------------------------------------------------------
+    const { data: petsInQueueMedical = [] } = useClinicQueueQuery();
+    const { data: petsInQueueGrooming = [] } = useGroomingQueueQuery();
+    const { data: petsInQueueGroomingHistory = [] } = useGroomingHistoryQuery();
+    const { add: addToClinic, update: updateClinic, remove: removeFromClinic } = useClinicQueueMutations();
+    const { add: addToGrooming, update: updateGrooming, remove: removeFromGrooming } = useGroomingQueueMutations();
+
+    async function addPetToQueueMedical(newPetInQueue: QueueItemPayload<MedicalQueueItem>) {
+        await addToClinic.mutateAsync({
+            petId: newPetInQueue.petData.id,
+            assignedDoctorId: newPetInQueue.assignedDoctorId ?? null,
+            notes: newPetInQueue.notes,
+        });
     }
 
-    function updatePetInQueueMedical(id: string, newData: Partial<MedicalQueueItem>){
-        setPetsInQueueMedical(prev => prev.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+    async function updatePetInQueueMedical(id: string, newData: QueueItemPayload<Partial<MedicalQueueItem>>) {
+        const doctorId = newData.assignedDoctorId;
+        await updateClinic.mutateAsync({
+            id,
+            input: {
+                state: newData.state as QueueState | undefined,
+                assignedDoctorId: doctorId,
+                notes: newData.notes,
+            },
+        });
     }
 
-    function removePetFromQueueMedical(id: string ) {
-        setPetsInQueueMedical(prev => prev.filter(pet => pet.id !== id));
+    async function removePetFromQueueMedical(id: string) {
+        await removeFromClinic.mutateAsync(id);
     }
 
-    //Mascotas en cola grooming
-    function addPetToQueueGrooming(newPet: GroomingQueueItem) {
-        setPetsInQueueGrooming(prev => [...prev, newPet]);
+    async function addPetToQueueGrooming(newItem: GroomingQueueItem) {
+        await addToGrooming.mutateAsync({
+            petId: newItem.petData.id,
+            systemCode: newItem.systemCode,
+            notes: newItem.notes,
+            healthObservations: newItem.healthObservations ?? [],
+            items: (newItem.productsAndServices ?? []).map((item) => ({
+                productId: item.productName !== undefined ? item.id : undefined,
+                serviceId: item.productName !== undefined ? undefined : item.id,
+                description: item.productName ?? item.serviceName ?? '',
+                quantity: item.quantity ?? 1,
+                unitPrice: item.salePrice ?? 0,
+            })),
+        });
     }
 
-    function updatePetInQueueGrooming(id: string, newData: Partial<GroomingQueueItem>) {
-        setPetsInQueueGrooming(prev => prev.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+    async function updatePetInQueueGrooming(id: string, newData: Partial<GroomingQueueItem>) {
+        await updateGrooming.mutateAsync({
+            id,
+            input: {
+                state: newData.state as QueueState | undefined,
+                notes: newData.notes,
+                healthObservations: newData.healthObservations,
+                items: newData.productsAndServices
+                    ? newData.productsAndServices.map((item) => ({
+                        productId: item.productName !== undefined ? item.id : undefined,
+                        serviceId: item.productName !== undefined ? undefined : item.id,
+                        description: item.productName ?? item.serviceName ?? '',
+                        quantity: item.quantity ?? 1,
+                        unitPrice: item.salePrice ?? 0,
+                    }))
+                    : undefined,
+            },
+        });
     }
 
-    function removePetFromQueueGrooming(id: string) {
-        setPetsInQueueGrooming(prev => prev.filter(pet => pet.id !== id));
+    async function removePetFromQueueGrooming(id: string) {
+        await removeFromGrooming.mutateAsync(id);
     }
 
-    function addPetInQueueGroomingHistory(newPet: GroomingQueueItem) {
-        setPetsInQueueGroomingHistory(prev => [...prev, newPet]);
+    /**
+     * El historial ya NO es un array separado: es la misma tabla con state
+     * TERMINADO/ENTREGADO. Mover al historial = cambiar el estado; volver
+     * a la cola = PENDIENTE.
+     */
+    async function addPetInQueueGroomingHistory(item: GroomingQueueItem) {
+        await updateGrooming.mutateAsync({ id: item.id, input: { state: 'Terminado' } });
     }
 
-    function updatePetInQueueGroomingHistory(id: string, newData: Partial<GroomingQueueItem>) {
-        setPetsInQueueGroomingHistory(prev => prev.map(pet => pet.id === id ? { ...pet, ...newData } : pet));
+    async function updatePetInQueueGroomingHistory(id: string, newData: Partial<GroomingQueueItem>) {
+        await updateGrooming.mutateAsync({
+            id,
+            input: {
+                state: newData.state as QueueState | undefined,
+                notes: newData.notes,
+            },
+        });
     }
 
-    function returnPetToQueueGrooming(petToReturn: GroomingQueueItem) {
-        // Eliminar la mascota del historial de grooming
-        setPetsInQueueGroomingHistory(prev => prev.filter(pet => pet.id !== petToReturn.id));
-
-        // Enviamos de vuelta a la mascota en la cola de grooming en el orden correcto
-        const updatedQueue = [...petsInQueueGrooming, petToReturn];
-        updatedQueue.sort((a, b) => a.turn - b.turn);
-
-        setPetsInQueueGrooming(updatedQueue);
+    async function returnPetToQueueGrooming(item: GroomingQueueItem) {
+        await updateGrooming.mutateAsync({ id: item.id, input: { state: 'Pendiente' } });
     }
 
     const contextValue: ClientsContextType = {

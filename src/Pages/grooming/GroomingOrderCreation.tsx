@@ -101,7 +101,7 @@ function GroomingOrderCreation() {
     const [isPriceModalOpen, setIsPriceModalOpen] = useState<boolean>(false);
     const [isQuantityModalOpen, setIsQuantityModalOpen] = useState<boolean>(false);
 
-    function sendInfoToQueueGrooming() {
+    async function sendInfoToQueueGrooming() {
         if (selectedProducts.length < 1) {
             toast.error("Debe seleccionar al menos un producto o servicio");
             return;
@@ -129,8 +129,14 @@ function GroomingOrderCreation() {
             productsAndServices: selectedProducts,
             healthObservations: [],
         };
-        addPetToQueueGrooming(dataToSend);
-        navigate("/grooming");
+        try {
+            await addPetToQueueGrooming(dataToSend);
+            toast.success('Orden de grooming creada correctamente.');
+            navigate('/grooming');
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo crear la orden de grooming.';
+            toast.error(message);
+        }
     }
 
     return (

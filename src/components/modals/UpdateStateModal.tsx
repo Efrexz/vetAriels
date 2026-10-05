@@ -1,6 +1,7 @@
 import {  useState, ChangeEvent  } from 'react';
 import { useClients } from '@context/ClientsContext';
-import { GroomingQueueItem } from '@t/clinical.types';
+import { useToast } from '@context/ToastContext';
+import { GroomingQueueItem, QueueState } from '@t/clinical.types';
 import DiskIcon from '@assets/diskIcon.svg?react';
 
 type ModalMode = "history" | "grooming";
@@ -18,20 +19,30 @@ interface UpdateStateModalProps {
 function UpdateStateModal({ dataToUpdate, onClose, mode }: UpdateStateModalProps) {
 
     const { updatePetInQueueGroomingHistory, updatePetInQueueGrooming } = useClients();
+    const { toast } = useToast();
+    const [state, setState] = useState<QueueState>(dataToUpdate?.state);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [state, setState] = useState<QueueItemState>(dataToUpdate?.state);
-
-    function updateState() {
+    async function updateState() {
         const updatedData = {
             ...dataToUpdate,
             state: state,
         };
-        if (mode === "history") {
-            updatePetInQueueGroomingHistory(dataToUpdate.id, updatedData);
-        } else if (mode === "grooming") {
-            updatePetInQueueGrooming(dataToUpdate.id, updatedData);
+        setIsSubmitting(true);
+        try {
+            if (mode === "history") {
+                await updatePetInQueueGroomingHistory(dataToUpdate.id, updatedData);
+            } else if (mode === "grooming") {
+                await updatePetInQueueGrooming(dataToUpdate.id, updatedData);
+            }
+            toast.success('Estado actualizado correctamente.');
+            onClose();
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo actualizar el estado.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
         }
-        onClose();
     }
 
     return (

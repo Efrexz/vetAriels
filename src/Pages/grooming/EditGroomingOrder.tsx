@@ -1,7 +1,7 @@
-import { useState, useMemo, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
-import { Client, Pet } from '@t/client.types';
+import { type Client } from '@t/client.types';
 import { Product, Service, PurchasedItem } from '@t/inventory.types';
 import { GroomingQueueItem } from '@t/clinical.types';
 import { ProductSearchInput } from '@components/search/ProductSearchInput';
@@ -123,7 +123,7 @@ function EditGroomingOrder() {
         }
     }
 
-    function updateGroomingOrder() {
+    async function updateGroomingOrder() {
         if (selectedProducts.length < 1) {
             toast.error("Debe seleccionar al menos un producto o servicio");
             return;
@@ -134,9 +134,17 @@ function EditGroomingOrder() {
             notes,
             healthObservations: selectedObservations,
         };
-        if(clientId){
-            updatePetInQueueGrooming(clientId, dataToSend);
-            toast.success("Orden de servicio actualizada");
+        if (petInQueueGrommingData?.id) {
+            try {
+                // BUG corregido: antes pasaba clientId (el id del CLIENTE)
+                // como id de la fila de cola; la orden nunca se actualizaba.
+                await updatePetInQueueGrooming(petInQueueGrommingData.id, dataToSend);
+                toast.success('Orden de servicio actualizada');
+                navigate('/grooming');
+            } catch (err) {
+                const message = err instanceof Error ? err.message : 'No se pudo actualizar la orden.';
+                toast.error(message);
+            }
         }
     }
 

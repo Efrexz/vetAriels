@@ -12,7 +12,6 @@ import { StatsCard } from '@components/ui/StatsCard';
 import BathIcon from '@assets/bathIcon.svg?react';
 import SearchIcon from '@assets/searchIcon.svg?react';
 import ReturnIcon from '@assets/returnIcon.svg?react';
-import EyeIcon from '@assets/eyeIcon.svg?react';
 import CheckIcon from '@assets/checkIcon.svg?react';
 import ScissorsIcon from '@assets/scissorsIcon.svg?react';
 import EraserIcon from '@assets/eraserIcon.svg?react';

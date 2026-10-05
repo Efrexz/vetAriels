@@ -1,5 +1,7 @@
 import {  useState, ChangeEvent } from 'react';
 import { useClients } from '@context/ClientsContext';
+import { useVetProfilesQuery } from '@hooks/useQueuesQuery';
+import { useToast } from '@context/ToastContext';
 import { ActionButtons } from '@components/ui/ActionButtons';
 import { MedicalQueueItem , QueueState } from '@t/clinical.types';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
@@ -11,11 +13,17 @@ interface EditQueuePatientModalProps {
 
 function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProps) {
     const { petsData, updatePetInQueueMedical } = useClients();
+    const { data: doctors = [] } = useVetProfilesQuery();
+    const { toast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const petsByOwner = petsData.filter(pet => pet.ownerId === queueData?.petData?.ownerId);
 
-    // Estado del formulario
-    const [selectedDoctor, setSelectedDoctor] = useState(queueData?.assignedDoctor);
+    // Estado del formulario: el medico se guarda por ID (FK a profiles).
+    // Para el valor inicial, matcheo el nombre guardado con la lista real.
+    const [selectedDoctorId, setSelectedDoctorId] = useState<string>(
+        doctors.find((d) => d.label === queueData?.assignedDoctor)?.id ?? ''
+    );
     const [selectedPetId, setSelectedPetId] = useState(queueData?.petData?.id);
 
     const [notes, setNotes] = useState(queueData?.notes || '');
@@ -24,28 +32,35 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
     //De las mascotas filtradas por dueño, buscamos la que seleccionamos para poderle enviar de nuevo la nueva data
     const newPetDataSelected = petsByOwner.find(pet => pet.id === selectedPetId);
 
-    function updateQueueData() {
+    async function updateQueueData() {
         if (!newPetDataSelected) {
-            console.error("No se pudo encontrar la mascota seleccionada.");
+            toast.error('No se encontró la mascota seleccionada.');
             return;
         }
 
-        const dataToUpdate : Partial<MedicalQueueItem> = {
-            ...queueData,
-            assignedDoctor: selectedDoctor,
-            petData: newPetDataSelected,
-            notes,
-            state: status,
-        };
-        updatePetInQueueMedical(queueData.id, dataToUpdate);
-        onClose();
+        setIsSubmitting(true);
+        try {
+            await updatePetInQueueMedical(queueData.id, {
+                assignedDoctor: doctors.find((d) => d.id === selectedDoctorId)?.label ?? '',
+                assignedDoctorId: selectedDoctorId || null,
+                notes,
+                state: status,
+            });
+            toast.success('Paciente de la cola actualizado.');
+            onClose();
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo actualizar el paciente.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     function handleSelectChange (e: ChangeEvent<HTMLSelectElement>) {
         const { id, value } = e.target;
         switch (id) {
             case 'doctor':
-                setSelectedDoctor(value);
+                setSelectedDoctorId(value);
                 break;
             case 'pet':
                 setSelectedPetId(value);
@@ -82,11 +97,12 @@ function EditQueuePatientModal({ onClose, queueData }: EditQueuePatientModalProp
                         <select
                             id="doctor"
                             className="border border-slate-200 rounded-xl bg-white text-ink p-2 w-full focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
-                            value={selectedDoctor}
+                            value={selectedDoctorId}
                             onChange={handleSelectChange}
                         >
-                            <option>Médico 1</option>
-                            <option>Médico 2</option>
+                            {doctors.map((doctor) => (
+                                <option key={doctor.id} value={doctor.id}>{doctor.label}</option>
+                            ))}
                         </select>
                     </div>
                     <div className="flex flex-col">

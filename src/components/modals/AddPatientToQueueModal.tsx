@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useClients } from '@context/ClientsContext';
+import { useVetProfilesQuery } from '@hooks/useQueuesQuery';
+import { useToast } from '@context/ToastContext';
 import { Pet, Client } from '@t/client.types';
-import { MedicalQueueItem } from '@t/clinical.types';
 import { ActionButtons } from '@components/ui/ActionButtons';
-import { generateUniqueId } from '@utils/idGenerator';
 import RoleUserIcon from '@assets/roleUserIcon.svg?react';
 
 interface AddPatientToQueueModalProps {
@@ -15,39 +15,51 @@ interface AddPatientToQueueModalProps {
 function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatientToQueueModalProps) {
 
     const { addPetToQueueMedical } = useClients();
+    const { data: doctors = [] } = useVetProfilesQuery();
+    const { toast } = useToast();
     // Estado del formulario
-    const [selectedDoctor, setSelectedDoctor] = useState<string>("Médico 1");
+    const [selectedDoctorId, setSelectedDoctorId] = useState<string>(doctors[0]?.id ?? '');
     const [selectedPetId, setSelectedPetId] = useState<string | undefined>(petsByOwner[0]?.id);
     const [isPetDataMissing, setIsPetDataMissing] = useState(false); // Estado para mostrar error si no se selecciona mascota
     const [notes, setNotes] = useState<string>('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     //obtenemos la fecha y la hora actuales a la cual se esta enviando a cola al paciente
     const now = new Date();
-    const currentDate = now.toLocaleDateString(); //  "22/05/2023"
-    const currentTime = now.toLocaleTimeString(); //    "07:43 PM"
+    const currentDate = now.toLocaleDateString();
+    const currentTime = now.toLocaleTimeString();
 
     // Manejo del envío del formulario
-    function sendPatientToQueue() {
+    async function sendPatientToQueue() {
         const petSelected = petsByOwner?.find(pet => pet.id === selectedPetId);
-        if (!petSelected) {// Si no se selecciona mascota, mostramos error
+        if (!petSelected) {
             setIsPetDataMissing(true);
             return;
         }
 
-        const dataToSend: MedicalQueueItem = {
-            id: generateUniqueId(),
-            assignedDoctor: selectedDoctor,
-            petData: petSelected,
-            ownerName: petSelected.ownerName,
-            notes,
-            dateOfAttention: currentDate,
-            timeOfAttention: currentTime,
-            state: "En espera",
-        };
-
-        // agregamos el paciente a la cola médica
-        addPetToQueueMedical(dataToSend);
-        onClose();
+        setIsSubmitting(true);
+        try {
+            // La DB guarda assigned_doctor_id (FK a profiles); el nombre
+            // mostrado viene del JOIN al listar la cola.
+            await addPetToQueueMedical({
+                id: '',
+                assignedDoctor: doctors.find((d) => d.id === selectedDoctorId)?.label ?? '',
+                assignedDoctorId: selectedDoctorId || null,
+                petData: petSelected,
+                ownerName: petSelected.ownerName,
+                notes,
+                dateOfAttention: currentDate,
+                timeOfAttention: currentTime,
+                state: 'En espera',
+            });
+            toast.success('Paciente agregado a la sala de espera.');
+            onClose();
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'No se pudo agregar a la cola.';
+            toast.error(message);
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -78,10 +90,13 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatient
                         <select
                             id="doctor"
                             className="border border-slate-200 rounded-xl p-2 w-full bg-white text-ink focus:ring-1 focus:ring-primary/30 focus:border-primary focus:outline-none"
-                            onChange={(e) => setSelectedDoctor(e.target.value)}
+                            value={selectedDoctorId}
+                            onChange={(e) => setSelectedDoctorId(e.target.value)}
                         >
-                            <option>Médico 1</option>
-                            <option>Médico 2</option>
+                            {doctors.length === 0 && <option value="">Cargando médicos...</option>}
+                            {doctors.map((doctor) => (
+                                <option key={doctor.id} value={doctor.id}>{doctor.label}</option>
+                            ))}
                         </select>
                     </div>
 
@@ -141,8 +156,9 @@ function AddPatientToQueueModal({ onClose, petsByOwner, clientData }: AddPatient
                 <ActionButtons
                     onCancel={onClose}
                     onSubmit={sendPatientToQueue}
-                    submitText="Enviar a la cola"
+                    submitText={isSubmitting ? 'Agregando...' : 'Enviar a la cola'}
                     mode="modal"
+                    disabled={isSubmitting}
                 />
             </div>
         </div>

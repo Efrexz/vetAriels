@@ -122,20 +122,29 @@ function ConfirmActionModal({ elementData, onClose, typeOfOperation, onConfirm }
                 });
                 break;
             case "medical":
-                removePetFromQueueMedical(elementData.id);
+                void Promise.resolve(removePetFromQueueMedical(elementData.id)).catch((err) => {
+                    setErrorMessage(err instanceof Error ? err.message : 'Error al quitar de la cola');
+                });
                 break;
             case "deleteGrooming":
-                removePetFromQueueGrooming(elementData.id);
+                void Promise.resolve(removePetFromQueueGrooming(elementData.id)).catch((err) => {
+                    setErrorMessage(err instanceof Error ? err.message : 'Error al quitar de la cola');
+                });
                 break;
             case "finishGrooming":
                 if ('turn' in elementData) {
-                    removePetFromQueueGrooming(elementData.id);
-                    addPetInQueueGroomingHistory(elementData);
+                    // "Terminado" ya no mueve el item entre arrays: el
+                    // historial es la MISMA fila con state TERMINADO.
+                    void Promise.resolve(addPetInQueueGroomingHistory(elementData)).catch((err) => {
+                        setErrorMessage(err instanceof Error ? err.message : 'Error al terminar la orden');
+                    });
                 }
                 break;
             case "returnGrooming":
                 if ('turn' in elementData) {
-                    returnPetToQueueGrooming(elementData);
+                    void Promise.resolve(returnPetToQueueGrooming(elementData)).catch((err) => {
+                        setErrorMessage(err instanceof Error ? err.message : 'Error al regresar a la cola');
+                    });
                 }
                 break;
             case "deleteUser":

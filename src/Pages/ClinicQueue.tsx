@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, useMemo, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useClients } from '@context/ClientsContext';
+import { useVetProfilesQuery } from '@hooks/useQueuesQuery';
 import { MedicalQueueItem } from '@t/clinical.types';
 import { EditQueuePatientModal } from '@components/modals/EditQueuePatientModal';
 import { ConfirmActionModal } from '@components/modals/ConfirmActionModal';
@@ -19,12 +20,6 @@ import SearchIcon from '@assets/searchIcon.svg?react';
 import Stethoscope from '@assets/stethoscope.svg?react';
 import EraserIcon from '@assets/eraserIcon.svg?react';
 
-const DOCTOR_OPTIONS = [
-  'olga-bustinza',
-  'luis-alvarado',
-  'juan-perez',
-];
-
 const STATE_OPTIONS = [
   'En espera',
   'En atenci\u00f3n',
@@ -42,6 +37,7 @@ function getStateBadge(state: string): string {
 
 function ClinicQueue() {
   const { petsInQueueMedical } = useClients();
+  const { data: vetProfiles = [] } = useVetProfilesQuery(true);
   const navigate = useNavigate();
 
   const [isEditQueueModalOpen, setIsEditQueueModalOpen] = useState(false);
@@ -55,7 +51,7 @@ function ClinicQueue() {
   const preFiltered = useMemo(() => {
     return petsInQueueMedical.filter((item) => {
       const matchesDoctor = doctorFilter
-        ? item.assignedDoctor.toLowerCase().includes(doctorFilter.toLowerCase())
+        ? item.assignedDoctor === doctorFilter
         : true;
       const matchesState = stateFilter
         ? (item.state as string) === stateFilter
@@ -157,8 +153,8 @@ function ClinicQueue() {
           <div className="flex flex-wrap gap-3">
             <select value={doctorFilter} onChange={(e) => setDoctorFilter(e.target.value)} className="w-full sm:w-auto py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30">
               <option value="">M&eacute;dico</option>
-              {DOCTOR_OPTIONS.map((d) => (
-                <option key={d} value={d}>{d}</option>
+              {vetProfiles.map((d) => (
+                <option key={d.id} value={d.label}>{d.label}</option>
               ))}
             </select>
             <select value={stateFilter} onChange={(e) => setStateFilter(e.target.value)} className="w-full sm:w-auto py-2 px-3 border border-slate-200 rounded-lg bg-white text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30">
