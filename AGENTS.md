@@ -25,6 +25,17 @@ Pre-commit hook (Husky + lint-staged): runs ESLint on staged JS/TS files and
 Prettier on staged CSS/JSON files. Use `npm run format` for explicit source
 formatting; the existing source is not yet fully formatted.
 
+## Git & Push (REGLA CRITICA)
+
+- **El agente NUNCA ejecuta `git push`.** La llave SSH del equipo tiene
+  passphrase que solo el usuario conoce (fallaria con
+  `Permission denied (publickey)` / ssh_askpass).
+- El agente SI hace commits (1 por fase, mensajes en espanol, --no-verify
+  por los warnings heredados hasta limpiarlos).
+- Al completar una fase con commits listos: avisar al usuario
+  "corre `git push origin main`" y esperar su confirmacion.
+- Remote: `git@github.com:Efrexz/vetAriels.git` (aka github.com/Efrexz/vetAriels).
+
 ## Architecture / data layer
 
 ### Estado actual de la migración
