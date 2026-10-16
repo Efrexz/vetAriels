@@ -9,6 +9,14 @@ Documentación técnica del proyecto organizada por micro-fases.
 - [Paso 2 — Seguridad de roles](./PASO_2_SEGURIDAD.md) — triggers anti-escalación
   y anti-lockout.
 - [Paso 3 — Edge Functions + Users](./PASO_3.md) — admin-users y password reset.
+- [Paso 4 — Migración de datos](./PASO_4.md) — servicios + React Query para
+  mascotas, productos, servicios e inventario + script de migración.
+- [Pasos 5/6 — Ventas y colas](./PASO_5_6.md) — comprobantes, caja y colas en
+  Supabase.
+- [Smoke test](./SMOKE_TEST.md) — guion de verificación end-to-end (10 min)
+  tras la migración completa.
+- [Paso 8 — Penetración](./PASO_8_PENETRATION.md) — pruebas manuales de RLS con
+  cada rol.
 
 > **Nota local**: existe un archivo `docs/PROJECT_CONTEXT.md` que es un handover
 > entre sesiones de chat. Está en `.gitignore` y solo vive en tu máquina.
