@@ -150,10 +150,16 @@ CREATE TRIGGER trg_set_updated_at BEFORE UPDATE ON public.grooming_queue
 -- Antes (en localStorage) dos usuarios podian corromper el stock.
 -- Ahora: trigger BEFORE INSERT valida que hay stock suficiente (descarga),
 -- AFTER INSERT/DELETE actualiza el stock. Todo dentro de una transaccion.
+--
+-- SECURITY DEFINER (Fase 0): stock esta REVOKED para anon/authenticated
+-- (solo el trigger lo modifica). Sin DEFINER, el trigger corre con los
+-- permisos del usuario y falla con 'permission denied for column stock'.
 -- ----------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.update_product_stock_on_insert()
 RETURNS TRIGGER
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_movement_type TEXT;
@@ -178,6 +184,8 @@ $$;
 CREATE OR REPLACE FUNCTION public.update_product_stock_on_delete()
 RETURNS TRIGGER
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_movement_type TEXT;

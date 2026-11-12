@@ -401,3 +401,21 @@ ALTER TABLE public.payments                     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.clinic_queue                 ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.grooming_queue               ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.grooming_queue_items         ENABLE ROW LEVEL SECURITY;
+
+-- ============================================================================
+-- EXPOSICION A LA API (GRANTs explicitos)
+-- ============================================================================
+-- Supabase (default actual): las tablas nuevas NO se exponen automaticamente
+-- a los roles de la Data API. Sin GRANTs, PostgREST responde
+-- 'permission denied for table ...' aunque las policies RLS esten correctas.
+--
+-- Con RLS activo, conceder CRUD amplio es seguro: las policies deciden que
+-- filas alcanza a ver/modificar cada rol. La migracion de seguridad refina
+-- despues las columnas protegidas (id, company_id, created_at, stock...).
+-- ============================================================================
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public
+  TO anon, authenticated;
+
+-- Para tablas futuras creadas por migraciones.
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO anon, authenticated;
