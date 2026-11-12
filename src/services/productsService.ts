@@ -248,19 +248,34 @@ export async function updateProduct(
 }
 
 /**
- * Soft delete: marca deleted_at con la hora actual. La policy de UPDATE
- * de products permite a admin/recep, asi que recepcionistas tambien
- * pueden 'eliminar' productos desde la UI sin chocar con la policy
- * de DELETE (solo admin).
+ * Soft delete via RPC `soft_delete` (ver softDeleteClient para el por que).
+ * Los productos se referencian por system_code en la UI; el RPC pide UUID,
+ * asi que primero resolvemos el id. Devuelve 1 si borro.
  */
 export async function softDeleteProduct(systemCode: string): Promise<void> {
-    const { error } = await supabase
+    const { data: rows, error: lookupError } = await supabase
         .from('products')
-        .update({ deleted_at: new Date().toISOString() })
+        .select('id')
         .eq('system_code', systemCode)
-        .is('deleted_at', null);
+        .is('deleted_at', null)
+        .limit(1);
+
+    if (lookupError) {
+        throw new Error(`Error al eliminar producto: ${translateProductError(lookupError.message)}`);
+    }
+    if (!rows || rows.length === 0) {
+        throw new Error('No se encontro el producto a eliminar (o ya estaba eliminado).');
+    }
+
+    const { data, error } = await supabase.rpc('soft_delete', {
+        p_table: 'products',
+        p_id: rows[0].id,
+    });
 
     if (error) {
         throw new Error(`Error al eliminar producto: ${translateProductError(error.message)}`);
+    }
+    if (data === 0) {
+        throw new Error('No se pudo eliminar el producto.');
     }
 }

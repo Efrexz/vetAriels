@@ -230,14 +230,25 @@ export async function updateClient(
  * admin/recep y DELETE solo a admin. Asi recepcionistas tambien pueden
  * "eliminar" clientes desde la UI.
  */
+/**
+ * Soft delete via RPC `soft_delete` (SECURITY DEFINER).
+ *
+ * Por que RPC y no UPDATE deleted_at: en Postgres 17 un UPDATE cuya fila
+ * nueva deja de satisfacer la policy de SELECT falla (la policy SELECT
+ * filtra deleted_at, asi que el UPDATE de soft delete se rechaza a si
+ * mismo). El RPC valida empresa y rol en el servidor y hace bypass de RLS.
+ * Devuelve 1 si borro, 0 si no existia / ya estaba borrado / otra empresa.
+ */
 export async function softDeleteClient(id: string): Promise<void> {
-  const { error } = await supabase
-    .from('clients')
-    .update({ deleted_at: new Date().toISOString() })
-    .eq('id', id)
-    .is('deleted_at', null);
+  const { data, error } = await supabase.rpc('soft_delete', {
+    p_table: 'clients',
+    p_id: id,
+  });
 
   if (error) {
     throw new Error(`Error al eliminar cliente: ${translateClientError(error.message)}`);
+  }
+  if (data === 0) {
+    throw new Error('No se encontro el cliente a eliminar (o ya estaba eliminado).');
   }
 }

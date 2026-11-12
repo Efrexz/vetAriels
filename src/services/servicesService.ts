@@ -167,17 +167,18 @@ export async function updateService(id: string, changes: UpdateServiceInput): Pr
 }
 
 /**
- * Soft delete: marca deleted_at. La policy de UPDATE de services permite
- * admin/recep, asi que recepcionistas tambien pueden 'eliminar'.
+ * Soft delete via RPC `soft_delete` (ver softDeleteClient para el por que).
  */
 export async function softDeleteService(id: string): Promise<void> {
-    const { error } = await supabase
-        .from('services')
-        .update({ deleted_at: new Date().toISOString() })
-        .eq('id', id)
-        .is('deleted_at', null);
+    const { data, error } = await supabase.rpc('soft_delete', {
+        p_table: 'services',
+        p_id: id,
+    });
 
     if (error) {
         throw new Error(`Error al eliminar servicio: ${translateServiceError(error.message)}`);
+    }
+    if (data === 0) {
+        throw new Error('No se encontro el servicio a eliminar (o ya estaba eliminado).');
     }
 }

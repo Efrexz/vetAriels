@@ -343,19 +343,20 @@ export async function updatePet(id: string, changes: UpdatePetInput): Promise<Pe
 }
 
 /**
- * Soft delete: marca deleted_at. La policy de UPDATE de pets permite a
- * admin/recep/vet, asi que veterinarios tambien pueden 'eliminar' mascotas
- * desde la UI sin chocar con la policy de DELETE (solo admin).
+ * Soft delete via RPC `soft_delete` (ver softDeleteClient para el por que).
+ * El RPC devuelve 1 si borro, 0 si no existia / ya estaba borrado / otra empresa.
  */
 export async function softDeletePet(id: string): Promise<void> {
-    const { error } = await supabase
-        .from('pets')
-        .update({ deleted_at: new Date().toISOString() })
-        .eq('id', id)
-        .is('deleted_at', null);
+    const { data, error } = await supabase.rpc('soft_delete', {
+        p_table: 'pets',
+        p_id: id,
+    });
 
     if (error) {
         throw new Error(`Error al eliminar mascota: ${translatePetError(error.message)}`);
+    }
+    if (data === 0) {
+        throw new Error('No se encontro la mascota a eliminar (o ya estaba eliminada).');
     }
 }
 

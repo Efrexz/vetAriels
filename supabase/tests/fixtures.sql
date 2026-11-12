@@ -46,6 +46,18 @@ VALUES
    '{"phone":"999000004"}', now(), now())
 ON CONFLICT (id) DO NOTHING;
 
+-- GoTrue escanea estas columnas como strings no-NULL: sin esto el login
+-- falla con "converting NULL to string is unsupported".
+UPDATE auth.users
+SET confirmation_token = '', recovery_token = '', email_change = '',
+    email_change_token_new = '', email_change_token_current = ''
+WHERE id IN (
+  '10000000-0000-0000-0000-00000000000a',
+  '20000000-0000-0000-0000-00000000000a',
+  '30000000-0000-0000-0000-00000000000a',
+  '40000000-0000-0000-0000-00000000000b'
+);
+
 -- Desactivar al usuario 3 (simula "admin lo desactivo"). Como postgres
 -- (equivale a service_role): el trigger de escalada hace bypass.
 UPDATE public.profiles SET active = FALSE
