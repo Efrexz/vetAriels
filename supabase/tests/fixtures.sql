@@ -43,7 +43,13 @@ VALUES
    '40000000-0000-0000-0000-00000000000b', 'authenticated', 'authenticated',
    'admin.b@test.local', crypt('test1234', gen_salt('bf')), now(),
    '{"provider":"email","providers":["email"],"company_id":"00000000-0000-0000-0000-00000000000b","role":"ADMIN","first_name":"Admin","last_name":"De B"}',
-   '{"phone":"999000004"}', now(), now())
+   '{"phone":"999000004"}', now(), now()),
+
+  ('00000000-0000-0000-0000-000000000000',
+   '50000000-0000-0000-0000-00000000000a', 'authenticated', 'authenticated',
+   'groomer.a@test.local', crypt('test1234', gen_salt('bf')), now(),
+   '{"provider":"email","providers":["email"],"company_id":"00000000-0000-0000-0000-00000000000a","role":"GROOMER","first_name":"Groomer","last_name":"De A"}',
+   '{"phone":"999000005"}', now(), now())
 ON CONFLICT (id) DO NOTHING;
 
 -- GoTrue escanea estas columnas como strings no-NULL: sin esto el login
@@ -55,7 +61,8 @@ WHERE id IN (
   '10000000-0000-0000-0000-00000000000a',
   '20000000-0000-0000-0000-00000000000a',
   '30000000-0000-0000-0000-00000000000a',
-  '40000000-0000-0000-0000-00000000000b'
+  '40000000-0000-0000-0000-00000000000b',
+  '50000000-0000-0000-0000-00000000000a'
 );
 
 -- Desactivar al usuario 3 (simula "admin lo desactivo"). Como postgres
