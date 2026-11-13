@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState, ReactNode, useContext } from 'react';
 import { User as SupabaseUser, Session } from '@supabase/supabase-js';
+import { useQueryClient } from '@tanstack/react-query';
 import { Role, CompanyData, User } from '@t/user.types';
 import { getSession, signOut, onAuthStateChange } from '../services/authService';
 import {
@@ -127,6 +128,27 @@ function GlobalProvider({ children }: GlobalProviderProps) {
   const [ownProfile, setOwnProfile] = useState<Awaited<ReturnType<typeof getOwnProfile>>>(null);
 
   const sessionUserId = session?.user?.id ?? null;
+
+  const queryClient = useQueryClient();
+
+  // ----------------------------------------------------------------------------
+  // Cache vs sesion (fix C-17/C-02 parcial):
+  //   * ANTES de loguear, las queries globales (admin-users, etc.) se
+  //     disparan sin JWT y fallan o devuelven vacio; ese resultado queda
+  //     cacheado y al entrar a la app el dropdown de responsables salia
+  //     vacio y no se reintentaba sin recargar la pagina.
+  //   * FIX: al APARECER una sesion se invalida toda la cache (refetch
+  //     real con JWT); al PERDERSE (logout) se elimina por completo, asi
+  //     el siguiente usuario en este navegador jamas ve datos cacheados
+  //     del anterior. Resto del aislamiento por identidad: Fase 3.
+  // ----------------------------------------------------------------------------
+  useEffect(() => {
+    if (sessionUserId) {
+      void queryClient.invalidateQueries();
+    } else {
+      queryClient.removeQueries();
+    }
+  }, [sessionUserId, queryClient]);
 
   useEffect(() => {
     let mounted = true;
