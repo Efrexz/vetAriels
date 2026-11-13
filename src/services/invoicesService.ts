@@ -136,6 +136,9 @@ function translateInvoiceError(message: string): string {
     if (m.includes('violates row-level security')) {
         return 'No tienes permisos para emitir comprobantes.';
     }
+    if (m.includes('stock insuficiente')) {
+        return 'Venta rechazada: no hay stock suficiente para alguno de los productos.';
+    }
     if (m.includes('check constraint') && m.includes('invoice_items')) {
         return 'Cada item del comprobante debe ser un producto o un servicio.';
     }
@@ -167,13 +170,14 @@ export async function getInvoices(): Promise<UiInvoice[]> {
 }
 
 /**
- * Crea el comprobante: cabezal (trigger asigna correlativo) + items +
- * pagos (movement_type 'VENTA' ligados por invoice_id + doc_ref).
+ * Crea el comprobante via RPC `create_invoice` (Fase 2).
  *
- * NO es una transaccion SQL unica (PostgREST REST no la permite desde
- * el cliente); si falla un paso se intenta limpiar lo creado para no
- * dejar comprobantes huerfanos. El flujo feliz es: cabezal -> items ->
- * pagos.
+ * UNA sola operacion atomica en el servidor: cabecera + items + pagos +
+ * descarga de stock. Si algo falla, TODO se revierte (no quedan
+ * comprobantes huerfanos ni cobros sin comprobante). El total lo calcula
+ * el servidor; stock insuficiente rechaza la venta completa.
+ *
+ * Pendiente anotado: idempotencia por clave de request.
  */
 export async function createInvoice(input: CreateInvoiceInput): Promise<CreatedInvoice> {
     const validItems = input.items.filter((it) => it.quantity > 0 && it.unitPrice > 0);
@@ -181,112 +185,31 @@ export async function createInvoice(input: CreateInvoiceInput): Promise<CreatedI
         throw new Error('El comprobante necesita al menos un item con cantidad y precio.');
     }
 
-    const total = validItems.reduce(
-        (sum, it) => sum + it.quantity * it.unitPrice, 0
-    );
-    // IGV 18% incluido en el precio (Peru).
-    const subtotal = total / 1.18;
-    const igv = total - subtotal;
+    const { data, error } = await supabase.rpc('create_invoice', {
+        p_client_id: input.clientId,
+        p_tipo_comprobante: input.tipoComprobante,
+        p_doc_tipo: input.clienteDocTipo,
+        p_doc_numero: input.clienteDocNumero || '00000000',
+        p_items: validItems.map((it) => ({
+            item_type: it.itemType,
+            product_id: it.productId ?? null,
+            service_id: it.serviceId ?? null,
+            description: it.description,
+            quantity: it.quantity,
+            unit_price: it.unitPrice,
+        })),
+        p_payments: input.payments
+            .filter((p) => p.amount > 0)
+            .map((p) => ({
+                payment_method: p.paymentMethod,
+                amount: p.amount,
+                description: p.description || null,
+            })),
+    });
 
-    const serie = input.tipoComprobante === 'FACTURA' ? 'F001' : 'B001';
-
-    const { data: head, error: headError } = await supabase
-        .from('invoices')
-        .insert({
-            client_id: input.clientId,
-            tipo_comprobante: input.tipoComprobante,
-            serie,
-            // correlativo lo asigna el trigger (NO se envia).
-            cliente_doc_tipo: input.clienteDocTipo,
-            cliente_doc_numero: input.clienteDocNumero || '00000000',
-            subtotal: Number(subtotal.toFixed(2)),
-            igv: Number(igv.toFixed(2)),
-            total: Number(total.toFixed(2)),
-            estado: 'EMITIDA',
-        })
-        .select('*')
-        .single();
-
-    if (headError) {
-        throw new Error(`Error al crear el comprobante: ${translateInvoiceError(headError.message)}`);
+    if (error) {
+        throw new Error(translateInvoiceError(error.message));
     }
 
-    const invoice = head as InvoiceRow;
-    const docRef = `${invoice.serie}-${String(invoice.correlativo).padStart(7, '0')}`;
-
-    // Items
-    const itemsPayload = validItems.map((it) => ({
-        invoice_id: invoice.id,
-        item_type: it.itemType,
-        product_id: it.productId ?? null,
-        service_id: it.serviceId ?? null,
-        description: it.description,
-        quantity: it.quantity,
-        unit_price: it.unitPrice,
-        subtotal: Number((it.quantity * it.unitPrice).toFixed(2)),
-    }));
-
-    const { error: itemsError } = await supabase
-        .from('invoice_items')
-        .insert(itemsPayload);
-
-    if (itemsError) {
-        // Rollback best-effort: el DELETE de invoices es solo admin (RLS);
-        // un_receipt huersano no es grave y es mejor verbose que silent.
-        await supabase.from('invoices').delete().eq('id', invoice.id);
-        throw new Error(`Error al guardar los items: ${translateInvoiceError(itemsError.message)}`);
-    }
-
-    // Pagos (caja): cada metodo elegido es un movement VENTA.
-    const validPayments = input.payments.filter((p) => p.amount > 0);
-    if (validPayments.length > 0) {
-        const paymentsPayload = validPayments.map((p) => ({
-            movement_type: 'VENTA' as const,
-            description: p.description?.trim() || `Cobro ${docRef}`,
-            payment_method: p.paymentMethod,
-            amount: p.amount,
-            doc_ref: docRef,
-            invoice_id: invoice.id,
-        }));
-        const { error: payError } = await supabase
-            .from('payments')
-            .insert(paymentsPayload);
-
-        if (payError) {
-            // El comprobante quedo EMITIDO pero los cobros fallaron: la
-            // factura aparece PENDIENTE y es cobrable luego desde la caja.
-            console.error('createInvoice: pagos fallaron:', payError);
-        }
-    }
-
-    // Descarga de stock de los productos vendidos (servicios NO descargan).
-    const productItems = validItems.filter((it) => it.itemType === 'PRODUCTO' && it.productId);
-    if (productItems.length > 0) {
-        try {
-            const { createMovement } = await import('./inventoryService');
-            await createMovement({
-                type: 'DESCARGA',
-                reason: `Venta ${docRef}`,
-                responsible: 'Sistema',
-                items: productItems.map((it) => ({
-                    productId: it.productId as string,
-                    quantity: it.quantity,
-                    unitCost: 0,
-                })),
-            });
-        } catch (stockErr) {
-            // Si no hay stock suficiente el trigger rechaza: la venta se
-            // emite igual (los servicios tambien se venden); el admin
-            // corrige el inventario con un ajuste.
-            console.error('createInvoice: descarga de stock fallo:', stockErr);
-        }
-    }
-
-    return {
-        id: invoice.id,
-        serie: invoice.serie,
-        correlativo: invoice.correlativo,
-        comprobante: docRef,
-        total,
-    };
+    return data as CreatedInvoice;
 }
