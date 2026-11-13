@@ -414,8 +414,8 @@ ALTER TABLE public.grooming_queue_items         ENABLE ROW LEVEL SECURITY;
 -- despues las columnas protegidas (id, company_id, created_at, stock...).
 -- ============================================================================
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public
-  TO anon, authenticated;
+  TO anon, authenticated, service_role;
 
 -- Para tablas futuras creadas por migraciones.
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
-  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO anon, authenticated;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO anon, authenticated, service_role;
