@@ -5,6 +5,7 @@ import { getSession, signOut, onAuthStateChange } from '../services/authService'
 import {
   createUser as adminCreateUser,
   deactivateUser as adminDeactivateUser,
+  activateUser as adminActivateUser,
   type CreateUserInput,
   type UserRole,
 } from '../services/adminUsersService';
@@ -169,9 +170,15 @@ function GlobalProvider({ children }: GlobalProviderProps) {
    * en espanol de la lista vieja de roles); CreateUser ahora manda el enum.
    */
   async function addUser(newUser: User & { rol: UserRole | string }): Promise<void> {
+    // SIN contrasena por defecto (auditoria C-04): el formulario exige
+    // password; si el caller no la manda, el alta FALLA en lugar de crear
+    // la cuenta con una contrasena predecible.
+    if (!newUser.password) {
+      throw new Error('La contrasena es obligatoria para crear un usuario.');
+    }
     const input: CreateUserInput = {
       email: newUser.email,
-      password: newUser.password ?? '123123',
+      password: newUser.password,
       first_name: newUser.name,
       last_name: newUser.lastName,
       phone: newUser.phone,
@@ -212,7 +219,12 @@ function GlobalProvider({ children }: GlobalProviderProps) {
       const { changeUserRole } = await import('../services/adminUsersService');
       await changeUserRole(id, newData.rol as UserRole);
     }
-    if (newData.status === 'INACTIVO') {
+    // Reactivar/desactivar via Edge Function (service_role + triggers).
+    // Ambas acciones son idempotentes: la funcion devuelve exito si el
+    // usuario ya esta en ese estado.
+    if (newData.status === 'ACTIVO') {
+      await adminActivateUser(id);
+    } else if (newData.status === 'INACTIVO') {
       await adminDeactivateUser(id);
     }
   }

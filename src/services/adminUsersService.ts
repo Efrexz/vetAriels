@@ -106,6 +106,17 @@ export async function deactivateUser(userId: string): Promise<void> {
   });
 }
 
+/**
+ * Reactiva un usuario desactivado (active = true). La Edge Function
+ * valida que el target pertenezca a la empresa del admin.
+ */
+export async function activateUser(userId: string): Promise<void> {
+  await invokeAdmin<{ success: true }>({
+    action: 'activate',
+    user_id: userId,
+  });
+}
+
 export async function changeUserRole(
   userId: string,
   newRole: UserRole

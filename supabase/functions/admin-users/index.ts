@@ -22,7 +22,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { corsHeaders } from '../_shared/cors.ts';
 
 interface RequestBody {
-  action: 'list' | 'create' | 'deactivate' | 'change_role';
+  action: 'list' | 'create' | 'deactivate' | 'activate' | 'change_role';
   // create
   email?: string;
   password?: string;
@@ -84,6 +84,8 @@ Deno.serve(async (req: Request) => {
         return await handleCreate(supabaseAdmin, adminCtx, body);
       case 'deactivate':
         return await handleDeactivate(supabaseAdmin, adminCtx, body);
+      case 'activate':
+        return await handleActivate(supabaseAdmin, adminCtx, body);
       case 'change_role':
         return await handleChangeRole(supabaseAdmin, adminCtx, body);
       default:
@@ -302,6 +304,65 @@ async function handleCreate(
 }
 
 /**
+ * Reactiva un usuario (active = true). La Edge Function admin-users es la
+ * UNICA via para activar/desactivar: el trigger prevent_privilege_escalation
+ * bloquea cambios de active a usuarios autenticados (fix C-01 de la
+ * auditoria), y service_role tiene bypass explicito en ese trigger.
+ */
+async function handleActivate(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  ctx: AdminContext,
+  body: RequestBody
+): Promise<Response> {
+  if (!body.user_id) {
+    return jsonResponse({ error: 'Falta user_id' }, 400);
+  }
+
+  const { data: targetProfile, error: lookupError } = await supabaseAdmin
+    .from('profiles')
+    .select('company_id, active')
+    .eq('id', body.user_id)
+    .single();
+
+  if (lookupError || !targetProfile) {
+    return jsonResponse({ error: 'Usuario no encontrado' }, 404);
+  }
+  if (targetProfile.company_id !== ctx.companyId) {
+    return jsonResponse(
+      { error: 'No puedes modificar usuarios de otra empresa' },
+      403
+    );
+  }
+  if (targetProfile.active) {
+    return jsonResponse({ success: true, alreadyActive: true });
+  }
+
+  const { error } = await supabaseAdmin
+    .from('profiles')
+    .update({ active: true })
+    .eq('id', body.user_id);
+
+  if (error) {
+    return jsonResponse(
+      { error: 'No se pudo activar: ' + error.message },
+      400
+    );
+  }
+
+  // Levantar el baneo de GoTrue (best-effort con log).
+  // @ts-ignore: Deno runtime
+  try {
+    await supabaseAdmin.auth.admin.updateUserById(body.user_id, {
+      ban_duration: 'none',
+    });
+  } catch (unbanErr) {
+    console.error('admin-users: no se pudo levantar el baneo:', unbanErr);
+  }
+
+  return jsonResponse({ success: true });
+}
+
+/**
  * Desactiva un usuario (no lo borra). El trigger prevent_profile_deletion
  * convierte el DELETE en soft-delete; aqui hacemos lo mismo de forma explicita.
  */
@@ -343,11 +404,19 @@ async function handleDeactivate(
     );
   }
 
-  // Defense in depth: ademas de active=false (que corta el acceso via RLS
-  // porque current_role()/current_company_id() exigen active), revocamos
-  // TODAS las sesiones activas del usuario en GoTrue. Best-effort: si
-  // falla (la API de sesiones no esta disponible en tu version de GoTrue),
-  // la desactivacion igual quedo hecha — el RLS ya niega el acceso.
+  // Defense in depth 1: banear en GoTrue -> el login mismo se bloquea en
+  // el servidor (antes solo la app bloqueaba y RLS cortaba datos).
+  // Defense in depth 2: revocar sesiones activas del usuario.
+  // Ambos best-effort con log: el active=false en profiles es la capa
+  // principal (RLS deja de resolver empresa/rol aunque exista JWT).
+  // @ts-ignore: Deno runtime
+  try {
+    await supabaseAdmin.auth.admin.updateUserById(body.user_id, {
+      ban_duration: '876000h', // ~100 anos: baneo indefinido practico
+    });
+  } catch (banErr) {
+    console.error('admin-users: no se pudo banear al usuario:', banErr);
+  }
   // @ts-ignore: Deno runtime
   try {
     await supabaseAdmin.auth.admin.signOut(body.user_id, { scope: 'global' });
@@ -406,13 +475,25 @@ async function handleChangeRole(
     );
   }
 
-  // Tambien actualizar app_metadata para que el JWT lleve el nuevo rol
-  await supabaseAdmin.auth.admin.updateUserById(body.user_id, {
-    app_metadata: {
-      company_id: ctx.companyId,
-      role: body.new_role,
-    },
-  });
+  // Tambien actualizar app_metadata para que el JWT lleve el nuevo rol.
+  // El dato REAL del rol es profiles (la fuente segura); el metadata solo
+  // refresca el JWT para nuevas sesiones. Si falla, el rol DB ya cambio:
+  // se reporta como exito parcial, no como error.
+  const { error: metaError } = await supabaseAdmin.auth.admin.updateUserById(
+    body.user_id,
+    {
+      app_metadata: {
+        company_id: ctx.companyId,
+        role: body.new_role,
+      },
+    }
+  );
+  if (metaError) {
+    console.error(
+      'admin-users: rol cambiado en DB pero fallo refrescar app_metadata:',
+      metaError
+    );
+  }
 
   return jsonResponse({ success: true });
 }

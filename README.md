@@ -47,13 +47,9 @@ Estos serian los pasos recomendados para que cualquier usuario nuevo pueda proba
 
 ### 🔐 Acceso inicial
 
-Para acceder por primera vez, puedes usar el siguiente usuario por defecto:
-
-Correo: zyzz_448@hotmail.com
-
-Contraseña: 123123
-
-Luego de ingresar, puedes crear tu propia cuenta personalizada si lo deseas.
+El sistema no publica credenciales de acceso. Una cuenta **ADMIN** de la
+clinica crea los usuarios desde **Configuracion > Usuarios** (los demas
+roles: veterinario, recepcionista, groomer, tambien se crean alli).
 
 ### 👥 Crear un nuevo usuario
 
