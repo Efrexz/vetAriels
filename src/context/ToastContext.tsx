@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useRef, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -30,6 +30,37 @@ interface ToastProviderProps {
 function ToastProvider({ children }: ToastProviderProps) {
     const [toasts, setToasts] = useState<Toast[]>([]);
     const counterRef = useRef(0);
+
+    // ----------------------------------------------------------------------------
+    // Puente con React Query (fix C-17): toda query que FALLA definitivamente
+    // (tras reintentos) despacha un evento global; aqui se convierte en una
+    // notificacion visible. Sin esto, un fallo de red/permisos se veia como
+    // "lista vacia" en cualquier pantalla (ej. bug del dropdown de
+    // responsables). Deduplicado: evita tormenta de toasts si varias queries
+    // fallan en el mismo instante.
+    // ----------------------------------------------------------------------------
+    const lastErrorToastRef = useRef<{ message: string; at: number }>({
+        message: '',
+        at: 0,
+    });
+
+    useEffect(() => {
+        function onQueryError(event: Event) {
+            const detail = (event as CustomEvent<{ message?: string; key?: string }>).detail;
+            const message =
+                detail?.message ||
+                'No se pudieron cargar los datos. Revisa tu conexion e intenta de nuevo.';
+            const now = Date.now();
+            const last = lastErrorToastRef.current;
+            if (last.message === message && now - last.at < 4000) {
+                return; // misma falla dentro de 4s: no spamear
+            }
+            lastErrorToastRef.current = { message, at: now };
+            addToast('error', message, 5000);
+        }
+        window.addEventListener('veta:query-error', onQueryError);
+        return () => window.removeEventListener('veta:query-error', onQueryError);
+    }, [addToast]);
 
     const removeToast = useCallback((id: string) => {
         setToasts((prev) =>
