@@ -122,7 +122,7 @@ const CLINIC_SELECT = `
         *,
         clients ( first_name, last_name )
     ),
-    profiles ( first_name, last_name )
+    profiles!assigned_doctor_id ( first_name, last_name )
 `;
 
 const GROOMING_SELECT = `
