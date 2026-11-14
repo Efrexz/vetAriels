@@ -16,7 +16,8 @@
     "test:coverage": "vitest run --coverage",
     "preview": "vite preview",
     "prepare": "husky",
-    "migrate:localstorage": "node --env-file=.env scripts/migrate-localstorage.mjs"
+    "migrate:localstorage": "node --env-file=.env scripts/migrate-localstorage.mjs",
+    "serve:functions": "supabase functions serve"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
