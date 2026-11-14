@@ -23,13 +23,21 @@ function ToastContainer() {
 
     if (toasts.length === 0) return null;
 
-    return (
-        <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
-            {toasts.map((toast) => {
-                const { Icon, color } = iconMap[toast.type];
-                const bg = bgMap[toast.type];
+    // Dos anclas segun tipo (feedback de uso real):
+    //   * exito/info -> ABAJO-IZQUIERDA: al enviar una mascota a cola se
+    //     verifica el icono de espera arriba a la derecha; el toast no debe
+    //     taparlo.
+    //   * error/warning -> ARRIBA-DERECHA: mas prominentes y no se esconden.
+    const prominent = toasts.filter((t) => t.type === 'error' || t.type === 'warning');
+    const casual = toasts.filter((t) => t.type === 'success' || t.type === 'info');
 
-                return (
+    if (prominent.length === 0 && casual.length === 0) return null;
+
+    const renderToast = (toast: (typeof toasts)[number]) => {
+        const { Icon, color } = iconMap[toast.type];
+        const bg = bgMap[toast.type];
+
+        return (
                     <div
                         key={toast.id}
                         className={`pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-xl border shadow-lg backdrop-blur-sm bg-paper/95 ${bg} transition-all duration-300 ${
@@ -58,9 +66,22 @@ function ToastContainer() {
                             </div>
                         )}
                     </div>
-                );
-            })}
-        </div>
+        );
+    };
+
+    return (
+        <>
+            {prominent.length > 0 && (
+                <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+                    {prominent.map(renderToast)}
+                </div>
+            )}
+            {casual.length > 0 && (
+                <div className="fixed bottom-4 left-4 z-[100] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+                    {casual.map(renderToast)}
+                </div>
+            )}
+        </>
     );
 }
 
