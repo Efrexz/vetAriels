@@ -10,6 +10,7 @@ import { QuantityCounter } from '@components/ui/QuantityCounter';
 import { PriceModificationModal } from '@components/modals/PriceModificationModal';
 import { QuantityModificationModal } from '@components/modals/QuantityModificationModal';
 import { generateUniqueId } from '@utils/idGenerator';
+import { parseDateSafe } from '@utils/date';
 import ShoppingCartPlusIcon from '@assets/shoppingCartPlus.svg?react';
 import NewUserIcon from '@assets/newUserIcon.svg?react';
 import UserPenIcon from '@assets/userPenIcon.svg?react';
@@ -93,7 +94,7 @@ function Sales() {
     function calculateAge(birthDate: string): PetAge {
         if (!birthDate) return { years: 0, months: 0, days: 0 };
         const today = new Date();
-        const birth = new Date(birthDate);
+        const birth = parseDateSafe(birthDate) ?? new Date();
 
         let ageYears = today.getFullYear() - birth.getFullYear();
         let ageMonths = today.getMonth() - birth.getMonth();

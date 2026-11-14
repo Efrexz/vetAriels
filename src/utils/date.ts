@@ -35,7 +35,18 @@ export function parseIsoDateLocal(iso: string): Date | null {
 export function parseDateSafe(value: string | undefined | null): Date | null {
     if (!value) return null;
 
-    // 1. ISO (yyyy-mm-dd...): hora local, no UTC.
+    // 0. Timestamp COMPLETO (con hora: 'T...' o ' HH:MM'): se parsea con el
+    //    motor nativo. new Date(iso) devuelve el INSTANTE correcto y
+    //    getHours()/calendario caen en la zona LOCAL del navegador (Lima
+    //    UTC-5). El parser ISO de abajo solo debe usarse para fechas de
+    //    calendario SIN hora (si recortara la hora, las ventas por hora del
+    //    dashboard caerian todas a medianoche).
+    if (/[T ]\d{2}:\d{2}/.test(value)) {
+        const native = new Date(value);
+        return Number.isNaN(native.getTime()) ? null : native;
+    }
+
+    // 1. Fecha de calendario (yyyy-mm-dd): hora local, no UTC.
     const iso = parseIsoDateLocal(value);
     if (iso) return iso;
 
@@ -60,7 +71,7 @@ export function parseDateSafe(value: string | undefined | null): Date | null {
         return Number.isNaN(date.getTime()) ? null : date;
     }
 
-    // 3. Fallback: el motor nativo (para fechas con zona horaria completa).
+    // Fallback: el motor nativo (para fechas con zona horaria completa).
     const native = new Date(value);
     return Number.isNaN(native.getTime()) ? null : native;
 }

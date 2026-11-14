@@ -70,17 +70,13 @@ export function formatTime(): string {
 /* ------------------------------------------------------------------ */
 
 /**
- * Parser de fechas del dashboard. Debega en @utils/date.ts (parseDateSafe):
- * acepta ISO de Supabase ('yyyy-mm-dd'), dd/mm/yyyy y el formato con hora
- * de los pagos. El parseo es LOCAL: el shift UTC de new Date(string)
- * hacia que "clientes nuevos hoy" diera 0 en Lima (UTC-5).
+ * Parser de fechas del dashboard. Delega en @utils/date.ts (parseDateSafe):
+ * acepta ISO con hora, ISO de calendario, dd/mm/yyyy y formatos legados.
+ * Los timestamps CON hora se parsean como instante (hora LOCAL correcta
+ * en el navegador); las fechas de calendario, a medianoche local.
  */
 function parseDateStr(raw: string): Date | null {
-  const cleaned = raw.trim();
-  // Con hora incluida ("31-07-2024 07:43 AM", "29/9/2026, 10:05:23"),
-  // extraemos solo la parte de fecha y computamos medianoche local.
-  const dateOnly = cleaned.split(/[ T]/)[0].replace(",", "");
-  return parseDateSafe(dateOnly);
+  return parseDateSafe(raw.trim());
 }
 
 export function parseMoney(raw: string | null | undefined): number {
