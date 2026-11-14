@@ -5,6 +5,7 @@
 // El resto de la app solo conoce estas funciones.
 // ============================================================================
 import { supabase } from './supabaseClient';
+import { isoToParts } from '../utils/date';
 import type { Client } from '../types/client.types';
 
 // Lo que Supabase devuelve tiene snake_case (id, first_name, last_name, ...).
@@ -40,8 +41,8 @@ export function rowToClient(row: ClientRow): Client {
     lastName: row.last_name,
     dni: row.dni ?? '',
     email: row.email ?? '',
-    date: row.created_at.slice(0, 10),
-    hour: row.created_at.slice(11, 19),
+    date: isoToParts(row.created_at).date,
+    hour: isoToParts(row.created_at).time,
     phone1: row.phone1,
     phone2: row.phone2 ?? '',
     address: row.address,

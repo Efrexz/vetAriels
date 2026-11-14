@@ -2,6 +2,7 @@
 // Servicios para productos (products)
 // ============================================================================
 import { supabase } from './supabaseClient';
+import { isoToParts } from '../utils/date';
 import type { Product } from '../types/inventory.types';
 
 // ----------------------------------------------------------------------------
@@ -59,8 +60,8 @@ export function rowToProduct(row: ProductRow): Product {
         cost: row.cost,
         salePrice: row.sale_price,
         availableStock: row.stock,
-        registrationDate: row.created_at.slice(0, 10),
-        registrationTime: row.created_at.slice(11, 19),
+        registrationDate: isoToParts(row.created_at).date,
+        registrationTime: isoToParts(row.created_at).time,
         status: row.active,
     };
 }

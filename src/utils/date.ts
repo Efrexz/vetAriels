@@ -77,6 +77,24 @@ export function parseDateSafe(value: string | undefined | null): Date | null {
 }
 
 /**
+ * Convierte un timestamp ISO de la DB a partes de CALENDARIO LOCAL
+ * (yyyy-mm-dd / HH:mm:ss). Los slice() directos sobre el ISO mostraban
+ * la fecha/hora UTC (Lima UTC-5: una venta de las 20:00 salia como del
+ * dia siguiente). Si el valor no parsea, cae al recorte crudo.
+ */
+export function isoToParts(iso: string): { date: string; time: string } {
+    const d = new Date(iso);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    if (Number.isNaN(d.getTime())) {
+        return { date: iso.slice(0, 10), time: iso.slice(11, 19) };
+    }
+    return {
+        date: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+        time: `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`,
+    };
+}
+
+/**
  * Nos dice si la fecha esta dentro del rango [from, to] inclusive
  * (comparacion por calendario, sin horas).
  */

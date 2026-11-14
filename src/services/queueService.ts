@@ -12,6 +12,7 @@
 //             TERMINADO<->Terminado | ENTREGADO<->Entregado
 // ============================================================================
 import { supabase } from './supabaseClient';
+import { isoToParts } from '../utils/date';
 import type { Pet } from '../types/client.types';
 import type { GroomingQueueItem, MedicalQueueItem, QueueState } from '../types/clinical.types';
 import type { PurchasedItem } from '../types/inventory.types';
@@ -161,7 +162,7 @@ export async function getClinicQueue(): Promise<MedicalQueueItem[]> {
             ownerName: pet ? `${pet.ownerName}` : '',
             notes: row.notes ?? '',
             dateOfAttention: row.date_of_attention,
-            timeOfAttention: row.created_at.slice(11, 19),
+            timeOfAttention: isoToParts(row.created_at).time,
             state: CLINIC_STATE_TO_UI[row.state] ?? 'Pendiente',
             assignedDoctor: doctor ? `${doctor.first_name} ${doctor.last_name}`.trim() : '',
         };
@@ -208,8 +209,8 @@ function mapGroomingRow(row: GroomingQueueRow): GroomingQueueItem {
     const items: PurchasedItem[] = (row.grooming_queue_items ?? []).map((it) => ({
         id: (it.product_id ?? it.service_id) as string,
         provisionalId: it.id,
-        additionDate: row.created_at.slice(0, 10),
-        additionTime: row.created_at.slice(11, 19),
+        additionDate: isoToParts(row.created_at).date,
+        additionTime: isoToParts(row.created_at).time,
         quantity: it.quantity,
         productName: undefined,
         serviceName: it.description,
@@ -224,8 +225,8 @@ function mapGroomingRow(row: GroomingQueueRow): GroomingQueueItem {
         notes: row.notes ?? '',
         // La DB no guarda fecha/hora de atencion separadas para grooming:
         // derivadas de created_at.
-        dateOfAttention: row.created_at.slice(0, 10),
-        timeOfAttention: row.created_at.slice(11, 19),
+        dateOfAttention: isoToParts(row.created_at).date,
+        timeOfAttention: isoToParts(row.created_at).time,
         state: GROOMING_STATE_TO_UI[row.state] ?? 'Pendiente',
         turn: row.turn,
         systemCode: row.system_code ?? (pet ? pet.hc : ''),

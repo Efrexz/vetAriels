@@ -2,6 +2,7 @@
 // Servicios para servicios (services)
 // ============================================================================
 import { supabase } from './supabaseClient';
+import { isoToParts } from '../utils/date';
 import type { Service } from '../types/inventory.types';
 
 // ----------------------------------------------------------------------------
@@ -37,8 +38,8 @@ export function rowToService(row: ServiceRow): Service {
         cost: row.cost,
         salePrice: row.sale_price,
         availableForSale: row.available_for_sale,
-        registrationDate: row.created_at.slice(0, 10),
-        registrationTime: row.created_at.slice(11, 19),
+        registrationDate: isoToParts(row.created_at).date,
+        registrationTime: isoToParts(row.created_at).time,
         status: row.active,
     };
 }

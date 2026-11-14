@@ -2,6 +2,7 @@
 // Servicios para mascotas (pets) y su historial clinico (pet_records)
 // ============================================================================
 import { supabase } from './supabaseClient';
+import { isoToParts } from '../utils/date';
 import type {
     Pet,
     PetRecord,
@@ -129,8 +130,8 @@ export function rowToPet(row: PetRow): Pet {
         ownerId: row.owner_id,
         ownerName: owner?.ownerName ?? '',
         owner: owner?.ownerName ?? '',
-        registrationDate: row.created_at.slice(0, 10),
-        registrationTime: row.created_at.slice(11, 19),
+        registrationDate: isoToParts(row.created_at).date,
+        registrationTime: isoToParts(row.created_at).time,
         petName: row.pet_name,
         birthDate: row.birth_date,
         microchip: row.microchip ?? '',

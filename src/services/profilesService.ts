@@ -3,6 +3,7 @@
 // empresa) — el rol y la sesion los controla Supabase Auth.
 // ============================================================================
 import { supabase } from './supabaseClient';
+import { isoToParts } from '../utils/date';
 import type { User } from '../types/user.types';
 import type { AdminUser } from './adminUsersService';
 
@@ -183,8 +184,8 @@ export function adminUserToUser(admin: AdminUser): User {
         phone: admin.phone ?? '',
         rol: ROLES_ES[admin.role] ?? admin.role,
         status: admin.active ? 'ACTIVO' : 'INACTIVO',
-        registrationDate: admin.created_at.slice(0, 10),
-        registrationTime: admin.created_at.slice(11, 19),
+        registrationDate: isoToParts(admin.created_at).date,
+        registrationTime: isoToParts(admin.created_at).time,
     };
 }
 
@@ -201,7 +202,7 @@ export function ownProfileToUser(profile: OwnProfile): User {
         phone: profile.phone,
         rol: ROLES_ES[profile.role] ?? profile.role,
         status: profile.active ? 'ACTIVO' : 'INACTIVO',
-        registrationDate: profile.createdAt.slice(0, 10),
-        registrationTime: profile.createdAt.slice(11, 19),
+        registrationDate: isoToParts(profile.createdAt).date,
+        registrationTime: isoToParts(profile.createdAt).time,
     };
 }

@@ -11,6 +11,7 @@
 // products.stock tras invalidar la query.
 // ============================================================================
 import { supabase } from './supabaseClient';
+import { isoToParts } from '../utils/date';
 import type { Product, Service, InventoryOperation } from '../types/inventory.types';
 
 // ----------------------------------------------------------------------------
@@ -97,8 +98,8 @@ function rowItemToPurchasedItem(row: InventoryMovementItemRow) {
 export function rowToMovement(row: InventoryMovementRow): InventoryOperation {
     const items = (row.inventory_movement_items ?? []).map(rowItemToPurchasedItem);
 
-    const date = row.created_at.slice(0, 10);
-    const time = row.created_at.slice(11, 19);
+    const date = isoToParts(row.created_at).date;
+    const time = isoToParts(row.created_at).time;
 
     return {
         id: row.id,
