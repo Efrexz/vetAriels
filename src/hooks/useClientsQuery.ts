@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { Client } from '../types/client.types';
 import {
   getClients,
   getClientById,
@@ -47,7 +48,13 @@ export function useClientsMutations() {
 
   const create = useMutation({
     mutationFn: (input: CreateClientInput) => createClient(input),
-    onSuccess: () => {
+    onSuccess: (created) => {
+      // Optimista: aparece de inmediato en la lista; sin esto, al navegar a
+      // su perfil el listado aun no lo tenia y parpadeaba "Cliente no
+      // encontrado" (el modal fantasma que veia el usuario).
+      queryClient.setQueryData<Client[]>(CLIENTS_KEY, (old) =>
+        old ? [created, ...old] : [created]
+      );
       void queryClient.invalidateQueries({ queryKey: CLIENTS_KEY });
     },
   });

@@ -16,10 +16,13 @@ const USERS_KEY = ['admin-users'] as const;
  * Cache compartido entre componentes (un solo request para todos los
  * consumidores).
  */
-export function useUsersQuery() {
+export function useUsersQuery(enabled: boolean = true) {
   return useQuery({
     queryKey: USERS_KEY,
     queryFn: listUsers,
+    // Solo ADMIN puede listar usuarios (la Edge Function responde 403 a los
+    // demas roles: el toast "Unauthorized" en groomer/vet era esta consulta).
+    enabled,
   });
 }
 

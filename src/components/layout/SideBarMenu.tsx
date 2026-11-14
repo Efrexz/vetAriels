@@ -131,11 +131,29 @@ interface SideBarMenuProps {
 }
 
 function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
-    const { companyData } = useGlobal();
+    const { companyData, activeUser } = useGlobal();
+
+    // Matriz de roles aplicada a la navegacion (Fase 1): el sidebar oculta
+    // las secciones que el rol no usa. La proteccion REAL vive en RLS; esto
+    // evita ver opciones que siempre daran error.
+    const role = activeUser?.rol;
+    const sectionsPermitidas: Record<string, string[] | null> = {
+        Administrador: null, // todas
+        Veterinario: ["Inicio", "Sala de espera", "Clientes", "Mascotas", "Servicios"],
+        Recepcionista: ["Inicio", "Ventas", "Sala de espera", "Clientes", "Mascotas", "Servicios", "Peluquería", "Productos"],
+        Groomer: ["Inicio", "Mascotas", "Servicios", "Peluquería"],
+    };
+    const permitidas = role ? sectionsPermitidas[role] ?? [] : [];
+    const visibleSections = sections
+        .map((s) => ({
+            ...s,
+            items: role === "ADMIN" ? s.items : s.items.filter((c) => permitidas.includes(c.name)),
+        }))
+        .filter((s) => s.items.length > 0);
     const location = useLocation();
 
     const initialOpen = useMemo(() => {
-        for (const section of sections) {
+        for (const section of visibleSections) {
             for (const cat of section.items) {
                 if (cat.subCategories && cat.subCategories.length > 0 && isRouteActive(cat, location.pathname)) {
                     return cat.name;
@@ -170,7 +188,7 @@ function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
             </div>
 
             <nav className="flex-1 overflow-y-auto custom-scrollbar py-3">
-                {sections.map((section, si) => (
+                {visibleSections.map((section, si) => (
                     <div key={si} className="mb-1">
                         {section.label && (
                             <p className="px-4 pt-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 select-none">

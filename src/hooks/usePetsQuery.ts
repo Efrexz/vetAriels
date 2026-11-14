@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { Pet } from '@t/client.types';
 import {
     getPets,
     getPetById,
@@ -54,7 +55,12 @@ export function usePetsMutations() {
 
     const create = useMutation({
         mutationFn: (input: CreatePetInput) => createPet(input),
-        onSuccess: () => {
+        onSuccess: (created) => {
+            // Optimista: la mascota aparece al instante (mismo patron que
+            // clientes; evita listados que "tardan en aparecer").
+            queryClient.setQueryData<Pet[]>(PETS_KEY, (old) =>
+                old ? [created, ...old] : [created]
+            );
             void queryClient.invalidateQueries({ queryKey: PETS_KEY });
         },
     });

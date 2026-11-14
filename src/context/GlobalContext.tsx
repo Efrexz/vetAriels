@@ -180,7 +180,7 @@ function GlobalProvider({ children }: GlobalProviderProps) {
   // users: lista real via Edge Function admin-users (service_role).
   // Antes era `const users = []` — eso dejaba EditUser muerto y los
   // selects de "Responsable" vacios en movimientos/pagos.
-  const { data: usersData = [] } = useUsersQuery();
+  const { data: usersData = [] } = useUsersQuery(ownProfile?.role === 'ADMIN');
   const users: User[] = usersData.map(adminUserToUser);
 
   /**
