@@ -147,7 +147,7 @@ function SideBarMenu({ toggleSideMenu }: SideBarMenuProps) {
     const visibleSections = sections
         .map((s) => ({
             ...s,
-            items: role === "ADMIN" ? s.items : s.items.filter((c) => permitidas.includes(c.name)),
+            items: role === "Administrador" ? s.items : s.items.filter((c) => permitidas.includes(c.name)),
         }))
         .filter((s) => s.items.length > 0);
     const location = useLocation();
